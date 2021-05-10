@@ -82,15 +82,21 @@
       </li>
 
       <li>
+        <a href="{{ route('settings.index') }}">
+          <i class="material-icons">settings</i>
+          <span>{{ __('Settings') }}</span>
+        </a>
+      </li>
+      <li>
         <a href="../changelogs.html">
           <i class="material-icons">update</i>
-          <span>Apa Yang Baru</span>
+          <span>{{ __('Whats New') }}</span>
         </a>
       </li>
       <li>
         <a href="../changelogs.html">
           <i class="material-icons">input</i>
-          <span>Keluar</span>
+          <span>{{ __('Logout') }}</span>
         </a>
       </li>
 
@@ -119,10 +125,12 @@
   <!-- Footer -->
   <div class="legal">
     <div class="copyright">
-      &copy; 2016 - 2017 <a href="javascript:void(0);">AdminBSB - Material Design</a>.
+      &copy; {{ $_since->value < date('Y') ? $_since->value . ' - ' . date('Y') : date('Y') }} <a
+        href="javascript:void(0);">{{ $_application_name->value }} -
+        {{ $_company_name->value }}</a>.
     </div>
     <div class="version">
-      <b>Version: </b> 1.0.5
+      <b>{{ __('Version') }}: </b> {{ $_application_version->value }}
     </div>
   </div>
   <!-- #Footer -->

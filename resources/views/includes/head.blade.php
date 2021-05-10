@@ -1,7 +1,7 @@
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  <title>@yield('title') | {{ config('app.name') }} </title>
+  <title>@yield('title') | {{ $_application_name->value }} </title>
   <!-- Favicon-->
   <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 
