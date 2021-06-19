@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Setting;
+use Illuminate\Support\Facades\Storage;
 
 class SettingRepository extends Repository
 {
@@ -126,5 +127,51 @@ class SettingRepository extends Repository
             "blue-grey",
             "black",
         ];
+    }
+
+    /**
+     * get logo url
+     *
+     * @return string
+     */
+    public static function logoUrl()
+    {
+        $logo = null;
+        if (config('app.template') === 'stisla') {
+            $logo = Setting::where('key', 'logo')->first();
+            if ($logo) {
+                if (Storage::exists('public/settings/' . $logo->value)) {
+                    return asset('storage/settings/' . $logo->value);
+                } else {
+                    $logo = null;
+                }
+            }
+        }
+        if (is_null($logo)) {
+            return asset('images/logo.png');
+        }
+    }
+
+    /**
+     * get login bg url
+     *
+     * @return string
+     */
+    public static function loginBgUrl()
+    {
+        $bgLogin = null;
+        if (config('app.template') === 'stisla') {
+            $bgLogin = Setting::where('key', 'stisla_bg_login')->first();
+            if ($bgLogin) {
+                if (Storage::exists('public/settings/' . $bgLogin->value)) {
+                    return asset('storage/settings/' . $bgLogin->value);
+                } else {
+                    $bgLogin = null;
+                }
+            }
+        }
+        if (is_null($bgLogin)) {
+            return asset('stisla/assets/img/unsplash/eberhard-grossgasteiger-1207565-unsplash.jpg');
+        }
     }
 }

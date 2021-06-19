@@ -1,0 +1,30 @@
+{
+    "name": "datatables.net-bs4",
+    "version": "1.10.19",
+    "description": "DataTables for jQuery with styling for [Bootstrap 4](http://getbootstrap.com/)",
+    "files": [
+        "css/**/*.css",
+        "js/**/*.js"
+    ],
+    "main": "./js/dataTables.bootstrap4.js",
+    "style": "./css/dataTables.bootstrap4.css",
+    "keywords": [
+        "filter",
+        "sort",
+        "DataTables",
+        "jQuery",
+        "table",
+        "Bootstrap 4"
+    ],
+    "homepage": "https://datatables.net",
+    "bugs": "https://datatables.net/forums",
+    "license": "MIT",
+    "author": {
+        "name": "SpryMedia Ltd",
+        "url": "http://datatables.net"
+    },
+    "dependencies": {
+        "jquery": ">=1.7",
+        "datatables.net": "1.10.19"
+    }
+}

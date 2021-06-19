@@ -1,0 +1,1 @@
+@extends('stisla.layouts.app')

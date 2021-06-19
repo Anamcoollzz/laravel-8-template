@@ -15,6 +15,13 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    'is_cdn' => env('APP_IS_CDN', false),
+    'template' => env('APP_TEMPLATE', 'stisla'),
+    'developer_name' => env('APP_DEVELOPER_NAME', 'Hairul Anam'),
+    'is_showing_developer' => env('APP_IS_SHOWING_DEVELOPER', false),
+    'version' => '1.0.0',
+    'is_demo' => env('APP_IS_DEMO', false),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
@@ -67,7 +74,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => env('APP_TIMEZONE', 'Asia/Jakarta'),
 
     /*
     |--------------------------------------------------------------------------
@@ -80,7 +87,7 @@ return [
     |
     */
 
-    'locale' => 'id',
+    'locale' => env('APP_LOCALE', 'id'),
 
     /*
     |--------------------------------------------------------------------------
@@ -93,7 +100,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
 
     /*
     |--------------------------------------------------------------------------

@@ -1,0 +1,57 @@
+.nama_perusahaan {
+    color: white;
+    margin-left: 30px;
+    margin-top: 8px;
+}
+
+.logoku {
+    max-height: 40px;
+}
+
+
+footer span {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+@media screen and (max-width: 425px){
+
+    .nama_perusahaan {
+        font-size: 14px;
+    }
+    
+    .logoku {
+        margin-left: -10px;
+        max-height: 30px;
+        position: absolute;
+        max-width: 30px;
+    }
+
+    footer .footer-left, footer .footer-right {
+        text-align: center;
+        display: block;
+        width: 100%;
+    }
+
+    footer .footer-right {
+        margin-top: 20px;
+    }
+
+    footer span {
+        display: block;
+        width: 100%;
+        margin: 0 !important;
+    }
+
+}
+
+@media screen and (max-width: 375px){
+    
+    
+}
+
+@media screen and (max-width: 320px){
+    
+ 
+
+}

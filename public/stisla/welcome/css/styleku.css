@@ -1,0 +1,35 @@
+body {
+    overflow: hidden;
+}
+
+.logoku {
+    max-width: 50px;
+}
+
+.home_banner_area .banner_inner {
+    margin: 0;
+    padding: 0;
+}
+
+.home_banner_area .banner_inner .home_left_img,
+.banner_content {
+    padding-top: 250px;
+    padding-bottom: 0;
+}
+
+@media screen and (max-width: 1366px) {
+
+    .home_banner_area .banner_inner .home_left_img,
+	.banner_content {
+	    padding-top: 130px;
+	}
+
+}
+
+@media screen and (max-width: 425px) {
+
+    .home_banner_area .banner_inner {
+        padding-top: 100px;
+    }
+
+}
