@@ -1,0 +1,27 @@
+[
+    { "key": "app_description", "value": "Ini hanyalah sistem biasa" },
+    { "key": "city", "value": "Jember" },
+    { "key": "company_name", "value": "PT Anam Techno" },
+    { "key": "country", "value": "Indonesia" },
+    {
+        "key": "favicon",
+        "value": "http://localhost/stisla/assets/img/favicon.ico"
+    },
+    { "key": "logo", "value": "http://localhost/img/logo.png" },
+    { "key": "year", "value": "2020" },
+
+    { "key": "meta_author", "value": "Hairul Anam" },
+    { "key": "meta_description", "value": "PT Anam Maju Pantang Mundur" },
+    {
+        "key": "meta_keywords",
+        "value": "Sistem Informasi, Pemrograman, Github, PHP, Laravel, Stisla, Heroku, CBT, Ujian Online"
+    },
+
+    {
+        "key": "stisla_bg_home",
+        "value": "http://localhost/img/bg_selamat_datang.jpg"
+    },
+    { "key": "stisla_bg_login", "value": "http://localhost/img/pantai.jpg" },
+    { "key": "stisla_sidebar_mini", "value": "0" },
+    { "key": "stisla_skin", "value": "style" }
+]

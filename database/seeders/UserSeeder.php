@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
-use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
 {
@@ -17,14 +16,17 @@ class UserSeeder extends Seeder
     public function run()
     {
         Schema::disableForeignKeyConstraints();
-        Role::truncate();
-        Role::create(['name' => 'superadmin']);
+
         User::truncate();
-        $user = User::create([
-            'name'     => 'Hairul Anam',
-            'email'    => 'superadmin@laraveltemplate.com',
-            'password' => bcrypt('superadmin')
-        ]);
-        $user->assignRole('superadmin');
+        $users = json_decode(file_get_contents(database_path('seeders/data/users.json')), true);
+        foreach ($users as $user) {
+            $user = User::create([
+                'name'     => $user['name'],
+                'email'    => $user['email'],
+                'password' => bcrypt($user['password'])
+            ]);
+            foreach ($user['roles'] as $role)
+                $user->assignRole($role);
+        }
     }
 }

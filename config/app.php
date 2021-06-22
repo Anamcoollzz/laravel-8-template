@@ -21,6 +21,7 @@ return [
     'is_showing_developer' => env('APP_IS_SHOWING_DEVELOPER', false),
     'version' => '1.0.0',
     'is_demo' => env('APP_IS_DEMO', false),
+    'is_heroku' => env('APP_IS_HEROKU', false),
 
     /*
     |--------------------------------------------------------------------------

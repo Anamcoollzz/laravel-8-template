@@ -1,0 +1,34 @@
+[
+    {
+        "name": "Profil",
+        "roles": ["superadmin"]
+    },
+    {
+        "name": "Profil Ubah",
+        "roles": ["superadmin"]
+    },
+    {
+        "name": "Role",
+        "roles": ["superadmin"]
+    },
+    {
+        "name": "Role Ubah",
+        "roles": ["superadmin"]
+    },
+    {
+        "name": "Pengguna",
+        "roles": ["superadmin"]
+    },
+    {
+        "name": "Pengguna Tambah",
+        "roles": ["superadmin"]
+    },
+    {
+        "name": "Pengguna Ubah",
+        "roles": ["superadmin"]
+    },
+    {
+        "name": "Pengguna Hapus",
+        "roles": ["superadmin"]
+    }
+]

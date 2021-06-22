@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -21,7 +22,10 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'avatar',
+        'email_verified_at',
         'password',
+        'last_login',
     ];
 
     /**
@@ -44,6 +48,15 @@ class User extends Authenticatable
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        // 'avatar_hehe'
+    ];
+
+    /**
      * add custom column avatar url
      *
      * @return string
@@ -53,6 +66,9 @@ class User extends Authenticatable
         if ($this->avatar) {
             if (Storage::exists('public/avatars/' . $this->avatar))
                 return asset('storage/avatars/' . $this->avatar);
+            if (Str::contains($this->avatar, 'https://') || Str::contains($this->avatar, 'http://')) {
+                return $this->avatar;
+            }
         }
         return null;
     }

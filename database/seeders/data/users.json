@@ -1,0 +1,8 @@
+[
+    {
+        "name": "Hairul Anam",
+        "email": "superadmin@laraveltemplate.com",
+        "password": "superadmin",
+        "roles": ["superadmin"]
+    }
+]
