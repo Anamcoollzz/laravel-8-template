@@ -24,50 +24,83 @@
         </a>
       </li>
 
-      <li>
-        <a class="nav-link" href="#">
-          <i class="fa fa-bars"></i>
-          <span>{{ __('Menu') }}</span>
-        </a>
-      </li>
+      @if (config('app.show_example_menu'))
+        <li>
+          <a class="nav-link" href="#">
+            <i class="fa fa-bars"></i>
+            <span>{{ __('Menu') }}</span>
+          </a>
+        </li>
 
-      <li class="nav-item dropdown {{-- active --}}">
-        <a href="#" class="nav-link has-dropdown">
-          <i class="fa fa-caret-square-down"></i>
-          <span>{{ __('Menu Dropdown') }}</span>
-        </a>
-        <ul class="dropdown-menu">
-          @foreach (range(1, 3) as $sub)
-            <li {{-- class="active" --}}>
-              <a class="nav-link" href="#">{{ __('Sub Menu') . $loop->iteration }}</a>
-            </li>
-          @endforeach
-        </ul>
-      </li>
+        <li class="nav-item dropdown {{-- active --}}">
+          <a href="#" class="nav-link has-dropdown">
+            <i class="fa fa-caret-square-down"></i>
+            <span>{{ __('Menu Dropdown') }}</span>
+          </a>
+          <ul class="dropdown-menu">
+            @foreach (range(1, 3) as $sub)
+              <li {{-- class="active" --}}>
+                <a class="nav-link" href="#">{{ __('Sub Menu') . $loop->iteration }}</a>
+              </li>
+            @endforeach
+          </ul>
+        </li>
 
-      <li @if (Route::is('datatable.index')) class="active" @endif>
-        <a class="nav-link" href="{{ route('datatable.index') }}">
-          <i class="fa fa-table"></i>
-          <span>{{ __('Datatable') }}</span>
-        </a>
-      </li>
+        <li @if (Route::is('datatable.index')) class="active" @endif>
+          <a class="nav-link" href="{{ route('datatable.index') }}">
+            <i class="fa fa-table"></i>
+            <span>{{ __('Datatable') }}</span>
+          </a>
+        </li>
 
-      <li @if (Route::is('form.index')) class="active" @endif>
-        <a class="nav-link" href="{{ route('form.index') }}">
-          <i class="fa fa-file-alt"></i>
-          <span>{{ __('Form') }}</span>
-        </a>
-      </li>
+        <li @if (Route::is('form.index')) class="active" @endif>
+          <a class="nav-link" href="{{ route('form.index') }}">
+            <i class="fa fa-file-alt"></i>
+            <span>{{ __('Form') }}</span>
+          </a>
+        </li>
+      @endif
 
       <li class="menu-header">{{ __('Menu Lainnya') }}</li>
 
+      @if (auth()->user()->can('Pengguna') ||
+    auth()->user()->can('Role'))
+        <li class="nav-item dropdown @if (Route::is('user-management.users.index') ||
+          Route::is('user-management.roles.index') || Route::is('user-management.roles.edit') ||
+          Route::is('user-management.users.edit') || Route::is('user-management.users.create')) active @endif">
+          <a href="#" class="nav-link has-dropdown">
+            <i class="fa fa-users"></i>
+            <span>{{ __('Manajemen Pengguna') }}</span>
+          </a>
+          <ul class="dropdown-menu">
+            @can('Pengguna')
+              <li @if (Route::is('user-management.users.index') || Route::is('user-management.users.edit') || Route::is('user-management.users.create')) class="active" @endif>
+                <a class="nav-link" href="{{ route('user-management.users.index') }}">
+                  {{ __('Data Pengguna') }}
+                </a>
+              </li>
+            @endcan
 
-      <li @if (Route::is('profile.index')) class="active" @endif>
-        <a class="nav-link" href="{{ route('profile.index') }}">
-          <i class="fa fa-user"></i>
-          <span>{{ __('Profil') }}</span>
-        </a>
-      </li>
+            @can('Role')
+              <li @if (Route::is('user-management.roles.index') || Route::is('user-management.roles.edit')) class="active" @endif>
+                <a class="nav-link" href="{{ route('user-management.roles.index') }}">
+                  {{ __('Data Role') }}
+                </a>
+              </li>
+            @endcan
+          </ul>
+        </li>
+      @endif
+
+      @can('Profil')
+        <li @if (Route::is('profile.index')) class="active" @endif>
+          <a class="nav-link" href="{{ route('profile.index') }}">
+            <i class="fa fa-user"></i>
+            <span>{{ __('Profil') }}</span>
+          </a>
+        </li>
+      @endcan
+
       <li>
         <a class="nav-link" href="{{ route('logout') }}">
           <i class="fa fa-sign-out-alt"></i>

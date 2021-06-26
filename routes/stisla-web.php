@@ -3,7 +3,9 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\UserManagementController;
 use App\Http\Middleware\ViewShare;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +31,12 @@ Route::middleware([
 
     # FORM
     Route::view('form', 'form.index')->name('form.index');
+
+    # USER MANAGEMENT
+    Route::prefix('user-management')->as('user-management.')->group(function () {
+        Route::resource('users', UserManagementController::class);
+        Route::resource('roles', RoleController::class);
+    });
 });
 
 Route::prefix('auth')->group(function () {
