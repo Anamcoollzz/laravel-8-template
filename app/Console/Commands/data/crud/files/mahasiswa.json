@@ -1,0 +1,72 @@
+{
+    "title": "Mahasiswa",
+    "icon": "fa fa-users",
+    "model": "Mahasiswa",
+    "columns": [
+        {
+            "type": "ai"
+        },
+        {
+            "type": "string",
+            "length": 50,
+            "name": "name",
+            "validations": {
+                "store": ["required"],
+                "update": ["required"]
+            },
+            "form": {
+                "type": "text",
+                "required": 2
+            }
+        },
+        {
+            "type": "date",
+            "name": "birth_date",
+            "validations": {
+                "store": ["required", "date_format:Y-m-d"],
+                "update": ["required", "date_format:Y-m-d"]
+            },
+            "form": {
+                "type": "date",
+                "required": 2
+            }
+        },
+        {
+            "type": "text",
+            "name": "address",
+            "validations": {
+                "store": ["required"],
+                "update": ["required"]
+            },
+            "form": {
+                "type": "textarea",
+                "required": 2
+            }
+        },
+        {
+            "type": "tinyInteger",
+            "name": "gender",
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Laki-laki"
+                },
+                {
+                    "value": 1,
+                    "label": "Perempuan"
+                }
+            ],
+            "validations": {
+                "store": ["required"],
+                "update": ["required"]
+            },
+            "form": {
+                "type": "radio",
+                "required": 2
+            }
+        },
+        {
+            "type": "timestamps"
+        }
+    ]
+}

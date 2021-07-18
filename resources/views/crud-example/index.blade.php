@@ -66,7 +66,7 @@
                         </td>
                         <td>{{ $item->date }}</td>
                         <td>{{ $item->time }}</td>
-                        <td>{{ $item->color }}</td>
+                        <td><span style="background-color: {{ $item->color }};">{{ $item->color }}</span></td>
                         <td>
                           @include('includes.form.buttons.btn-edit', ['link'=>route('crud-examples.edit',
                           [$item->id])])

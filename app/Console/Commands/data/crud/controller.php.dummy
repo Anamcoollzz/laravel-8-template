@@ -1,0 +1,133 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\REQUESTNAME;
+use App\Models\MODELNAME;
+use App\Repositories\REPOSITORYNAME;
+use App\Services\FileService;
+
+class CONTROLLERNAME extends Controller
+{
+    /**
+     * VARREPOSITORYNAME
+     *
+     * @var REPOSITORYNAME
+     */
+    private REPOSITORYNAME $VARREPOSITORYNAME;
+
+    /**
+     * fileService
+     *
+     * @var FileService
+     */
+    private FileService $fileService;
+
+    /**
+     * constructor method
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->VARREPOSITORYNAME = new REPOSITORYNAME;
+        $this->fileService = new FileService;
+        // $this->middleware('can:TITLE');
+        // $this->middleware('can:TITLE Tambah')->only(['create', 'store']);
+        // $this->middleware('can:TITLE Ubah')->only(['edit', 'update']);
+        // $this->middleware('can:TITLE Hapus')->only(['destroy']);
+    }
+
+    /**
+     * showing data page
+     *
+     * @return Response
+     */
+    public function index()
+    {
+        return view('FOLDERVIEW.index', [
+            'data' => $this->VARREPOSITORYNAME->getLatest(),
+        ]);
+    }
+
+    /**
+     * show add new data page
+     *
+     * @return Response
+     */
+    public function create()
+    {
+        return view('FOLDERVIEW.form', [
+
+        ]);
+    }
+
+    /**
+     * save new data to db
+     *
+     * @param REQUESTNAME $request
+     * @return Response
+     */
+    public function store(REQUESTNAME $request)
+    {
+        $this->VARREPOSITORYNAME->create(
+            array_merge(
+                [
+
+                ],
+                $request->only([
+                    COLUMNS
+                ])
+            )
+        );
+        return redirect()->back()->with('successMessage', __('Berhasil menambah data'));
+    }
+
+    /**
+     * showing edit page
+     *
+     * @param MODELNAME $VARMODELNAME
+     * @return Response
+     */
+    public function edit(MODELNAME $VARMODELNAME)
+    {
+        return view('FOLDERVIEW.form', [
+            'd' => $VARMODELNAME,
+        ]);
+    }
+
+    /**
+     * update data to db
+     *
+     * @param REQUESTNAME $request
+     * @param MODELNAME $VARMODELNAME
+     * @return Response
+     */
+    public function update(REQUESTNAME $request, MODELNAME $VARMODELNAME)
+    {
+        $this->VARREPOSITORYNAME->update(
+            array_merge(
+                [
+
+                ],
+                $request->only([
+                    COLUMNS
+                ])
+            ),
+            $VARMODELNAME->id
+        );
+        return redirect()->back()->with('successMessage', __('Berhasil memperbarui data'));
+    }
+
+    /**
+     * delete from db
+     *
+     * @param MODELNAME $VARMODELNAME
+     * @return Response
+     */
+    public function destroy(MODELNAME $VARMODELNAME)
+    {
+        $this->VARREPOSITORYNAME->delete($VARMODELNAME->id);
+        return redirect()->back()->with('successMessage', __('Berhasil menghapus data'));
+    }
+}

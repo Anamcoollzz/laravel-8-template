@@ -41,6 +41,8 @@ Route::middleware([
 
     # CONTOH CRUD
     Route::resource('crud-examples', CrudExampleController::class);
+
+    Route::resource('mahasiswas', \App\Http\Controllers\MahasiswaController::class);
 });
 
 Route::prefix('auth')->group(function () {

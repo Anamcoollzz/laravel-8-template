@@ -1,0 +1,67 @@
+@extends('stisla.layouts.app-table')
+
+@section('title')
+  {{ $title = 'TITLE' }}
+@endsection
+
+@section('content')
+  <div class="section-header">
+    <h1>{{ $title }}</h1>
+    <div class="section-header-breadcrumb">
+      <div class="breadcrumb-item active">
+        <a href="{{ route('dashboard.index') }}">{{ __('Dashboard') }}</a>
+      </div>
+      <div class="breadcrumb-item">{{ $title }}</div>
+    </div>
+  </div>
+
+  <div class="section-body">
+    <div class="row">
+      <div class="col-12">
+        @if ($data->count() > 0)
+          <div class="card">
+            <div class="card-header">
+              <h4><i class="ICON"></i> Data {{ $title }}</h4>
+              {{-- @can('TITLE Tambah') --}}
+              <div class="card-header-action">
+                @include('includes.form.buttons.btn-add', ['link'=>route('ROUTE.create')])
+              </div>
+              {{-- @endcan --}}
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped" id="datatable">
+                  <thead>
+                    <tr>
+                      <th class="text-center">{{ __('#') }}</th>
+TH
+                      <th>{{ __('Aksi') }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach ($data as $item)
+                      <tr>
+                        <td>{{ $loop->iteration }}</td>
+TD
+                        <td>
+                          {{-- @can('TITLE Ubah') --}}
+                            @include('includes.form.buttons.btn-edit', ['link'=>route('ROUTE.edit', [$item->id])])
+                          {{-- @can('TITLE Hapus') --}}
+                            @include('includes.form.buttons.btn-delete', ['link'=>route('ROUTE.destroy', [$item->id])])
+                          {{-- @endcan --}}
+                        </td>
+                      </tr>
+                    @endforeach
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        @else
+          @include('includes.empty-state', ['title'=>'Data '.$title, 'icon'=>'ICON','link'=>route('ROUTE.create')])
+        @endif
+      </div>
+
+    </div>
+  </div>
+@endsection
