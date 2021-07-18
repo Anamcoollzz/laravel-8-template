@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CrudExampleController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
@@ -37,6 +38,9 @@ Route::middleware([
         Route::resource('users', UserManagementController::class);
         Route::resource('roles', RoleController::class);
     });
+
+    # CONTOH CRUD
+    Route::resource('crud-examples', CrudExampleController::class);
 });
 
 Route::prefix('auth')->group(function () {

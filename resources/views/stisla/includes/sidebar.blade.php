@@ -24,6 +24,13 @@
         </a>
       </li>
 
+      <li @if (Route::is('crud-examples.index') || Route::is('crud-examples.create') || Route::is('crud-examples.edit')) class="active" @endif>
+        <a class="nav-link" href="{{ route('crud-examples.index') }}">
+          <i class="fa fa-atom"></i>
+          <span>{{ __('Contoh CRUD') }}</span>
+        </a>
+      </li>
+
       @if (config('app.show_example_menu'))
         <li>
           <a class="nav-link" href="#">

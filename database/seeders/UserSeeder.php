@@ -20,13 +20,13 @@ class UserSeeder extends Seeder
         User::truncate();
         $users = json_decode(file_get_contents(database_path('seeders/data/users.json')), true);
         foreach ($users as $user) {
-            $user = User::create([
+            $userObj = User::create([
                 'name'     => $user['name'],
                 'email'    => $user['email'],
                 'password' => bcrypt($user['password'])
             ]);
             foreach ($user['roles'] as $role)
-                $user->assignRole($role);
+                $userObj->assignRole($role);
         }
     }
 }

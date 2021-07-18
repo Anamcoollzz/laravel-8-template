@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\CrudExample;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -26,6 +27,40 @@ class FileService
         $filename = date('YmdHis') . Str::random(20);
         $avatarFile->storeAs('public/avatars', $filename);
         return $filename;
+    }
+
+    /**
+     * upload file crud example
+     *
+     * @param \Illuminate\Http\UploadedFile $file
+     * @return string
+     */
+    public function uploadCrudExampleFile(\Illuminate\Http\UploadedFile $file)
+    {
+        if (config('app.is_heroku')) {
+            $httpsUrl = cloudinary()->upload($file->getRealPath())->getSecurePath();
+            return $httpsUrl;
+        }
+        $filename = date('YmdHis') . Str::random(20);
+        $file->storeAs('public/crud-examples', $filename);
+        return $filename;
+    }
+
+    /**
+     * delete file crud example
+     *
+     * @param CrudExample $crudExample
+     * @return bool
+     */
+    public function deleteCrudExampleFile(CrudExample $crudExample)
+    {
+        $filepath = 'public/crud-examples/' . $crudExample->file;
+        $exist    = Storage::exists($filepath);
+        if ($exist) {
+            Storage::delete($filepath);
+            return true;
+        }
+        return false;
     }
 
     /**

@@ -54,6 +54,36 @@
     }
   });
 
+  function deleteGlobal(e, action_url) {
+    e.preventDefault();
+    swal({
+        title: 'Anda yakin?',
+        text: 'Sekali dihapus, data tidak akan kembali lagi!',
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+        buttons: {
+          cancel: {
+            text: "Batal",
+            value: null,
+            visible: true,
+            className: "",
+            closeModal: true,
+          },
+          confirm: {
+            text: "Lanjutkan",
+          }
+        }
+      })
+      .then(function(willDelete) {
+        if (willDelete) {
+          $('#formDeleteGlobal').attr('action', action_url);
+          document.getElementById('formDeleteGlobal').submit();
+        } else {
+          swal('Info', 'Okay, tidak jadi', 'info');
+        }
+      });
+  }
 </script>
 <script src="{{ asset('stisla/assets/js/skripku.js') }}"></script>
 
@@ -62,7 +92,6 @@
   <input type="hidden" id="sessionSuccessMessage" value="{{ session('successMessage') }}">
   <script>
     swal('Sukses', $('#sessionSuccessMessage').val(), 'success');
-
   </script>
 @endif
 
@@ -70,7 +99,6 @@
   <input type="hidden" id="sessionErrorMessage" value="{{ session('errorMessage') }}">
   <script>
     swal('Gagal', $('#sessionErrorMessage').val(), 'error');
-
   </script>
 @endif
 
