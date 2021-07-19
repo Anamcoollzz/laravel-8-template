@@ -25,9 +25,12 @@ session(['_meta_description' => $_meta_description, '_meta_keywords' => $_meta_k
   @include('stisla.includes.css')
 
 </head>
+@php
+$_sidebar_mini = \App\Models\Setting::where('key', 'stisla_sidebar_mini')->first()->value ?? 0;
+@endphp
 
-<body>
-  <div id="app">
+<body class="{{ $_sidebar_mini == 1 ? 'sidebar-mini' : '' }}">
+  <div id=" app">
     <div class="main-wrapper">
       @include('stisla.includes.navbar')
       @include('stisla.includes.sidebar')

@@ -8,11 +8,12 @@ $_app_name = \App\Models\Setting::where('key', 'application_name')->first()->val
 $_developer_name = config('app.developer_name');
 $_whatsapp_developer = config('developer.whatsapp');
 $_year = \App\Models\Setting::where('key', 'year')->first()->value;
+$_since = \App\Models\Setting::where('key', 'since')->first()->value;
 $_version = config('app.version');
 $_app_name_mobile = \App\Helpers\StringHelper::acronym($_app_name, 2);
 $_favicon = \App\Models\Setting::where('key', 'favicon')->first()->value;
 $_logo_url = \App\Repositories\SettingRepository::logoUrl();
-session(['_meta_description' => $_meta_description, '_meta_keywords' => $_meta_keywords, '_meta_author' => $_meta_author, '_company_name' => $_company_name, '_skin' => $_skin, '_app_name' => $_app_name, '_developer_name' => $_developer_name, '_whatsapp_developer' => $_whatsapp_developer, '_year' => $_year, '_version' => $_version, '_app_name_mobile' => $_app_name_mobile, '_favicon' => $_favicon, '_logo_url' => $_logo_url]);
+session(['_meta_description' => $_meta_description, '_meta_keywords' => $_meta_keywords, '_meta_author' => $_meta_author, '_company_name' => $_company_name, '_skin' => $_skin, '_app_name' => $_app_name, '_developer_name' => $_developer_name, '_whatsapp_developer' => $_whatsapp_developer, '_year' => $_year, '_version' => $_version, '_app_name_mobile' => $_app_name_mobile, '_favicon' => $_favicon, '_logo_url' => $_logo_url, '_since' => $_since]);
 @endphp
 
 <!DOCTYPE html>

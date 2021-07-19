@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SettingRequest;
 use App\Repositories\SettingRepository;
+use App\Services\FileService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\View;
@@ -19,6 +20,13 @@ class SettingController extends Controller
     private $settingRepository;
 
     /**
+     * fileservice
+     *
+     * @var FileService
+     */
+    private FileService $fileService;
+
+    /**
      * construct function
      *
      * @return void
@@ -26,6 +34,7 @@ class SettingController extends Controller
     public function __construct()
     {
         $this->settingRepository = new SettingRepository;
+        $this->fileService       = new FileService;
     }
 
     /**
@@ -61,7 +70,11 @@ class SettingController extends Controller
     public function update(SettingRequest $request)
     {
         foreach ($request->all() as $key => $input) {
-            $this->settingRepository->updateByKey(['value' => $input], $key);
+            if ($key === 'favicon') {
+                $url = $this->fileService->uploadFavicon($request->file('favicon'));
+                $this->settingRepository->updateByKey(['value' => $url], $key);
+            } else
+                $this->settingRepository->updateByKey(['value' => $input], $key);
         }
         return back()
             ->with(config('app.template') === 'stisla' ? 'successMessage' : 'success_msg', __('Application Setting') . ' ' . __('success updated'));

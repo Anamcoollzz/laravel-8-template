@@ -45,7 +45,7 @@ class CreateRepositoryCommand extends Command
             if (!$modelName) {
                 $modelName = $name;
             }
-            $repositoryFile = file_get_contents(app_path('Console/Commands/data/NameRepository.php'));
+            $repositoryFile = file_get_contents(app_path('Console/Commands/data/NameRepository.php.dummy'));
             $repositoryFile = str_replace('ModelName', $modelName, $repositoryFile);
             $repositoryFile = str_replace('NameRepository', $name . 'Repository', $repositoryFile);
             if ($this->confirm('Do you wish to continue? (' . $name . 'Repository)')) {

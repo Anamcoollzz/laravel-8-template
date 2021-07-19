@@ -22,11 +22,11 @@
       <div class="col-12">
         <div class="card">
           <div class="card-header">
-            <h4><i class="fa fa-cogs"></i> {{ $title }}</h4>
+            <h4><i class="fa fa-cogs"></i> {{ $title }} Umum</h4>
 
           </div>
           <div class="card-body">
-            <form action="{{ route('settings.update') }}" method="POST">
+            <form action="{{ route('settings.update') }}" method="POST" enctype="multipart/form-data">
               @method('put')
               @csrf
               <div class="row clearfix">
@@ -46,10 +46,46 @@
                   @include('includes.form.input', ['id'=>'application_version', 'label'=>__('Version'),
                   'value'=>$_application_version->value, 'required'=>true])
                 </div>
+
+                <div class="col-md-12">
+                  @include('includes.form.buttons.save-btn')
+                  @include('includes.form.buttons.reset-btn')
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h4><i class="fa fa-eye"></i> {{ __('Pengaturan Tampilan') }}</h4>
+
+          </div>
+          <div class="card-body">
+            <form action="{{ route('settings.update') }}" method="POST" enctype="multipart/form-data">
+              @method('put')
+              @csrf
+              <div class="row clearfix">
                 <div class="col-sm-6">
                   {{-- {{ dd($activeSkin->value) }} --}}
                   @include('includes.form.select', ['id'=>'stisla_skin', 'label'=>__('Skin'),
                   'selected'=>$activeSkin->value, 'options'=>$skins, 'required'=>true])
+                </div>
+                <div class="col-sm-6">
+                  @include('includes.form.select', ['id'=>'login_template', 'label'=>__('Tampilan Halaman Masuk'),
+                  'selected'=>\App\Models\Setting::firstOrCreate(['key'=> 'login_template'], ['value'=>'default'])->value,
+                  'options'=>['default'=>'default', 'tampilan 2'=>'tampilan 2'],
+                  'required'=>true])
+                </div>
+                <div class="col-sm-6">
+                  @include('includes.form.select', ['id'=>'stisla_sidebar_mini', 'label'=>__('Sidebar Mini'),
+                  'selected'=>\App\Models\Setting::firstOrCreate(['key'=> 'stisla_sidebar_mini'], ['value'=>'0'])->value,
+                  'options'=>['0'=>'Tidak', '1'=>'Ya'],
+                  'required'=>true])
+                </div>
+                <div class="col-sm-6">
+                  @include('includes.form.input', ['id'=>'favicon', 'label'=>__('Favicon'),
+                  'required'=>false, 'accept'=>'image/x-icon', 'type'=>'file'])
                 </div>
                 <div class="col-md-12">
                   @include('includes.form.buttons.save-btn')

@@ -37,6 +37,13 @@ class AuthController extends Controller
      */
     public function loginForm()
     {
+        if (config('app.template') === 'stisla') {
+            $template = \App\Models\Setting::firstOrCreate(['key' => 'login_template'], ['value' => 'default'])->value;
+            if ($template === 'tampilan 2')
+                return view('auth.login.index-stisla-2');
+            else
+                return view('auth.login.index-stisla');
+        }
         return view('auth.login.index');
     }
 
@@ -51,6 +58,7 @@ class AuthController extends Controller
         $user = $this->userRepository->findByEmail($request->email);
         if (Hash::check($request->password, $user->password)) {
             Auth::login($user, $request->filled('remember'));
+            $user->update(['last_login' => now()]);
             return redirect()->route('dashboard.index')->with('successMessage', __('Sukses masuk ke dalam sistem'));
         }
         return redirect()->back()->withInput()->with('errorMessage', __('Password yang dimasukkan salah'));

@@ -120,4 +120,21 @@ class FileService
             return [false, $e->getMessage()];
         }
     }
+
+    /**
+     * upload favicon file
+     *
+     * @param \Illuminate\Http\UploadedFile $avatarFile
+     * @return string
+     */
+    public function uploadFavicon(\Illuminate\Http\UploadedFile $avatarFile)
+    {
+        if (config('app.is_heroku')) {
+            $httpsUrl = cloudinary()->upload($avatarFile->getRealPath())->getSecurePath();
+            return $httpsUrl;
+        }
+        $filename = date('YmdHis') . Str::random(20);
+        $avatarFile->storeAs('public/favicon', $filename);
+        return asset('storage/favicon/' . $filename);
+    }
 }

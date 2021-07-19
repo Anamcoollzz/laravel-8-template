@@ -207,7 +207,7 @@
         </a>
         <div class="dropdown-menu dropdown-menu-right">
           <div class="dropdown-title">{{ __('Waktu masuk') }}
-            <br>{{ Auth::user()->logged_in_time }}
+            <br>{{ Auth::user()->last_login }}
           </div>
 
           <a href="{{ route('profile.index') }}" class="dropdown-item has-icon">

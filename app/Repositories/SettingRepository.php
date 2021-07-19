@@ -147,12 +147,15 @@ class SettingRepository extends Repository
     public function getStislaSkins()
     {
         return [
-            "style"   => "default",
-            "brown"   => "brown",
-            "purple"  => "purple",
-            "red"     => "red",
-            "reverse" => "reverse",
-            "yellow"  => "yellow",
+            "style"  => "default",
+            "brown"  => "brown",
+            "purple" => "purple",
+            "red"    => "red",
+            "indigo" => "indigo",
+            "yellow" => "yellow",
+            "orange" => "orange",
+            "pink"   => "pink",
+            "citron" => "citron",
         ];
     }
 

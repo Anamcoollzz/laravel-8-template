@@ -5,10 +5,11 @@
     { "key": "country", "value": "Indonesia" },
     {
         "key": "favicon",
-        "value": "http://localhost/stisla/assets/img/favicon.ico"
+        "value": "http://127.0.0.1:8001/favicon.ico"
     },
     { "key": "logo", "value": "http://localhost/img/logo.png" },
     { "key": "year", "value": "2020" },
+    { "key": "since", "value": "2020" },
 
     { "key": "meta_author", "value": "Hairul Anam" },
     { "key": "meta_description", "value": "PT Anam Maju Pantang Mundur" },

@@ -5,4 +5,6 @@
 <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
 <title>@yield('title') &mdash; {{ $_app_name }}</title>
 <!-- Favicon -->
-<link id="favicon" rel="shortcut icon" href="{{ $_favicon }}" type="image/x-icon">
+<link rel="shortcut icon"
+  href="{{ \App\Models\Setting::where('key', 'favicon')->first()->value ?? asset('favicon.ico') }}"
+  type="image/x-icon">

@@ -41,7 +41,7 @@ class MakeServiceCommand extends Command
         if (!$name)
             $this->error('Name required!');
         else {
-            $serviceFile = file_get_contents(app_path('Console/Commands/data/NameService.php'));
+            $serviceFile = file_get_contents(app_path('Console/Commands/data/NameService.php.dummy'));
             $serviceFile = str_replace('NameService', $name . 'Service', $serviceFile);
             if ($this->confirm('Do you wish to continue? (' . $name . 'Service)')) {
                 $filepath = app_path('Services\\' . $name . 'Service.php');
