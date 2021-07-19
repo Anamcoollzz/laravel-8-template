@@ -1,7 +1,7 @@
 <footer class="main-footer">
   <div class="footer-left">
-    Copyright &copy; {{ session('_year') ?? \App\Models\Setting::where('key', 'year')->first()->value }} <div
-      class="bullet"></div>
+    Copyright &copy; {{ $_since < date('Y') ? $_since . ' - ' . date('Y') : $_since }}
+    <div class="bullet"></div>
     <a href="{{ route('dashboard.index') }}">{{ session('_app_name') ?? config('app.name') }}</a>
 
     @if (config('app.is_showing_developer'))
@@ -17,6 +17,6 @@
 
   </div>
   <div class="footer-right">
-    Versi {{ session('_version') ?? config('app.version') }}
+    Versi {{ $_version ?? config('app.version') }}
   </div>
 </footer>

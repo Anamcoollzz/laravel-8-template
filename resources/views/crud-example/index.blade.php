@@ -29,6 +29,7 @@
               {{-- @endcan --}}
             </div>
             <div class="card-body">
+              @include('stisla.includes.datatable-buttons')
               <div class="table-responsive">
                 <table class="table table-striped" id="datatable">
                   <thead>
@@ -89,3 +90,12 @@
     </div>
   </div>
 @endsection
+
+
+@push('css')
+
+@endpush
+
+@push('js')
+
+@endpush

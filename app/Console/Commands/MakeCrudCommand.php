@@ -150,7 +150,7 @@ class MakeCrudCommand extends Command
             }
         }
         $migrationContent = str_replace('STRUCTURE', $STRUCTURE, $migrationContent);
-        file_put_contents(database_path('migrations/' . date('Y_m_d_His') . '_create_' . $modelNameSnake . '_table.php'), $migrationContent);
+        file_put_contents($migrationPath = database_path('migrations\\' . date('Y_m_d_His') . '_create_' . $modelNameSnake . '_table.php'), $migrationContent);
 
         // CREATE MODEL
         $modelExample = file_get_contents(
@@ -162,14 +162,14 @@ class MakeCrudCommand extends Command
         $modelContent = str_replace('FILLABLES', $FILLABLES, $modelContent);
         $modelContent = str_replace('MODELNAME', $modelName, $modelContent);
         $modelContent = str_replace('TYPESVALUE', '[' . $TYPESVALUE . "\n\t]", $modelContent);
-        file_put_contents(app_path('Models/' . $modelName . '.php'), $modelContent);
+        file_put_contents($modelPath = app_path('Models\\' . $modelName . '.php'), $modelContent);
 
         // CREATE REPOSITORY
         $repositoryFile = file_get_contents(app_path('Console/Commands/data/NameRepository.php'));
         $repositoryFile = str_replace('ModelName', $modelName, $repositoryFile);
         $repositoryFile = str_replace('NameRepository', $modelName . 'Repository', $repositoryFile);
         $filepath = app_path('Repositories\\' . $modelName . 'Repository.php');
-        file_put_contents($filepath, $repositoryFile);
+        file_put_contents($repositoryPath = $filepath, $repositoryFile);
 
         // CREATE CONTROLLER
         $controllerFile = file_get_contents(
@@ -187,7 +187,7 @@ class MakeCrudCommand extends Command
         $controllerFile = str_replace('COLUMNS', $FILLABLES, $controllerFile);
         $controllerFile = str_replace('FOLDERVIEW', Str::slug($modelName), $controllerFile);
         $filepath = app_path('Http\\Controllers\\' . $modelName . 'Controller.php');
-        file_put_contents($filepath, $controllerFile);
+        file_put_contents($controllerPath = $filepath, $controllerFile);
 
         // CREATE REQUEST
         $requestFile = file_get_contents(
@@ -199,7 +199,7 @@ class MakeCrudCommand extends Command
         $requestFile = str_replace('UPDATEVALIDATIONS', $UPDATEVALIDATIONS, $requestFile);
         $requestFile = str_replace('STOREVALIDATIONS', $STOREVALIDATIONS, $requestFile);
         $filepath    = app_path('Http\\Requests\\' . $modelName . 'Request.php');
-        file_put_contents($filepath, $requestFile);
+        file_put_contents($requestPath = $filepath, $requestFile);
 
         // CREATE VIEWS
         $viewIndexFile = file_get_contents(app_path('Console\\Commands\\data\\crud\\views\\index.blade.php.dummy'));
@@ -215,7 +215,7 @@ class MakeCrudCommand extends Command
             // mkdir($folder);
         }
         $filepath    = $folder . '\\index.blade.php';
-        file_put_contents($filepath, $viewIndexFile);
+        file_put_contents($viewIndexPath = $filepath, $viewIndexFile);
 
         $viewFormFile = file_get_contents(app_path('Console\\Commands\\data\\crud\\views\\form.blade.php.dummy'));
         $viewFormFile = str_replace('TITLE', $this->json->title, $viewFormFile);
@@ -223,10 +223,17 @@ class MakeCrudCommand extends Command
         $viewFormFile = str_replace('ICON', $this->json->icon, $viewFormFile);
         $viewFormFile = str_replace('FORM', $FORM, $viewFormFile);
         $filepath    = $folder . '\\form.blade.php';
-        file_put_contents($filepath, $viewFormFile);
+        file_put_contents($viewCreatePath = $filepath, $viewFormFile);
 
-        $this->info('copy this to your route file => Route::resource(\'' . Str::slug($modelName) . 's\', \App\Http\Controllers\\' . $modelName . 'Controller::class);');
+        $this->info('Created migration file => ' . $migrationPath);
+        $this->info('Created model file => ' . $modelPath);
+        $this->info('Created controller file => ' . $controllerPath);
+        $this->info('Created repository file => ' . $repositoryPath);
+        $this->info('Created request file => ' . $requestPath);
+        $this->info('Created view index file => ' . $viewIndexPath);
+        $this->info('Created form index file => ' . $viewCreatePath);
         $this->info('Don\'t forget to run php artisan migrate');
+        $this->info('copy this to your route file => Route::resource(\'' . Str::slug($modelName) . 's\', \App\Http\Controllers\\' . $modelName . 'Controller::class);');
 
         return 0;
     }

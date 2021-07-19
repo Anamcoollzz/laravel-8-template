@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\TestingController;
 use App\Http\Controllers\UserManagementController;
 use App\Http\Middleware\ViewShare;
 use Illuminate\Support\Facades\Route;
@@ -43,6 +44,8 @@ Route::middleware([
     Route::resource('crud-examples', CrudExampleController::class);
 
     Route::resource('mahasiswas', \App\Http\Controllers\MahasiswaController::class);
+
+    Route::get('testing/datatable', [TestingController::class, 'datatable']);
 });
 
 Route::prefix('auth')->group(function () {

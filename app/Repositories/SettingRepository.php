@@ -99,6 +99,16 @@ class SettingRepository extends Repository
     }
 
     /**
+     * get application stisla skin
+     *
+     * @return Setting
+     */
+    public static function stislaSkin()
+    {
+        return Setting::firstOrCreate(['key' => 'stisla_skin'], ['value' => 'style']);
+    }
+
+    /**
      * get skins app
      *
      * @return array
@@ -126,6 +136,23 @@ class SettingRepository extends Repository
             "grey",
             "blue-grey",
             "black",
+        ];
+    }
+
+    /**
+     * get stisla skins app
+     *
+     * @return array
+     */
+    public function getStislaSkins()
+    {
+        return [
+            "style"   => "default",
+            "brown"   => "brown",
+            "purple"  => "purple",
+            "red"     => "red",
+            "reverse" => "reverse",
+            "yellow"  => "yellow",
         ];
     }
 

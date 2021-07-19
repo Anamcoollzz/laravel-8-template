@@ -108,6 +108,15 @@
         </li>
       @endcan
 
+      @can('Pengaturan')
+        <li @if (Route::is('settings.index')) class="active" @endif>
+          <a class="nav-link" href="{{ route('settings.index') }}">
+            <i class="fa fa-cogs"></i>
+            <span>{{ __('Pengaturan') }}</span>
+          </a>
+        </li>
+      @endcan
+
       <li>
         <a class="nav-link" href="{{ route('logout') }}">
           <i class="fa fa-sign-out-alt"></i>

@@ -23,11 +23,20 @@ class SettingRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'application_name' => 'required',
-            'company_name'     => 'required',
-            'since'            => 'required|numeric',
-            'version'          => 'required',
-        ];
+        if (config('app.template') === 'stisla')
+            return [
+                'application_name'    => 'required',
+                'company_name'        => 'required',
+                'since'               => 'required|numeric',
+                'application_version' => 'required',
+                'stisla_skin'         => 'required',
+            ];
+        else
+            return [
+                'application_name' => 'required',
+                'company_name'     => 'required',
+                'since'            => 'required|numeric',
+                'version'          => 'required',
+            ];
     }
 }

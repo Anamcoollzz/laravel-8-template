@@ -35,14 +35,21 @@ class SettingController extends Controller
      */
     public function index()
     {
-        $skins = collect($this->settingRepository->getSkins())->map(function ($item) {
-            $item2['name'] = $item;
-            return $item2;
-        })->pluck('name', 'name')->toArray();
-        // return $skins;
-        return view('settings.index', [
-            'skins' => $skins,
-        ]);
+        if (config('app.template') === 'stisla') {
+            $skins = $this->settingRepository->getStislaSkins();
+            return view('settings.index-stisla', [
+                'skins' => $skins,
+                'activeSkin' => $this->settingRepository->stislaSkin(),
+            ]);
+        } else {
+            $skins = collect($this->settingRepository->getSkins())->map(function ($item) {
+                $item2['name'] = $item;
+                return $item2;
+            })->pluck('name', 'name')->toArray();
+            return view('settings.index', [
+                'skins' => $skins,
+            ]);
+        }
     }
 
     /**
@@ -56,6 +63,7 @@ class SettingController extends Controller
         foreach ($request->all() as $key => $input) {
             $this->settingRepository->updateByKey(['value' => $input], $key);
         }
-        return back()->with('success_msg', __('Application Setting') . ' ' . __('success updated'));
+        return back()
+            ->with(config('app.template') === 'stisla' ? 'successMessage' : 'success_msg', __('Application Setting') . ' ' . __('success updated'));
     }
 }

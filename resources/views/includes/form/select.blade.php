@@ -6,8 +6,7 @@
   <select @if ($multiple ?? false) multiple @endif
     name="{{ $name ?? $id }}" @isset($id) id="{{ $id }}" @endisset class="form-control">
     @foreach ($options as $value => $text)
-      <option @if (($selected ?? ($d->$name ?? ($d->$id ?? false))) == $value) selected @endif
-        value="{{ $value }}">{{ $text }}</option>
+      <option @if (($selected ?? ($d[$name ?? $id] ?? false)) == $value) selected @endif value="{{ $value }}">{{ $text }}</option>
     @endforeach
   </select>
 </div>
