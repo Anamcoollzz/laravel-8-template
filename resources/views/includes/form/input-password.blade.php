@@ -1,2 +1,3 @@
-@include('includes.form.input', ['id'=>'password', 'type'=>'password', 'label'=>'Password', 'required'=>$required??true,
+@include('includes.form.input', ['id'=>$id??'password', 'type'=>'password', 'label'=>$label??'Password',
+'required'=>$required??true,
 'icon'=>'fas fa-key'])

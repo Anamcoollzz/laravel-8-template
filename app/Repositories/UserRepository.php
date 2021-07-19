@@ -31,6 +31,17 @@ class UserRepository extends Repository
     }
 
     /**
+     * find user by email token
+     *
+     * @param string $emailToken
+     * @return User
+     */
+    public function findByEmailToken(string $emailToken)
+    {
+        return $this->model->where('email_token', $emailToken)->first();
+    }
+
+    /**
      * update profile by user login
      *
      * @param array $data

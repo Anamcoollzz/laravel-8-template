@@ -23,15 +23,31 @@ class SettingRequest extends FormRequest
      */
     public function rules()
     {
-        if (config('app.template') === 'stisla')
-            return [
-                'application_name'    => 'required',
-                'company_name'        => 'required',
-                'since'               => 'required|numeric',
-                'application_version' => 'required',
-                'stisla_skin'         => 'required',
-            ];
-        else
+        if (config('app.template') === 'stisla') {
+
+            if ($this->type === 'umum')
+                return [
+                    'application_name'    => 'required',
+                    'company_name'        => 'required',
+                    'since'               => 'required|numeric',
+                    'application_version' => 'required',
+                ];
+            else if ($this->type === 'tampilan')
+                return [
+                    'stisla_skin' => 'required',
+                    'favicon'     => 'nullable|file',
+                ];
+            else if ($this->type === 'email')
+                return [
+                    'mail_from_address' => 'required',
+                    'mail_from_name'    => 'required',
+                    'mail_host'         => 'required',
+                    'mail_port'         => 'required',
+                    'mail_username'     => 'required',
+                    'mail_password'     => 'required',
+                    'mail_encryption'   => 'required',
+                ];
+        } else
             return [
                 'application_name' => 'required',
                 'company_name'     => 'required',

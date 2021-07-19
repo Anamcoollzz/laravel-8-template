@@ -17,14 +17,15 @@ array_push($props, isset($type) ? 'type="' . $type . '"' : 'type="text"');
 @if (config('app.template') === 'stisla')
   @if ($icon ?? false)
     <div class="form-group">
-      <label for="{{ $id ?? $name }}">{{ $label ?? $id }}
+      <label for="{{ $id ?? $name }}"
+        class="{{ $errors->has($name ?? $id) ? 'text-danger' : '' }}">{{ $label ?? $id }}
         @if ($required ?? false)
           <span class="text-danger">*</span>
         @endif
       </label>
       <div class="input-group">
         <div class="input-group-prepend">
-          <div class="input-group-text">
+          <div class="input-group-text {{ $errors->has($name ?? $id) ? 'border-danger' : '' }}">
             <i class="{{ $icon }}"></i>
           </div>
         </div>
@@ -41,7 +42,8 @@ array_push($props, isset($type) ? 'type="' . $type . '"' : 'type="text"');
     </div>
   @else
     <div class="form-group">
-      <label for="{{ $id ?? $name }}">{{ $label ?? $id }}
+      <label for="{{ $id ?? $name }}"
+        class="{{ $errors->has($name ?? $id) ? 'text-danger' : '' }}">{{ $label ?? $id }}
         @if ($required ?? false)
           <span class="text-danger">*</span>
         @endif

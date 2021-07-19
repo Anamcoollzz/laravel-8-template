@@ -1,7 +1,7 @@
 @extends('stisla.layouts.app-blank')
 
 @section('title')
-  {{ $title = __('Masuk') }}
+  {{ $title = __('Lupa Password') }}
 @endsection
 
 @section('content')
@@ -25,42 +25,17 @@
                   @csrf
 
                   @include('includes.form.input-email')
-                  @include('auth.login.input-password')
-
-                  <div class="form-group">
-                    <div class="custom-control custom-checkbox">
-                      <input type="checkbox" name="remember" class="custom-control-input" tabindex="3" id="remember-me">
-                      <label class="custom-control-label" for="remember-me">{{ __('Ingat Saya') }}</label>
-                    </div>
-                  </div>
 
                   <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
-                      {{ $title }}
+                      {{ __('Kirim') }}
                     </button>
                   </div>
                 </form>
-                {{-- <div class="text-center mt-4 mb-3">
-                  <div class="text-job text-muted">Login With Social</div>
-                </div>
-                <div class="row sm-gutters">
-                  <div class="col-6">
-                    <a class="btn btn-block btn-social btn-facebook">
-                      <span class="fab fa-facebook"></span> Facebook
-                    </a>
-                  </div>
-                  <div class="col-6">
-                    <a class="btn btn-block btn-social btn-twitter">
-                      <span class="fab fa-twitter"></span> Twitter
-                    </a>
-                  </div>
-                </div> --}}
+
 
               </div>
             </div>
-            {{-- <div class="mt-5 text-muted text-center">
-              Don't have an account? <a href="auth-register.html">Create One</a>
-            </div> --}}
             <div class="simple-footer">
               Copyright &copy; {{ ($_since = session('_since')) < date('Y') ? $_since . ' - ' . date('Y') : $_since }}
             </div>

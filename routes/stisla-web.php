@@ -51,5 +51,9 @@ Route::middleware([
 Route::prefix('auth')->group(function () {
     Route::get('login', [AuthController::class, 'loginForm'])->name('login');
     Route::post('login', [AuthController::class, 'login']);
-    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
+    Route::get('forgot-password', [AuthController::class, 'forgotPasswordForm'])->name('forgot-password');
+    Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
+    Route::get('reset-password/{token}', [AuthController::class, 'resetPasswordForm'])->name('reset-password');
+    Route::post('reset-password/{token}', [AuthController::class, 'resetPassword']);
 });
