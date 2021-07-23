@@ -46,11 +46,17 @@ Route::middleware([
     Route::resource('mahasiswas', \App\Http\Controllers\MahasiswaController::class);
 
     Route::get('testing/datatable', [TestingController::class, 'datatable']);
+    Route::get('testing/send-email', [TestingController::class, 'sendEmail']);
 });
 
 Route::prefix('auth')->group(function () {
     Route::get('login', [AuthController::class, 'loginForm'])->name('login');
     Route::post('login', [AuthController::class, 'login']);
+    Route::get('verification', [AuthController::class, 'verificationForm'])->name('verification');
+    Route::post('verification', [AuthController::class, 'verification']);
+    Route::get('verify/{token}', [AuthController::class, 'verify'])->name('verify');
+    Route::get('register', [AuthController::class, 'registerForm'])->name('register');
+    Route::post('register', [AuthController::class, 'register']);
     Route::get('logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
     Route::get('forgot-password', [AuthController::class, 'forgotPasswordForm'])->name('forgot-password');
     Route::post('forgot-password', [AuthController::class, 'forgotPassword']);

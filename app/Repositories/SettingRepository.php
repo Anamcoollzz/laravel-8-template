@@ -204,4 +204,14 @@ class SettingRepository extends Repository
             return asset('stisla/assets/img/unsplash/eberhard-grossgasteiger-1207565-unsplash.jpg');
         }
     }
+
+    /**
+     * loginMustVerified
+     *
+     * @return bool
+     */
+    public function loginMustVerified()
+    {
+        return ((int) Setting::firstOrCreate(['key' => 'login_must_verified'], ['value' => 0])->value) === 1;
+    }
 }

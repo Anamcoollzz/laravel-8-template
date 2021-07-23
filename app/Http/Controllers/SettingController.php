@@ -47,8 +47,9 @@ class SettingController extends Controller
         if (config('app.template') === 'stisla') {
             $skins = $this->settingRepository->getStislaSkins();
             return view('settings.index-stisla', [
-                'skins' => $skins,
-                'activeSkin' => $this->settingRepository->stislaSkin(),
+                'skins'               => $skins,
+                'activeSkin'          => $this->settingRepository->stislaSkin(),
+                'login_must_verified' => $this->settingRepository->loginMustVerified(),
             ]);
         } else {
             $skins = collect($this->settingRepository->getSkins())->map(function ($item) {

@@ -18,6 +18,8 @@ class CrudExample extends Model
         'text',
         'number',
         'select',
+        'select2',
+        'select2_multiple',
         'textarea',
         'radio',
         'checkbox',
@@ -33,6 +35,7 @@ class CrudExample extends Model
      * @var array
      */
     protected $casts = [
-        'checkbox' => 'array',
+        'checkbox'         => 'array',
+        'select2_multiple' => 'array',
     ];
 }

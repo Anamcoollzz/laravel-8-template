@@ -87,6 +87,8 @@ class CrudExampleController extends Controller
                     'checkbox',
                     "time",
                     "color",
+                    'select2',
+                    'select2_multiple'
                 ])
             )
         );
@@ -131,6 +133,8 @@ class CrudExampleController extends Controller
                     'checkbox',
                     "time",
                     "color",
+                    'select2',
+                    'select2_multiple'
                 ])
             ),
             $crudExample->id

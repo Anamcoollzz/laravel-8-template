@@ -87,7 +87,8 @@ $(document).ready(function () {
 
   // datatable
   if ($("#datatable").length > 0) {
-    $("#datatable").dataTable({
+    var $dtTbl = $("#datatable");
+    $dtTbl.dataTable({
       language: {
         lengthMenu: "Menampilkan _MENU_ baris data per halaman",
         zeroRecords: "Tidak ada data",
@@ -124,8 +125,21 @@ $(document).ready(function () {
           extend: "pdf",
           text: "PDF",
           orientation: "landscape",
-          pageSize: "LETTER",
+          pageSize: "Legal",
           className: "btn-danger",
+          customize: function (doc) {
+            var colCount = new Array();
+            $dtTbl.find("tbody tr:first-child td").each(function () {
+              if ($(this).attr("colspan")) {
+                for (var i = 1; i <= $(this).attr("colspan"); $i++) {
+                  colCount.push("*");
+                }
+              } else {
+                colCount.push("*");
+              }
+            });
+            doc.content[1].table.widths = colCount;
+          },
         },
         {
           attr: { id: "printDtBtn" },

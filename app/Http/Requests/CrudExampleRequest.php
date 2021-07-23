@@ -24,16 +24,18 @@ class CrudExampleRequest extends FormRequest
     public function rules()
     {
         return [
-            'text'     => 'required',
-            "number"   => "required|numeric",
-            "select"   => "required",
-            "textarea" => "required",
-            "checkbox" => "required|array",
-            "radio"    => "required",
-            "file"     => $this->isMethod('put') ? '' : "required|file",
-            "date"     => "required|date",
-            "time"     => "required",
-            "color"    => "required",
+            'text'             => 'required',
+            "number"           => "required|numeric",
+            "select"           => "required",
+            "select2"          => "required",
+            "select2_multiple" => "required|array",
+            "textarea"         => "required",
+            "checkbox"         => "required|array",
+            "radio"            => "required",
+            "file"             => $this->isMethod('put') ? '' : "required|file",
+            "date"             => "required|date",
+            "time"             => "required",
+            "color"            => "required",
         ];
     }
 }

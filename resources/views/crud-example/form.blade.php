@@ -47,6 +47,15 @@
                   'label'=>'Select', 'required'=>true])
                 </div>
                 <div class="col-md-6">
+                  @include('includes.form.select2', ['id'=>'select2', 'name'=>'select2', 'options'=>$selectOptions,
+                  'label'=>'Select2', 'required'=>true])
+                </div>
+                <div class="col-md-6">
+                  @include('includes.form.select2', ['id'=>'select2_multiple', 'name'=>'select2_multiple[]',
+                  'options'=>$selectOptions,
+                  'label'=>'Select2 Multiple', 'required'=>true, 'multiple'=>true])
+                </div>
+                <div class="col-md-6">
                   @include('includes.form.textarea', ['required'=>true, 'id'=>'textarea', 'label'=>'Textarea'])
                 </div>
                 <div class="col-md-6">

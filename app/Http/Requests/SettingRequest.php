@@ -37,6 +37,10 @@ class SettingRequest extends FormRequest
                     'stisla_skin' => 'required',
                     'favicon'     => 'nullable|file',
                 ];
+            else if ($this->type === 'lainnya')
+                return [
+                    'login_must_verified' => 'required|numeric',
+                ];
             else if ($this->type === 'email')
                 return [
                     'mail_from_address' => 'required',

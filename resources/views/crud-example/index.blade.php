@@ -38,6 +38,8 @@
                       <th>{{ __('Text') }}</th>
                       <th>{{ __('Number') }}</th>
                       <th>{{ __('Select') }}</th>
+                      <th>{{ __('Select2') }}</th>
+                      <th>{{ __('Select2 Multiple') }}</th>
                       <th>{{ __('Textarea') }}</th>
                       <th>{{ __('Radio') }}</th>
                       <th>{{ __('Checkbox') }}</th>
@@ -55,6 +57,8 @@
                         <td>{{ $item->text }}</td>
                         <td>{{ $item->number }}</td>
                         <td>{{ $item->select }}</td>
+                        <td>{{ $item->select2 }}</td>
+                        <td>{{ implode(', ', $item->select2_multiple) }}</td>
                         <td>{{ $item->textarea }}</td>
                         <td>{{ $item->radio }}</td>
                         <td>{{ implode(', ', $item->checkbox) }}</td>

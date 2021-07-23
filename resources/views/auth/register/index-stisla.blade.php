@@ -1,7 +1,7 @@
 @extends('stisla.layouts.app-blank')
 
 @section('title')
-  {{ __('Masuk') }}
+  {{ __('Daftar') }}
 @endsection
 
 @section('content')
@@ -17,31 +17,22 @@
               <span class="font-weight-bold">{{ session('_app_name') }}</span>
             </h4>
             <h5 class="text-dark font-weight-normal">{{ session('_company_name') }}</h5>
-            <p class="text-muted">Sebelum memulai, anda harus masuk terlebih dahulu dengan akun anda.
+            <p class="text-muted">Sebelum memulai, anda harus mendaftar terlebih dahulu.
             </p>
           </div>
           <form method="POST" action="" class="needs-validation" novalidate="">
             @csrf
+            @include('includes.form.input-name')
             @include('includes.form.input-email')
             {{-- @include('includes.form.input-password') --}}
 
-            @include('auth.login.input-password')
+            @include('includes.form.input-password')
+            @include('includes.form.input-password', ['id'=>'password_confirmation', 'label'=>'Konfirmasi Password'])
 
-            <div class="form-group">
-              <div class="custom-control custom-checkbox">
-                <input type="checkbox" name="remember" class="custom-control-input" tabindex="3" id="remember-me">
-                <label class="custom-control-label" for="remember-me">{{ __('Ingat Saya') }}</label>
-                <div class="float-right">
-                  <a href="{{ route('verification') }}" class="text-small">
-                    {{ __('Belum verifikasi email?') }}
-                  </a>
-                </div>
-              </div>
-            </div>
 
             <div class="form-group text-right">
-              <a href="{{ route('register') }}" class="btn btn-success">Belum punya akun</a>
-              @include('includes.form.buttons.btn-primary', ['icon'=>'fas fa-sign-in-alt', 'label'=>__('Masuk')])
+              <a href="{{ route('login') }}" class="btn btn-success">Sudah punya akun</a>
+              @include('includes.form.buttons.btn-primary', ['icon'=>'fas fa-sign-in-alt', 'label'=>__('Daftar')])
             </div>
           </form>
 

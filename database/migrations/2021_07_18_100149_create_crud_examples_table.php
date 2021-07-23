@@ -18,6 +18,8 @@ class CreateCrudExamplesTable extends Migration
             $table->string('text');
             $table->double('number');
             $table->string('select');
+            $table->string('select2');
+            $table->text('select2_multiple');
             $table->text('textarea');
             $table->string('radio');
             $table->text('checkbox');

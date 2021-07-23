@@ -31,16 +31,10 @@
               <div class="custom-control custom-checkbox">
                 <input type="checkbox" name="remember" class="custom-control-input" tabindex="3" id="remember-me">
                 <label class="custom-control-label" for="remember-me">{{ __('Ingat Saya') }}</label>
-                <div class="float-right">
-                  <a href="{{ route('verification') }}" class="text-small">
-                    {{ __('Belum verifikasi email?') }}
-                  </a>
-                </div>
               </div>
             </div>
 
             <div class="form-group text-right">
-              <a href="{{ route('register') }}" class="btn btn-success">Belum punya akun</a>
               @include('includes.form.buttons.btn-primary', ['icon'=>'fas fa-sign-in-alt', 'label'=>__('Masuk')])
             </div>
           </form>
