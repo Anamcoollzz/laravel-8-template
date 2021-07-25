@@ -36,11 +36,47 @@
               @csrf
               <div class="row">
 				<div class="col-md-6">
-                  @include('includes.form.input', ['required'=>true, 'type'=>'text', 'id'=>'name', 'name'=>'name', 'label'=>__('Name')])
+                  @include('includes.form.input', ['required'=>true, 'type'=>'text', 'id'=>'name', 'name'=>'name', 'label'=>__('Full Name')])
                 </div>
 
 				<div class="col-md-6">
                   @include('includes.form.input', ['required'=>true, 'type'=>'date', 'id'=>'birth_date', 'name'=>'birth_date', 'label'=>__('Birth Date')])
+                </div>
+
+				<div class="col-md-6">
+                  @include('includes.form.select2', ['required'=>true, 'id'=>'select2', 'name'=>'select2', 'label'=>__('Select2'), 'options'=>["anam","devi"], 'multiple'=>true])
+                </div>
+
+				<div class="col-md-6">
+                  @include('includes.form.select', ['required'=>true, 'id'=>'select', 'name'=>'select', 'label'=>__('Select'), 'options'=>["anam","devi"]])
+                </div>
+
+				<div class="col-md-6">
+                  @include('includes.form.colorpicker', ['required'=>true, 'type'=>'text', 'id'=>'colorpicker', 'name'=>'colorpicker', 'label'=>__('Colorpicker')])
+                </div>
+
+				<div class="col-md-6">
+                  @include('includes.form.input', ['required'=>true, 'type'=>'number', 'id'=>'number', 'name'=>'number', 'label'=>__('Number'), 'min'=>0])
+                </div>
+
+				<div class="col-md-6">
+                  @include('includes.form.input', ['required'=>true, 'type'=>'file', 'accept'=>'image/*', 'id'=>'image', 'name'=>'image', 'label'=>__('Image')])
+                </div>
+
+				<div class="col-md-6">
+                  @include('includes.form.input', ['required'=>true, 'type'=>'file', 'accept'=>'*', 'id'=>'file', 'name'=>'file', 'label'=>__('File')])
+                </div>
+
+				<div class="col-md-6">
+                  @include('includes.form.input-password', ['required'=>true, 'type'=>'text', 'id'=>'password', 'name'=>'password', 'label'=>__('Password')])
+                </div>
+
+				<div class="col-md-6">
+                  @include('includes.form.input-email', ['required'=>true, 'type'=>'email', 'id'=>'email', 'name'=>'email', 'label'=>__('Email')])
+                </div>
+
+				<div class="col-md-6">
+                  @include('includes.form.input', ['required'=>true, 'type'=>'time', 'id'=>'time', 'name'=>'time', 'label'=>__('Time')])
                 </div>
 
 				<div class="col-md-6">
@@ -66,3 +102,11 @@
     </div>
   </div>
 @endsection
+
+@push('css')
+
+@endpush
+
+@push('js')
+
+@endpush

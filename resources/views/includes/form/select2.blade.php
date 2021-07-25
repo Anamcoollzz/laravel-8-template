@@ -1,5 +1,5 @@
 @if (is_stisla_template())
-  @include('includes.form.select', ['select2'=>true])
+  @include('includes.form.select', ['select2'=>true, 'multiple'=>$multiple??false])
 
   @if (!defined('SELECT2_IMPORT'))
     @php

@@ -102,6 +102,13 @@
   </script>
 @endif
 
+<script>
+  function showImportModal(e) {
+    e.preventDefault();
+    $('#importModal').modal('show');
+  }
+</script>
+
 @stack('scripts')
 
 @if (config('app.env') == 'local' && env('LIVERELOAD'))

@@ -2,11 +2,14 @@
   <label for="password">Password
     <span class="text-danger">*</span>
   </label>
-  <div class="float-right">
-    <a href="{{ route('forgot-password') }}" class="text-small">
-      {{ __('Lupa Password?') }}
-    </a>
-  </div>
+  @if ($isForgotPasswordSendToEmail)
+    <div class="float-right">
+      <a href="{{ route('forgot-password') }}" class="text-small">
+        {{ __('Lupa Password?') }}
+      </a>
+    </div>
+  @endif
+
   <div class="input-group">
     <div class="input-group-prepend">
       <div class="input-group-text {{ $errors->has('password') ? 'border-danger' : '' }}">

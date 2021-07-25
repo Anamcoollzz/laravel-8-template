@@ -1,4 +1,4 @@
-@extends('stisla.layouts.app-table')
+@extends($data->count() > 0 ? 'stisla.layouts.app-table' : 'stisla.layouts.app')
 
 @section('title')
   {{ $title = 'Contoh CRUD' }}
@@ -22,69 +22,20 @@
           <div class="card">
             <div class="card-header">
               <h4><i class="fa fa-atom"></i> Data {{ $title }}</h4>
-              {{-- @can('Contoh CRUD Tambah') --}}
+
               <div class="card-header-action">
+                {{-- @can('Contoh CRUD Impor Excel') --}}
+                @include('includes.form.buttons.btn-import-excel')
+                {{-- @endcan --}}
+                {{-- @can('Contoh CRUD Tambah') --}}
                 @include('includes.form.buttons.btn-add', ['link'=>route('crud-examples.create')])
+                {{-- @endcan --}}
               </div>
-              {{-- @endcan --}}
             </div>
             <div class="card-body">
               @include('stisla.includes.datatable-buttons')
               <div class="table-responsive">
-                <table class="table table-striped" id="datatable">
-                  <thead>
-                    <tr>
-                      <th class="text-center">#</th>
-                      <th>{{ __('Text') }}</th>
-                      <th>{{ __('Number') }}</th>
-                      <th>{{ __('Select') }}</th>
-                      <th>{{ __('Select2') }}</th>
-                      <th>{{ __('Select2 Multiple') }}</th>
-                      <th>{{ __('Textarea') }}</th>
-                      <th>{{ __('Radio') }}</th>
-                      <th>{{ __('Checkbox') }}</th>
-                      <th>{{ __('File') }}</th>
-                      <th>{{ __('Date') }}</th>
-                      <th>{{ __('Time') }}</th>
-                      <th>{{ __('Color') }}</th>
-                      <th>{{ __('Aksi') }}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @foreach ($data as $item)
-                      <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $item->text }}</td>
-                        <td>{{ $item->number }}</td>
-                        <td>{{ $item->select }}</td>
-                        <td>{{ $item->select2 }}</td>
-                        <td>{{ implode(', ', $item->select2_multiple) }}</td>
-                        <td>{{ $item->textarea }}</td>
-                        <td>{{ $item->radio }}</td>
-                        <td>{{ implode(', ', $item->checkbox) }}</td>
-                        <td>
-                          @if (Str::contains($item->file, 'http'))
-                            <a href="{{ $item->file }}" target="_blank">Lihat</a>
-                          @else
-                            <a href="{{ Storage::url('crud-examples/' . $item->file) }}" target="_blank">Lihat</a>
-                          @endif
-                        </td>
-                        <td>{{ $item->date }}</td>
-                        <td>{{ $item->time }}</td>
-                        <td>
-                          <div class="p-2 rounded" style="background-color: {{ $item->color }};">{{ $item->color }}
-                          </div>
-                        </td>
-                        <td>
-                          @include('includes.form.buttons.btn-edit', ['link'=>route('crud-examples.edit',
-                          [$item->id])])
-                          @include('includes.form.buttons.btn-delete', ['link'=>route('crud-examples.destroy',
-                          [$item->id])])
-                        </td>
-                      </tr>
-                    @endforeach
-                  </tbody>
-                </table>
+                @include('crud-example.export-excel-example', ['isExport'=>false])
               </div>
             </div>
           </div>
@@ -96,13 +47,25 @@
 
     </div>
   </div>
-@endsection
 
+@endsection
 
 @push('css')
 
 @endpush
 
 @push('js')
+
+@endpush
+
+@push('scripts')
+  <script>
+
+  </script>
+@endpush
+
+@push('modals')
+  @include('includes.modals.modal-import-excel', ['formAction'=>route('crud-examples.import-excel'),
+  'downloadLink'=>route('crud-examples.import-excel-example')])
 
 @endpush

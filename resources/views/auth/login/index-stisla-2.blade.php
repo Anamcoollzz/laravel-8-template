@@ -40,6 +40,22 @@
                     </button>
                   </div>
                 </form>
+
+                <div class="row">
+                  @if ($loginMustVerified)
+                    <div class="col-md-6">
+                      <a href=" {{ route('verification') }}" class="text-small">
+                        {{ __('Belum verifikasi email?') }}
+                      </a>
+                    </div>
+                  @endif
+                  @if ($isActiveRegisterPage)
+                    <div class="col-md-6 @if ($loginMustVerified) text-right @endif">
+                      <a href="{{ route('register') }}" class="text-small text-primary">Belum punya akun?</a>
+                    </div>
+                  @endif
+                </div>
+
                 {{-- <div class="text-center mt-4 mb-3">
                   <div class="text-job text-muted">Login With Social</div>
                 </div>

@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\CrudExampleExport;
+use App\Helpers\Helper;
 use App\Http\Requests\CrudExampleRequest;
+use App\Imports\CrudExampleImport;
 use App\Models\CrudExample;
 use App\Repositories\CrudExampleRepository;
 use App\Services\FileService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class CrudExampleController extends Controller
 {
@@ -153,5 +159,32 @@ class CrudExampleController extends Controller
         $this->fileService->deleteCrudExampleFile($crudExample);
         $this->crudExampleRepository->delete($crudExample->id);
         return redirect()->back()->with('successMessage', __('Berhasil menghapus data'));
+    }
+
+    /**
+     * download import example
+     *
+     * @return BinaryFileResponse
+     */
+    public function importExcelExample(): BinaryFileResponse
+    {
+        return Excel::download(new CrudExampleExport(
+            $this->crudExampleRepository->getLatest()
+        ), 'crud_examples.xlsx');
+    }
+
+    /**
+     * import excel file to db
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function importExcel(Request $request)
+    {
+        $request->validate([
+            'import_file' => 'required|file|mimetypes:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        ]);
+        $data = Excel::import(new CrudExampleImport, $request->file('import_file'));
+        return Helper::redirectSuccess(route('crud-examples.index'), __('Impor berhasil dilakukan'));
     }
 }

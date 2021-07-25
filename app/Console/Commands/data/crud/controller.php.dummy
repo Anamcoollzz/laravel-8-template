@@ -6,6 +6,9 @@ use App\Http\Requests\REQUESTNAME;
 use App\Models\MODELNAME;
 use App\Repositories\REPOSITORYNAME;
 use App\Services\FileService;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use App\Helpers\Helper;
 
 class CONTROLLERNAME extends Controller
 {
@@ -36,6 +39,7 @@ class CONTROLLERNAME extends Controller
         // $this->middleware('can:TITLE Tambah')->only(['create', 'store']);
         // $this->middleware('can:TITLE Ubah')->only(['edit', 'update']);
         // $this->middleware('can:TITLE Hapus')->only(['destroy']);
+        // $this->middleware('can:Mahasiswa Impor Excel')->only(['importExcelExample', 'importExcel']);
     }
 
     /**
@@ -129,5 +133,32 @@ class CONTROLLERNAME extends Controller
     {
         $this->VARREPOSITORYNAME->delete($VARMODELNAME->id);
         return redirect()->back()->with('successMessage', __('Berhasil menghapus data'));
+    }
+
+    /**
+     * download import example
+     *
+     * @return BinaryFileResponse
+     */
+    public function importExcelExample(): BinaryFileResponse
+    {
+        return Excel::download(new \App\Exports\MODELNAMEExport(
+            $this->VARREPOSITORYNAME->getLatest()
+        ), 'FOLDERVIEW_excel_import_example.xlsx');
+    }
+
+    /**
+     * import excel file to db
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return Response
+     */
+    public function importExcel(\Illuminate\Http\Request $request)
+    {
+        $request->validate([
+            'import_file' => 'required|file|mimetypes:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        ]);
+        Excel::import(new \App\Imports\MODELNAMEImport, $request->file('import_file'));
+        return Helper::redirectSuccess(route('FOLDERVIEWs.index'), __('Impor berhasil dilakukan'));
     }
 }

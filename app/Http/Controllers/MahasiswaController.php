@@ -6,6 +6,9 @@ use App\Http\Requests\MahasiswaRequest;
 use App\Models\Mahasiswa;
 use App\Repositories\MahasiswaRepository;
 use App\Services\FileService;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use App\Helpers\Helper;
 
 class MahasiswaController extends Controller
 {
@@ -36,6 +39,7 @@ class MahasiswaController extends Controller
         // $this->middleware('can:Mahasiswa Tambah')->only(['create', 'store']);
         // $this->middleware('can:Mahasiswa Ubah')->only(['edit', 'update']);
         // $this->middleware('can:Mahasiswa Hapus')->only(['destroy']);
+        // $this->middleware('can:Mahasiswa Impor Excel')->only(['importExcelExample', 'importExcel']);
     }
 
     /**
@@ -76,7 +80,7 @@ class MahasiswaController extends Controller
 
                 ],
                 $request->only([
-                    'name', 'birth_date', 'address', 'gender', 
+                    'name', 'birth_date', 'select2', 'select', 'colorpicker', 'number', 'image', 'file', 'password', 'email', 'time', 'address', 'gender', 
                 ])
             )
         );
@@ -111,7 +115,7 @@ class MahasiswaController extends Controller
 
                 ],
                 $request->only([
-                    'name', 'birth_date', 'address', 'gender', 
+                    'name', 'birth_date', 'select2', 'select', 'colorpicker', 'number', 'image', 'file', 'password', 'email', 'time', 'address', 'gender', 
                 ])
             ),
             $mahasiswa->id
@@ -129,5 +133,32 @@ class MahasiswaController extends Controller
     {
         $this->mahasiswaRepository->delete($mahasiswa->id);
         return redirect()->back()->with('successMessage', __('Berhasil menghapus data'));
+    }
+
+    /**
+     * download import example
+     *
+     * @return BinaryFileResponse
+     */
+    public function importExcelExample(): BinaryFileResponse
+    {
+        return Excel::download(new \App\Exports\MahasiswaExport(
+            $this->mahasiswaRepository->getLatest()
+        ), 'mahasiswa_excel_import_example.xlsx');
+    }
+
+    /**
+     * import excel file to db
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return Response
+     */
+    public function importExcel(\Illuminate\Http\Request $request)
+    {
+        $request->validate([
+            'import_file' => 'required|file|mimetypes:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        ]);
+        Excel::import(new \App\Imports\MahasiswaImport, $request->file('import_file'));
+        return Helper::redirectSuccess(route('mahasiswas.index'), __('Impor berhasil dilakukan'));
     }
 }

@@ -1,4 +1,4 @@
-@extends('stisla.layouts.app-table')
+@extends($data->count() > 0 ? 'stisla.layouts.app-table' : 'stisla.layouts.app')
 
 @section('title')
   {{ $title = 'TITLE' }}
@@ -22,11 +22,14 @@
           <div class="card">
             <div class="card-header">
               <h4><i class="ICON"></i> Data {{ $title }}</h4>
-              {{-- @can('TITLE Tambah') --}}
               <div class="card-header-action">
+                {{-- @can('TITLE Impor Excel') --}}
+                @include('includes.form.buttons.btn-import-excel')
+                {{-- @endcan --}}
+                {{-- @can('TITLE Tambah') --}}
                 @include('includes.form.buttons.btn-add', ['link'=>route('ROUTE.create')])
+                {{-- @endcan --}}
               </div>
-              {{-- @endcan --}}
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -71,5 +74,17 @@ TD
 @endpush
 
 @push('js')
+
+@endpush
+
+@push('scripts')
+  <script>
+
+  </script>
+@endpush
+
+@push('modals')
+  @include('includes.modals.modal-import-excel', ['formAction'=>route('ROUTE.import-excel'),
+  'downloadLink'=>route('ROUTE.import-excel-example')])
 
 @endpush

@@ -7,17 +7,14 @@ use App\Http\Requests\ForgotPasswordRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\ResetPasswordRequest;
-use App\Models\User;
 use App\Repositories\SettingRepository;
 use App\Repositories\UserRepository;
 use App\Services\EmailService;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
@@ -63,6 +60,9 @@ class AuthController extends Controller
      */
     public function registerForm()
     {
+        if ($this->settingRepository->isActiveRegisterPage() === false)
+            abort(404);
+
         // if (config('app.template') === 'stisla') {
         //     $template = \App\Models\Setting::firstOrCreate(['key' => 'login_template'], ['value' => 'default'])->value;
         //     if ($template === 'tampilan 2')
@@ -108,11 +108,19 @@ class AuthController extends Controller
     public function loginForm()
     {
         if (config('app.template') === 'stisla') {
+            $isActiveRegisterPage = $this->settingRepository->isActiveRegisterPage();
+            $isForgotPasswordSendToEmail = $this->settingRepository->isForgotPasswordSendToEmail();
+            $loginMustVerified = $this->settingRepository->loginMustVerified();
             $template = \App\Models\Setting::firstOrCreate(['key' => 'login_template'], ['value' => 'default'])->value;
+            $data = [
+                'isActiveRegisterPage' => $isActiveRegisterPage,
+                'isForgotPasswordSendToEmail' => $isForgotPasswordSendToEmail,
+                'loginMustVerified' => $loginMustVerified
+            ];
             if ($template === 'tampilan 2')
-                return view('auth.login.index-stisla-2');
+                return view('auth.login.index-stisla-2', $data);
             else
-                return view('auth.login.index-stisla');
+                return view('auth.login.index-stisla', $data);
         }
         return view('auth.login.index');
     }
@@ -158,6 +166,7 @@ class AuthController extends Controller
      */
     public function forgotPasswordForm()
     {
+        if ($this->settingRepository->isForgotPasswordSendToEmail() === false) abort(404);
         if (config('app.template') === 'stisla') {
             // $template = \App\Models\Setting::firstOrCreate(['key' => 'login_template'], ['value' => 'default'])->value;
             // if ($template === 'tampilan 2')
@@ -176,6 +185,7 @@ class AuthController extends Controller
      */
     public function forgotPassword(ForgotPasswordRequest $request)
     {
+        if ($this->settingRepository->isForgotPasswordSendToEmail() === false) abort(404);
         DB::beginTransaction();
         try {
             $user = $this->userRepository->findByEmail($request->email);
@@ -200,6 +210,7 @@ class AuthController extends Controller
      */
     public function resetPasswordForm($token)
     {
+        if ($this->settingRepository->isForgotPasswordSendToEmail() === false) abort(404);
         $user = $this->userRepository->findByEmailToken($token);
         if ($user === null)
             abort(404);
@@ -222,6 +233,7 @@ class AuthController extends Controller
      */
     public function resetPassword($token, ResetPasswordRequest $request)
     {
+        if ($this->settingRepository->isForgotPasswordSendToEmail() === false) abort(404);
         DB::beginTransaction();
         try {
             $user = $this->userRepository->findByEmailToken($token);
@@ -242,6 +254,7 @@ class AuthController extends Controller
      */
     public function verificationForm()
     {
+        if ($this->settingRepository->loginMustVerified() === false) abort(404);
         // if (config('app.template') === 'stisla') {
         //     $template = \App\Models\Setting::firstOrCreate(['key' => 'login_template'], ['value' => 'default'])->value;
         //     if ($template === 'tampilan 2')
@@ -261,6 +274,7 @@ class AuthController extends Controller
      */
     public function verification(ForgotPasswordRequest $request)
     {
+        if ($this->settingRepository->loginMustVerified() === false) abort(404);
         DB::beginTransaction();
         try {
             $user = $this->userRepository->findByEmail($request->email);
@@ -285,6 +299,7 @@ class AuthController extends Controller
      */
     public function verify($token)
     {
+        if ($this->settingRepository->loginMustVerified() === false) abort(404);
         $user = $this->userRepository->findByEmailToken($token);
         if ($user === null) {
             abort(404);

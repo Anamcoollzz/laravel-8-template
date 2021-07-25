@@ -21,11 +21,11 @@
 <link rel="stylesheet" href="{{ asset('stisla/assets/css/components.css') }}">
 <link rel="stylesheet" href="{{ asset('stisla/assets/css/styleku.css') }}">
 
-<style>
+{{-- <style>
   .modal-backdrop {
     z-index: unset;
   }
 
-</style>
+</style> --}}
 <!-- Your Style -->
 @stack('style')

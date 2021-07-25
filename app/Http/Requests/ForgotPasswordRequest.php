@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Repositories\SettingRepository;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ForgotPasswordRequest extends FormRequest
@@ -13,7 +14,7 @@ class ForgotPasswordRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return (new SettingRepository)->isForgotPasswordSendToEmail();
     }
 
     /**

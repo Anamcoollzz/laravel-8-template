@@ -41,7 +41,17 @@ class MakeCrudCommand extends Command
      */
     public function handle()
     {
-        $filepath = app_path('Console\\Commands\\data\\crud\\files\\mahasiswa.json');
+        $filename = $this->ask('CRUD Filename? (check example in ' . app_path('Console\\Commands\\data\\crud\\files\\mahasiswa.json') . ') type like this [mahasiswa]');
+        if (!$filename) {
+            $this->error("CRUD file required");
+            return 0;
+        }
+        $filepath = app_path('Console\\Commands\\data\\crud\\files\\' . $filename . '.json');
+        if (File::exists($filepath) === false) {
+            $this->error("File not found");
+            return 0;
+        }
+
         $this->json = json_decode(file_get_contents($filepath));
 
         $modelName = $this->json->model;
@@ -72,22 +82,22 @@ class MakeCrudCommand extends Command
                 $STRUCTURE .= '$table->' . $column->type . '(\'' . $column->name . '\');';
                 // $FILLABLES .= "\t\t'" . $column->name . "',\n";
                 $FILLABLES .= "'" . $column->name . "', ";
-                $label = Str::title(str_replace('_', ' ', $column->name));
-                $TH .= "\t\t\t\t\t\t<th class=\"text-center\">{{ __('" . $label . "') }}</th>\n";
+                $label = $column->label ?? Str::title(str_replace('_', ' ', $column->name));
+                $TH .= "\t\t<th class=\"text-center\">{{ __('" . $label . "') }}</th>\n";
                 if (isset($column->options)) {
-                    $TD .= "\t\t\t\t\t\t<td>" . '{{ \App\Models\\' . $modelName . '::TYPES[\'' . $column->name . '\'][$item->' . $column->name . "] }}</td>\n";
+                    $TD .= "\t\t<td>" . '{{ \App\Models\\' . $modelName . '::TYPES[\'' . $column->name . '\'][$item->' . $column->name . "] }}</td>\n";
                 } else
-                    $TD .= "\t\t\t\t\t\t<td>" . '{{ $item->' . $column->name . " }}</td>\n";
+                    $TD .= "\t\t<td>" . '{{ $item->' . $column->name . " }}</td>\n";
             } else {
                 $STRUCTURE .= '$table->string(\'' . $column->name . '\', ' . ($column->length ?? 191) . ');';
                 // $FILLABLES .= "\t\t'" . $column->name . "',\n";
                 $FILLABLES .= "'" . $column->name . "', ";
-                $label = Str::title(str_replace('_', ' ', $column->name));
-                $TH .= "\t\t\t\t\t\t<th class=\"text-center\">{{ __('" . $label . "') }}</th>\n";
+                $label = $column->label ?? Str::title(str_replace('_', ' ', $column->name));
+                $TH .= "\t\t<th class=\"text-center\">{{ __('" . $label . "') }}</th>\n";
                 if (isset($column->options)) {
-                    $TD .= "\t\t\t\t\t\t<td>" . '{{ \App\Models\\' . $modelName . '::TYPES[\'' . $column->name . '\'][$item->' . $column->name . "] }}</td>\n";
+                    $TD .= "\t\t<td>" . '{{ \App\Models\\' . $modelName . '::TYPES[\'' . $column->name . '\'][$item->' . $column->name . "] }}</td>\n";
                 } else
-                    $TD .= "\t\t\t\t\t\t<td>" . '{{ $item->' . $column->name . " }}</td>\n";
+                    $TD .= "\t\t<td>" . '{{ $item->' . $column->name . " }}</td>\n";
             }
             $STRUCTURE .= "\n\t\t\t";
 
@@ -115,11 +125,46 @@ class MakeCrudCommand extends Command
             }
 
             if (isset($column->form)) {
-                $label = Str::title(str_replace('_', ' ', $column->name));
+                $label = $column->label ?? Str::title(str_replace('_', ' ', $column->name));
                 switch ($column->form->type) {
                     case 'text':
                         $FORM .= "\t\t\t\t<div class=\"col-md-6\">
                   @include('includes.form.input', ['required'=>true, 'type'=>'text', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
+                </div>\n\n";
+                        break;
+                    case 'email':
+                        $FORM .= "\t\t\t\t<div class=\"col-md-6\">
+                  @include('includes.form.input-email', ['required'=>true, 'type'=>'email', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
+                </div>\n\n";
+                        break;
+                    case 'password':
+                        $FORM .= "\t\t\t\t<div class=\"col-md-6\">
+                  @include('includes.form.input-password', ['required'=>true, 'type'=>'text', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
+                </div>\n\n";
+                        break;
+                    case 'image':
+                        $FORM .= "\t\t\t\t<div class=\"col-md-6\">
+                  @include('includes.form.input', ['required'=>true, 'type'=>'file', 'accept'=>'image/*', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
+                </div>\n\n";
+                        break;
+                    case 'file':
+                        $FORM .= "\t\t\t\t<div class=\"col-md-6\">
+                  @include('includes.form.input', ['required'=>true, 'type'=>'file', 'accept'=>'*', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
+                </div>\n\n";
+                        break;
+                    case 'number':
+                        $FORM .= "\t\t\t\t<div class=\"col-md-6\">
+                  @include('includes.form.input', ['required'=>true, 'type'=>'number', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "'), 'min'=>0])
+                </div>\n\n";
+                        break;
+                    case 'time':
+                        $FORM .= "\t\t\t\t<div class=\"col-md-6\">
+                  @include('includes.form.input', ['required'=>true, 'type'=>'time', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
+                </div>\n\n";
+                        break;
+                    case 'colorpicker':
+                        $FORM .= "\t\t\t\t<div class=\"col-md-6\">
+                  @include('includes.form.colorpicker', ['required'=>true, 'type'=>'text', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
                 </div>\n\n";
                         break;
                     case 'date':
@@ -130,6 +175,19 @@ class MakeCrudCommand extends Command
                     case 'textarea':
                         $FORM .= "\t\t\t\t<div class=\"col-md-6\">
                   @include('includes.form.textarea', ['required'=>true, 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
+                </div>\n\n";
+                        break;
+                    case 'select2':
+                        $multiple = $column->form->multiple ?? false ? 'true' : 'false';
+                        $options = json_encode($column->form->options ?? []);
+                        $FORM .= "\t\t\t\t<div class=\"col-md-6\">
+                  @include('includes.form.select2', ['required'=>true, 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "'), 'options'=>" . $options . ", 'multiple'=>" . $multiple . "])
+                </div>\n\n";
+                        break;
+                    case 'select':
+                        $options = json_encode($column->form->options ?? []);
+                        $FORM .= "\t\t\t\t<div class=\"col-md-6\">
+                  @include('includes.form.select', ['required'=>true, 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "'), 'options'=>" . $options . "])
                 </div>\n\n";
                         break;
                     case 'radio':
@@ -150,6 +208,23 @@ class MakeCrudCommand extends Command
             }
         }
         $migrationContent = str_replace('STRUCTURE', $STRUCTURE, $migrationContent);
+        $migrationFiles = File::files(database_path('migrations'));
+        $migrationFiles = array_map(function ($item) {
+            return substr(
+                str_replace(database_path('migrations') . '\\', '', $item->getPathname()),
+                18
+            );
+        }, $migrationFiles);
+        // dd($migrationFiles);
+        // if (
+        //     // !Str::contains(
+        //     //     $migrationFiles[0]->getPathname(),
+        //     //     '_create_' . $modelNameSnake . '_table'
+        //     // )
+        //     !in_array('create_' . $modelNameSnake . '_table.php', $migrationFiles)
+        // ) {
+        //     file_put_contents($migrationPath = database_path('migrations\\' . date('Y_m_d_His') . '_create_' . $modelNameSnake . '_table.php'), $migrationContent);
+        // }
         file_put_contents($migrationPath = database_path('migrations\\' . date('Y_m_d_His') . '_create_' . $modelNameSnake . '_table.php'), $migrationContent);
 
         // CREATE MODEL
@@ -165,7 +240,7 @@ class MakeCrudCommand extends Command
         file_put_contents($modelPath = app_path('Models\\' . $modelName . '.php'), $modelContent);
 
         // CREATE REPOSITORY
-        $repositoryFile = file_get_contents(app_path('Console/Commands/data/NameRepository.php'));
+        $repositoryFile = file_get_contents(app_path('Console/Commands/data/NameRepository.php.dummy'));
         $repositoryFile = str_replace('ModelName', $modelName, $repositoryFile);
         $repositoryFile = str_replace('NameRepository', $modelName . 'Repository', $repositoryFile);
         $filepath = app_path('Repositories\\' . $modelName . 'Repository.php');
@@ -225,15 +300,43 @@ class MakeCrudCommand extends Command
         $filepath    = $folder . '\\form.blade.php';
         file_put_contents($viewCreatePath = $filepath, $viewFormFile);
 
-        $this->info('Created migration file => ' . $migrationPath);
+        $viewExportExcelFile = file_get_contents(app_path('Console\\Commands\\data\\crud\\views\\export-excel-example.blade.php.dummy'));
+        $viewExportExcelFile = str_replace('TITLE', $this->json->title, $viewExportExcelFile);
+        $viewExportExcelFile = str_replace('ROUTE', Str::slug($modelName) . 's', $viewExportExcelFile);
+        $viewExportExcelFile = str_replace('ICON', $this->json->icon, $viewExportExcelFile);
+        $viewExportExcelFile = str_replace('FORM', $FORM, $viewExportExcelFile);
+        $viewExportExcelFile = str_replace('TH', $TH, $viewExportExcelFile);
+        $viewExportExcelFile = str_replace('TD', $TD, $viewExportExcelFile);
+        $viewExportExcelPath    = $folder . '\\export-excel-example.blade.php';
+        file_put_contents($viewExportExcelPath, $viewExportExcelFile);
+
+        $exportExcelFile = file_get_contents(app_path('Console\\Commands\\data\\crud\\export.php.dummy'));
+        $exportExcelFile = str_replace('FOLDERVIEW', Str::slug($modelName), $exportExcelFile);
+        $exportExcelFile = str_replace('MODELNAME', $modelName, $exportExcelFile);
+        $exportExcelFile = str_replace('FILLABLES', $FILLABLES, $exportExcelFile);
+        $exportExcelPath = app_path('Exports\\' . $modelName . 'Export.php');
+        file_put_contents($exportExcelPath, $exportExcelFile);
+
+        $importExcelFile = file_get_contents(app_path('Console\\Commands\\data\\crud\\import.php.dummy'));
+        $importExcelFile = str_replace('MODELNAME', $modelName, $importExcelFile);
+        $importExcelPath = app_path('Imports\\' . $modelName . 'Import.php');
+        file_put_contents($importExcelPath, $importExcelFile);
+
+        if (isset($migrationPath))
+            $this->info('Created migration file => ' . $migrationPath);
         $this->info('Created model file => ' . $modelPath);
         $this->info('Created controller file => ' . $controllerPath);
         $this->info('Created repository file => ' . $repositoryPath);
         $this->info('Created request file => ' . $requestPath);
+        $this->info('Created export excel file => ' . $exportExcelPath);
+        $this->info('Created import excel file => ' . $importExcelPath);
         $this->info('Created view index file => ' . $viewIndexPath);
         $this->info('Created form index file => ' . $viewCreatePath);
         $this->info('Don\'t forget to run php artisan migrate');
-        $this->info('copy this to your route file => Route::resource(\'' . Str::slug($modelName) . 's\', \App\Http\Controllers\\' . $modelName . 'Controller::class);');
+        $this->info('copy this to your route file 👇');
+        $this->info('Route::get(\'' . ($modelNameSlug = Str::slug($modelName)) . 's/import-excel-example\', [\App\Http\Controllers\\' . $modelName . 'Controller::class, \'importExcelExample\'])->name(\'' . $modelNameSlug . 's.import-excel-example\');');
+        $this->info('Route::post(\'' . $modelNameSlug . 's/import-excel\', [\App\Http\Controllers\\' . $modelName . 'Controller::class, \'importExcel\'])->name(\'' . $modelNameSlug . 's.import-excel\');');
+        $this->info('Route::resource(\'' . $modelNameSlug . 's\', \App\Http\Controllers\\' . $modelName . 'Controller::class);');
 
         return 0;
     }

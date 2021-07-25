@@ -30,7 +30,7 @@ $_sidebar_mini = \App\Models\Setting::where('key', 'stisla_sidebar_mini')->first
 @endphp
 
 <body class="{{ $_sidebar_mini == 1 ? 'sidebar-mini' : '' }}">
-  <div id=" app">
+  <div id="app">
     <div class="main-wrapper">
       @include('stisla.includes.navbar')
       @include('stisla.includes.sidebar')

@@ -214,4 +214,24 @@ class SettingRepository extends Repository
     {
         return ((int) Setting::firstOrCreate(['key' => 'login_must_verified'], ['value' => 0])->value) === 1;
     }
+
+    /**
+     * isActiveRegisterPage
+     *
+     * @return bool
+     */
+    public function isActiveRegisterPage()
+    {
+        return ((int) Setting::firstOrCreate(['key' => 'is_active_register_page'], ['value' => 0])->value) === 1;
+    }
+
+    /**
+     * isForgotPasswordSendToEmail
+     *
+     * @return bool
+     */
+    public function isForgotPasswordSendToEmail()
+    {
+        return ((int) Setting::firstOrCreate(['key' => 'is_forgot_password_send_to_email'], ['value' => 0])->value) === 1;
+    }
 }

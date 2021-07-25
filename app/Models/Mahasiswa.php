@@ -22,7 +22,7 @@ class Mahasiswa extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'birth_date', 'address', 'gender', 
+        'name', 'birth_date', 'select2', 'select', 'colorpicker', 'number', 'image', 'file', 'password', 'email', 'time', 'address', 'gender', 
     ];
 
     /**

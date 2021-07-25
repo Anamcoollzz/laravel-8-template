@@ -222,6 +222,18 @@
                   Terlebih Dahulu'),
                   'selected'=>$login_must_verified, 'options'=>['0'=>'Tidak', '1'=>'Ya'], 'required'=>true])
                 </div>
+
+                <div class="col-sm-6">
+                  @include('includes.form.select', ['id'=>'is_active_register_page', 'label'=>__('Aktifkan Halaman Daftar
+                  (Registrasi)'),
+                  'selected'=>$is_active_register_page, 'options'=>['0'=>'Tidak', '1'=>'Ya'], 'required'=>true])
+                </div>
+
+                <div class="col-sm-6">
+                  @include('includes.form.select', ['id'=>'is_forgot_password_send_to_email', 'label'=>__('Lupa Password
+                  Kirim Ke Email'),
+                  'selected'=>$is_forgot_password_send_to_email, 'options'=>['0'=>'Tidak', '1'=>'Ya'], 'required'=>true])
+                </div>
                 <div class="col-md-12">
                   @include('includes.form.buttons.save-btn')
                   @include('includes.form.buttons.reset-btn')

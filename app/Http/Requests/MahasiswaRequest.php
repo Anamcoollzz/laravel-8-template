@@ -27,6 +27,15 @@ class MahasiswaRequest extends FormRequest
             return [
 				'name' => ["required"],
 				'birth_date' => ["required","date_format:Y-m-d"],
+				'select2' => ["required"],
+				'select' => ["required"],
+				'colorpicker' => ["required"],
+				'number' => ["required"],
+				'image' => ["required"],
+				'file' => ["required"],
+				'password' => ["required"],
+				'email' => ["required"],
+				'time' => ["required"],
 				'address' => ["required"],
 				'gender' => ["required"],
 
@@ -35,6 +44,15 @@ class MahasiswaRequest extends FormRequest
         return [
 			'name' => ["required"],
 			'birth_date' => ["required","date_format:Y-m-d"],
+			'select2' => ["required"],
+			'select' => ["required"],
+			'colorpicker' => ["required"],
+			'number' => ["required"],
+			'image' => ["required"],
+			'file' => ["required"],
+			'password' => ["required"],
+			'email' => ["required"],
+			'time' => ["required"],
 			'address' => ["required"],
 			'gender' => ["required"],
 

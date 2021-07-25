@@ -21,4 +21,9 @@ class TestingController extends Controller
     {
         (new EmailService)->testing('hairulanam21@gmail.com', Str::random(20));
     }
+
+    public function modal()
+    {
+        return view('testing.modal');
+    }
 }
