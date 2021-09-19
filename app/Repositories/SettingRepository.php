@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use App\Helpers\Helper;
+use App\Helpers\StringHelper;
 use App\Models\Setting;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Storage;
@@ -218,6 +220,9 @@ class SettingRepository
             if (session('_logo')) $logo = session('_logo');
             else $logo = Setting::where('key', 'logo')->first()->value;
             if ($logo) {
+                if (StringHelper::isUrl($logo)) {
+                    return $logo;
+                }
                 if (Storage::exists('public/settings/' . $logo)) {
                     return asset('storage/settings/' . $logo);
                 } else {
@@ -238,9 +243,12 @@ class SettingRepository
     public static function loginBgUrl()
     {
         $bgLogin = null;
-        if (config('app.template') === 'stisla') {
+        if (TEMPLATE === STISLA) {
             if (session('_stisla_bg_login')) return session('_stisla_bg_login');
             $bgLogin =  Setting::where('key', 'stisla_bg_login')->first()->value;
+            if (StringHelper::isUrl($bgLogin)) {
+                return $bgLogin;
+            }
             if ($bgLogin) {
                 if (Storage::exists('public/settings/' . $bgLogin)) {
                     return asset('storage/settings/' . $bgLogin);

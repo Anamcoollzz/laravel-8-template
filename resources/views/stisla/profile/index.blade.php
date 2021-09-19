@@ -5,17 +5,11 @@
 @endsection
 
 @section('content')
-  <div class="section-header">
-    <h1>{{ $title }}</h1>
-    <div class="section-header-breadcrumb">
-      <div class="breadcrumb-item active">
-        <a href="{{ route('dashboard.index') }}">{{ __('Dashboard') }}</a>
-      </div>
-      <div class="breadcrumb-item">{{ $title }}</div>
-    </div>
-  </div>
+  @include('stisla.includes.breadcrumbs.breadcrumb-table')
 
   <div class="section-body">
+    <h2 class="section-title">{{ $title }}</h2>
+    <p class="section-lead">{{ __('Perbarui kapan saja profil anda di halaman ini') }}.</p>
     <div class="row">
       <div class="col-12">
 
@@ -53,6 +47,8 @@
 
         </form>
 
+        <h2 class="section-title">{{ __('Perbarui Password') }}</h2>
+        <p class="section-lead">{{ __('Perbarui kapan saja password anda di halaman ini') }}.</p>
         <form action="{{ route('profile.update-password') }}" method="post" class="needs-validation">
           <div class="card">
             <div class="card-header">

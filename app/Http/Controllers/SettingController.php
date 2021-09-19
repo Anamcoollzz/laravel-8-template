@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SettingRequest;
-use App\Repositories\EmailRepository;
 use App\Repositories\SettingRepository;
 use App\Services\FileService;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
@@ -72,16 +70,24 @@ class SettingController extends Controller
     {
         // dd(session()->all());
         foreach ($request->all() as $key => $input) {
+            $value = $input;
             if ($key === 'favicon') {
-                $url = $this->fileService->uploadFavicon($request->file('favicon'));
-                $this->settingRepository->updateByKey(['value' => $url], $key);
-            } else
-                $this->settingRepository->updateByKey(['value' => $input], $key);
+                $value = $this->fileService->uploadFavicon($request->file('favicon'));
+            } else if ($key === 'logo') {
+                $value = $this->fileService->uploadLogo($request->file('logo'));
+            } else if ($key === 'stisla_bg_login') {
+                $value = $this->fileService->uploadStislaBgLogin($request->file('stisla_bg_login'));
+            } else if ($key === 'stisla_bg_home') {
+                $value = $this->fileService->uploadStislaBgHome($request->file('stisla_bg_home'));
+            }
+            $this->settingRepository->updateByKey(['value' => $value], $key);
         }
         $settings = SettingRepository::settings();
         foreach ($settings as $key => $setting) {
-            Session::forget($key);
+            Session::forget('_' . $key);
         }
+        Session::forget('_logo_url');
+        Session::forget('_logo');
         // Session::flush();
         return back()->with(config('app.template') === 'stisla' ? 'successMessage' : 'success_msg', __('Application Setting') . ' ' . __('success updated'));
     }

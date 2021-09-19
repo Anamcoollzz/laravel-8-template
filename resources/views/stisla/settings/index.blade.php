@@ -12,6 +12,7 @@
   <div class="section-body">
     <div class="row">
       <div class="col-12">
+
         <div class="card">
           <div class="card-header">
             <h4><i class="fa fa-cogs"></i> {{ $title }} Umum</h4>
@@ -24,8 +25,8 @@
               @csrf
               <div class="row clearfix">
                 <div class="col-sm-6">
-                  @include('stisla.includes.forms.inputs.input', ['id'=>'application_name', 'label'=>__('Application
-                  Name'),
+                  @include('stisla.includes.forms.inputs.input', ['id'=>'application_name',
+                  'label'=>__('Nama Aplikasi'),
                   'value'=>$_app_name, 'required'=>true])
                 </div>
                 <div class="col-sm-6">
@@ -39,6 +40,53 @@
                 <div class="col-sm-6">
                   @include('stisla.includes.forms.inputs.input', ['id'=>'application_version', 'label'=>__('Version'),
                   'value'=>$_application_version, 'required'=>true])
+                </div>
+                <div class="col-sm-6">
+                  @include('stisla.includes.forms.inputs.input', ['id'=>'app_description', 'label'=>__('Version'),
+                  'value'=>$_app_description, 'label'=>__('Deskripsi'), 'required'=>true])
+                </div>
+                <div class="col-sm-6">
+                  @include('stisla.includes.forms.inputs.input', ['id'=>'city', 'label'=>__('Version'),
+                  'value'=>$_city, 'label'=>__('Kota'), 'required'=>true])
+                </div>
+                <div class="col-sm-6">
+                  @include('stisla.includes.forms.inputs.input', ['id'=>'country', 'label'=>__('Version'),
+                  'value'=>$_country, 'label'=>__('Negara'), 'required'=>true])
+                </div>
+
+                <div class="col-md-12">
+                  @include('stisla.includes.forms.buttons.btn-save')
+                  @include('stisla.includes.forms.buttons.btn-reset')
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h4><i class="fa fa-globe"></i> {{ $title }} Meta</h4>
+
+          </div>
+          <div class="card-body">
+            <form action="{{ route('settings.update') }}" method="POST" enctype="multipart/form-data">
+              <input type="hidden" name="type" value="meta">
+              @method('put')
+              @csrf
+              <div class="row clearfix">
+                <div class="col-sm-6">
+                  @include('stisla.includes.forms.inputs.input', ['id'=>'meta_author',
+                  'label'=>__('Meta Author'),
+                  'value'=>$_meta_author, 'required'=>true])
+                </div>
+                <div class="col-sm-6">
+                  @include('stisla.includes.forms.inputs.input', ['id'=>'meta_description', 'label'=>__('Meta
+                  Description'),
+                  'value'=>$_meta_description, 'required'=>true])
+                </div>
+                <div class="col-sm-6">
+                  @include('stisla.includes.forms.inputs.input', ['id'=>'meta_keywords', 'label'=>__('Meta Keywords'),
+                  'value'=>$_meta_keywords, 'required'=>true])
                 </div>
 
                 <div class="col-md-12">
@@ -82,12 +130,38 @@
                   @include('stisla.includes.forms.inputs.input', ['id'=>'favicon', 'label'=>__('Favicon'),
                   'required'=>false, 'accept'=>'image/x-icon', 'type'=>'file'])
                 </div>
+                <div class="col-sm-6">
+                  @include('stisla.includes.forms.inputs.input', ['id'=>'logo', 'label'=>__('Logo'),
+                  'required'=>false, 'accept'=>'image/png,image/jpg', 'type'=>'file'])
+                </div>
+                <div class="col-sm-6">
+                  @include('stisla.includes.forms.inputs.input', ['id'=>'stisla_bg_login', 'label'=>__('Background Halaman
+                  Masuk / Daftar'),
+                  'required'=>false, 'accept'=>'image/png,image/jpg', 'type'=>'file'])
+                </div>
+                <div class="col-sm-6">
+                  @include('stisla.includes.forms.inputs.input', ['id'=>'stisla_bg_home', 'label'=>__('Background
+                  Halaman ').__('Dashboard'),
+                  'required'=>false, 'accept'=>'image/png,image/jpg', 'type'=>'file'])
+                </div>
                 <div class="col-md-12">
                   @include('stisla.includes.forms.buttons.btn-save')
                   @include('stisla.includes.forms.buttons.btn-reset')
                 </div>
               </div>
             </form>
+            <br />
+            <br />
+            <div class="row">
+              @foreach (['_logo_url' => __('Logo'), '_stisla_bg_login' => __('Background Halaman Masuk / Daftar'), '_stisla_bg_home' => __('Background Halaman Beranda')] as $item => $label)
+                <div class="col-md-4 col-lg-3">
+                  <a href="{{ $$item }}" target="_blank">
+                    <img class="img-thumbnail" src="{{ $$item }}" alt="{{ $label }}">
+                  </a>
+                  <div class="text-center font-bold"><strong>{{ $label }}</strong></div>
+                </div>
+              @endforeach
+            </div>
           </div>
         </div>
 

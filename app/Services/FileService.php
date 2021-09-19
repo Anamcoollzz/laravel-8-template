@@ -13,20 +13,48 @@ class FileService
 {
 
     /**
-     * upload avatar file
+     * execute upload
      *
-     * @param \Illuminate\Http\UploadedFile $avatarFile
+     * @param \Illuminate\Http\UploadedFile $file
+     * @param string $folderName
      * @return string
      */
-    public function uploadAvatar(\Illuminate\Http\UploadedFile $avatarFile)
+    public function executeUpload(\Illuminate\Http\UploadedFile $file, string $folderName)
     {
         if (config('app.is_heroku')) {
-            $httpsUrl = cloudinary()->upload($avatarFile->getRealPath())->getSecurePath();
+            $httpsUrl = cloudinary()->upload($file->getRealPath())->getSecurePath();
             return $httpsUrl;
         }
-        $filename = date('YmdHis') . Str::random(20);
-        $avatarFile->storeAs('public/avatars', $filename);
-        return $filename;
+        $filename = date('YmdHis') . Str::random(20) . '.' . $file->getClientOriginalExtension();
+        $file->storeAs('public/' . $folderName, $filename);
+        return asset('storage/' . $folderName . '/' . $filename);
+    }
+
+    /**
+     * execute delete from storage
+     *
+     * @param string $filepath
+     * @return bool
+     */
+    public function executeDeleteFromStorage(string $filepath)
+    {
+        $exist    = Storage::exists($filepath);
+        if ($exist) {
+            Storage::delete($filepath);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * upload avatar file
+     *
+     * @param \Illuminate\Http\UploadedFile $file
+     * @return string
+     */
+    public function uploadAvatar(\Illuminate\Http\UploadedFile $file)
+    {
+        return $this->executeUpload($file, 'avatars');
     }
 
     /**
@@ -37,13 +65,7 @@ class FileService
      */
     public function uploadCrudExampleFile(\Illuminate\Http\UploadedFile $file)
     {
-        if (config('app.is_heroku')) {
-            $httpsUrl = cloudinary()->upload($file->getRealPath())->getSecurePath();
-            return $httpsUrl;
-        }
-        $filename = date('YmdHis') . Str::random(20);
-        $file->storeAs('public/crud-examples', $filename);
-        return $filename;
+        return $this->executeUpload($file, 'crud-examples');
     }
 
     /**
@@ -55,12 +77,7 @@ class FileService
     public function deleteCrudExampleFile(CrudExample $crudExample)
     {
         $filepath = 'public/crud-examples/' . $crudExample->file;
-        $exist    = Storage::exists($filepath);
-        if ($exist) {
-            Storage::delete($filepath);
-            return true;
-        }
-        return false;
+        return $this->executeDeleteFromStorage($filepath);
     }
 
     /**
@@ -124,17 +141,44 @@ class FileService
     /**
      * upload favicon file
      *
-     * @param \Illuminate\Http\UploadedFile $avatarFile
+     * @param \Illuminate\Http\UploadedFile $file
      * @return string
      */
-    public function uploadFavicon(\Illuminate\Http\UploadedFile $avatarFile)
+    public function uploadFavicon(\Illuminate\Http\UploadedFile $file)
     {
-        if (config('app.is_heroku')) {
-            $httpsUrl = cloudinary()->upload($avatarFile->getRealPath())->getSecurePath();
-            return $httpsUrl;
-        }
-        $filename = date('YmdHis') . Str::random(20);
-        $avatarFile->storeAs('public/favicon', $filename);
-        return asset('storage/favicon/' . $filename);
+        return $this->executeUpload($file, 'favicon');
+    }
+
+    /**
+     * upload logo file
+     *
+     * @param \Illuminate\Http\UploadedFile $file
+     * @return string
+     */
+    public function uploadLogo(\Illuminate\Http\UploadedFile $file)
+    {
+        return $this->executeUpload($file, 'logo');
+    }
+
+    /**
+     * upload stisla bg login file
+     *
+     * @param \Illuminate\Http\UploadedFile $file
+     * @return string
+     */
+    public function uploadStislaBgLogin(\Illuminate\Http\UploadedFile $file)
+    {
+        return $this->executeUpload($file, 'stisla-bg-login');
+    }
+
+    /**
+     * upload stisla bg home file
+     *
+     * @param \Illuminate\Http\UploadedFile $file
+     * @return string
+     */
+    public function uploadStislaBgHome(\Illuminate\Http\UploadedFile $file)
+    {
+        return $this->executeUpload($file, 'stisla-bg-home');
     }
 }

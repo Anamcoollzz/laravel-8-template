@@ -52,9 +52,9 @@
         </td>
         @if ($isExport === false)
           <td>
-            @include('includes.form.buttons.btn-edit', ['link'=>route('crud-examples.edit',
+            @include('stisla.includes.forms.buttons.btn-edit', ['link'=>route('crud-examples.edit',
             [$item->id])])
-            @include('includes.form.buttons.btn-delete', ['link'=>route('crud-examples.destroy',
+            @include('stisla.includes.forms.buttons.btn-delete', ['link'=>route('crud-examples.destroy',
             [$item->id])])
           </td>
         @endif

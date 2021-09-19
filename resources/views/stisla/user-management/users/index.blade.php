@@ -33,6 +33,9 @@
                     <th>{{ __('Email') }}</th>
                     <th>{{ __('Role') }}</th>
                     <th>{{ __('Terakhir Masuk') }}</th>
+                    @if ($_is_login_must_verified)
+                      <th>{{ __('Waktu Verifikasi') }}</th>
+                    @endif
                     <th>{{ __('Aksi') }}</th>
                   </tr>
                 </thead>
@@ -52,7 +55,10 @@
                           @endif
                         @endforeach
                       </td>
-                      <td>{{ $item->last_login }}</td>
+                      <td>{{ $item->last_login ?? '-' }}</td>
+                      @if ($_is_login_must_verified)
+                        <td>{{ $item->email_verified_at ?? '-' }}</td>
+                      @endif
                       <td>
                         @can('Pengguna Ubah')
                           @include('stisla.includes.forms.buttons.btn-edit', ['link'=>route('user-management.users.edit',

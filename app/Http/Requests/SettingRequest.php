@@ -23,7 +23,7 @@ class SettingRequest extends FormRequest
      */
     public function rules()
     {
-        if (config('app.template') === 'stisla') {
+        if (TEMPLATE === STISLA) {
 
             if ($this->type === 'umum')
                 return [
@@ -32,10 +32,20 @@ class SettingRequest extends FormRequest
                     'since'               => 'required|numeric',
                     'application_version' => 'required',
                 ];
+            else if ($this->type === 'meta')
+                return [
+                    'meta_author'         => 'required',
+                    'meta_description'    => 'required',
+                    'meta_keywords'       => 'required',
+                ];
             else if ($this->type === 'tampilan')
                 return [
-                    'stisla_skin' => 'required',
-                    'favicon'     => 'nullable|file',
+                    'stisla_skin'         => 'required',
+                    'stisla_sidebar_mini' => 'required',
+                    'favicon'             => 'nullable|file',
+                    'logo'                => 'nullable|file',
+                    'stisla_bg_home'      => 'nullable|file',
+                    'stisla_bg_login'     => 'nullable|file',
                 ];
             else if ($this->type === 'lainnya')
                 return [

@@ -1,7 +1,7 @@
 @extends('stisla.layouts.app')
 
 @section('title')
-  {{ isset($d) ? __('Ubah') : __('Tambah') }} {{ $title = 'Contoh CRUD' }}
+  {{ $action = isset($d) ? __('Ubah') : __('Tambah') }} {{ $title = 'Contoh CRUD' }}
 @endsection
 
 @section('content')
@@ -14,16 +14,18 @@
       <div class="breadcrumb-item active">
         <a href="{{ route('crud-examples.index') }}">{{ __('Contoh CRUD') }}</a>
       </div>
-      <div class="breadcrumb-item">{{ isset($d) ? __('Ubah') : __('Tambah') }} {{ $title }}</div>
+      <div class="breadcrumb-item">{{ $action }} {{ $title }}</div>
     </div>
   </div>
 
   <div class="section-body">
+    <h2 class="section-title">{{ $action }} {{ $title }}</h2>
+    <p class="section-lead">{{ __('Menampilkan halaman ' . $action . ' ' . $title) }}.</p>
     <div class="row">
       <div class="col-12">
         <div class="card">
           <div class="card-header">
-            <h4><i class="fa fa-users"></i> {{ isset($d) ? __('Ubah') : __('Tambah') }} {{ $title }}</h4>
+            <h4><i class="fa fa-users"></i> {{ $action }} {{ $title }}</h4>
             {{-- @can('Contoh CRUD') --}}
             <div class="card-header-action">
               @include('stisla.includes.forms.buttons.btn-view', ['link'=>route('crud-examples.index')])

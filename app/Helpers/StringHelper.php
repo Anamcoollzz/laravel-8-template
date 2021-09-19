@@ -2,6 +2,8 @@
 
 namespace App\Helpers;
 
+use Illuminate\Support\Str;
+
 class StringHelper
 {
 
@@ -28,5 +30,16 @@ class StringHelper
             }
         }
         return $acronym;
+    }
+
+    /**
+     * isUrl
+     *
+     * @param string $words
+     * @return boolean
+     */
+    public static function isUrl(string $words)
+    {
+        return Str::contains($words, 'https://') || Str::contains($words, 'http://');
     }
 }
