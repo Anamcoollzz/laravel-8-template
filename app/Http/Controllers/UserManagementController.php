@@ -36,7 +36,7 @@ class UserManagementController extends Controller
      */
     public function index()
     {
-        return view('user-management.users.index', [
+        return view('stisla.user-management.users.index', [
             'data' => $this->userRepository->getUsers(),
         ]);
     }
@@ -49,7 +49,7 @@ class UserManagementController extends Controller
     public function create()
     {
         $roleOptions = $this->userRepository->getRoles()->pluck('name', 'id')->toArray();
-        return view('user-management.users.form', [
+        return view('stisla.user-management.users.form', [
             'roleOptions' => $roleOptions,
         ]);
     }
@@ -83,7 +83,7 @@ class UserManagementController extends Controller
         $roleOptions = $this->userRepository->getRoles()->pluck('name', 'id')->toArray();
         if ($user->roles->count() > 0)
             $user->role = $user->roles[0]->id;
-        return view('user-management.users.form', [
+        return view('stisla.user-management.users.form', [
             'roleOptions' => $roleOptions,
             'd'           => $user,
         ]);

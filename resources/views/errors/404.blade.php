@@ -1,4 +1,4 @@
-@extends('stisla.layouts.app-blank')
+@extends('stisla.layouts.app-blank', \App\Repositories\SettingRepository::settings())
 
 @section('content')
   @if (config('app.template') === 'stisla')

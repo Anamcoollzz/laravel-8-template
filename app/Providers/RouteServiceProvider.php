@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Middleware\ViewShare;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -47,7 +48,7 @@ class RouteServiceProvider extends ServiceProvider
             //     ->namespace($this->namespace)
             //     ->group(base_path('routes/web.php'));
 
-            Route::middleware('web')
+            Route::middleware('web', ViewShare::class)
                 ->namespace($this->namespace)
                 ->group(base_path('routes/stisla-web.php'));
         });

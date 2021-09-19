@@ -41,7 +41,7 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        return view('profile.index', [
+        return view('stisla.profile.index', [
             'user' => auth()->user(),
         ]);
     }
@@ -68,7 +68,7 @@ class ProfileController extends Controller
                 'name', 'email'
             ]));
         }
-        return redirect()->back()->with('successMessage', __('Berhasil memperbarui profil'));
+        return back()->with('successMessage', __('Berhasil memperbarui profil'));
     }
 
     /**
@@ -82,6 +82,6 @@ class ProfileController extends Controller
         $this->userRepository->updateProfile([
             'password' => bcrypt($request->password)
         ]);
-        return redirect()->back()->with('successMessage', __('Berhasil memperbarui password'));
+        return back()->with('successMessage', __('Berhasil memperbarui password'));
     }
 }

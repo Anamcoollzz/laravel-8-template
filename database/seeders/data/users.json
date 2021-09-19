@@ -3,6 +3,7 @@
         "name": "Hairul Anam",
         "email": "superadmin@laraveltemplate.com",
         "password": "superadmin",
-        "roles": ["superadmin"]
+        "roles": ["superadmin"],
+        "email_verified_at": "2021-04-06 04:06:00"
     }
 ]

@@ -2,9 +2,12 @@
 
 namespace App\Services;
 
+use App\Mail\ForgotPasswordMail;
 use App\Mail\TestingMail;
+use App\Mail\VerificationAccountMail;
 use App\Models\User;
 use App\Repositories\EmailRepository;
+use Illuminate\Mail\Mailable;
 use Illuminate\Support\Facades\Mail;
 
 class EmailService
@@ -16,6 +19,15 @@ class EmailService
      * @return void
      */
     public function __construct()
+    {
+    }
+
+    /**
+     * prepare config
+     *
+     * @return void
+     */
+    public function prepare()
     {
         $mail_provider     = EmailRepository::emailProvider();
         $mail_from_address = EmailRepository::fromAddress();
@@ -63,6 +75,28 @@ class EmailService
     }
 
     /**
+     * send direct
+     *
+     * @return void
+     */
+    public function sendDirect(string $to, Mailable $mailable)
+    {
+        $this->prepare();
+        Mail::to($to)->send($mailable);
+    }
+
+    /**
+     * send queue
+     *
+     * @return void
+     */
+    public function sendQueue(string $to, Mailable $mailable)
+    {
+        $this->prepare();
+        Mail::to($to)->queue($mailable);
+    }
+
+    /**
      * forgot password
      *
      * @param User $user
@@ -70,7 +104,7 @@ class EmailService
      */
     public function forgotPassword(User $user)
     {
-        Mail::to($user->email)->send(new \App\Mail\ForgotPasswordMail($user));
+        $this->sendDirect($user->email, new ForgotPasswordMail($user));
     }
 
     /**
@@ -81,7 +115,7 @@ class EmailService
      */
     public function verifyAccount(User $user)
     {
-        Mail::to($user->email)->send(new \App\Mail\VerificationAccountMail($user));
+        $this->sendDirect($user->email, new VerificationAccountMail($user));
     }
 
     /**
@@ -93,6 +127,6 @@ class EmailService
      */
     public function testing(string $to, string $text)
     {
-        Mail::to($to)->send(new TestingMail($text));
+        $this->sendDirect($to, new TestingMail($text));
     }
 }

@@ -1,0 +1,74 @@
+@extends('stisla.layouts.app')
+
+@section('title')
+  {{ $action = isset($d) ? __('Ubah') : __('Tambah') }} {{ $title = 'Data Pengguna' }}
+@endsection
+
+@section('content')
+  <div class="section-header">
+    <h1>{{ $title }}</h1>
+    <div class="section-header-breadcrumb">
+      <div class="breadcrumb-item active">
+        <a href="{{ route('dashboard.index') }}">{{ __('Dashboard') }}</a>
+      </div>
+      @can('Pengguna')
+        <div class="breadcrumb-item active">
+          <a href="{{ route('user-management.users.index') }}">{{ __('Data Pengguna') }}</a>
+        </div>
+      @endcan
+      <div class="breadcrumb-item">{{ $action }} {{ $title }}</div>
+    </div>
+  </div>
+
+  <div class="section-body">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h4><i class="fa fa-users"></i> {{ $action }} {{ $title }}</h4>
+            @can('Pengguna')
+              <div class="card-header-action">
+                @include('stisla.includes.forms.buttons.btn-view', ['link'=>route('user-management.users.index')])
+              </div>
+            @endcan
+          </div>
+          <div class="card-body">
+            <form
+              action="{{ isset($d) ? route('user-management.users.update', [$d->id]) : route('user-management.users.store') }}"
+              method="POST">
+
+              @isset($d)
+                @method('PUT')
+              @endisset
+
+              @csrf
+              <div class="row">
+                <div class="col-md-6">
+                  @include('stisla.includes.forms.inputs.input-name', ['required'=>true])
+                </div>
+                <div class="col-md-6">
+                  @include('stisla.includes.forms.inputs.input-email')
+                </div>
+                <div class="col-md-6">
+                  @include('stisla.includes.forms.selects.select', ['id'=>'role', 'name'=>'role', 'options'=>$roleOptions,
+                  'label'=>'Role', 'required'=>true])
+                </div>
+                <div class="col-md-6">
+                  @include('stisla.includes.forms.inputs.input-password', ['hint'=>isset($d) ? 'Password bisa dikosongi' :
+                  false,
+                  'required'=>!isset($d), 'value'=>isset($d)?'':null])
+                </div>
+                <div class="col-md-12">
+                  <br>
+                  @include('stisla.includes.forms.buttons.btn-save')
+                  @include('stisla.includes.forms.buttons.btn-reset')
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+@endsection

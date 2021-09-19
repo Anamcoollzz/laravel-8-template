@@ -3,19 +3,65 @@
 namespace App\Repositories;
 
 use App\Models\Setting;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Storage;
 
-class SettingRepository extends Repository
+class SettingRepository
 {
 
     /**
-     * construct function
+     * get all data
      *
-     * @return void
+     * @return Collection
      */
-    public function __construct()
+    public static function all()
     {
-        $this->model = new Setting();
+        return Setting::all();
+    }
+
+    /**
+     * update data by key
+     *
+     * @param array $data
+     * @param string $key
+     * @return Model
+     */
+    public static function updateByKey(array $data, string $key)
+    {
+        $model = Setting::where('key', $key);
+        if ($model) {
+            $model->update($data);
+            return $model;
+        }
+        return 0;
+    }
+
+    /**
+     * get setting formatted
+     *
+     * @return array
+     */
+    public static function settings()
+    {
+        $data = [];
+        foreach (static::all() as $d) {
+            $data['_' . $d->key] = $d->value;
+            if ($d->key === 'application_name') {
+                $data['_app_name'] = $d->value;
+                $data['_app_name_mobile'] = \App\Helpers\StringHelper::acronym($d->value, 2);
+            } else if ($d->key === 'logo') {
+                $data['_logo_url'] = SettingRepository::logoUrl();
+            } else if ($d->key === 'stisla_skin') {
+                $data['_skin'] = $d->value;
+            } else if ($d->key === 'stisla_bg_login') {
+                $data['_stisla_bg_login'] = SettingRepository::loginBgUrl();
+            } else if ($d->key === 'stisla_sidebar_mini') {
+                $data['_sidebar_mini'] = $d->value;
+            } else if ($d->key === 'application_version') {
+                $data['_version '] = $d->value;
+            }
+        }
+        return $data;
     }
 
     /**
@@ -25,7 +71,7 @@ class SettingRepository extends Repository
      */
     public static function applicationName()
     {
-        return Setting::firstOrCreate(['key' => 'application_name'], ['value' => 'Laravel 8 Admin Template']);
+        return Setting::firstOrCreate(['key' => 'application_name'], ['value' => 'Laravel 8 Admin Template'])->value;
     }
 
     /**
@@ -33,7 +79,7 @@ class SettingRepository extends Repository
      *
      * @return int
      */
-    public function updateApplicationName(string $applicationName)
+    public static function updateApplicationName(string $applicationName)
     {
         return Setting::where(['key' => 'application_name'])->update(['value' => $applicationName]);
     }
@@ -45,7 +91,7 @@ class SettingRepository extends Repository
      */
     public static function companyName()
     {
-        return Setting::firstOrCreate(['key' => 'company_name'], ['value' => 'Dummy Company Name']);
+        return Setting::firstOrCreate(['key' => 'company_name'], ['value' => 'Dummy Company Name'])->value;
     }
 
     /**
@@ -65,7 +111,7 @@ class SettingRepository extends Repository
      */
     public static function since()
     {
-        return Setting::firstOrCreate(['key' => 'since'], ['value' => '2021']);
+        return Setting::firstOrCreate(['key' => 'since'], ['value' => '2021'])->value;
     }
 
     /**
@@ -85,7 +131,7 @@ class SettingRepository extends Repository
      */
     public static function applicationVersion()
     {
-        return Setting::firstOrCreate(['key' => 'application_version'], ['value' => '1.0.0']);
+        return Setting::firstOrCreate(['key' => 'application_version'], ['value' => '1.0.0'])->value;
     }
 
     /**
@@ -95,7 +141,7 @@ class SettingRepository extends Repository
      */
     public static function skin()
     {
-        return Setting::firstOrCreate(['key' => 'skin'], ['value' => 'red']);
+        return Setting::firstOrCreate(['key' => 'skin'], ['value' => 'red'])->value;
     }
 
     /**
@@ -105,7 +151,7 @@ class SettingRepository extends Repository
      */
     public static function stislaSkin()
     {
-        return Setting::firstOrCreate(['key' => 'stisla_skin'], ['value' => 'style']);
+        return Setting::firstOrCreate(['key' => 'stisla_skin'], ['value' => 'style'])->value;
     }
 
     /**
@@ -113,7 +159,7 @@ class SettingRepository extends Repository
      *
      * @return array
      */
-    public function getSkins()
+    public static function getSkins()
     {
         return [
             "red",
@@ -144,7 +190,7 @@ class SettingRepository extends Repository
      *
      * @return array
      */
-    public function getStislaSkins()
+    public static function getStislaSkins()
     {
         return [
             "style"  => "default",
@@ -168,10 +214,12 @@ class SettingRepository extends Repository
     {
         $logo = null;
         if (config('app.template') === 'stisla') {
-            $logo = Setting::where('key', 'logo')->first();
+            // if (session('_logo_url')) return session('_logo_url');
+            if (session('_logo')) $logo = session('_logo');
+            else $logo = Setting::where('key', 'logo')->first()->value;
             if ($logo) {
-                if (Storage::exists('public/settings/' . $logo->value)) {
-                    return asset('storage/settings/' . $logo->value);
+                if (Storage::exists('public/settings/' . $logo)) {
+                    return asset('storage/settings/' . $logo);
                 } else {
                     $logo = null;
                 }
@@ -191,10 +239,11 @@ class SettingRepository extends Repository
     {
         $bgLogin = null;
         if (config('app.template') === 'stisla') {
-            $bgLogin = Setting::where('key', 'stisla_bg_login')->first();
+            if (session('_stisla_bg_login')) return session('_stisla_bg_login');
+            $bgLogin =  Setting::where('key', 'stisla_bg_login')->first()->value;
             if ($bgLogin) {
-                if (Storage::exists('public/settings/' . $bgLogin->value)) {
-                    return asset('storage/settings/' . $bgLogin->value);
+                if (Storage::exists('public/settings/' . $bgLogin)) {
+                    return asset('storage/settings/' . $bgLogin);
                 } else {
                     $bgLogin = null;
                 }
@@ -210,9 +259,9 @@ class SettingRepository extends Repository
      *
      * @return bool
      */
-    public function loginMustVerified()
+    public static function loginMustVerified()
     {
-        return ((int) Setting::firstOrCreate(['key' => 'login_must_verified'], ['value' => 0])->value) === 1;
+        return session('_is_login_must_verified') ?? ((int) Setting::firstOrCreate(['key' => 'is_login_must_verified'], ['value' => 0])->value) === 1;
     }
 
     /**
@@ -220,8 +269,9 @@ class SettingRepository extends Repository
      *
      * @return bool
      */
-    public function isActiveRegisterPage()
+    public static function isActiveRegisterPage()
     {
+        if (session('_is_active_register_page')) return session('_is_active_register_page');
         return ((int) Setting::firstOrCreate(['key' => 'is_active_register_page'], ['value' => 0])->value) === 1;
     }
 
@@ -230,8 +280,134 @@ class SettingRepository extends Repository
      *
      * @return bool
      */
-    public function isForgotPasswordSendToEmail()
+    public static function isForgotPasswordSendToEmail()
     {
+        if (session('_is_forgot_password_send_to_email')) return session('_is_forgot_password_send_to_email');
         return ((int) Setting::firstOrCreate(['key' => 'is_forgot_password_send_to_email'], ['value' => 0])->value) === 1;
+    }
+
+    /**
+     * loginTemplate
+     *
+     * @return string
+     */
+    public static function stislaLoginTemplate()
+    {
+        if (session('_stisla_login_template')) return session('_stisla_login_template');
+        return Setting::firstOrCreate(['key' => 'stisla_login_template'], ['value' => 'default'])->value;
+    }
+
+    /**
+     * metaDescription
+     *
+     * @return string
+     */
+    public static function metaDescription()
+    {
+        return Setting::firstOrCreate(
+            ['key' => 'meta_description'],
+            ['value' => 'PT Anam Maju Pantang Mundur']
+        )->value;
+    }
+
+    /**
+     * metaKeywords
+     *
+     * @return string
+     */
+    public static function metaKeywords()
+    {
+        return Setting::firstOrCreate(
+            ['key' => 'meta_keywords'],
+            ['value' => 'Sistem Informasi, Pemrograman, Github, PHP, Laravel, Stisla, Heroku, CBT, Ujian Online']
+        )->value;
+    }
+
+    /**
+     * metaAuthor
+     *
+     * @return string
+     */
+    public static function metaAuthor()
+    {
+        return Setting::firstOrCreate(
+            ['key' => 'meta_author'],
+            ['value' => 'Hairul Anam']
+        )->value;
+    }
+
+    /**
+     * developerName
+     *
+     * @return string
+     */
+    public static function developerName()
+    {
+        return Setting::firstOrCreate(
+            ['key' => 'developer_name'],
+            ['value' => 'Hairul Anam']
+        )->value;
+    }
+
+    /**
+     * developerWhatsapp
+     *
+     * @return string
+     */
+    public static function developerWhatsapp()
+    {
+        return Setting::firstOrCreate(
+            ['key' => 'developer_whatsapp'],
+            ['value' => '6285322778935']
+        )->value;
+    }
+
+    /**
+     * favicon
+     *
+     * @return string
+     */
+    public static function favicon()
+    {
+        return Setting::firstOrCreate(
+            ['key' => 'favicon'],
+            ['value' => 'http://127.0.0.1:8001/favicon.ico']
+        )->value;
+    }
+
+    /**
+     * city
+     *
+     * @return string
+     */
+    public static function city()
+    {
+        return Setting::firstOrCreate(
+            ['key' => 'city'],
+            ['value' => 'Jember']
+        )->value;
+    }
+
+    /**
+     * country
+     *
+     * @return string
+     */
+    public static function country()
+    {
+        return Setting::firstOrCreate(
+            ['key' => 'country'],
+            ['value' => 'Indonesia']
+        )->value;
+    }
+
+    /**
+     * stislaSidebarMini
+     *
+     * @return bool
+     */
+    public static function stislaSidebarMini()
+    {
+        return ((int)Setting::firstOrCreate(['key' => 'stisla_sidebar_mini'], ['value' => '0'])->value) === 1;
     }
 }

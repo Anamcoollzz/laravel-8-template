@@ -21,9 +21,10 @@ class UserSeeder extends Seeder
         $users = json_decode(file_get_contents(database_path('seeders/data/users.json')), true);
         foreach ($users as $user) {
             $userObj = User::create([
-                'name'     => $user['name'],
-                'email'    => $user['email'],
-                'password' => bcrypt($user['password'])
+                'name'              => $user['name'],
+                'email'             => $user['email'],
+                'email_verified_at' => $user['email_verified_at'],
+                'password'          => bcrypt($user['password'])
             ]);
             foreach ($user['roles'] as $role)
                 $userObj->assignRole($role);

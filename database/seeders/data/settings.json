@@ -1,28 +1,59 @@
 [
+    { "key": "application_name", "value": "Laravel 8 Template" },
+    { "key": "application_version", "value": "1.0.0" },
     { "key": "app_description", "value": "Ini hanyalah sistem biasa" },
     { "key": "city", "value": "Jember" },
-    { "key": "company_name", "value": "PT Anam Techno" },
+    { "key": "company_name", "value": "[Nama Perusahaannya]" },
     { "key": "country", "value": "Indonesia" },
     {
         "key": "favicon",
-        "value": "http://127.0.0.1:8001/favicon.ico"
+        "value": "http://127.0.0.1:8000/favicon.ico"
     },
-    { "key": "logo", "value": "http://localhost/img/logo.png" },
-    { "key": "year", "value": "2020" },
-    { "key": "since", "value": "2020" },
+    { "key": "logo", "value": "http://127.0.0.1:8000/img/logo.png" },
+    { "key": "since", "value": "2021" },
 
-    { "key": "meta_author", "value": "Hairul Anam" },
-    { "key": "meta_description", "value": "PT Anam Maju Pantang Mundur" },
+    {
+        "key": "meta_author",
+        "value": "Hairul Anam, Hafiz Ardi, Ariski Setyawan"
+    },
+    { "key": "meta_description", "value": "[Nama Perusahaannya]" },
     {
         "key": "meta_keywords",
-        "value": "Sistem Informasi, Pemrograman, Github, PHP, Laravel, Stisla, Heroku, CBT, Ujian Online"
+        "value": "Sistem Informasi, Pemrograman, Github, PHP, Laravel, Stisla, Heroku, Gitlab, MySQL"
     },
 
     {
         "key": "stisla_bg_home",
-        "value": "http://localhost/img/bg_selamat_datang.jpg"
+        "value": "http://127.0.0.1:8000/img/bg_selamat_datang.jpg"
     },
-    { "key": "stisla_bg_login", "value": "http://localhost/img/pantai.jpg" },
+    {
+        "key": "stisla_bg_login",
+        "value": "http://127.0.0.1:8000/img/pantai.jpg"
+    },
     { "key": "stisla_sidebar_mini", "value": "0" },
-    { "key": "stisla_skin", "value": "style" }
+    { "key": "stisla_login_template", "value": "default" },
+    { "key": "stisla_skin", "value": "style" },
+
+    { "key": "mail_provider", "value": "mailtrap" },
+    { "key": "mail_from_address", "value": "hairulanam21" },
+    { "key": "mail_from_name", "value": "Superadmin" },
+
+    { "key": "mail_mailtrap_host", "value": "smtp" },
+    { "key": "mail_mailtrap_port", "value": "2525" },
+    { "key": "mail_mailtrap_username", "value": "809d58dfa23ade" },
+    { "key": "mail_mailtrap_password", "value": "e9d1aa54a61db1" },
+    { "key": "mail_mailtrap_encryption", "value": "tls" },
+
+    { "key": "mail_host", "value": "smtp" },
+    { "key": "mail_port", "value": "2525" },
+    { "key": "mail_username", "value": "809d58dfa23ade" },
+    { "key": "mail_password", "value": "e9d1aa54a61db1" },
+    { "key": "mail_encryption", "value": "tls" },
+
+    { "key": "mail_mailgun_domain", "value": "test" },
+    { "key": "mail_mailgun_api_key", "value": "test" },
+
+    { "key": "is_login_must_verified", "value": "1" },
+    { "key": "is_active_register_page", "value": "1" },
+    { "key": "is_forgot_password_send_to_email", "value": "1" }
 ]

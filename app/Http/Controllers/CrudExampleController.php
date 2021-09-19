@@ -52,7 +52,7 @@ class CrudExampleController extends Controller
      */
     public function index()
     {
-        return view('crud-example.index', [
+        return view('stisla.crud-example.index', [
             'data' => $this->crudExampleRepository->getLatest(),
         ]);
     }
@@ -64,7 +64,7 @@ class CrudExampleController extends Controller
      */
     public function create()
     {
-        return view('crud-example.form', [
+        return view('stisla.crud-example.form', [
             'selectOptions' => ['option 1' => 'option 1', 'option 2' => 'option 2', 'option 3' => 'option 3',]
         ]);
     }
@@ -109,7 +109,7 @@ class CrudExampleController extends Controller
      */
     public function edit(CrudExample $crudExample)
     {
-        return view('crud-example.form', [
+        return view('stisla.crud-example.form', [
             'selectOptions' => ['option 1' => 'option 1', 'option 2' => 'option 2', 'option 3' => 'option 3',],
             'd'             => $crudExample,
         ]);

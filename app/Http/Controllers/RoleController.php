@@ -34,7 +34,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        return view('user-management.roles.index', [
+        return view('stisla.user-management.roles.index', [
             'data' => $this->userRepository->getRoles(),
         ]);
     }
@@ -49,7 +49,7 @@ class RoleController extends Controller
         $role->load(['permissions']);
         $rolePermissions = $role->permissions->pluck('name')->toArray();
         // dd($rolePermissions);
-        return view('user-management.roles.form', [
+        return view('stisla.user-management.roles.form', [
             'd'               => $role,
             'permissions'     => $this->userRepository->getPermissions(),
             'rolePermissions' => $rolePermissions,
@@ -65,6 +65,7 @@ class RoleController extends Controller
      */
     public function update(Request $request, Role $role)
     {
+        if ($role->name === 'superadmin') abort(404);
         $this->userRepository->updateRole($role->id, $request->only(['permissions']));
         return redirect()->back()->with('successMessage', __('Berhasil memperbarui role'));
     }

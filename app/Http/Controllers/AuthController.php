@@ -15,6 +15,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
@@ -66,12 +67,13 @@ class AuthController extends Controller
         // if (config('app.template') === 'stisla') {
         //     $template = \App\Models\Setting::firstOrCreate(['key' => 'login_template'], ['value' => 'default'])->value;
         //     if ($template === 'tampilan 2')
-        //         return view('auth.login.index-stisla-2');
+        //         return view('stisla.auth.login.index-stisla-2');
         //     else
-        //         return view('auth.login.index-stisla');
+        //         return view('stisla.auth.login.index-stisla');
         // }
-        // return view('auth.login.index');
-        return view('auth.register.index-stisla');
+        // return view('stisla.auth.login.index');
+        if (TEMPLATE === STISLA)
+            return view('stisla.auth.register.index');
     }
 
     /**
@@ -107,22 +109,15 @@ class AuthController extends Controller
      */
     public function loginForm()
     {
-        if (config('app.template') === 'stisla') {
-            $isActiveRegisterPage = $this->settingRepository->isActiveRegisterPage();
-            $isForgotPasswordSendToEmail = $this->settingRepository->isForgotPasswordSendToEmail();
-            $loginMustVerified = $this->settingRepository->loginMustVerified();
-            $template = \App\Models\Setting::firstOrCreate(['key' => 'login_template'], ['value' => 'default'])->value;
-            $data = [
-                'isActiveRegisterPage' => $isActiveRegisterPage,
-                'isForgotPasswordSendToEmail' => $isForgotPasswordSendToEmail,
-                'loginMustVerified' => $loginMustVerified
-            ];
+        if (TEMPLATE === STISLA) {
+            $template = $this->settingRepository->stislaLoginTemplate();
+            $data     = [];
             if ($template === 'tampilan 2')
-                return view('auth.login.index-stisla-2', $data);
+                return view('stisla.auth.login.index2', $data);
             else
-                return view('auth.login.index-stisla', $data);
+                return view('stisla.auth.login.index', $data);
         }
-        return view('auth.login.index');
+        return view('stisla.auth.login.index');
     }
 
     /**
@@ -156,6 +151,7 @@ class AuthController extends Controller
     public function logout()
     {
         Auth::logout();
+        Session::flush();
         return redirect()->route('login');
     }
 
@@ -167,14 +163,14 @@ class AuthController extends Controller
     public function forgotPasswordForm()
     {
         if ($this->settingRepository->isForgotPasswordSendToEmail() === false) abort(404);
-        if (config('app.template') === 'stisla') {
+        if (TEMPLATE === STISLA) {
             // $template = \App\Models\Setting::firstOrCreate(['key' => 'login_template'], ['value' => 'default'])->value;
             // if ($template === 'tampilan 2')
-            // return view('auth.login.index-stisla-2');
+            // return view('stisla.auth.login.index-stisla-2');
             // else
-            return view('auth.forgot-password.index-stisla-2');
+            return view('stisla.auth.forgot-password.index2');
         }
-        return view('auth.login.index');
+        return view('stisla.auth.login.index');
     }
 
     /**
@@ -192,11 +188,11 @@ class AuthController extends Controller
             $user->update(['email_token' => Str::random(100)]);
             $this->emailService->forgotPassword($user);
             DB::commit();
-            return redirect()->back()->withInput()->with('successMessage', __('Sukses mengirim ke ' . $request->email));
+            return back()->withInput()->with('successMessage', __('Sukses mengirim ke ' . $request->email));
         } catch (Exception $e) {
             DB::rollBack();
             // if (Str::contains($e->getMessage(), 'Connection could not be established')) {
-            return redirect()->back()->withInput()->with('errorMessage', __('Gagal mengirim email, server email sedang gangguan'));
+            return back()->withInput()->with('errorMessage', __('Gagal mengirim email, server email sedang gangguan'));
             // }
             // return $e->getMessage();
         }
@@ -214,14 +210,14 @@ class AuthController extends Controller
         $user = $this->userRepository->findByEmailToken($token);
         if ($user === null)
             abort(404);
-        if (config('app.template') === 'stisla') {
+        if (TEMPLATE === STISLA) {
             // $template = \App\Models\Setting::firstOrCreate(['key' => 'login_template'], ['value' => 'default'])->value;
             // if ($template === 'tampilan 2')
-            // return view('auth.login.index-stisla-2');
+            // return view('stisla.auth.login.index-stisla-2');
             // else
-            return view('auth.reset-password.index-stisla-2');
+            return view('stisla.auth.reset-password.index-stisla-2');
         }
-        return view('auth.login.index');
+        return view('stisla.auth.login.index');
     }
 
     /**
@@ -238,12 +234,12 @@ class AuthController extends Controller
         try {
             $user = $this->userRepository->findByEmailToken($token);
             if ($user === null)
-                return redirect()->back()->withInput()->with('errorMessage', __('Gagal memperbarui password'));
+                return back()->withInput()->with('errorMessage', __('Gagal memperbarui password'));
             $user->update(['password' => bcrypt($request->new_password), 'email_token' => null]);
             DB::commit();
             return redirect()->route('login')->withInput()->with('successMessage', __('Sukses memperbarui password'));
         } catch (Exception $e) {
-            return redirect()->back()->withInput()->with('errorMessage', __('Gagal memperbarui password'));
+            return back()->withInput()->with('errorMessage', __('Gagal memperbarui password'));
         }
     }
 
@@ -258,12 +254,13 @@ class AuthController extends Controller
         // if (config('app.template') === 'stisla') {
         //     $template = \App\Models\Setting::firstOrCreate(['key' => 'login_template'], ['value' => 'default'])->value;
         //     if ($template === 'tampilan 2')
-        //         return view('auth.login.index-stisla-2');
+        //         return view('stisla.auth.login.index-stisla-2');
         //     else
-        //         return view('auth.login.index-stisla');
+        //         return view('stisla.auth.login.index-stisla');
         // }
-        // return view('auth.login.index');
-        return view('auth.verification.index-stisla-2');
+        // return view('stisla.auth.login.index');
+        if (TEMPLATE === STISLA)
+            return view('stisla.auth.verification.index2');
     }
 
     /**
@@ -281,11 +278,11 @@ class AuthController extends Controller
             $user->update(['email_token' => Str::random(150)]);
             $this->emailService->verifyAccount($user);
             DB::commit();
-            return redirect()->back()->withInput()->with('successMessage', __('Sukses mengirim link verifikasi ke ' . $request->email));
+            return back()->withInput()->with('successMessage', __('Sukses mengirim link verifikasi ke ' . $request->email));
         } catch (Exception $e) {
             DB::rollBack();
             // if (Str::contains($e->getMessage(), 'Connection could not be established')) {
-            return redirect()->back()->withInput()->with('errorMessage', __('Gagal mengirim email, server email sedang gangguan'));
+            return back()->withInput()->with('errorMessage', __('Gagal mengirim email, server email sedang gangguan'));
             // }
             // return $e->getMessage();
         }

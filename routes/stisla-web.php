@@ -8,12 +8,10 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TestingController;
 use App\Http\Controllers\UserManagementController;
-use App\Http\Middleware\ViewShare;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware([
-    'auth',
-    ViewShare::class,
+    'auth'
 ])->group(function () {
 
     # DASHBOARD
@@ -29,10 +27,10 @@ Route::middleware([
     Route::put('profile/password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
 
     # DATATABLE
-    Route::view('datatable', 'datatable.index')->name('datatable.index');
+    Route::view('datatable', 'stisla.datatable.index')->name('datatable.index');
 
     # FORM
-    Route::view('form', 'form.index')->name('form.index');
+    Route::view('form', 'stisla.form.index')->name('form.index');
 
     # USER MANAGEMENT
     Route::prefix('user-management')->as('user-management.')->group(function () {
@@ -46,8 +44,8 @@ Route::middleware([
     Route::resource('crud-examples', CrudExampleController::class);
 
     Route::get('mahasiswas/import-excel-example', [\App\Http\Controllers\MahasiswaController::class, 'importExcelExample'])->name('mahasiswas.import-excel-example');
-Route::post('mahasiswas/import-excel', [\App\Http\Controllers\MahasiswaController::class, 'importExcel'])->name('mahasiswas.import-excel');
-Route::resource('mahasiswas', \App\Http\Controllers\MahasiswaController::class);
+    Route::post('mahasiswas/import-excel', [\App\Http\Controllers\MahasiswaController::class, 'importExcel'])->name('mahasiswas.import-excel');
+    Route::resource('mahasiswas', \App\Http\Controllers\MahasiswaController::class);
 
     Route::get('testing/datatable', [TestingController::class, 'datatable']);
     Route::get('testing/send-email', [TestingController::class, 'sendEmail']);
