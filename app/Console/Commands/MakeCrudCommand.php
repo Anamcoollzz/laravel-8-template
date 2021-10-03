@@ -73,6 +73,7 @@ class MakeCrudCommand extends Command
         $TD = '';
         $FORM = '';
         $TYPESVALUE = '';
+        $SEEDERCOLUMNS = '';
         foreach ($this->json->columns as $column) {
             if ($column->type === 'ai')
                 $STRUCTURE .= '$table->id();';
@@ -82,6 +83,7 @@ class MakeCrudCommand extends Command
                 $STRUCTURE .= '$table->' . $column->type . '(\'' . $column->name . '\');';
                 // $FILLABLES .= "\t\t'" . $column->name . "',\n";
                 $FILLABLES .= "'" . $column->name . "', ";
+                $SEEDERCOLUMNS .= "'" . $column->name . '\'' . ' => $faker->numberBetween(0,1000), // ganti method fakernya sesuai kebutuhan' . "\n\t\t\t\t";
                 $label = $column->label ?? Str::title(str_replace('_', ' ', $column->name));
                 $TH .= "\t\t<th class=\"text-center\">{{ __('" . $label . "') }}</th>\n";
                 if (isset($column->options)) {
@@ -92,6 +94,7 @@ class MakeCrudCommand extends Command
                 $STRUCTURE .= '$table->string(\'' . $column->name . '\', ' . ($column->length ?? 191) . ');';
                 // $FILLABLES .= "\t\t'" . $column->name . "',\n";
                 $FILLABLES .= "'" . $column->name . "', ";
+                $SEEDERCOLUMNS .= "'" . $column->name . '\'' . ' => Str::random(10),' . "\n\t\t\t\t";
                 $label = $column->label ?? Str::title(str_replace('_', ' ', $column->name));
                 $TH .= "\t\t<th class=\"text-center\">{{ __('" . $label . "') }}</th>\n";
                 if (isset($column->options)) {
@@ -283,7 +286,7 @@ class MakeCrudCommand extends Command
         $viewIndexFile = str_replace('ICON', $this->json->icon, $viewIndexFile);
         $viewIndexFile = str_replace('TH', $TH, $viewIndexFile);
         $viewIndexFile = str_replace('TD', $TD, $viewIndexFile);
-        $folder = base_path('resources\\views\\') . Str::slug($modelName);
+        $folder = base_path('resources\\views\\stisla\\') . Str::slug($modelName);
         // dd($folder);
         if (!file_exists($folder)) {
             File::makeDirectory($folder);
@@ -322,8 +325,16 @@ class MakeCrudCommand extends Command
         $importExcelPath = app_path('Imports\\' . $modelName . 'Import.php');
         file_put_contents($importExcelPath, $importExcelFile);
 
+        // SEEDER
+        $seederFile = file_get_contents(app_path('Console\\Commands\\data\\crud\\seeder.php.dummy'));
+        $seederFile = str_replace('MODELNAME', $modelName, $seederFile);
+        $seederFile = str_replace('SEEDERCOLUMNS', $SEEDERCOLUMNS, $seederFile);
+        $seederPath = database_path('Seeders\\' . $modelName . 'Seeder.php');
+        file_put_contents($seederPath, $seederFile);
+
         if (isset($migrationPath))
             $this->info('Created migration file => ' . $migrationPath);
+        $this->info('Created seeder file => ' . $seederPath);
         $this->info('Created model file => ' . $modelPath);
         $this->info('Created controller file => ' . $controllerPath);
         $this->info('Created repository file => ' . $repositoryPath);
@@ -334,7 +345,13 @@ class MakeCrudCommand extends Command
         $this->info('Created form index file => ' . $viewCreatePath);
         $this->info('Don\'t forget to run php artisan migrate');
         $this->info('copy this to your route file 👇');
-        $this->info('Route::get(\'' . ($modelNameSlug = Str::slug($modelName)) . 's/import-excel-example\', [\App\Http\Controllers\\' . $modelName . 'Controller::class, \'importExcelExample\'])->name(\'' . $modelNameSlug . 's.import-excel-example\');');
+
+        // for copy route
+        $this->info('Route::get(\'' . ($modelNameSlug = Str::slug($modelName)) . 's/pdf\', [\App\Http\Controllers\\' . $modelName . 'Controller::class, \'pdf\'])->name(\'' . $modelNameSlug . 's.pdf\');');
+        $this->info('Route::get(\'' . $modelNameSlug . 's/csv\', [\App\Http\Controllers\\' . $modelName . 'Controller::class, \'csv\'])->name(\'' . $modelNameSlug . 's.csv\');');
+        $this->info('Route::get(\'' . $modelNameSlug . 's/json\', [\App\Http\Controllers\\' . $modelName . 'Controller::class, \'json\'])->name(\'' . $modelNameSlug . 's.json\');');
+        $this->info('Route::get(\'' . $modelNameSlug . 's/excel\', [\App\Http\Controllers\\' . $modelName . 'Controller::class, \'excel\'])->name(\'' . $modelNameSlug . 's.excel\');');
+        $this->info('Route::get(\'' . $modelNameSlug . 's/import-excel-example\', [\App\Http\Controllers\\' . $modelName . 'Controller::class, \'importExcelExample\'])->name(\'' . $modelNameSlug . 's.import-excel-example\');');
         $this->info('Route::post(\'' . $modelNameSlug . 's/import-excel\', [\App\Http\Controllers\\' . $modelName . 'Controller::class, \'importExcel\'])->name(\'' . $modelNameSlug . 's.import-excel\');');
         $this->info('Route::resource(\'' . $modelNameSlug . 's\', \App\Http\Controllers\\' . $modelName . 'Controller::class);');
 

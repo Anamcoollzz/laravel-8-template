@@ -39,11 +39,13 @@ class CrudExampleController extends Controller
     public function __construct()
     {
         $this->crudExampleRepository = new CrudExampleRepository;
-        $this->fileService = new FileService;
+        $this->fileService           = new FileService;
         // $this->middleware('can:Contoh CRUD');
         // $this->middleware('can:Contoh CRUD Tambah')->only(['create', 'store']);
         // $this->middleware('can:Contoh CRUD Ubah')->only(['edit', 'update']);
         // $this->middleware('can:Contoh CRUD Hapus')->only(['destroy']);
+        // $this->middleware('can:Contoh CRUD Ekspor')->only(['json', 'excel', 'csv', 'pdf']);
+        // $this->middleware('can:Contoh CRUD Impor Excel')->only(['importExcel', 'importExcelExample']);
     }
 
     /**

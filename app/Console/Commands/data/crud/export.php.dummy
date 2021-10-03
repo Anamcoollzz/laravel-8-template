@@ -4,10 +4,11 @@ namespace App\Exports;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
-use Maatwebsite\Excel\Concerns\FromView;
 
-class MODELNAMEExport implements FromView
+class MODELNAMEExport implements \Maatwebsite\Excel\Concerns\FromView
 {
+    use \Maatwebsite\Excel\Concerns\Exportable;
+
     /**
      * data
      *

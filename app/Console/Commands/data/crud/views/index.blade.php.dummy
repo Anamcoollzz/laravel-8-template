@@ -21,13 +21,28 @@
         @if ($data->count() > 0)
           <div class="card">
             <div class="card-header">
+              <h4><i class="fa fa-atom"></i> Aksi Ekspor</h4>
+
+              <div class="card-header-action">
+                {{-- @can('TITLE CRUD Ekspor') --}}
+                @include('stisla.includes.forms.buttons.btn-pdf-download', ['link'=>route('ROUTE.pdf')])
+                @include('stisla.includes.forms.buttons.btn-excel-download', ['link'=>route('ROUTE.excel')])
+                @include('stisla.includes.forms.buttons.btn-csv-download', ['link'=>route('ROUTE.csv')])
+                @include('stisla.includes.forms.buttons.btn-json-download', ['link'=>route('ROUTE.json')])
+                {{-- @endcan --}}
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
               <h4><i class="ICON"></i> Data {{ $title }}</h4>
               <div class="card-header-action">
                 {{-- @can('TITLE Impor Excel') --}}
-                @include('includes.form.buttons.btn-import-excel')
+                @include('stisla.includes.form.buttons.btn-import-excel')
                 {{-- @endcan --}}
                 {{-- @can('TITLE Tambah') --}}
-                @include('includes.form.buttons.btn-add', ['link'=>route('ROUTE.create')])
+                @include('stisla.includes.form.buttons.btn-add', ['link'=>route('ROUTE.create')])
                 {{-- @endcan --}}
               </div>
             </div>
@@ -48,9 +63,9 @@ TH
 TD
                         <td>
                           {{-- @can('TITLE Ubah') --}}
-                            @include('includes.form.buttons.btn-edit', ['link'=>route('ROUTE.edit', [$item->id])])
+                            @include('stisla.includes.form.buttons.btn-edit', ['link'=>route('ROUTE.edit', [$item->id])])
                           {{-- @can('TITLE Hapus') --}}
-                            @include('includes.form.buttons.btn-delete', ['link'=>route('ROUTE.destroy', [$item->id])])
+                            @include('stisla.includes.form.buttons.btn-delete', ['link'=>route('ROUTE.destroy', [$item->id])])
                           {{-- @endcan --}}
                         </td>
                       </tr>
@@ -61,7 +76,7 @@ TD
             </div>
           </div>
         @else
-          @include('includes.empty-state', ['title'=>'Data '.$title, 'icon'=>'ICON','link'=>route('ROUTE.create')])
+          @include('stisla.includes.others.empty-state', ['title'=>'Data '.$title, 'icon'=>'ICON','link'=>route('ROUTE.create')])
         @endif
       </div>
 
@@ -84,7 +99,7 @@ TD
 @endpush
 
 @push('modals')
-  @include('includes.modals.modal-import-excel', ['formAction'=>route('ROUTE.import-excel'),
+  @include('stisla.includes.modals.modal-import-excel', ['formAction'=>route('ROUTE.import-excel'),
   'downloadLink'=>route('ROUTE.import-excel-example')])
 
 @endpush
