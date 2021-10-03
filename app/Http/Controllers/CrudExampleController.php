@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class CrudExampleController extends Controller
 {
@@ -186,5 +187,54 @@ class CrudExampleController extends Controller
         ]);
         $data = Excel::import(new CrudExampleImport, $request->file('import_file'));
         return Helper::redirectSuccess(route('crud-examples.index'), __('Impor berhasil dilakukan'));
+    }
+
+    /**
+     * download export data as json
+     *
+     * @return Response
+     */
+    public function json()
+    {
+        $data = $this->crudExampleRepository->getLatest();
+        return $this->fileService->downloadJson($data, 'crud_examples.json');
+    }
+
+    /**
+     * download export data as xlsx
+     *
+     * @return Response
+     */
+    public function excel()
+    {
+        $data = $this->crudExampleRepository->getLatest();
+        return (new CrudExampleExport($data))->download('crud_examples.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+    }
+
+    /**
+     * download export data as csv
+     *
+     * @return Response
+     */
+    public function csv()
+    {
+        $data = $this->crudExampleRepository->getLatest();
+        return (new CrudExampleExport($data))->download('crud_examples.csv', \Maatwebsite\Excel\Excel::CSV);
+    }
+
+    /**
+     * download export data as pdf
+     *
+     * @return Response
+     */
+    public function pdf()
+    {
+        $data = $this->crudExampleRepository->getLatest();
+        return PDF::setPaper('Letter', 'landscape')
+            ->loadView('stisla.crud-example.export-pdf', [
+                'data'     => $data,
+                'isExport' => true
+            ])
+            ->download('crud_examples.pdf');
     }
 }

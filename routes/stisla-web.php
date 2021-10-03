@@ -39,6 +39,10 @@ Route::middleware([
     });
 
     # CONTOH CRUD
+    Route::get('crud-examples/pdf', [CrudExampleController::class, 'pdf'])->name('crud-examples.pdf');
+    Route::get('crud-examples/csv', [CrudExampleController::class, 'csv'])->name('crud-examples.csv');
+    Route::get('crud-examples/excel', [CrudExampleController::class, 'excel'])->name('crud-examples.excel');
+    Route::get('crud-examples/json', [CrudExampleController::class, 'json'])->name('crud-examples.json');
     Route::get('crud-examples/import-excel-example', [CrudExampleController::class, 'importExcelExample'])->name('crud-examples.import-excel-example');
     Route::post('crud-examples/import-excel', [CrudExampleController::class, 'importExcel'])->name('crud-examples.import-excel');
     Route::resource('crud-examples', CrudExampleController::class);

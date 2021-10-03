@@ -7,9 +7,12 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\FromView;
+use Maatwebsite\Excel\Concerns\Exportable;
 
 class CrudExampleExport implements FromView
 {
+    use Exportable;
+
     /**
      * data
      *
@@ -35,8 +38,8 @@ class CrudExampleExport implements FromView
      */
     public function view(): View
     {
-        return view('crud-example.export-excel-example', [
-            'data'       => $this->data,
+        return view('stisla.crud-example.export-excel-example', [
+            'data'     => $this->data,
             'isExport' => true
         ]);
     }

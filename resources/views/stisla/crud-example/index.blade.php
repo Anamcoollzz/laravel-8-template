@@ -15,6 +15,21 @@
         @if ($data->count() > 0)
           <div class="card">
             <div class="card-header">
+              <h4><i class="fa fa-atom"></i> Aksi Ekspor</h4>
+
+              <div class="card-header-action">
+                {{-- @can('Contoh CRUD Ekspor') --}}
+                @include('stisla.includes.forms.buttons.btn-pdf-download', ['link'=>route('crud-examples.pdf')])
+                @include('stisla.includes.forms.buttons.btn-excel-download', ['link'=>route('crud-examples.excel')])
+                @include('stisla.includes.forms.buttons.btn-csv-download', ['link'=>route('crud-examples.csv')])
+                @include('stisla.includes.forms.buttons.btn-json-download', ['link'=>route('crud-examples.json')])
+                {{-- @endcan --}}
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
               <h4><i class="fa fa-atom"></i> Data {{ $title }}</h4>
 
               <div class="card-header-action">

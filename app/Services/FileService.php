@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Models\CrudExample;
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
@@ -180,5 +182,21 @@ class FileService
     public function uploadStislaBgHome(\Illuminate\Http\UploadedFile $file)
     {
         return $this->executeUpload($file, 'stisla-bg-home');
+    }
+
+    /**
+     * download collection as json file
+     *
+     * @param Collection $collection
+     * @param string $filename
+     * @return Response
+     */
+    public function downloadJson(Collection $collection, string $filename)
+    {
+        $json = $collection->toJson();
+        $path = 'temp/json/' . $filename;
+        Storage::put($path, $json);
+        $path = storage_path('app/' . $path);
+        return response()->download($path)->deleteFileAfterSend(true);
     }
 }
