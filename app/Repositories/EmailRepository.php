@@ -14,7 +14,7 @@ class EmailRepository
      */
     public static function emailProvider()
     {
-        return session('_mail_provider') ?? Setting::firstOrCreate(
+        return Setting::firstOrCreate(
             ['key' => 'mail_provider'],
             ['value' => 'mailtrap']
         )->value;
@@ -27,7 +27,7 @@ class EmailRepository
      */
     public static function fromAddress()
     {
-        return session('_mail_from_address') ?? Setting::firstOrCreate(
+        return Setting::firstOrCreate(
             ['key' => 'mail_from_address'],
             ['value' => 'hairulanam21@gmail.com']
         )->value;
@@ -40,10 +40,15 @@ class EmailRepository
      */
     public static function fromName()
     {
-        return session('_mail_from_name') ?? Setting::firstOrCreate(
-            ['key' => 'mail_from_name'],
-            ['value' => 'Superadmin ' . session('_app_name')]
-        )->value;
+        $setting = Setting::where('key', 'mail_from_name')->first();
+        if (!$setting) {
+            $appName = SettingRepository::appName();
+            $setting = Setting::create([
+                'key' => 'mail_from_name',
+                'value' => 'Superadmin ' . $appName,
+            ]);
+        }
+        return $setting->value;
     }
 
     // START MAILTRAP
@@ -54,7 +59,7 @@ class EmailRepository
      */
     public static function mailtrapHost()
     {
-        return session('_mail_mailtrap_host') ?? Setting::firstOrCreate(
+        return Setting::firstOrCreate(
             ['key' => 'mail_mailtrap_host'],
             ['value' => 'smtp.mailtrap.io']
         )->value;
@@ -67,7 +72,7 @@ class EmailRepository
      */
     public static function mailtrapPort()
     {
-        return session('_mail_mailtrap_port') ?? Setting::firstOrCreate(
+        return Setting::firstOrCreate(
             ['key' => 'mail_mailtrap_port'],
             ['value' => '2525']
         )->value;
@@ -80,7 +85,7 @@ class EmailRepository
      */
     public static function mailtrapUsername()
     {
-        return session('_mail_mailtrap_username') ?? Setting::firstOrCreate(
+        return Setting::firstOrCreate(
             ['key' => 'mail_mailtrap_username'],
             ['value' => '809d58dfa23ade']
         )->value;
@@ -93,7 +98,7 @@ class EmailRepository
      */
     public static function mailtrapPassword()
     {
-        return session('_mail_mailtrap_password') ?? Setting::firstOrCreate(
+        return Setting::firstOrCreate(
             ['key' => 'mail_mailtrap_password'],
             ['value' => 'e9d1aa54a61db1']
         )->value;
@@ -106,7 +111,7 @@ class EmailRepository
      */
     public static function mailtrapEncryption()
     {
-        return session('_mail_mailtrap_encryption') ?? Setting::firstOrCreate(
+        return Setting::firstOrCreate(
             ['key' => 'mail_mailtrap_encryption'],
             ['value' => 'tls']
         )->value;
@@ -121,7 +126,7 @@ class EmailRepository
      */
     public static function smtpHost()
     {
-        return session('_mail_host') ?? Setting::firstOrCreate(
+        return Setting::firstOrCreate(
             ['key' => 'mail_host'],
             ['value' => 'smtp.mailtrap.io']
         )->value;
@@ -134,7 +139,7 @@ class EmailRepository
      */
     public static function smtpPort()
     {
-        return session('_mail_port') ?? Setting::firstOrCreate(
+        return Setting::firstOrCreate(
             ['key' => 'mail_port'],
             ['value' => '2525']
         )->value;
@@ -147,7 +152,7 @@ class EmailRepository
      */
     public static function smtpUsername()
     {
-        return session('_mail_username') ?? Setting::firstOrCreate(
+        return Setting::firstOrCreate(
             ['key' => 'mail_username'],
             ['value' => '809d58dfa23ade']
         )->value;
@@ -160,7 +165,7 @@ class EmailRepository
      */
     public static function smtpPassword()
     {
-        return session('_mail_password') ?? Setting::firstOrCreate(
+        return Setting::firstOrCreate(
             ['key' => 'mail_password'],
             ['value' => 'e9d1aa54a61db1']
         )->value;
@@ -173,7 +178,7 @@ class EmailRepository
      */
     public static function smtpEncryption()
     {
-        return session('_mail_encryption') ?? Setting::firstOrCreate(
+        return Setting::firstOrCreate(
             ['key' => 'mail_encryption'],
             ['value' => 'tls']
         )->value;
@@ -188,7 +193,7 @@ class EmailRepository
      */
     public static function mailgunDomain()
     {
-        return session('_mail_mailgun_domain') ?? Setting::firstOrCreate(
+        return Setting::firstOrCreate(
             ['key' => 'mail_mailgun_domain'],
             ['value' => 'test']
         )->value;
@@ -201,7 +206,7 @@ class EmailRepository
      */
     public static function mailgunApiKey()
     {
-        return session('_mail_mailgun_api_key') ?? Setting::firstOrCreate(
+        return Setting::firstOrCreate(
             ['key' => 'mail_mailgun_api_key'],
             ['value' => 'test']
         )->value;

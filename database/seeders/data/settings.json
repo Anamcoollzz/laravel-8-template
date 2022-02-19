@@ -9,7 +9,7 @@
         "key": "favicon",
         "value": "http://127.0.0.1:8000/favicon.ico"
     },
-    { "key": "logo", "value": "http://127.0.0.1:8000/img/logo.png" },
+    { "key": "logo", "value": "http://127.0.0.1:8000/images/logo.png" },
     { "key": "since", "value": "2021" },
 
     {
@@ -24,11 +24,11 @@
 
     {
         "key": "stisla_bg_home",
-        "value": "http://127.0.0.1:8000/img/bg_selamat_datang.jpg"
+        "value": "http://127.0.0.1:8000/stisla/assets/img/unsplash/andre-benz-1214056-unsplash.jpg"
     },
     {
         "key": "stisla_bg_login",
-        "value": "http://127.0.0.1:8000/img/pantai.jpg"
+        "value": "http://127.0.0.1:8000/stisla/assets/img/unsplash/eberhard-grossgasteiger-1207565-unsplash.jpg"
     },
     { "key": "stisla_sidebar_mini", "value": "0" },
     { "key": "stisla_login_template", "value": "default" },

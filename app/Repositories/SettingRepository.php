@@ -18,7 +18,8 @@ class SettingRepository
      */
     public static function all()
     {
-        return Setting::all();
+        $data = Setting::all();
+        return $data;
     }
 
     /**
@@ -52,11 +53,11 @@ class SettingRepository
                 $data['_app_name'] = $d->value;
                 $data['_app_name_mobile'] = \App\Helpers\StringHelper::acronym($d->value, 2);
             } else if ($d->key === 'logo') {
-                $data['_logo_url'] = SettingRepository::logoUrl();
+                $data['_logo_url'] = SettingRepository::logoUrl($d->value);
             } else if ($d->key === 'stisla_skin') {
                 $data['_skin'] = $d->value;
             } else if ($d->key === 'stisla_bg_login') {
-                $data['_stisla_bg_login'] = SettingRepository::loginBgUrl();
+                $data['_stisla_bg_login_url'] = $data['_stisla_bg_login'] = SettingRepository::loginBgUrl($d->value);
             } else if ($d->key === 'stisla_sidebar_mini') {
                 $data['_sidebar_mini'] = $d->value;
             } else if ($d->key === 'application_version') {
@@ -74,6 +75,16 @@ class SettingRepository
     public static function applicationName()
     {
         return Setting::firstOrCreate(['key' => 'application_name'], ['value' => 'Laravel 8 Admin Template'])->value;
+    }
+
+    /**
+     * get application name
+     *
+     * @return Setting
+     */
+    public static function appName()
+    {
+        return static::applicationName();
     }
 
     /**
@@ -210,15 +221,14 @@ class SettingRepository
     /**
      * get logo url
      *
+     * @param string|null $path
      * @return string
      */
-    public static function logoUrl()
+    public static function logoUrl($logo = null)
     {
-        $logo = null;
         if (config('app.template') === 'stisla') {
-            // if (session('_logo_url')) return session('_logo_url');
-            if (session('_logo')) $logo = session('_logo');
-            else $logo = Setting::where('key', 'logo')->first()->value;
+            if (is_null($logo))
+                $logo = Setting::where('key', 'logo')->first()->value;
             if ($logo) {
                 if (StringHelper::isUrl($logo)) {
                     return $logo;
@@ -238,14 +248,14 @@ class SettingRepository
     /**
      * get login bg url
      *
+     * @param string|null $bgLogin
      * @return string
      */
-    public static function loginBgUrl()
+    public static function loginBgUrl($bgLogin = null)
     {
-        $bgLogin = null;
         if (TEMPLATE === STISLA) {
-            if (session('_stisla_bg_login')) return session('_stisla_bg_login');
-            $bgLogin =  Setting::where('key', 'stisla_bg_login')->first()->value;
+            if (is_null($bgLogin))
+                $bgLogin =  Setting::where('key', 'stisla_bg_login')->first()->value;
             if (StringHelper::isUrl($bgLogin)) {
                 return $bgLogin;
             }
@@ -269,7 +279,7 @@ class SettingRepository
      */
     public static function loginMustVerified()
     {
-        return session('_is_login_must_verified') ?? ((int) Setting::firstOrCreate(['key' => 'is_login_must_verified'], ['value' => 0])->value) === 1;
+        return ((int) Setting::firstOrCreate(['key' => 'is_login_must_verified'], ['value' => 0])->value) === 1;
     }
 
     /**
@@ -279,7 +289,6 @@ class SettingRepository
      */
     public static function isActiveRegisterPage()
     {
-        if (session('_is_active_register_page')) return session('_is_active_register_page');
         return ((int) Setting::firstOrCreate(['key' => 'is_active_register_page'], ['value' => 0])->value) === 1;
     }
 
@@ -290,7 +299,6 @@ class SettingRepository
      */
     public static function isForgotPasswordSendToEmail()
     {
-        if (session('_is_forgot_password_send_to_email')) return session('_is_forgot_password_send_to_email');
         return ((int) Setting::firstOrCreate(['key' => 'is_forgot_password_send_to_email'], ['value' => 0])->value) === 1;
     }
 
@@ -301,7 +309,6 @@ class SettingRepository
      */
     public static function stislaLoginTemplate()
     {
-        if (session('_stisla_login_template')) return session('_stisla_login_template');
         return Setting::firstOrCreate(['key' => 'stisla_login_template'], ['value' => 'default'])->value;
     }
 

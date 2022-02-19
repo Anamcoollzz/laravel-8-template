@@ -191,7 +191,11 @@ $(document).ready(function () {
   // toggle sidebar mini
   window.sidebar_miniku = function () {
     var WINDOW_WIDTH = $(window).outerWidth();
-    if (SIDEBAR_MINI && WINDOW_WIDTH > 1024) {
+    if (
+      typeof SIDEBAR_MINI !== "undefined" &&
+      SIDEBAR_MINI === true &&
+      WINDOW_WIDTH > 1024
+    ) {
       setTimeout(function () {
         $('[data-toggle="sidebar"]').trigger("click");
       }, 500);

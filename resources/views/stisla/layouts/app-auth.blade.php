@@ -19,7 +19,7 @@
     </section>
   </div>
 
-  @include('stisla.includes.others.js')
+  @include('stisla.includes.others.js-auth')
 
 </body>
 

@@ -2,13 +2,11 @@
   <div class="footer-left">
     Copyright &copy; {{ $_since < date('Y') ? $_since . ' - ' . date('Y') : $_since }}
     <div class="bullet"></div>
-    <a href="{{ route('dashboard.index') }}">{{ session('_app_name') ?? config('app.name') }}</a>
+    <a href="{{ route('dashboard.index') }}">{{ $_app_name }}</a>
 
     @if (config('app.is_showing_developer'))
-      <span> ♥ Aplikasi dibuat oleh {{ session('_developer_name') ?? config('app.developer_name') }}</span>
-      <span> ♥ WhatsApp di <a
-          href="https://wa.me/{{ session('_whatsapp_developer') ?? config('developer.whatsapp') }}"
-          target="_blank">{{ session('_whatsapp_developer') ?? config('developer.whatsapp') }}</a></span>
+      <span> ♥ Aplikasi dibuat oleh {{ $_developer_name }}</span>
+      <span> ♥ WhatsApp di <a href="https://wa.me/{{ $_whatsapp_developer }}" target="_blank">{{ $_whatsapp_developer }}</a></span>
     @endif
 
     @if (config('app.is_demo'))

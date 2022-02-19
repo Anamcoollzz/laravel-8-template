@@ -51,6 +51,10 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web', ViewShare::class)
                 ->namespace($this->namespace)
                 ->group(base_path('routes/stisla-web.php'));
+
+            Route::middleware('web', ViewShare::class, 'auth')
+                ->namespace($this->namespace)
+                ->group(base_path('routes/stisla-web-auth.php'));
         });
     }
 

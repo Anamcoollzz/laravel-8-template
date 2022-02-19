@@ -5,7 +5,6 @@
 @endsection
 
 @section('content')
-
   <div class="p-4 m-3">
     <div class="align-self-center">
       @include('stisla.includes.auth.auth-header')
@@ -36,16 +35,13 @@
 
       <div class="form-group text-right">
         @if ($_is_active_register_page)
-          @include('stisla.includes.forms.buttons.btn-success', ['icon'=>'fas fa-sign-in-alt', 'label'=>__('Belum punya
-          akun'), 'link'=>route('register')])
+          @include('stisla.includes.forms.buttons.btn-success', ['icon'=>'fas fa-sign-in-alt', 'label'=>__('Belum punya akun'), 'link'=>route('register')])
         @endif
 
-        @include('stisla.includes.forms.buttons.btn-primary', ['icon'=>'fas fa-sign-in-alt', 'label'=>__('Masuk'),
-        'type'=>'submit'])
+        @include('stisla.includes.forms.buttons.btn-primary', ['icon'=>'fas fa-sign-in-alt', 'label'=>__('Masuk'), 'type'=>'submit'])
       </div>
     </form>
     @include('stisla.includes.auth.auth-footer')
 
   </div>
-
 @endsection
