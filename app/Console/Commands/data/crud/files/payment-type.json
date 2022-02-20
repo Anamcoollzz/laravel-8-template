@@ -1,0 +1,54 @@
+{
+    "title": "Jenis Pembayaran",
+    "icon": "fa fa-certificate",
+    "model": "PaymentType",
+    "columns": [
+        {
+            "type": "ai"
+        },
+        {
+            "type": "string",
+            "length": 50,
+            "label": "Nama Pembayaran",
+            "name": "type_name",
+            "validations": {
+                "store": ["required"],
+                "update": ["required"]
+            },
+            "form": {
+                "type": "text",
+                "required": 2
+            }
+        },
+        {
+            "type": "double",
+            "label": "Tagihan",
+            "name": "bill_amount",
+            "validations": {
+                "store": ["required"],
+                "update": ["required"]
+            },
+            "form": {
+                "type": "number",
+                "required": 2
+            }
+        },
+        {
+            "type": "string",
+            "label": "Jenis Waktu Pembayaran",
+            "name": "payment_time_type",
+            "validations": {
+                "store": ["required"],
+                "update": ["required"]
+            },
+            "form": {
+                "type": "select",
+                "required": 2
+            }
+        },
+
+        {
+            "type": "timestamps"
+        }
+    ]
+}

@@ -38,8 +38,8 @@
 FORM
                 <div class="col-md-12">
                   <br>
-                  @include('includes.form.buttons.save-btn')
-                  @include('includes.form.buttons.btn-reset')
+                  @include('stisla.includes.forms.buttons.btn-save')
+                  @include('stisla.includes.forms.buttons.btn-reset')
                 </div>
               </div>
             </form>

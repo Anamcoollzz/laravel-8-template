@@ -9,8 +9,6 @@ use App\Services\FileService;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use App\Helpers\Helper;
-use Illuminate\Http\Response;
-use Barryvdh\DomPDF\Facade as PDF;
 
 class CONTROLLERNAME extends Controller
 {
@@ -36,12 +34,12 @@ class CONTROLLERNAME extends Controller
     public function __construct()
     {
         $this->VARREPOSITORYNAME = new REPOSITORYNAME;
-        $this->fileService       = new FileService;
+        $this->fileService = new FileService;
         // $this->middleware('can:TITLE');
         // $this->middleware('can:TITLE Tambah')->only(['create', 'store']);
         // $this->middleware('can:TITLE Ubah')->only(['edit', 'update']);
         // $this->middleware('can:TITLE Hapus')->only(['destroy']);
-        // $this->middleware('can:TITLE Impor Excel')->only(['importExcelExample', 'importExcel']);
+        // $this->middleware('can:Mahasiswa Impor Excel')->only(['importExcelExample', 'importExcel']);
     }
 
     /**
@@ -51,7 +49,7 @@ class CONTROLLERNAME extends Controller
      */
     public function index()
     {
-        return view('stisla.FOLDERVIEW.index', [
+        return view('FOLDERVIEW.index', [
             'data' => $this->VARREPOSITORYNAME->getLatest(),
         ]);
     }
@@ -63,7 +61,7 @@ class CONTROLLERNAME extends Controller
      */
     public function create()
     {
-        return view('stisla.FOLDERVIEW.form', [
+        return view('FOLDERVIEW.form', [
 
         ]);
     }
@@ -97,7 +95,7 @@ class CONTROLLERNAME extends Controller
      */
     public function edit(MODELNAME $VARMODELNAME)
     {
-        return view('stisla.FOLDERVIEW.form', [
+        return view('FOLDERVIEW.form', [
             'd' => $VARMODELNAME,
         ]);
     }
@@ -162,54 +160,5 @@ class CONTROLLERNAME extends Controller
         ]);
         Excel::import(new \App\Imports\MODELNAMEImport, $request->file('import_file'));
         return Helper::redirectSuccess(route('FOLDERVIEWs.index'), __('Impor berhasil dilakukan'));
-    }
-
-    /**
-     * download export data as json
-     *
-     * @return Response
-     */
-    public function json()
-    {
-        $data = $this->VARREPOSITORYNAME->getLatest();
-        return $this->fileService->downloadJson($data, 'FOLDERVIEWs.json');
-    }
-
-    /**
-     * download export data as xlsx
-     *
-     * @return Response
-     */
-    public function excel()
-    {
-        $data = $this->VARREPOSITORYNAME->getLatest();
-        return (new MODELNAMEExport($data))->download('FOLDERVIEWs.xlsx', \Maatwebsite\Excel\Excel::XLSX);
-    }
-
-    /**
-     * download export data as csv
-     *
-     * @return Response
-     */
-    public function csv()
-    {
-        $data = $this->VARREPOSITORYNAME->getLatest();
-        return (new MODELNAMEExport($data))->download('FOLDERVIEWs.csv', \Maatwebsite\Excel\Excel::CSV);
-    }
-
-    /**
-     * download export data as pdf
-     *
-     * @return Response
-     */
-    public function pdf()
-    {
-        $data = $this->VARREPOSITORYNAME->getLatest();
-        return PDF::setPaper('Letter', 'landscape')
-            ->loadView('stisla.FOLDERVIEW.export-pdf', [
-                'data'     => $data,
-                'isExport' => true
-            ])
-            ->download('FOLDERVIEWs.pdf');
     }
 }

@@ -68,10 +68,31 @@
         </li>
       @endif
 
+      <li class="menu-header">{{ __('Master Data') }}</li>
+
+      @php
+        $__menu_user = Route::is('user-management.users.index') || Route::is('user-management.users.edit') || Route::is('user-management.users.create');
+        $__menu_role = Route::is('user-management.roles.index') || Route::is('user-management.roles.edit') || Route::is('user-management.roles.create');
+      @endphp
+      <li @if (Route::is('payment-types.index')) class="active" @endif>
+        <a class="nav-link" href="{{ route('payment-types.index') }}">
+          <i class="fas fa-certificate"></i>
+          <span>{{ __('Jenis Pembayaran') }}</span>
+        </a>
+      </li>
+
       <li class="menu-header">{{ __('Menu Lainnya') }}</li>
 
-      @if (auth()->user()->can('Pengguna') ||
-    auth()->user()->can('Role'))
+      @php
+        $condition =
+            auth()
+                ->user()
+                ->can('Pengguna') ||
+            auth()
+                ->user()
+                ->can('Role');
+      @endphp
+      @if ($condition)
         @php
           $__menu_user = Route::is('user-management.users.index') || Route::is('user-management.users.edit') || Route::is('user-management.users.create');
           $__menu_role = Route::is('user-management.roles.index') || Route::is('user-management.roles.edit') || Route::is('user-management.roles.create');

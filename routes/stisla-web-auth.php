@@ -53,3 +53,9 @@ Route::resource('mahasiswas', \App\Http\Controllers\MahasiswaController::class);
 Route::get('testing/datatable', [TestingController::class, 'datatable']);
 Route::get('testing/send-email', [TestingController::class, 'sendEmail']);
 Route::get('testing/modal', [TestingController::class, 'modal']);
+
+
+# PAYMENT TYPE
+Route::get('payment-types/import-excel-example', [\App\Http\Controllers\PaymentTypeController::class, 'importExcelExample'])->name('payment-types.import-excel-example');
+Route::post('payment-types/import-excel', [\App\Http\Controllers\PaymentTypeController::class, 'importExcel'])->name('payment-types.import-excel');
+Route::resource('payment-types', \App\Http\Controllers\PaymentTypeController::class);
