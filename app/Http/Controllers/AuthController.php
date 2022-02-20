@@ -138,6 +138,7 @@ class AuthController extends Controller
             }
             Auth::login($user, $request->filled('remember'));
             $user->update(['last_login' => now()]);
+            logLogin();
             return Helper::redirectSuccess(route('dashboard.index'), __('Sukses masuk ke dalam sistem'));
         }
         return Helper::backError(['password' => __('Password yang dimasukkan salah')]);
@@ -150,6 +151,7 @@ class AuthController extends Controller
      */
     public function logout()
     {
+        logLogout();
         Auth::logout();
         Session::flush();
         return redirect()->route('login');

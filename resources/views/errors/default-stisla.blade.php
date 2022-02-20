@@ -31,12 +31,12 @@
       </div>
     </div>
     <div class="simple-footer mt-5">
-      Copyright &copy; {{ $_since }} <div class="bullet"></div>
-      <a href="{{ route('dashboard.index') }}">{{ $_app_name }}</a>
+      Copyright &copy; {{ since() ?? year() }} <div class="bullet"></div>
+      <a href="{{ route('dashboard.index') }}">{{ app_name() }}</a>
 
       @if (config('app.is_showing_developer'))
-        <span> ♥ Aplikasi dibuat oleh {{ $_developer_name }}</span>
-        <span> ♥ WhatsApp di <a href="https://wa.me/{{ $_whatsapp_developer }}" target="_blank">{{ $_whatsapp_developer }}</a></span>
+        <span> ♥ Aplikasi dibuat oleh {{ developer_name() }}</span>
+        <span> ♥ WhatsApp di <a href="https://wa.me/{{ $_whatsapp_developer = whatsapp_developer() }}" target="_blank">{{ $_whatsapp_developer }}</a></span>
       @endif
     </div>
     {{-- @include('stisla.includes.footer') --}}

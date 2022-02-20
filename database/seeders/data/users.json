@@ -5,5 +5,13 @@
         "password": "superadmin",
         "roles": ["superadmin"],
         "email_verified_at": "2021-04-06 04:06:00"
+    },
+
+    {
+        "name": "Akun Testing",
+        "email": "akuntesting@laraveltemplate.com",
+        "password": "akuntesting",
+        "roles": ["akuntesting"],
+        "email_verified_at": "2021-04-06 04:06:00"
     }
 ]

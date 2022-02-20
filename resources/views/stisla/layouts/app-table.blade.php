@@ -2,8 +2,9 @@
 
 @push('css')
   <link rel="stylesheet" href="{{ asset('stisla/node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css') }}">
-  <link rel="stylesheet"
-    href="{{ asset('stisla/node_modules/datatables.net-select-bs4/css/select.bootstrap4.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('stisla/node_modules/datatables.net-select-bs4/css/select.bootstrap4.min.css') }}">
+
+  {{-- untuk export button --}}
   <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
 @endpush
 
@@ -25,7 +26,7 @@
 @push('scripts')
   <script>
     $(function() {
-      $('.dt-buttons').hide();
+      //   $('.dt-buttons').hide();
     });
   </script>
 @endpush

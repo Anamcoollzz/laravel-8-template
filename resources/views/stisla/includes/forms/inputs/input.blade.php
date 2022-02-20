@@ -8,7 +8,7 @@ array_push($props, isset($placeholder) ? 'placeholder="' . $placeholder . '"' : 
 array_push($props, isset($accept) ? 'accept="' . $accept . '"' : '');
 array_push($props, isset($min) ? 'min="' . $min . '"' : '');
 array_push($props, isset($max) ? 'max="' . $max . '"' : '');
-array_push($props, isset($disabled) ? 'disabled' : '');
+array_push($props, isset($disabled) && $disabled === true ? 'disabled' : '');
 array_push($props, isset($readonly) ? 'readonly' : '');
 array_push($props, $required ?? false ? 'required' : '');
 array_push($props, isset($type) ? 'type="' . $type . '"' : 'type="text"');
@@ -17,8 +17,7 @@ array_push($props, isset($type) ? 'type="' . $type . '"' : 'type="text"');
 @if (config('app.template') === 'stisla')
   @if ($icon ?? false)
     <div class="form-group">
-      <label for="{{ $id ?? $name }}"
-        class="{{ $errors->has($name ?? $id) ? 'text-danger' : '' }}">{{ $label ?? $id }}
+      <label for="{{ $id ?? $name }}" class="{{ $errors->has($name ?? $id) ? 'text-danger' : '' }}">{{ $label ?? $id }}
         @if ($required ?? false)
           <span class="text-danger">*</span>
         @endif
@@ -32,7 +31,7 @@ array_push($props, isset($type) ? 'type="' . $type . '"' : 'type="text"');
         <input {!! implode(' ', $props) !!} class="form-control {{ $errors->has($name ?? $id) ? 'is-invalid' : '' }}">
       </div>
       @if ($hint ?? false)
-        <div class="text-muted">{{ $hint }}</div>
+        <small class="form-text text-muted">{{ $hint }}</small>
       @endif
       @error($name ?? $id)
         <div id="{{ $name ?? $id }}-error-feedback" class="text-danger" for="{{ $name ?? $id }}">
@@ -42,15 +41,14 @@ array_push($props, isset($type) ? 'type="' . $type . '"' : 'type="text"');
     </div>
   @else
     <div class="form-group">
-      <label for="{{ $id ?? $name }}"
-        class="{{ $errors->has($name ?? $id) ? 'text-danger' : '' }}">{{ $label ?? $id }}
+      <label for="{{ $id ?? $name }}" class="{{ $errors->has($name ?? $id) ? 'text-danger' : '' }}">{{ $label ?? $id }}
         @if ($required ?? false)
           <span class="text-danger">*</span>
         @endif
       </label>
       <input {!! implode(' ', $props) !!} class="form-control {{ $errors->has($name ?? $id) ? 'is-invalid' : '' }}">
       @if ($hint ?? false)
-        <div class="text-muted">{{ $hint }}</div>
+        <small class="form-text text-muted">{{ $hint }}</small>
       @endif
 
       @error($name ?? $id)
@@ -73,8 +71,7 @@ array_push($props, isset($type) ? 'type="' . $type . '"' : 'type="text"');
     @endif
 
     @error($name ?? $id)
-      <label id="{{ $name ?? $id }}-error-feedback" class="error"
-        for="{{ $name ?? $id }}">{{ $message }}</label>
+      <label id="{{ $name ?? $id }}-error-feedback" class="error" for="{{ $name ?? $id }}">{{ $message }}</label>
     @enderror
   </div>
 

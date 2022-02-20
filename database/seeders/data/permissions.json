@@ -1,38 +1,80 @@
 [
     {
         "name": "Profil",
-        "roles": ["superadmin"]
+        "roles": ["superadmin", "akuntesting"],
+        "group": "Profil"
     },
     {
         "name": "Profil Ubah",
-        "roles": ["superadmin"]
+        "roles": ["superadmin", "akuntesting"],
+        "group": "Profil"
     },
+
     {
         "name": "Role",
-        "roles": ["superadmin"]
+        "roles": ["superadmin", "akuntesting"],
+        "group": "Role"
+    },
+    {
+        "name": "Role Tambah",
+        "roles": ["superadmin", "akuntesting"],
+        "group": "Role"
+    },
+    {
+        "name": "Role Impor Excel",
+        "roles": ["superadmin", "akuntesting"],
+        "group": "Role"
     },
     {
         "name": "Role Ubah",
-        "roles": ["superadmin"]
+        "roles": ["superadmin", "akuntesting"],
+        "group": "Role"
     },
     {
+        "name": "Role Hapus",
+        "roles": ["superadmin", "akuntesting"],
+        "group": "Role"
+    },
+    {
+        "name": "Role Ekspor",
+        "roles": ["superadmin", "akuntesting"],
+        "group": "Role"
+    },
+
+    {
         "name": "Pengguna",
-        "roles": ["superadmin"]
+        "roles": ["superadmin", "akuntesting"],
+        "group": "Pengguna"
     },
     {
         "name": "Pengguna Tambah",
-        "roles": ["superadmin"]
+        "roles": ["superadmin", "akuntesting"],
+        "group": "Pengguna"
+    },
+    {
+        "name": "Pengguna Impor Excel",
+        "roles": ["superadmin", "akuntesting"],
+        "group": "Pengguna"
     },
     {
         "name": "Pengguna Ubah",
-        "roles": ["superadmin"]
+        "roles": ["superadmin", "akuntesting"],
+        "group": "Pengguna"
     },
     {
         "name": "Pengguna Hapus",
-        "roles": ["superadmin"]
+        "roles": ["superadmin", "akuntesting"],
+        "group": "Pengguna"
     },
     {
+        "name": "Pengguna Ekspor",
+        "roles": ["superadmin", "akuntesting"],
+        "group": "Pengguna"
+    },
+
+    {
         "name": "Pengaturan",
-        "roles": ["superadmin"]
+        "roles": ["superadmin", "akuntesting"],
+        "group": "Pengaturan"
     }
 ]

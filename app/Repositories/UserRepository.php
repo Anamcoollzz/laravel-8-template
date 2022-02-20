@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\PermissionGroup;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Spatie\Permission\Models\Permission;
@@ -87,6 +88,35 @@ class UserRepository extends Repository
     }
 
     /**
+     * findRole
+     *
+     * @param integer $roleId
+     * @return Role
+     */
+    public function findRole(int $roleId)
+    {
+        return Role::where('id', $roleId)->with(['permissions'])->first();
+    }
+
+    /**
+     * create role data
+     *
+     * @param string $roleName
+     * @param array $data
+     * @return int
+     */
+    public function createRole(string $roleName, array $data)
+    {
+        if (isset($data['permissions'])) {
+            $role        = Role::create(['name' => $roleName]);
+            $permissions = Permission::whereIn('name', $data['permissions'])->get();
+            $role        = Role::find($role->id);
+            $role->syncPermissions($permissions);
+            return $role;
+        }
+    }
+
+    /**
      * update role data
      *
      * @param int $roleId
@@ -96,10 +126,22 @@ class UserRepository extends Repository
     public function updateRole(int $roleId, array $data)
     {
         if (isset($data['permissions'])) {
-            $role = Role::find($roleId);
+            $role        = Role::find($roleId);
             $permissions = Permission::whereIn('name', $data['permissions'])->get();
             $role->syncPermissions($permissions);
+            return $role;
         }
+    }
+
+    /**
+     * delete role data
+     *
+     * @param int $roleId
+     * @return int
+     */
+    public function deleteRole(int $roleId)
+    {
+        return Role::where('id', $roleId)->delete();
     }
 
     /**
@@ -111,5 +153,15 @@ class UserRepository extends Repository
     {
         $owners = $this->model->role('pemilik kos')->get();
         return $owners->pluck('name', 'id')->toArray();
+    }
+
+    /**
+     * get permission group with child
+     *
+     * @return Collection
+     */
+    public function getPermissionGroupWithChild()
+    {
+        return PermissionGroup::with(['permissions'])->get();
     }
 }

@@ -14,5 +14,10 @@
         "laravel-mix": "^6.0.6",
         "lodash": "^4.17.19",
         "postcss": "^8.1.14"
+    },
+    "prettier": {
+        "printWidth": 200,
+        "semi": true,
+        "singleQuote": true
     }
 }

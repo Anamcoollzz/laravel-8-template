@@ -30,6 +30,10 @@ Route::view('form', 'stisla.form.index')->name('form.index');
 # USER MANAGEMENT
 Route::prefix('user-management')->as('user-management.')->group(function () {
     Route::resource('users', UserManagementController::class);
+
+    # ROLES
+    Route::get('roles/import-excel-example', [RoleController::class, 'importExcelExample'])->name('roles.import-excel-example');
+    Route::post('roles/import-excel', [RoleController::class, 'importExcel'])->name('roles.import-excel');
     Route::resource('roles', RoleController::class);
 });
 

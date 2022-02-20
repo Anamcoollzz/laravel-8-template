@@ -3,12 +3,12 @@ $(document).ready(function () {
   function checkAll() {
     if ($('[data-toggle="checkall"]').length) {
       $('[data-toggle="checkall"]').each(function (index, item) {
-        $(item).on("change", function () {
-          var checkbox = $(item).parent().parent().next().find("input");
+        $(item).on('change', function () {
+          var checkbox = $(item).parent().parent().next().find('input');
           if (this.checked) {
-            checkbox.prop("checked", true);
+            checkbox.prop('checked', true);
           } else {
-            checkbox.prop("checked", false);
+            checkbox.prop('checked', false);
           }
         });
       });
@@ -19,17 +19,17 @@ $(document).ready(function () {
 
   if ($('[data-toggle="checkallmodul"]').length) {
     $('[data-toggle="checkallmodul"]').each(function (index, item) {
-      $(item).on("change", function () {
+      $(item).on('change', function () {
         if (this.checked) {
           $('[data-toggle="checkall"]').each(function (index2, item2) {
-            $(item2).prop("checked", true);
+            $(item2).prop('checked', true);
           });
         } else {
           $('[data-toggle="checkall"]').each(function (index2, item2) {
-            $(item2).prop("checked", false);
+            $(item2).prop('checked', false);
           });
         }
-        $('[data-toggle="checkall"]').trigger("change");
+        $('[data-toggle="checkall"]').trigger('change');
       });
     });
   }
@@ -44,160 +44,168 @@ $(document).ready(function () {
   }
 
   // login page only
-  if ($("#sapaan").length > 0) {
+  if ($('#sapaan').length > 0) {
     var date = new Date();
     var jam = date.getHours();
     var menit = date.getMinutes();
-    var pesan = "";
+    var pesan = '';
     if (jam >= 18) {
-      if (menit >= 30) pesan = "Selamat Malam";
-      else pesan = "Selamat Sore";
+      if (menit >= 30) pesan = 'Selamat Malam';
+      else pesan = 'Selamat Sore';
     } else if (jam >= 14) {
-      pesan = "Selamat Sore";
+      pesan = 'Selamat Sore';
     } else if (jam >= 10) {
-      pesan = "Selamat Siang";
+      pesan = 'Selamat Siang';
     } else if (jam >= 4) {
-      pesan = "Selamat Pagi";
+      pesan = 'Selamat Pagi';
     }
-    $("#sapaan").html(pesan);
+    $('#sapaan').html(pesan);
   }
 
   // show or hide password
-  if ($("#password").length > 0) {
-    var tombol_mata = $("#password").parents(".form-group");
-    tombol_mata = tombol_mata.find(".ikon2");
+  if ($('#password').length > 0) {
+    var tombol_mata = $('#password').parents('.form-group');
+    tombol_mata = tombol_mata.find('.ikon2');
     if (tombol_mata.length > 0) {
       tombol_mata.css({
-        cursor: "pointer",
+        cursor: 'pointer',
       });
-      tombol_mata.on("click", function () {
-        if (tombol_mata.find(".fa-eye").length > 0) {
-          tombol_mata.parents(".form-group").find("input").attr("type", "text");
-          tombol_mata.find("i").removeClass("fa-eye").addClass("fa-eye-slash");
+      tombol_mata.on('click', function () {
+        if (tombol_mata.find('.fa-eye').length > 0) {
+          tombol_mata.parents('.form-group').find('input').attr('type', 'text');
+          tombol_mata.find('i').removeClass('fa-eye').addClass('fa-eye-slash');
         } else {
-          tombol_mata
-            .parents(".form-group")
-            .find("input")
-            .attr("type", "password");
-          tombol_mata.find("i").addClass("fa-eye").removeClass("fa-eye-slash");
+          tombol_mata.parents('.form-group').find('input').attr('type', 'password');
+          tombol_mata.find('i').addClass('fa-eye').removeClass('fa-eye-slash');
         }
       });
     }
   }
 
   // datatable
-  if ($("#datatable").length > 0) {
-    var $dtTbl = $("#datatable");
-    $dtTbl.dataTable({
+  if ($('#datatable').length > 0) {
+    var $dtTbl = $('#datatable');
+    var options = {
       language: {
-        lengthMenu: "Menampilkan _MENU_ baris data per halaman",
-        zeroRecords: "Tidak ada data",
-        info: "Menampilkan halaman _PAGE_ dari _PAGES_",
-        infoFiltered: "(filtered from _MAX_ total records)",
-        search: "Pencarian",
+        lengthMenu: 'Menampilkan _MENU_ baris data per halaman',
+        zeroRecords: 'Tidak ada data',
+        info: 'Menampilkan halaman _PAGE_ dari _PAGES_',
+        infoFiltered: '(filtered from _MAX_ total records)',
+        search: 'Pencarian',
         paginate: {
-          previous: "Sebelumnya",
-          next: "Selanjutnya",
+          previous: 'Sebelumnya',
+          next: 'Selanjutnya',
+        },
+        buttons: {
+          copySuccess: {
+            1: '1 baris disalin ke papanklip',
+            _: '%d baris disalin ke papanklip',
+          },
+          copyTitle: 'Salin ke papanklip',
         },
       },
-      dom: "Bfrtip",
-      buttons: [
+    };
+    // alert($dtTbl.data("export"));
+    if ($dtTbl.data('export') === true) {
+      var title = $dtTbl.data('title') && $dtTbl.data('title').replace(' ', '_').toLowerCase();
+      title = title ? title + '_export' : document.title;
+      options['dom'] = 'Bfrtip';
+      options['buttons'] = [
         {
-          attr: { id: "copyDtBtn" },
-          extend: "copy",
-          text: "Salin",
-          className: "btn-primary",
+          attr: { id: 'copyDtBtn' },
+          extend: 'copy',
+          text: 'Salin',
+          className: 'btn-primary',
+          title: title,
         },
         {
-          attr: { id: "csvDtBtn" },
-          extend: "csv",
-          text: "CSV",
-          className: "btn-success",
+          attr: { id: 'csvDtBtn' },
+          extend: 'csv',
+          text: 'CSV',
+          className: 'btn-success',
+          title: title,
         },
         {
-          attr: { id: "excelDtBtn" },
-          extend: "excel",
-          text: "Excel",
-          className: "btn-success",
+          attr: { id: 'excelDtBtn' },
+          extend: 'excel',
+          text: 'Excel',
+          className: 'btn-success',
+          title: title,
         },
         {
-          attr: { id: "pdfDtBtn" },
-          extend: "pdf",
-          text: "PDF",
-          orientation: "landscape",
-          pageSize: "Legal",
-          className: "btn-danger",
+          attr: { id: 'pdfDtBtn' },
+          extend: 'pdf',
+          text: 'PDF',
+          orientation: 'landscape',
+          pageSize: 'Legal',
+          className: 'btn-danger',
+          title: title,
           customize: function (doc) {
             var colCount = new Array();
-            $dtTbl.find("tbody tr:first-child td").each(function () {
-              if ($(this).attr("colspan")) {
-                for (var i = 1; i <= $(this).attr("colspan"); $i++) {
-                  colCount.push("*");
+            $dtTbl.find('tbody tr:first-child td').each(function () {
+              if ($(this).attr('colspan')) {
+                for (var i = 1; i <= $(this).attr('colspan'); $i++) {
+                  colCount.push('*');
                 }
               } else {
-                colCount.push("*");
+                colCount.push('*');
               }
             });
             doc.content[1].table.widths = colCount;
           },
         },
         {
-          attr: { id: "printDtBtn" },
-          extend: "print",
-          text: "Cetak",
-          className: "btn-primary",
+          attr: { id: 'printDtBtn' },
+          extend: 'print',
+          text: 'Cetak',
+          className: 'btn-primary',
+          // title: title,
         },
         //   'copyHtml5',
         //   'excelHtml5',
         //   'csvHtml5',
         //   'pdfHtml5',
         {
-          attr: { id: "jsonDtBtn" },
-          text: "JSON",
-          className: "btn btn-warning",
+          attr: { id: 'jsonDtBtn' },
+          text: 'JSON',
+          className: 'btn btn-warning',
           action: function (e, dt, button, config) {
             var data = dt.buttons.exportData();
 
-            $.fn.dataTable.fileSave(
-              new Blob([JSON.stringify(data)]),
-              "Export.json"
-            );
+            $.fn.dataTable.fileSave(new Blob([JSON.stringify(data)]), title + '.json');
           },
         },
-      ],
-    });
+      ];
+    }
+    $dtTbl.dataTable(options);
   }
 
   // select2
-  if ($(".select2").length > 0) {
-    $(".select2").each(function (index, item) {
+  if ($('.select2').length > 0) {
+    $('.select2').each(function (index, item) {
       $(item).select2();
     });
   }
 
   // datepicker
-  if ($(".datepicker").length > 0) {
-    $(".datepicker").daterangepicker({
+  if ($('.datepicker').length > 0) {
+    $('.datepicker').daterangepicker({
       autoUpdateInput: false, //disable default date
       singleDatePicker: true,
       showDropdowns: true,
     });
 
-    $(".datepicker").on("apply.daterangepicker", function (ev, picker) {
-      $(this).val(picker.startDate.format("YYYY-MM-DD"));
+    $('.datepicker').on('apply.daterangepicker', function (ev, picker) {
+      $(this).val(picker.startDate.format('YYYY-MM-DD'));
     });
   }
 
   // toggle sidebar mini
   window.sidebar_miniku = function () {
     var WINDOW_WIDTH = $(window).outerWidth();
-    if (
-      typeof SIDEBAR_MINI !== "undefined" &&
-      SIDEBAR_MINI === true &&
-      WINDOW_WIDTH > 1024
-    ) {
+    if (typeof SIDEBAR_MINI !== 'undefined' && SIDEBAR_MINI === true && WINDOW_WIDTH > 1024) {
       setTimeout(function () {
-        $('[data-toggle="sidebar"]').trigger("click");
+        $('[data-toggle="sidebar"]').trigger('click');
       }, 500);
     }
   };
@@ -209,76 +217,75 @@ $(document).ready(function () {
 function hapus(e, action_url) {
   e.preventDefault();
   swal({
-    title: "Anda yakin?",
-    text: "Sekali dihapus, data tidak akan kembali lagi!",
-    icon: "warning",
+    title: 'Anda yakin?',
+    text: 'Sekali dihapus, data tidak akan kembali lagi!',
+    icon: 'warning',
     buttons: true,
     dangerMode: true,
     buttons: {
       cancel: {
-        text: "Batal",
+        text: 'Batal',
         value: null,
         visible: true,
-        className: "",
+        className: '',
         closeModal: true,
       },
       confirm: {
-        text: "Lanjutkan",
+        text: 'Lanjutkan',
       },
     },
   }).then(function (willDelete) {
     if (willDelete) {
-      $("#form-hapus").attr("action", action_url);
-      document.getElementById("form-hapus").submit();
+      $('#form-hapus').attr('action', action_url);
+      document.getElementById('form-hapus').submit();
     } else {
-      swal("Okay, tidak jadi");
+      swal('Okay, tidak jadi');
     }
   });
 }
 
 function validateEmail(email) {
-  var re =
-    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
 }
 
 // form validation
 
-$("form")
+$('form')
   .find('button[type="submit"]')
   .click(function (e) {
-    $(".is-invalid").removeClass("is-invalid");
-    $(".invalid-feedback").remove();
-    $(".input-group-text").removeClass("border-danger");
+    $('.is-invalid').removeClass('is-invalid');
+    $('.invalid-feedback').remove();
+    $('.input-group-text').removeClass('border-danger');
     var $button = $(this);
-    var $form = $button.closest("form");
+    var $form = $button.closest('form');
     $form.find('[data-toggle="summernote_message"]').empty();
-    var $formControl = $form.find(".form-control:not(.note-form-control)");
+    var $formControl = $form.find('.form-control:not(.note-form-control)');
     var tidakError = true;
     $formControl.each(function (index, item) {
-      if (item.hasAttribute("required") && !item.value) {
+      if (item.hasAttribute('required') && !item.value) {
         tidakError = false;
-        $(item).addClass("is-invalid");
-        var $formGroup = $(item).closest(".form-group");
-        $formGroup.find(".input-group-text").addClass("border-danger");
-        var $invalidFeedback = $formGroup.find(".invalid-feedback");
+        $(item).addClass('is-invalid');
+        var $formGroup = $(item).closest('.form-group');
+        $formGroup.find('.input-group-text').addClass('border-danger');
+        var $invalidFeedback = $formGroup.find('.invalid-feedback');
         if ($invalidFeedback.length <= 0) {
           $(item).after('<span class="invalid-feedback"></span>');
         }
-        $invalidFeedback = $formGroup.find(".invalid-feedback");
-        $invalidFeedback.html($(item).attr("required-message"));
-      } else if (item.type == "email") {
+        $invalidFeedback = $formGroup.find('.invalid-feedback');
+        $invalidFeedback.html($(item).attr('required-message'));
+      } else if (item.type == 'email') {
         if (!validateEmail(item.value)) {
           tidakError = false;
-          $(item).addClass("is-invalid");
-          var $formGroup = $(item).closest(".form-group");
-          $formGroup.find(".input-group-text").addClass("border-danger");
-          var $invalidFeedback = $formGroup.find(".invalid-feedback");
+          $(item).addClass('is-invalid');
+          var $formGroup = $(item).closest('.form-group');
+          $formGroup.find('.input-group-text').addClass('border-danger');
+          var $invalidFeedback = $formGroup.find('.invalid-feedback');
           if ($invalidFeedback.length <= 0) {
             $(item).after('<span class="invalid-feedback"></span>');
           }
-          $invalidFeedback = $formGroup.find(".invalid-feedback");
-          $invalidFeedback.html($(item).attr("email-message"));
+          $invalidFeedback = $formGroup.find('.invalid-feedback');
+          $invalidFeedback.html($(item).attr('email-message'));
         }
       }
     });
@@ -286,25 +293,20 @@ $("form")
     $summernote = $form.find('[data-toggle="summernote"]');
     if ($summernote.length) {
       var summernote = $summernote[0];
-      if (
-        summernote.hasAttribute("required-message") &&
-        $summernote.summernote("code") == "<p><br></p>"
-      ) {
-        $form
-          .find('[data-toggle="summernote_message"]')
-          .html($summernote.attr("required-message"));
+      if (summernote.hasAttribute('required-message') && $summernote.summernote('code') == '<p><br></p>') {
+        $form.find('[data-toggle="summernote_message"]').html($summernote.attr('required-message'));
       }
-      $summernote.before().val($summernote.summernote("code"));
+      $summernote.before().val($summernote.summernote('code'));
       // console.log($summernote.before().val())
     }
     if (!tidakError) {
-      $("html, body").animate(
+      $('html, body').animate(
         {
           scrollTop: $form.offset().top - 100,
         },
         1000
       );
-      errorMsg("Ada yang error pada form, silakan cek kembali!!!");
+      errorMsg('Ada yang error pada form, silakan cek kembali!!!');
     }
     // return false;
     return tidakError;
@@ -313,9 +315,9 @@ $("form")
 // swal message
 
 function errorMsg(msg) {
-  swal("Error!!!", msg, "error");
+  swal('Error!!!', msg, 'error');
 }
 
 function successMsg(msg) {
-  return swal("Sukses", msg, "success");
+  return swal('Sukses', msg, 'success');
 }

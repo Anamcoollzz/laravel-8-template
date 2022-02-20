@@ -72,16 +72,18 @@
 
       @if (auth()->user()->can('Pengguna') ||
     auth()->user()->can('Role'))
-        <li class="nav-item dropdown @if (Route::is('user-management.users.index') ||
-          Route::is('user-management.roles.index') || Route::is('user-management.roles.edit') ||
-          Route::is('user-management.users.edit') || Route::is('user-management.users.create')) active @endif">
+        @php
+          $__menu_user = Route::is('user-management.users.index') || Route::is('user-management.users.edit') || Route::is('user-management.users.create');
+          $__menu_role = Route::is('user-management.roles.index') || Route::is('user-management.roles.edit') || Route::is('user-management.roles.create');
+        @endphp
+        <li class="nav-item dropdown @if ($__menu_user || $__menu_role) active @endif">
           <a href="#" class="nav-link has-dropdown">
             <i class="fas fa-users"></i>
             <span>{{ __('Manajemen Pengguna') }}</span>
           </a>
           <ul class="dropdown-menu">
             @can('Pengguna')
-              <li @if (Route::is('user-management.users.index') || Route::is('user-management.users.edit') || Route::is('user-management.users.create')) class="active" @endif>
+              <li @if ($__menu_user) class="active" @endif>
                 <a class="nav-link" href="{{ route('user-management.users.index') }}">
                   {{ __('Data Pengguna') }}
                 </a>
@@ -89,7 +91,7 @@
             @endcan
 
             @can('Role')
-              <li @if (Route::is('user-management.roles.index') || Route::is('user-management.roles.edit')) class="active" @endif>
+              <li @if ($__menu_role) class="active" @endif>
                 <a class="nav-link" href="{{ route('user-management.roles.index') }}">
                   {{ __('Data Role') }}
                 </a>

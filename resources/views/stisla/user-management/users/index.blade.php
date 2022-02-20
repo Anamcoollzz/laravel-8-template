@@ -16,11 +16,15 @@
           <div class="card-header">
             <h4><i class="fa fa-users"></i> {{ $title }}</h4>
 
-            @can('Pengguna Tambah')
-              <div class="card-header-action">
+            <div class="card-header-action">
+              @can('Pengguna Impor Excel')
+                @include('stisla.includes.forms.buttons.btn-import-excel')
+              @endcan
+
+              @can('Pengguna Tambah')
                 @include('stisla.includes.forms.buttons.btn-add', ['link'=>route('user-management.users.create')])
-              </div>
-            @endcan
+              @endcan
+            </div>
 
           </div>
           <div class="card-body">
@@ -41,7 +45,6 @@
                 </thead>
                 <tbody>
                   @foreach ($data as $item)
-
                     <tr>
                       <td>{{ $loop->iteration }}</td>
                       <td>{{ $item->name }}</td>

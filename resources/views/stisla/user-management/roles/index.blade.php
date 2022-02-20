@@ -15,10 +15,20 @@
         <div class="card">
           <div class="card-header">
             <h4><i class="fa fa-users"></i> {{ $title }}</h4>
+
+            <div class="card-header-action">
+              @can('Role Impor Excel')
+                @include('stisla.includes.forms.buttons.btn-import-excel')
+              @endcan
+
+              @can('Role Tambah')
+                @include('stisla.includes.forms.buttons.btn-add', ['link'=>route('user-management.roles.create')])
+              @endcan
+            </div>
           </div>
           <div class="card-body">
             <div class="table-responsive">
-              <table class="table table-striped">
+              <table class="table table-striped" id="datatable" @can('Role Ekspor') data-export="true" data-title="{{ __('Role') }}" @endcan>
                 <thead>
                   <tr>
                     <th class="text-center">#</th>
@@ -34,8 +44,12 @@
                         {{ $item->name }}
                       </td>
                       <td>
-                        @include('stisla.includes.forms.buttons.btn-edit', ['link'=>route('user-management.roles.edit',
-                        [$item->id])])
+                        @can('Role Ubah')
+                          @include('stisla.includes.forms.buttons.btn-edit', ['link'=>route('user-management.roles.edit', [$item->id])])
+                        @endcan
+                        @if (auth()->user()->can('Role Hapus') && $item->name !== 'superadmin')
+                          @include('stisla.includes.forms.buttons.btn-delete', ['link'=>route('user-management.roles.destroy', [$item->id])])
+                        @endif
                       </td>
                     </tr>
                   @endforeach
@@ -49,3 +63,10 @@
     </div>
   </div>
 @endsection
+
+@can('Role Impor Excel')
+  @push('modals')
+    @include('stisla.includes.modals.modal-import-excel', ['formAction'=>route('user-management.roles.import-excel'),
+    'downloadLink'=>route('user-management.roles.import-excel-example'), 'note'=>__('Pastikan nama role tidak ada yang sama')])
+  @endpush
+@endcan
