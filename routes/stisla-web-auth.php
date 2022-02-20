@@ -59,3 +59,28 @@ Route::get('testing/modal', [TestingController::class, 'modal']);
 Route::get('payment-types/import-excel-example', [\App\Http\Controllers\PaymentTypeController::class, 'importExcelExample'])->name('payment-types.import-excel-example');
 Route::post('payment-types/import-excel', [\App\Http\Controllers\PaymentTypeController::class, 'importExcel'])->name('payment-types.import-excel');
 Route::resource('payment-types', \App\Http\Controllers\PaymentTypeController::class);
+
+# VIEW ONLY
+Route::view('classes', 'stisla.views.classes.index')->name('views.classes.index');
+Route::view('classes/create', 'stisla.views.classes.form')->name('views.classes.create');
+Route::view('classes/{id}/edit', 'stisla.views.classes.form', ['d' => 1])->name('views.classes.edit');
+
+Route::view('group-classes', 'stisla.views.group-classes.index')->name('views.group-classes.index');
+Route::view('group-classes/create', 'stisla.views.group-classes.form')->name('views.group-classes.create');
+Route::view('group-classes/{id}/edit', 'stisla.views.group-classes.form', ['d' => 1])->name('views.group-classes.edit');
+
+Route::view('school-years', 'stisla.views.school-years.index')->name('views.school-years.index');
+Route::view('school-years/create', 'stisla.views.school-years.form')->name('views.school-years.create');
+Route::view('school-years/{id}/edit', 'stisla.views.school-years.form', ['d' => 1])->name('views.school-years.edit');
+
+Route::view('students', 'stisla.views.students.index')->name('views.students.index');
+Route::view('students/create', 'stisla.views.students.form')->name('views.students.create');
+Route::view('students/{id}/edit', 'stisla.views.students.form', ['d' => 1])->name('views.students.edit');
+
+Route::view('transaction-records', 'stisla.views.transaction-records.index')->name('views.transaction-records.index');
+Route::view('transaction-records/records', 'stisla.views.transaction-records.form')->name('views.transaction-records.form');
+
+Route::view('transactions', 'stisla.views.transactions.index')->name('views.transactions.index');
+Route::view('transactions/print', 'stisla.views.transactions.print')->name('views.transactions.print');
+
+Route::view('statistics', 'stisla.views.statistics.index')->name('views.statistics.index');

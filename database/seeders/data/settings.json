@@ -1,9 +1,9 @@
 [
-    { "key": "application_name", "value": "Laravel 8 Template" },
+    { "key": "application_name", "value": "Apl Keu Sekolah" },
     { "key": "application_version", "value": "1.0.0" },
-    { "key": "app_description", "value": "Ini hanyalah sistem biasa" },
+    { "key": "app_description", "value": "Ini adalah sebuah aplikasi keuangan sekolah yang akan membantu sekolah dalam memanajemen pembayaran keuangan di sekolah" },
     { "key": "city", "value": "Jember" },
-    { "key": "company_name", "value": "[Nama Perusahaannya]" },
+    { "key": "company_name", "value": "[Nama Sekolah]" },
     { "key": "country", "value": "Indonesia" },
     {
         "key": "favicon",
@@ -16,7 +16,7 @@
         "key": "meta_author",
         "value": "Hairul Anam, Hafiz Ardi, Ariski Setyawan"
     },
-    { "key": "meta_description", "value": "[Nama Perusahaannya]" },
+    { "key": "meta_description", "value": "[Nama Sekolah]" },
     {
         "key": "meta_keywords",
         "value": "Sistem Informasi, Pemrograman, Github, PHP, Laravel, Stisla, Heroku, Gitlab, MySQL"

@@ -1,17 +1,17 @@
 [
     {
-        "name": "Hairul Anam",
-        "email": "superadmin@laraveltemplate.com",
+        "name": "Nama Superadmin",
+        "email": "superadmin@namasekolah.com",
         "password": "superadmin",
         "roles": ["superadmin"],
         "email_verified_at": "2021-04-06 04:06:00"
     },
 
     {
-        "name": "Akun Testing",
-        "email": "akuntesting@laraveltemplate.com",
-        "password": "akuntesting",
-        "roles": ["akuntesting"],
+        "name": "Nama Operator",
+        "email": "operator1@namasekolah.com",
+        "password": "operator1",
+        "roles": ["operator"],
         "email_verified_at": "2021-04-06 04:06:00"
     }
 ]

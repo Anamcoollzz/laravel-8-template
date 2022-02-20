@@ -43,7 +43,8 @@
             },
             "form": {
                 "type": "select",
-                "required": 2
+                "required": 2,
+                "options": ["bulanan", "tahunan", "sekali"]
             }
         },
 

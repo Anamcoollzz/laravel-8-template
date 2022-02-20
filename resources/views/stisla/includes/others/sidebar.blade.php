@@ -23,15 +23,34 @@
           <span>{{ __('Dashboard') }}</span>
         </a>
       </li>
+      <li @if (Route::is('views.statistics.index')) class="active" @endif>
+        <a class="nav-link" href="{{ route('views.statistics.index') }}">
+          <i class="fas fa-chart-line"></i>
+          <span>{{ __('Stastitik') }}</span>
+        </a>
+      </li>
+      <li @if (Route::is('views.transaction-records.index')) class="active" @endif>
+        <a class="nav-link" href="{{ route('views.transaction-records.index') }}">
+          <i class="fas fa-dollar-sign"></i>
+          <span>{{ __('Rekam Transaksi') }}</span>
+        </a>
+      </li>
 
-      <li @if (Route::is('crud-examples.index') || Route::is('crud-examples.create') || Route::is('crud-examples.edit')) class="active" @endif>
+      <li @if (Route::is('views.transactions.index')) class="active" @endif>
+        <a class="nav-link" href="{{ route('views.transactions.index') }}">
+          <i class="fas fa-history"></i>
+          <span>{{ __('Transaksi') }}</span>
+        </a>
+      </li>
+
+      {{-- <li @if (Route::is('crud-examples.index') || Route::is('crud-examples.create') || Route::is('crud-examples.edit')) class="active" @endif>
         <a class="nav-link" href="{{ route('crud-examples.index') }}">
           <i class="fas fa-atom"></i>
           <span>{{ __('Contoh CRUD') }}</span>
         </a>
-      </li>
+      </li> --}}
 
-      @if (config('app.show_example_menu'))
+      {{-- @if (config('app.show_example_menu'))
         <li>
           <a class="nav-link" href="#">
             <i class="fas fa-bars"></i>
@@ -39,14 +58,14 @@
           </a>
         </li>
 
-        <li class="nav-item dropdown {{-- active --}}">
+        <li class="nav-item dropdown ">
           <a href="#" class="nav-link has-dropdown">
             <i class="fas fa-caret-square-down"></i>
             <span>{{ __('Menu Dropdown') }}</span>
           </a>
           <ul class="dropdown-menu">
             @foreach (range(1, 3) as $sub)
-              <li {{-- class="active" --}}>
+              <li>
                 <a class="nav-link" href="#">{{ __('Sub Menu') . $loop->iteration }}</a>
               </li>
             @endforeach
@@ -66,14 +85,34 @@
             <span>{{ __('Form') }}</span>
           </a>
         </li>
-      @endif
+      @endif --}}
 
       <li class="menu-header">{{ __('Master Data') }}</li>
 
-      @php
-        $__menu_user = Route::is('user-management.users.index') || Route::is('user-management.users.edit') || Route::is('user-management.users.create');
-        $__menu_role = Route::is('user-management.roles.index') || Route::is('user-management.roles.edit') || Route::is('user-management.roles.create');
-      @endphp
+      <li @if (Route::is('views.students.index') || Route::is('views.students.create') || Route::is('views.students.edit')) class="active" @endif>
+        <a class="nav-link" href="{{ route('views.students.index') }}">
+          <i class="fas fa-users"></i>
+          <span>{{ __('Siswa') }}</span>
+        </a>
+      </li>
+      <li @if (Route::is('views.school-years.index') || Route::is('views.school-years.create') || Route::is('views.school-years.edit')) class="active" @endif>
+        <a class="nav-link" href="{{ route('views.school-years.index') }}">
+          <i class="fas fa-calendar"></i>
+          <span>{{ __('Tahun Ajaran') }}</span>
+        </a>
+      </li>
+      <li @if (Route::is('views.classes.index') || Route::is('views.classes.create') || Route::is('views.classes.edit')) class="active" @endif>
+        <a class="nav-link" href="{{ route('views.classes.index') }}">
+          <i class="fas fa-chair"></i>
+          <span>{{ __('Kelas') }}</span>
+        </a>
+      </li>
+      <li @if (Route::is('views.group-classes.index') || Route::is('views.group-classes.create') || Route::is('views.group-classes.edit')) class="active" @endif>
+        <a class="nav-link" href="{{ route('views.group-classes.index') }}">
+          <i class="fas fa-university"></i>
+          <span>{{ __('Grup Kelas') }}</span>
+        </a>
+      </li>
       <li @if (Route::is('payment-types.index')) class="active" @endif>
         <a class="nav-link" href="{{ route('payment-types.index') }}">
           <i class="fas fa-certificate"></i>
@@ -83,6 +122,11 @@
 
       <li class="menu-header">{{ __('Menu Lainnya') }}</li>
 
+
+      @php
+        $__menu_user = Route::is('user-management.users.index') || Route::is('user-management.users.edit') || Route::is('user-management.users.create');
+        $__menu_role = Route::is('user-management.roles.index') || Route::is('user-management.roles.edit') || Route::is('user-management.roles.create');
+      @endphp
       @php
         $condition =
             auth()
@@ -148,5 +192,10 @@
       </li>
 
     </ul>
+    <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
+      <a data-target="#modalSchoolYear" data-toggle="modal" href="#" class="btn btn-primary btn-lg btn-block btn-icon-split">
+        <i class="fas fa-calendar"></i> Tahun Ajaran 2021/2022
+      </a>
+    </div>
   </aside>
 </div>
