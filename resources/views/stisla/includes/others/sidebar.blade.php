@@ -66,6 +66,13 @@
             <span>{{ __('Form') }}</span>
           </a>
         </li>
+
+        <li @if (Route::is('chart-js.index')) class="active" @endif>
+          <a class="nav-link" href="{{ route('chart-js.index') }}">
+            <i class="fas fa-chart-line"></i>
+            <span>{{ __('Chart JS') }}</span>
+          </a>
+        </li>
       @endif
 
       <li class="menu-header">{{ __('Menu Lainnya') }}</li>

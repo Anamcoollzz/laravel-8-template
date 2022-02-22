@@ -41,7 +41,7 @@ class MakeCrudCommand extends Command
      */
     public function handle()
     {
-        $filename = $this->ask('CRUD Filename? (check example in ' . app_path('Console\\Commands\\data\\crud\\files\\mahasiswa.json') . ') type like this [mahasiswa]');
+        $filename = $this->ask('CRUD Filename? (check example in ' . app_path('Console\\Commands\\data\\crud\\files\\student.json') . ') type like this [student]');
         if (!$filename) {
             $this->error("CRUD file required");
             return 0;

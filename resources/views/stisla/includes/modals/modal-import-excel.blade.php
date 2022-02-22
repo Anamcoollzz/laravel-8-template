@@ -10,7 +10,7 @@
           </button>
         </div>
         <div class="modal-body">
-          @if ($note)
+          @if ($note ?? false)
             <div class="mb-4">
               <div class="alert alert-info alert-has-icon">
                 <div class="alert-icon"><i class="far fa-lightbulb"></i></div>

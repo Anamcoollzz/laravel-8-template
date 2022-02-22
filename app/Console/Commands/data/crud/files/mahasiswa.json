@@ -1,7 +1,7 @@
 {
     "title": "Mahasiswa",
     "icon": "fa fa-users",
-    "model": "Mahasiswa",
+    "model": "Student",
     "columns": [
         {
             "type": "ai"

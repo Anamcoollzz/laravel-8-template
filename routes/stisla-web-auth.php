@@ -22,10 +22,13 @@ Route::put('profile', [ProfileController::class, 'update']);
 Route::put('profile/password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
 
 # DATATABLE
-Route::view('datatable', 'stisla.datatable.index')->name('datatable.index');
+Route::view('datatable', 'stisla.examples.datatable.index')->name('datatable.index');
 
 # FORM
-Route::view('form', 'stisla.form.index')->name('form.index');
+Route::view('form', 'stisla.examples.form.index')->name('form.index');
+
+# CHART JS
+Route::view('chart-js', 'stisla.examples.chart-js.index')->name('chart-js.index');
 
 # USER MANAGEMENT
 Route::prefix('user-management')->as('user-management.')->group(function () {
