@@ -37,9 +37,9 @@
                   <thead>
                     <tr>
                       <th class="text-center">{{ __('#') }}</th>
-		<th class="text-center">{{ __('Nama Pembayaran') }}</th>
-		<th class="text-center">{{ __('Tagihan') }}</th>
-		<th class="text-center">{{ __('Jenis Waktu Pembayaran') }}</th>
+                      <th class="text-center">{{ __('Nama Pembayaran') }}</th>
+                      <th class="text-center">{{ __('Tagihan') }}</th>
+                      <th class="text-center">{{ __('Jenis Waktu Pembayaran') }}</th>
 
                       <th>{{ __('Aksi') }}</th>
                     </tr>
@@ -48,15 +48,15 @@
                     @foreach ($data as $item)
                       <tr>
                         <td>{{ $loop->iteration }}</td>
-		<td>{{ $item->type_name }}</td>
-		<td>{{ $item->bill_amount }}</td>
-		<td>{{ $item->payment_time_type }}</td>
+                        <td>{{ $item->type_name }}</td>
+                        <td>{{ $item->bill_amount }}</td>
+                        <td>{{ $item->payment_time_type }}</td>
 
                         <td>
                           {{-- @can('Jenis Pembayaran Ubah') --}}
-                            @include('stisla.includes.forms.buttons.btn-edit', ['link'=>route('payment-types.edit', [$item->id])])
+                          @include('stisla.includes.forms.buttons.btn-edit', ['link'=>route('payment-types.edit', [$item->id])])
                           {{-- @can('Jenis Pembayaran Hapus') --}}
-                            @include('stisla.includes.forms.buttons.btn-delete', ['link'=>route('payment-types.destroy', [$item->id])])
+                          @include('stisla.includes.forms.buttons.btn-delete', ['link'=>route('payment-types.destroy', [$item->id])])
                           {{-- @endcan --}}
                         </td>
                       </tr>
@@ -67,7 +67,7 @@
             </div>
           </div>
         @else
-          @include('stisla.includes.empty-state', ['title'=>'Data '.$title, 'icon'=>'fa fa-certificate','link'=>route('payment-types.create')])
+          @include('stisla.includes.others.empty-state', ['title'=>'Data '.$title, 'icon'=>'fa fa-certificate','link'=>route('payment-types.create')])
         @endif
       </div>
 
@@ -76,11 +76,9 @@
 @endsection
 
 @push('css')
-
 @endpush
 
 @push('js')
-
 @endpush
 
 @push('scripts')
@@ -92,5 +90,4 @@
 @push('modals')
   @include('stisla.includes.modals.modal-import-excel', ['formAction'=>route('payment-types.import-excel'),
   'downloadLink'=>route('payment-types.import-excel-example')])
-
 @endpush
