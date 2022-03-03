@@ -87,7 +87,7 @@ class Repository extends RepositoryAbstract
         $model = $this->find($id);
         if ($model) {
             $model->update($data);
-            return $model;
+            return $this->find($id);
         }
         return 0;
     }

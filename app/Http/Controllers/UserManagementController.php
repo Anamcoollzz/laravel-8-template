@@ -64,11 +64,17 @@ class UserManagementController extends Controller
     {
         $user = $this->userRepository->create(
             array_merge(
-                ['password' => bcrypt($request->password)],
-                $request->only(['name', 'email'])
+                [
+                    'password' => bcrypt($request->password)
+                ],
+                $request->only([
+                    'name',
+                    'email'
+                ])
             )
         );
         $user->assignRole($request->role);
+        logCreate(__('Menambah Pengguna Baru'), $user);
         return redirect()->back()->with('successMessage', __('Berhasil menambah pengguna'));
     }
 
@@ -98,14 +104,16 @@ class UserManagementController extends Controller
      */
     public function update(UserRequest $request, User $user)
     {
-        $this->userRepository->update(
-            array_merge(
-                ['password' => $request->filled('password') ? bcrypt($request->password) : $user->password],
-                $request->only(['name', 'email'])
-            ),
-            $user->id
-        );
-        $user->syncRoles([$request->role]);
+        $data = $request->only([
+            'name',
+            'email'
+        ]);
+        if ($request->filled('password')) {
+            $data['password'] = bcrypt($request->password);
+        }
+        $userNew = $this->userRepository->update($data, $user->id);
+        $userNew->syncRoles([$request->role]);
+        logUpdate(__("Perbarui Pengguna"), $user, $userNew);
         return redirect()->back()->with('successMessage', __('Berhasil memperbarui pengguna'));
     }
 
@@ -117,9 +125,8 @@ class UserManagementController extends Controller
      */
     public function destroy(User $user)
     {
-        $user = $this->userRepository->delete(
-            $user->id
-        );
+        $this->userRepository->delete($user->id);
+        logDelete(__('Menghapus Pengguna'), $user);
         return redirect()->back()->with('successMessage', __('Berhasil menghapus pengguna'));
     }
 }

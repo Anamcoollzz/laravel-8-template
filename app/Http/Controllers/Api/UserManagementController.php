@@ -51,11 +51,17 @@ class UserManagementController extends Controller
     {
         $user = $this->userRepository->create(
             array_merge(
-                ['password' => bcrypt($request->password)],
-                $request->only(['name', 'email'])
+                [
+                    'password' => bcrypt($request->password)
+                ],
+                $request->only([
+                    'name',
+                    'email'
+                ])
             )
         );
         $user->assignRole($request->role);
+        logCreate(__('Menambah Pengguna Baru'), $user);
         return response200($user, __('Berhasil menambah data pengguna'));
     }
 
@@ -68,15 +74,17 @@ class UserManagementController extends Controller
      */
     public function update(UserRequest $request, User $user)
     {
-        $this->userRepository->update(
-            array_merge(
-                ['password' => $request->filled('password') ? bcrypt($request->password) : $user->password],
-                $request->only(['name', 'email'])
-            ),
-            $user->id
-        );
-        $user->syncRoles([$request->role]);
-        return redirect()->back()->with('successMessage', __('Berhasil memperbarui pengguna'));
+        $data = $request->only([
+            'name',
+            'email'
+        ]);
+        if ($request->filled('password')) {
+            $data['password'] = bcrypt($request->password);
+        }
+        $userNew = $this->userRepository->update($data, $user->id);
+        $userNew->syncRoles([$request->role]);
+        logUpdate(__("Perbarui Pengguna"), $user, $userNew);
+        return response200($user, __('Berhasil memperbarui data pengguna'));
     }
 
     /**
@@ -87,9 +95,8 @@ class UserManagementController extends Controller
      */
     public function destroy(User $user)
     {
-        $user = $this->userRepository->delete(
-            $user->id
-        );
-        return redirect()->back()->with('successMessage', __('Berhasil menghapus pengguna'));
+        $deleted = $this->userRepository->delete($user->id);
+        logDelete(__('Menghapus Pengguna'), $user);
+        return response200($deleted, __('Berhasil menghapus pengguna'));
     }
 }
