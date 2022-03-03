@@ -54,34 +54,32 @@ class ProfileController extends Controller
      */
     public function update(ProfileRequest $request)
     {
+        $data = $request->only([
+            'name',
+            'email'
+        ]);
+        $user = auth()->user();
         if ($request->hasFile('avatar')) {
-            $this->userRepository->updateProfile(
-                array_merge(
-                    $request->only([
-                        'name', 'email'
-                    ]),
-                    ['avatar' => $this->fileService->uploadAvatar($request->file('avatar'))],
-                )
-            );
-        } else {
-            $this->userRepository->updateProfile($request->only([
-                'name', 'email'
-            ]));
+            $data['avatar'] = $this->fileService->uploadAvatar($request->file('avatar'));
         }
+        $newUser = $this->userRepository->updateProfile($data);
+        logUpdate(__('Perbarui Profil Pengguna'), $user, $newUser);
         return back()->with('successMessage', __('Berhasil memperbarui profil'));
     }
 
     /**
-     * update profile user login
+     * update password user login
      *
      * @param ProfileRequest $request
      * @return Response
      */
     public function updatePassword(ProfileRequest $request)
     {
+        $oldPassword = auth()->user()->password;
         $this->userRepository->updateProfile([
-            'password' => bcrypt($request->password)
+            'password' => $newPassword = bcrypt($request->password)
         ]);
+        logUpdate(__('Perbarui Kata Sandi'), $oldPassword, $newPassword);
         return back()->with('successMessage', __('Berhasil memperbarui password'));
     }
 }

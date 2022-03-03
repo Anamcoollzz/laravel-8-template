@@ -24,6 +24,9 @@ return [
     'is_heroku' => env('APP_IS_HEROKU', false),
     'show_example_menu' => env('APP_SHOW_EXAMPLE_MENU', true),
 
+    // api app key required
+    'header_key' => env('APP_HEADER_KEY', null),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment

@@ -2,10 +2,12 @@
 
 namespace App\Repositories;
 
+use Illuminate\Database\Eloquent\Model;
+
 abstract class RepositoryAbstract
 {
 
-    protected $model;
+    protected Model $model;
 
     /**
      * get all data

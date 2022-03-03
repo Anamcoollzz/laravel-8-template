@@ -20,14 +20,23 @@ class VerificationAccountMail extends Mailable
     public User $user;
 
     /**
+     * isVerificationCode var
+     *
+     * @var bool
+     */
+    private bool $isVerificationCode;
+
+    /**
      * Create a new message instance.
      *
      * @param User $user
+     * @param bool $isVerificationCode
      * @return void
      */
-    public function __construct(User $user)
+    public function __construct(User $user, bool $isVerificationCode)
     {
         $this->user = $user;
+        $this->isVerificationCode = $isVerificationCode;
     }
 
     /**
@@ -37,6 +46,8 @@ class VerificationAccountMail extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.verification-account');
+        return $this->subject(__('Verifikasi Akun'))->view('stisla.emails.verification-account', [
+            'isVerificationCode' => $this->isVerificationCode
+        ]);
     }
 }

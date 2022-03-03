@@ -236,12 +236,12 @@ class AuthController extends Controller
         try {
             $user = $this->userRepository->findByEmailToken($token);
             if ($user === null)
-                return back()->withInput()->with('errorMessage', __('Gagal memperbarui password'));
+                return back()->withInput()->with('errorMessage', __('Gagal memperbarui kata sandi'));
             $user->update(['password' => bcrypt($request->new_password), 'email_token' => null]);
             DB::commit();
-            return redirect()->route('login')->withInput()->with('successMessage', __('Sukses memperbarui password'));
+            return redirect()->route('login')->withInput()->with('successMessage', __('Sukses memperbarui kata sandi'));
         } catch (Exception $e) {
-            return back()->withInput()->with('errorMessage', __('Gagal memperbarui password'));
+            return back()->withInput()->with('errorMessage', __('Gagal memperbarui kata sandi'));
         }
     }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Route;
 
 class LoginRequest extends FormRequest
 {
@@ -23,6 +24,12 @@ class LoginRequest extends FormRequest
      */
     public function rules()
     {
+        if (Route::is('api.login')) {
+            return [
+                'email'    => 'required|exists:users,email',
+                'password' => 'required|min:5',
+            ];
+        }
         return [
             'email'    => 'required|exists:users,email',
             'password' => 'required|min:5',

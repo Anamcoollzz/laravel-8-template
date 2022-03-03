@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 class Repository extends RepositoryAbstract
 {
 
-    protected $model;
+    protected Model $model;
 
     /**
      * get all data

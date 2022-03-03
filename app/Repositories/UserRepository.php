@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\ActivityLog;
 use App\Models\PermissionGroup;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
@@ -11,6 +12,13 @@ use Spatie\Permission\Models\Role;
 class UserRepository extends Repository
 {
     /**
+     * userId
+     *
+     * @var mixed
+     */
+    private $userId;
+
+    /**
      * constructor method
      *
      * @return void
@@ -18,6 +26,7 @@ class UserRepository extends Repository
     public function __construct()
     {
         $this->model = new User();
+        $this->userId = auth()->id() ?? auth('api')->id();
     }
 
     /**
@@ -50,7 +59,8 @@ class UserRepository extends Repository
      */
     public function updateProfile(array $data)
     {
-        return $this->model->where('id', auth()->id())->update($data);
+        $this->model->where('id', $this->userId)->update($data);
+        return $this->find($this->userId);
     }
 
     /**
@@ -60,8 +70,20 @@ class UserRepository extends Repository
      */
     public function getUsers()
     {
-        $users = $this->model->with(['roles'])->get();
+        $users = $this->model->with(['roles'])->latest()->get();
         // dd($users);
+        return $users;
+    }
+
+    /**
+     * get user data as pagination
+     *
+     * @param integer $perPage
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function getPaginateUsers($perPage = 20)
+    {
+        $users = $this->model->with(['roles'])->latest()->paginate($perPage);
         return $users;
     }
 
@@ -163,5 +185,19 @@ class UserRepository extends Repository
     public function getPermissionGroupWithChild()
     {
         return PermissionGroup::with(['permissions'])->get();
+    }
+
+    /**
+     * getLogActivitiesPaginate
+     *
+     * @param integer $perPage
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function getLogActivitiesPaginate($perPage = 20)
+    {
+        return ActivityLog::query()
+            ->where('user_id', $this->userId)
+            ->latest()
+            ->paginate($perPage);
     }
 }

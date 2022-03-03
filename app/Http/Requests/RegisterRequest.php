@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Repositories\SettingRepository;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Route;
 
 class RegisterRequest extends FormRequest
 {
@@ -24,6 +25,14 @@ class RegisterRequest extends FormRequest
      */
     public function rules()
     {
+        if (Route::is('api.register')) {
+            return [
+                'name'                  => 'required',
+                'email'                 => 'required|email|unique:users,email',
+                'password'              => 'required|min:6|confirmed',
+                'password_confirmation' => 'required|min:6',
+            ];
+        }
         return [
             'name'                  => 'required',
             'email'                 => 'required|email|unique:users,email',

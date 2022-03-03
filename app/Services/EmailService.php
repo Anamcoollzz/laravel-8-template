@@ -72,6 +72,10 @@ class EmailService
                 ]
             ]);
         }
+        // config(['mail.from.name' => 'New Name']);
+        (new \Illuminate\Mail\MailServiceProvider(app()))->register();
+
+        // dd(config('mail'));
     }
 
     /**
@@ -100,22 +104,24 @@ class EmailService
      * forgot password
      *
      * @param User $user
+     * @param bool $isVerificationCode
      * @return void
      */
-    public function forgotPassword(User $user)
+    public function forgotPassword(User $user, bool $isVerificationCode = false)
     {
-        $this->sendDirect($user->email, new ForgotPasswordMail($user));
+        $this->sendDirect($user->email, new ForgotPasswordMail($user, $isVerificationCode));
     }
 
     /**
      * verification account
      *
      * @param User $user
+     * @param bool $isVerificationCode
      * @return void
      */
-    public function verifyAccount(User $user)
+    public function verifyAccount(User $user, bool $isVerificationCode = false)
     {
-        $this->sendDirect($user->email, new VerificationAccountMail($user));
+        $this->sendDirect($user->email, new VerificationAccountMail($user, $isVerificationCode));
     }
 
     /**

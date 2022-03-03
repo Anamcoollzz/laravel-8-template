@@ -35,10 +35,10 @@
     { "key": "stisla_skin", "value": "style" },
 
     { "key": "mail_provider", "value": "mailtrap" },
-    { "key": "mail_from_address", "value": "hairulanam21" },
+    { "key": "mail_from_address", "value": "anamkun@laraveltemplate.com" },
     { "key": "mail_from_name", "value": "Superadmin" },
 
-    { "key": "mail_mailtrap_host", "value": "smtp" },
+    { "key": "mail_mailtrap_host", "value": "smtp.mailtrap.io" },
     { "key": "mail_mailtrap_port", "value": "2525" },
     { "key": "mail_mailtrap_username", "value": "809d58dfa23ade" },
     { "key": "mail_mailtrap_password", "value": "e9d1aa54a61db1" },
