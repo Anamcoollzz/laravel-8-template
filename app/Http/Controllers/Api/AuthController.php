@@ -63,6 +63,8 @@ class AuthController extends Controller
         $this->fileService       = new FileService;
 
         $this->middleware('can:Profil Ubah')->only(['updateProfile', 'updatePassword']);
+        $this->middleware('can:Pengaturan')->only(['settings']);
+        $this->middleware('can:Log Aktivitas')->only(['logActivities']);
     }
 
     /**

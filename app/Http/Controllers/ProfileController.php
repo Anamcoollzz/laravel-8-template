@@ -32,6 +32,8 @@ class ProfileController extends Controller
     {
         $this->userRepository = new UserRepository;
         $this->fileService    = new FileService;
+
+        $this->middleware('can:Profil Ubah')->only(['update', 'updatePassword']);
     }
 
     /**

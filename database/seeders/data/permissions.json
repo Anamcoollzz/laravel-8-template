@@ -76,5 +76,11 @@
         "name": "Pengaturan",
         "roles": ["superadmin", "akuntesting"],
         "group": "Pengaturan"
+    },
+
+    {
+        "name": "Log Aktivitas",
+        "roles": ["superadmin", "akuntesting"],
+        "group": "Log Aktivitas"
     }
 ]
