@@ -22,7 +22,13 @@ class RolePermissionSeeder extends Seeder
         Role::truncate();
         $roles = json_decode(file_get_contents(database_path('seeders/data/roles.json')), true);
         foreach ($roles as $role) {
-            Role::create(['name' => $role]);
+            $roleObj = Role::create([
+                'name' => $role,
+            ]);
+            if ($role === 'superadmin') {
+                $roleObj->is_locked = 1;
+                $roleObj->save();
+            }
         }
 
         Permission::truncate();
@@ -32,7 +38,7 @@ class RolePermissionSeeder extends Seeder
                 'group_name' => $permission['group']
             ]);
             $perm = Permission::create([
-                'name' => $permission['name'],
+                'name'                => $permission['name'],
                 'permission_group_id' => $group->id
             ]);
             foreach ($permission['roles'] as $role)

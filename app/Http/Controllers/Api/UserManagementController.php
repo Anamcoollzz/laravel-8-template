@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
 use App\Repositories\UserRepository;
+use Illuminate\Http\JsonResponse;
 
 class UserManagementController extends Controller
 {
@@ -26,18 +27,30 @@ class UserManagementController extends Controller
         $this->userRepository = new UserRepository;
         $this->middleware('can:Pengguna');
         $this->middleware('can:Pengguna Tambah')->only(['create', 'store']);
-        $this->middleware('can:Pengguna Ubah')->only(['edit', 'update']);
+        $this->middleware('can:Pengguna Ubah')->only(['edit', 'update', 'updatePassword']);
         $this->middleware('can:Pengguna Hapus')->only(['destroy']);
     }
 
     /**
-     * showing user management page
+     * get all user as pagination
      *
-     * @return Response
+     * @return JsonResponse
      */
     public function index()
     {
         $data = $this->userRepository->getPaginateUsers(request('perPage'));
+        return response200($data, __('Berhasil mengambil data pengguna'));
+    }
+
+    /**
+     * get detail user
+     *
+     * @param mixed $userId
+     * @return JsonResponse
+     */
+    public function show(mixed $userId)
+    {
+        $data = $this->userRepository->findWithOrFail($userId, ['roles.permissions']);
         return response200($data, __('Berhasil mengambil data pengguna'));
     }
 
@@ -69,34 +82,49 @@ class UserManagementController extends Controller
      * update user to db
      *
      * @param UserRequest $request
-     * @param User $user
+     * @param mixed $userId
      * @return Response
      */
-    public function update(UserRequest $request, User $user)
+    public function update(UserRequest $request, mixed $userId)
     {
+        $user = $this->userRepository->findOrFail($userId);
         $data = $request->only([
             'name',
             'email'
         ]);
-        if ($request->filled('password')) {
-            $data['password'] = bcrypt($request->password);
-        }
         $userNew = $this->userRepository->update($data, $user->id);
         $userNew->syncRoles([$request->role]);
         logUpdate(__("Perbarui Pengguna"), $user, $userNew);
-        return response200($user, __('Berhasil memperbarui data pengguna'));
+        return response200($userNew, __('Berhasil memperbarui data pengguna'));
     }
 
     /**
      * delete user from db
      *
-     * @param User $user
+     * @param mixed $userId
      * @return Response
      */
-    public function destroy(User $user)
+    public function destroy(mixed $userId)
     {
-        $deleted = $this->userRepository->delete($user->id);
+        $user = $this->userRepository->findOrFail($userId);
+        $deleted = $this->userRepository->delete($userId);
         logDelete(__('Menghapus Pengguna'), $user);
-        return response200($deleted, __('Berhasil menghapus pengguna'));
+        return response200($deleted, __('Berhasil menghapus data pengguna'));
+    }
+
+    /**
+     * update password user to db
+     *
+     * @param UserRequest $request
+     * @param mixed $userId
+     * @return Response
+     */
+    public function updatePassword(UserRequest $request, $userId)
+    {
+        $user = $this->userRepository->findOrFail($userId);
+        $data = ['password' => bcrypt($request->new_password)];
+        $userNew = $this->userRepository->update($data, $userId);
+        logUpdate(__("Perbarui Kata Sandi Pengguna"), $user->password, $userNew->password);
+        return response200(true, __('Berhasil memperbarui kata sandi pengguna'));
     }
 }

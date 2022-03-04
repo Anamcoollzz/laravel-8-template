@@ -51,10 +51,10 @@ abstract class RepositoryAbstract
     /**
      * find data by id
      *
-     * @param int $id
+     * @param mixed $id
      * @return Model
      */
-    abstract public function find(int $id);
+    abstract public function find($id);
 
     /**
      * update data by id

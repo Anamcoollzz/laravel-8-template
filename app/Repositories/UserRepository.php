@@ -94,7 +94,7 @@ class UserRepository extends Repository
      */
     public function getRoles()
     {
-        $roles = Role::all();
+        $roles = Role::with(['permissions'])->get();
         return $roles;
     }
 
@@ -130,7 +130,10 @@ class UserRepository extends Repository
     public function createRole(string $roleName, array $data)
     {
         if (isset($data['permissions'])) {
-            $role        = Role::create(['name' => $roleName]);
+            $role        = Role::create([
+                'name'       => $roleName,
+                'guard_name' => 'web'
+            ]);
             $permissions = Permission::whereIn('name', $data['permissions'])->get();
             $role        = Role::find($role->id);
             $role->syncPermissions($permissions);

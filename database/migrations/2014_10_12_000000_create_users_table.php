@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->dateTime('last_login')->nullable();
             $table->string('email_token', 191)->nullable();
             $table->string('verification_code', 6)->nullable();
+            $table->boolean('is_locked')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

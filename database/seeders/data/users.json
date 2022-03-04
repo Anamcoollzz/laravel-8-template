@@ -4,7 +4,8 @@
         "email": "superadmin@laraveltemplate.com",
         "password": "superadmin",
         "roles": ["superadmin"],
-        "email_verified_at": "2021-04-06 04:06:00"
+        "email_verified_at": "2021-04-06 04:06:00",
+        "is_locked": 1
     },
 
     {

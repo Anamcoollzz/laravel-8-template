@@ -41,8 +41,7 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->routes(function () {
             Route::prefix('api')
-                ->middleware('api')
-                ->middleware(EnsureAppKey::class)
+                ->middleware(['api', EnsureAppKey::class])
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api.php'));
 

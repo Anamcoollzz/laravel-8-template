@@ -181,6 +181,22 @@ function response200($data = null, string $message = null)
 }
 
 /**
+ * response404
+ *
+ * @param mixed $errors
+ * @param string $message
+ * @return JsonResponse
+ */
+function response404($data = null, string $message = null)
+{
+    if ($message === null) $message = __('Data tidak ditemukan.');
+    return response()->json([
+        'data' => $data,
+        'message' => $message,
+    ], 404);
+}
+
+/**
  * response200
  *
  * @param mixed $errors

@@ -67,12 +67,47 @@ class Repository extends RepositoryAbstract
     /**
      * find data by id
      *
-     * @param int $id
+     * @param mixed $id
      * @return Model
      */
-    public function find(int $id)
+    public function find($id)
     {
         return $this->model->find($id);
+    }
+
+    /**
+     * find or fail data by id
+     *
+     * @param mixed $id
+     * @return Model
+     */
+    public function findOrFail($id)
+    {
+        return $this->model->findOrFail($id);
+    }
+
+    /**
+     * find with data by id
+     *
+     * @param mixed $id
+     * @param array $with
+     * @return Model
+     */
+    public function findWith($id, $with = [])
+    {
+        return $this->model->where('id', $id)->with($with)->first();
+    }
+
+    /**
+     * find with or fail data by id
+     *
+     * @param mixed $id
+     * @param array $with
+     * @return Model
+     */
+    public function findWithOrFail($id, $with = [])
+    {
+        return $this->model->where('id', $id)->with($with)->firstOrFail();
     }
 
     /**

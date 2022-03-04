@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserManagementController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('hehe/{role}', [\App\Http\Controllers\RoleController::class, 'edit']);
 Route::as('api.')->prefix('v1')->group(function () {
     # AUTH MODULES
     Route::post('auth/login', [AuthController::class, 'login'])->name('login');
@@ -37,6 +39,11 @@ Route::as('api.')->prefix('v1')->group(function () {
         Route::get('settings', [AuthController::class, 'settings'])->name('profiles.settings');
 
         # USERS
+        Route::put('users/update-password/{user}', [UserManagementController::class, 'updatePassword'])->name('users.update-password');
         Route::apiResource('users', UserManagementController::class);
+
+        # ROLES
+        Route::get('permissions', [RoleController::class, 'permissions'])->name('permissions');
+        Route::apiResource('roles', RoleController::class);
     });
 });

@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Exports\CrudExampleExport;
 use App\Exports\RoleExampleExport;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\ImportExcelRequest;
 use App\Http\Requests\RoleRequest;
 use App\Imports\RoleImport;
 use App\Repositories\UserRepository;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -33,66 +35,45 @@ class RoleController extends Controller
     {
         $this->userRepository = new UserRepository;
         $this->middleware('can:Role');
-        $this->middleware('can:Role Tambah')->only(['create', 'store']);
-        $this->middleware('can:Role Ubah')->only(['edit', 'update']);
+        $this->middleware('can:Role Tambah')->only(['store']);
+        $this->middleware('can:Role Ubah')->only(['update']);
+        $this->middleware('can:Role Hapus')->only(['destroy']);
     }
 
     /**
-     * showing user management page
+     * get roles data
      *
-     * @return Response
+     * @return JsonResponse
      */
     public function index()
     {
-        return view('stisla.user-management.roles.index', [
-            'data' => $this->userRepository->getRoles(),
-        ]);
-    }
-
-    /**
-     * showing create role page
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        return view('stisla.user-management.roles.form', [
-            'permissionGroups' => $this->userRepository->getPermissionGroupWithChild(),
-            'action'           => route('user-management.roles.store'),
-            'actionType'       => CREATE
-        ]);
+        $data = $this->userRepository->getRoles();
+        return response200($data, __('Berhasil mengambil data role'));
     }
 
     /**
      * store role data
      *
      * @param RoleRequest $request
-     * @return Response
+     * @return JsonResponse
      */
     public function store(RoleRequest $request)
     {
         $result = $this->userRepository->createRole($request->name, $request->only(['permissions']));
         logCreate(__('Tambah Role'), $result);
-        return back()->with('successMessage', __('Berhasil memperbarui role'));
+        return response200($result, __('Berhasil membuat role dan set permission'));
     }
 
     /**
-     * showing edit role page
+     * get detail role
      *
      * @param Role $role
-     * @return Response
+     * @return JsonResponse
      */
-    public function edit(Role $role)
+    public function show(Role $role)
     {
         $role->load(['permissions']);
-        $rolePermissions = $role->permissions->pluck('name')->toArray();
-        return view('stisla.user-management.roles.form', [
-            'd'                => $role,
-            'rolePermissions'  => $rolePermissions,
-            'permissionGroups' => $this->userRepository->getPermissionGroupWithChild(),
-            'action'           => route('user-management.roles.update', [$role->id]),
-            'actionType'       => UPDATE
-        ]);
+        return response200($role, __('Berhasil mengambil data role dan permission'));
     }
 
     /**
@@ -100,36 +81,36 @@ class RoleController extends Controller
      *
      * @param Request $request
      * @param Role $role
-     * @return Response
+     * @return JsonResponse
      */
     public function update(Request $request, Role $role)
     {
-        if ($role->is_locked) abort(404);
+        if ($role->is_locked) return response404();
         $before = $this->userRepository->findRole($role->id);
         $after = $this->userRepository->updateRole($role->id, $request->only(['permissions']));
         logUpdate('Ubah Role', $before, $after);
-        return back()->with('successMessage', __('Berhasil memperbarui role'));
+        return response200($after, __('Berhasil memperbarui data role dan permission'));
     }
 
     /**
      * delete role data
      *
      * @param Role $role
-     * @return Response
+     * @return JsonResponse
      */
     public function destroy(Role $role)
     {
         DB::beginTransaction();
         try {
-            if ($role->is_locked) abort(404);
+            if ($role->is_locked) return response404();
             $before = $this->userRepository->findRole($role->id);
             $this->userRepository->deleteRole($role->id);
             logDelete('Hapus Role', $before);
             DB::commit();
-            return back()->with('successMessage', __('Berhasil menghapus role'));
+            return response200(true, __('Berhasil menghapus role'));
         } catch (Exception $exception) {
             DB::rollBack();
-            return back()->with('errorMessage', $exception->getMessage());
+            return response500(null, $exception->getMessage());
         }
     }
 
@@ -159,5 +140,16 @@ class RoleController extends Controller
             DB::rollBack();
             return back()->with('errorMessage', $exception->getMessage());
         }
+    }
+
+    /**
+     * get all permissions
+     *
+     * @return JsonResponse
+     */
+    public function permissions()
+    {
+        $data = $this->userRepository->getPermissions();
+        return response200($data, __('Berhasil mengambil data permission'));
     }
 }
