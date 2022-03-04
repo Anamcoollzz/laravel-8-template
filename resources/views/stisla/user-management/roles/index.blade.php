@@ -17,13 +17,13 @@
             <h4><i class="fa fa-users"></i> {{ $title }}</h4>
 
             <div class="card-header-action">
-              @can('Role Impor Excel')
+              @if ($canImportExcel)
                 @include('stisla.includes.forms.buttons.btn-import-excel')
-              @endcan
+              @endif
 
-              @can('Role Tambah')
-                @include('stisla.includes.forms.buttons.btn-add', ['link'=>route('user-management.roles.create')])
-              @endcan
+              @if ($canCreate)
+                @include('stisla.includes.forms.buttons.btn-add', ['link' => route('user-management.roles.create')])
+              @endif
             </div>
           </div>
           <div class="card-body">
@@ -44,11 +44,11 @@
                         {{ $item->name }}
                       </td>
                       <td>
-                        @can('Role Ubah')
-                          @include('stisla.includes.forms.buttons.btn-edit', ['link'=>route('user-management.roles.edit', [$item->id])])
-                        @endcan
-                        @if (auth()->user()->can('Role Hapus') && $item->name !== 'superadmin')
-                          @include('stisla.includes.forms.buttons.btn-delete', ['link'=>route('user-management.roles.destroy', [$item->id])])
+                        @if ($canUpdate)
+                          @include('stisla.includes.forms.buttons.btn-edit', ['link' => route('user-management.roles.edit', [$item->id])])
+                        @endif
+                        @if ($canDelete && !$item->is_locked)
+                          @include('stisla.includes.forms.buttons.btn-delete', ['link' => route('user-management.roles.destroy', [$item->id])])
                         @endif
                       </td>
                     </tr>
@@ -64,9 +64,12 @@
   </div>
 @endsection
 
-@can('Role Impor Excel')
+@if ($canImportExcel)
   @push('modals')
-    @include('stisla.includes.modals.modal-import-excel', ['formAction'=>route('user-management.roles.import-excel'),
-    'downloadLink'=>route('user-management.roles.import-excel-example'), 'note'=>__('Pastikan nama role tidak ada yang sama')])
+    @include('stisla.includes.modals.modal-import-excel', [
+        'formAction' => route('user-management.roles.import-excel'),
+        'downloadLink' => route('user-management.roles.import-excel-example'),
+        'note' => __('Pastikan nama role tidak ada yang sama'),
+    ])
   @endpush
-@endcan
+@endif

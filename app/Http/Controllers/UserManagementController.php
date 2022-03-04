@@ -36,8 +36,13 @@ class UserManagementController extends Controller
      */
     public function index()
     {
+        $user = auth()->user();
         return view('stisla.user-management.users.index', [
-            'data' => $this->userRepository->getUsers(),
+            'data'           => $this->userRepository->getUsers(),
+            'canImportExcel' => $user->can('Pengguna Impor Excel'),
+            'canCreate'      => $user->can('Pengguna Tambah'),
+            'canUpdate'      => $user->can('Pengguna Ubah'),
+            'canDelete'      => $user->can('Pengguna Hapus'),
         ]);
     }
 

@@ -17,13 +17,13 @@
             <h4><i class="fa fa-users"></i> {{ $title }}</h4>
 
             <div class="card-header-action">
-              @can('Pengguna Impor Excel')
+              @if ($canImportExcel)
                 @include('stisla.includes.forms.buttons.btn-import-excel')
-              @endcan
+              @endif
 
-              @can('Pengguna Tambah')
-                @include('stisla.includes.forms.buttons.btn-add', ['link'=>route('user-management.users.create')])
-              @endcan
+              @if ($canCreate)
+                @include('stisla.includes.forms.buttons.btn-add', ['link' => route('user-management.users.create')])
+              @endif
             </div>
 
           </div>
@@ -63,15 +63,12 @@
                         <td>{{ $item->email_verified_at ?? '-' }}</td>
                       @endif
                       <td>
-                        @can('Pengguna Ubah')
-                          @include('stisla.includes.forms.buttons.btn-edit', ['link'=>route('user-management.users.edit',
-                          [$item->id])])
-                        @endcan
-                        @can('Pengguna Hapus')
-                          @include('stisla.includes.forms.buttons.btn-delete',
-                          ['link'=>route('user-management.users.destroy',
-                          [$item->id])])
-                        @endcan
+                        @if ($canUpdate)
+                          @include('stisla.includes.forms.buttons.btn-edit', ['link' => route('user-management.users.edit', [$item->id])])
+                        @endif
+                        @if ($canDelete)
+                          @include('stisla.includes.forms.buttons.btn-delete', ['link' => route('user-management.users.destroy', [$item->id])])
+                        @endif
                       </td>
                     </tr>
                   @endforeach

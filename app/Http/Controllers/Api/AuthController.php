@@ -61,6 +61,8 @@ class AuthController extends Controller
         $this->settingRepository = new SettingRepository;
         $this->emailService      = new EmailService;
         $this->fileService       = new FileService;
+
+        $this->middleware('can:Profil Ubah')->only(['updateProfile', 'updatePassword']);
     }
 
     /**

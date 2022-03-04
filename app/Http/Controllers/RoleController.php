@@ -45,8 +45,13 @@ class RoleController extends Controller
      */
     public function index()
     {
+        $user = auth()->user();
         return view('stisla.user-management.roles.index', [
-            'data' => $this->userRepository->getRoles(),
+            'data'           => $this->userRepository->getRoles(),
+            'canImportExcel' => $user->can('Pengguna Impor Excel'),
+            'canCreate'      => $user->can('Pengguna Tambah'),
+            'canUpdate'      => $user->can('Pengguna Ubah'),
+            'canDelete'      => $user->can('Pengguna Hapus'),
         ]);
     }
 
