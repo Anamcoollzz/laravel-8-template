@@ -63,7 +63,7 @@ class ProfileController extends Controller
             $data['avatar'] = $this->fileService->uploadAvatar($request->file('avatar'));
         }
         $newUser = $this->userRepository->updateProfile($data);
-        logUpdate(__('Perbarui Profil Pengguna'), $user, $newUser);
+        logUpdate('Profil Pengguna', $user, $newUser);
         return back()->with('successMessage', __('Berhasil memperbarui profil'));
     }
 
@@ -79,7 +79,7 @@ class ProfileController extends Controller
         $this->userRepository->updateProfile([
             'password' => $newPassword = bcrypt($request->password)
         ]);
-        logUpdate(__('Perbarui Kata Sandi'), $oldPassword, $newPassword);
+        logUpdate('Kata Sandi', $oldPassword, $newPassword);
         return back()->with('successMessage', __('Berhasil memperbarui password'));
     }
 }

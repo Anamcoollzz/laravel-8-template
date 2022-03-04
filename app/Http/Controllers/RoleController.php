@@ -74,7 +74,8 @@ class RoleController extends Controller
     {
         $result = $this->userRepository->createRole($request->name, $request->only(['permissions']));
         logCreate('Role', $result);
-        return back()->with('successMessage', __('Berhasil memperbarui data role'));
+        $successMessage = successMessageCreate('Role Dan Permission');
+        return back()->with('successMessage', $successMessage);
     }
 
     /**
@@ -109,7 +110,8 @@ class RoleController extends Controller
         $before = $this->userRepository->findRole($role->id);
         $after = $this->userRepository->updateRole($role->id, $request->only(['permissions']));
         logUpdate('Role', $before, $after);
-        return back()->with('successMessage', __('Berhasil memperbarui data role'));
+        $successMessage = successMessageUpdate('Role Dan Permission');
+        return back()->with('successMessage', $successMessage);
     }
 
     /**
@@ -127,7 +129,8 @@ class RoleController extends Controller
             $this->userRepository->deleteRole($role->id);
             logDelete('Role', $before);
             DB::commit();
-            return back()->with('successMessage', __('Berhasil menghapus data role'));
+            $successMessage = successMessageDelete('Role Dan Permission');
+            return back()->with('successMessage', $successMessage);
         } catch (Exception $exception) {
             DB::rollBack();
             return back()->with('errorMessage', $exception->getMessage());

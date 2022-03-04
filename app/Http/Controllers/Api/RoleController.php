@@ -48,7 +48,8 @@ class RoleController extends Controller
     public function index()
     {
         $data = $this->userRepository->getRoles();
-        return response200($data, __('Berhasil mengambil data role'));
+        $successMessage = successMessageLoadData('Role Dan Permission');
+        return response200($data, $successMessage);
     }
 
     /**
@@ -61,7 +62,8 @@ class RoleController extends Controller
     {
         $result = $this->userRepository->createRole($request->name, $request->only(['permissions']));
         logCreate('Role', $result);
-        return response200($result, __('Berhasil membuat role dan set permission'));
+        $successMessage = successMessageCreate('Role Dan Set Permission');
+        return response200($result, $successMessage);
     }
 
     /**
@@ -73,7 +75,8 @@ class RoleController extends Controller
     public function show(Role $role)
     {
         $role->load(['permissions']);
-        return response200($role, __('Berhasil mengambil data role dan permission'));
+        $successMessage = successMessageLoadData('Role Dan Permission');
+        return response200($role, $successMessage);
     }
 
     /**
@@ -89,7 +92,8 @@ class RoleController extends Controller
         $before = $this->userRepository->findRole($role->id);
         $after = $this->userRepository->updateRole($role->id, $request->only(['permissions']));
         logUpdate('Role', $before, $after);
-        return response200($after, __('Berhasil memperbarui data role dan permission'));
+        $successMessage = successMessageUpdate('Role Dan Permission');
+        return response200($after, $successMessage);
     }
 
     /**
@@ -107,7 +111,8 @@ class RoleController extends Controller
             $this->userRepository->deleteRole($role->id);
             logDelete('Role', $before);
             DB::commit();
-            return response200(true, __('Berhasil menghapus role'));
+            $successMessage = successMessageDelete('Role Dan Permission');
+            return response200(true, $successMessage);
         } catch (Exception $exception) {
             DB::rollBack();
             return response500(null, $exception->getMessage());
@@ -150,6 +155,7 @@ class RoleController extends Controller
     public function permissions()
     {
         $data = $this->userRepository->getPermissions();
-        return response200($data, __('Berhasil mengambil data permission'));
+        $successMessage = successMessageLoadData('Permission');
+        return response200($data, $successMessage);
     }
 }

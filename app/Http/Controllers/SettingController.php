@@ -68,7 +68,7 @@ class SettingController extends Controller
      */
     public function update(SettingRequest $request)
     {
-        // dd(session()->all());
+        $before = $this->settingRepository->all();
         foreach ($request->all() as $key => $input) {
             $value = $input;
             if ($key === 'favicon') {
@@ -88,7 +88,8 @@ class SettingController extends Controller
         }
         Session::forget('_logo_url');
         Session::forget('_logo');
-        // Session::flush();
+        $after = $this->settingRepository->all();
+        logUpdate('Pengaturan', $before, $after);
         return back()->with(config('app.template') === 'stisla' ? 'successMessage' : 'success_msg', __('Application Setting') . ' ' . __('success updated'));
     }
 }

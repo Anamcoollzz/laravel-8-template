@@ -79,7 +79,7 @@ class AuthController extends Controller
                     'email' => [__('Email belum diverifikasi.')]
                 ]);
             }
-            return $this->handleLogin($user, __('Sukses masuk ke dalam sistem'));
+            return $this->handleLogin($user, __('Berhasil masuk ke dalam sistem'));
         }
         return response422([
             'email' => [__('Email atau kata sandi yang dimasukkan salah.')]
@@ -112,7 +112,7 @@ class AuthController extends Controller
             return response200($user, __('Cek inbox email anda untuk memverifikasi akun terlebih dahulu'));
         }
         logRegister($user);
-        return $this->handleLogin($user, __('Sukses mendaftar dan masuk ke dalam sistem'));
+        return $this->handleLogin($user, __('Berhasil mendaftar dan masuk ke dalam sistem'));
     }
 
     /**
@@ -134,7 +134,7 @@ class AuthController extends Controller
             $this->emailService->forgotPassword($userNew, true);
             logForgotPassword($user, $userNew);
             DB::commit();
-            return response200($user, __('Sukses mengirim ke ' . $request->email));
+            return response200($user, __('Berhasil mengirim ke ' . $request->email));
         } catch (Exception $e) {
             return $e->getMessage();
             DB::rollBack();
@@ -169,7 +169,7 @@ class AuthController extends Controller
             'verification_code' => null
         ], $user->id);
         logExecute(__('Verifikasi Akun'), UPDATE, $user, $userNew);
-        return $this->handleLogin($user, __('Sukses memverifikasi akun, silakan masuk menggunakan akun anda'));
+        return $this->handleLogin($user, __('Berhasil memverifikasi akun, silakan masuk menggunakan akun anda'));
     }
 
     /**
@@ -227,7 +227,7 @@ class AuthController extends Controller
             ], $user->id);
             logExecute(__('Reset Kata Sandi'), UPDATE, $user->password, $userNew->password);
             DB::commit();
-            return response200(true, __('Sukses memperbarui kata sandi'));
+            return response200(true, __('Berhasil memperbarui kata sandi'));
         } catch (Exception $e) {
             return response500(null, __('Gagal memperbarui kata sandi'));
         }
@@ -242,7 +242,7 @@ class AuthController extends Controller
     {
         logLogout();
         auth('api')->logout();
-        return response200(null, __('Sukses keluar dari sistem'));
+        return response200(null, __('Berhasil keluar dari sistem'));
     }
 
     /**
@@ -296,7 +296,7 @@ class AuthController extends Controller
     {
         $user = auth('api')->user();
         $user->load(['roles.permissions']);
-        return response200($user, __('Sukses mengambil data pengguna'));
+        return response200($user, __('Berhasil mengambil data pengguna'));
     }
 
     /**

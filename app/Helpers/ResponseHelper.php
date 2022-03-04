@@ -25,7 +25,7 @@ function response422($errors, string $message = null)
  */
 function response200($data = null, string $message = null)
 {
-    if ($message === null) $message = __('Sukses');
+    if ($message === null) $message = __('Berhasil');
     return response()->json([
         'data' => $data,
         'message' => $message,

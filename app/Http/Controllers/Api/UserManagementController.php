@@ -39,7 +39,8 @@ class UserManagementController extends Controller
     public function index()
     {
         $data = $this->userRepository->getPaginateUsers(request('perPage'));
-        return response200($data, __('Berhasil mengambil data pengguna'));
+        $successMessage = successMessageLoadData("Pengguna");
+        return response200($data, $successMessage);
     }
 
     /**
@@ -51,7 +52,8 @@ class UserManagementController extends Controller
     public function show(mixed $userId)
     {
         $data = $this->userRepository->findWithOrFail($userId, ['roles.permissions']);
-        return response200($data, __('Berhasil mengambil data pengguna'));
+        $successMessage = successMessageLoadData("Pengguna");
+        return response200($data, $successMessage);
     }
 
     /**
@@ -75,7 +77,8 @@ class UserManagementController extends Controller
         );
         $user->assignRole($request->role);
         logCreate('Pengguna', $user);
-        return response200($user, __('Berhasil menambah data pengguna'));
+        $successMessage = successMessageCreate("Pengguna");
+        return response200($user, $successMessage);
     }
 
     /**
@@ -95,7 +98,8 @@ class UserManagementController extends Controller
         $userNew = $this->userRepository->update($data, $user->id);
         $userNew->syncRoles([$request->role]);
         logUpdate('Pengguna', $user, $userNew);
-        return response200($userNew, __('Berhasil memperbarui data pengguna'));
+        $successMessage = successMessageUpdate("Pengguna");
+        return response200($userNew, $successMessage);
     }
 
     /**
@@ -109,7 +113,8 @@ class UserManagementController extends Controller
         $user = $this->userRepository->findOrFail($userId);
         $deleted = $this->userRepository->delete($userId);
         logDelete('Pengguna', $user);
-        return response200($deleted, __('Berhasil menghapus data pengguna'));
+        $successMessage = successMessageDelete("Pengguna");
+        return response200($deleted, $successMessage);
     }
 
     /**

@@ -102,7 +102,7 @@ class AuthController extends Controller
         $user->update(['last_login' => now()]);
         logRegister($user);
         logLogin();
-        return redirect()->route('dashboard.index')->with('successMessage', __('Sukses mendaftar dan masuk ke dalam sistem'));
+        return redirect()->route('dashboard.index')->with('successMessage', __('Berhasil mendaftar dan masuk ke dalam sistem'));
     }
 
     /**
@@ -142,7 +142,7 @@ class AuthController extends Controller
             Auth::login($user, $request->filled('remember'));
             $user->update(['last_login' => now()]);
             logLogin();
-            return Helper::redirectSuccess(route('dashboard.index'), __('Sukses masuk ke dalam sistem'));
+            return Helper::redirectSuccess(route('dashboard.index'), __('Berhasil masuk ke dalam sistem'));
         }
         return Helper::backError(['password' => __('Password yang dimasukkan salah')]);
     }
@@ -197,7 +197,7 @@ class AuthController extends Controller
             $this->emailService->forgotPassword($userNew);
             logForgotPassword($user, $userNew);
             DB::commit();
-            return back()->withInput()->with('successMessage', __('Sukses mengirim ke ' . $request->email));
+            return back()->withInput()->with('successMessage', __('Berhasil mengirim ke ' . $request->email));
         } catch (Exception $e) {
             DB::rollBack();
             // if (Str::contains($e->getMessage(), 'Connection could not be established')) {
@@ -247,7 +247,7 @@ class AuthController extends Controller
             $userNew = $this->userRepository->update(['password' => bcrypt($request->new_password), 'email_token' => null], $user->id);
             logExecute(__('Reset Kata Sandi'), UPDATE, $user->password, $userNew->password);
             DB::commit();
-            return redirect()->route('login')->withInput()->with('successMessage', __('Sukses memperbarui kata sandi'));
+            return redirect()->route('login')->withInput()->with('successMessage', __('Berhasil memperbarui kata sandi'));
         } catch (Exception $e) {
             return back()->withInput()->with('errorMessage', __('Gagal memperbarui kata sandi'));
         }
@@ -289,7 +289,7 @@ class AuthController extends Controller
             $this->emailService->verifyAccount($userNew);
             logExecute(__('Email Verifikasi'), UPDATE, null, null);
             DB::commit();
-            return back()->withInput()->with('successMessage', __('Sukses mengirim link verifikasi ke ' . $request->email));
+            return back()->withInput()->with('successMessage', __('Berhasil mengirim link verifikasi ke ' . $request->email));
         } catch (Exception $e) {
             DB::rollBack();
             // if (Str::contains($e->getMessage(), 'Connection could not be established')) {
@@ -316,6 +316,6 @@ class AuthController extends Controller
             'verification_code' => null
         ], $user->id);
         logExecute(__('Verifikasi Akun'), UPDATE, $user, $userNew);
-        return redirect()->route('login')->with('successMessage', __('Sukses memverifikasi akun, silakan masuk menggunakan akun anda'));
+        return redirect()->route('login')->with('successMessage', __('Berhasil memverifikasi akun, silakan masuk menggunakan akun anda'));
     }
 }

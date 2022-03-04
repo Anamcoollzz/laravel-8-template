@@ -41,3 +41,4 @@ function developer_whatsapp()
 
 include 'LogHelper.php';
 include 'ResponseHelper.php';
+include 'MessageHelper.php';
