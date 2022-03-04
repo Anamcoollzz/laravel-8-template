@@ -25,7 +25,7 @@
           <label class="custom-control-label" for="remember-me">{{ __('Ingat Saya') }}</label>
           @if ($_is_login_must_verified)
             <div class="float-right">
-              <a href="{{ route('verification') }}" class="text-small">
+              <a href="{{ route('send-email-verification') }}" class="text-small">
                 {{ __('Belum verifikasi email?') }}
               </a>
             </div>
@@ -35,10 +35,14 @@
 
       <div class="form-group text-right">
         @if ($_is_active_register_page)
-          @include('stisla.includes.forms.buttons.btn-success', ['icon'=>'fas fa-sign-in-alt', 'label'=>__('Belum punya akun'), 'link'=>route('register')])
+          @include('stisla.includes.forms.buttons.btn-success', [
+              'icon' => 'fas fa-sign-in-alt',
+              'label' => __('Belum punya akun'),
+              'link' => route('register'),
+          ])
         @endif
 
-        @include('stisla.includes.forms.buttons.btn-primary', ['icon'=>'fas fa-sign-in-alt', 'label'=>__('Masuk'), 'type'=>'submit'])
+        @include('stisla.includes.forms.buttons.btn-primary', ['icon' => 'fas fa-sign-in-alt', 'label' => __('Masuk'), 'type' => 'submit'])
       </div>
     </form>
     @include('stisla.includes.auth.auth-footer')

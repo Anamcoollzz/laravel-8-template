@@ -74,8 +74,8 @@ class UserManagementController extends Controller
             )
         );
         $user->assignRole($request->role);
-        logCreate(__('Menambah Pengguna Baru'), $user);
-        return redirect()->back()->with('successMessage', __('Berhasil menambah pengguna'));
+        logCreate('Pengguna', $user);
+        return redirect()->back()->with('successMessage', __('Berhasil menambah data pengguna'));
     }
 
     /**
@@ -113,8 +113,8 @@ class UserManagementController extends Controller
         }
         $userNew = $this->userRepository->update($data, $user->id);
         $userNew->syncRoles([$request->role]);
-        logUpdate(__("Perbarui Pengguna"), $user, $userNew);
-        return redirect()->back()->with('successMessage', __('Berhasil memperbarui pengguna'));
+        logUpdate('Pengguna', $user, $userNew);
+        return redirect()->back()->with('successMessage', __('Berhasil memperbarui data pengguna'));
     }
 
     /**
@@ -126,7 +126,7 @@ class UserManagementController extends Controller
     public function destroy(User $user)
     {
         $this->userRepository->delete($user->id);
-        logDelete(__('Menghapus Pengguna'), $user);
-        return redirect()->back()->with('successMessage', __('Berhasil menghapus pengguna'));
+        logDelete('Pengguna', $user);
+        return redirect()->back()->with('successMessage', __('Berhasil menghapus data pengguna'));
     }
 }

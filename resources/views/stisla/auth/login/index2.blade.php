@@ -29,7 +29,7 @@
     <div class="row">
       @if ($_is_login_must_verified)
         <div class="col-md-6">
-          <a href=" {{ route('verification') }}" class="text-small">
+          <a href=" {{ route('send-email-verification') }}" class="text-small">
             {{ __('Belum verifikasi email?') }}
           </a>
         </div>
@@ -58,5 +58,4 @@
                 </div> --}}
 
   </div>
-
 @endsection

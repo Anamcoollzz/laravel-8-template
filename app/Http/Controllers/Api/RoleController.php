@@ -60,7 +60,7 @@ class RoleController extends Controller
     public function store(RoleRequest $request)
     {
         $result = $this->userRepository->createRole($request->name, $request->only(['permissions']));
-        logCreate(__('Tambah Role'), $result);
+        logCreate('Role', $result);
         return response200($result, __('Berhasil membuat role dan set permission'));
     }
 
@@ -88,7 +88,7 @@ class RoleController extends Controller
         if ($role->is_locked) return response404();
         $before = $this->userRepository->findRole($role->id);
         $after = $this->userRepository->updateRole($role->id, $request->only(['permissions']));
-        logUpdate('Ubah Role', $before, $after);
+        logUpdate('Role', $before, $after);
         return response200($after, __('Berhasil memperbarui data role dan permission'));
     }
 
@@ -105,7 +105,7 @@ class RoleController extends Controller
             if ($role->is_locked) return response404();
             $before = $this->userRepository->findRole($role->id);
             $this->userRepository->deleteRole($role->id);
-            logDelete('Hapus Role', $before);
+            logDelete('Role', $before);
             DB::commit();
             return response200(true, __('Berhasil menghapus role'));
         } catch (Exception $exception) {

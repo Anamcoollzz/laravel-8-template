@@ -74,7 +74,7 @@ class UserManagementController extends Controller
             )
         );
         $user->assignRole($request->role);
-        logCreate(__('Menambah Pengguna Baru'), $user);
+        logCreate('Pengguna', $user);
         return response200($user, __('Berhasil menambah data pengguna'));
     }
 
@@ -94,7 +94,7 @@ class UserManagementController extends Controller
         ]);
         $userNew = $this->userRepository->update($data, $user->id);
         $userNew->syncRoles([$request->role]);
-        logUpdate(__("Perbarui Pengguna"), $user, $userNew);
+        logUpdate('Pengguna', $user, $userNew);
         return response200($userNew, __('Berhasil memperbarui data pengguna'));
     }
 
@@ -108,7 +108,7 @@ class UserManagementController extends Controller
     {
         $user = $this->userRepository->findOrFail($userId);
         $deleted = $this->userRepository->delete($userId);
-        logDelete(__('Menghapus Pengguna'), $user);
+        logDelete('Pengguna', $user);
         return response200($deleted, __('Berhasil menghapus data pengguna'));
     }
 
@@ -124,7 +124,7 @@ class UserManagementController extends Controller
         $user = $this->userRepository->findOrFail($userId);
         $data = ['password' => bcrypt($request->new_password)];
         $userNew = $this->userRepository->update($data, $userId);
-        logUpdate(__("Perbarui Kata Sandi Pengguna"), $user->password, $userNew->password);
+        logUpdate(logTitleUpdate('Kata Sandi Pengguna'), $user->password, $userNew->password);
         return response200(true, __('Berhasil memperbarui kata sandi pengguna'));
     }
 }

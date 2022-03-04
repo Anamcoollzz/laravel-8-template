@@ -74,19 +74,15 @@ class AuthController extends Controller
         $user = $this->userRepository->findByEmail($request->email);
         if (Hash::check($request->password, $user->password)) {
             $loginMustVerified = $this->settingRepository->loginMustVerified();
-            if ($loginMustVerified) {
-                if ($user->email_verified_at === null) {
-                    return response422([
-                        'email' => [__('Email belum diverifikasi')]
-                    ]);
-                }
+            if ($loginMustVerified && $user->email_verified_at === null) {
+                return response422([
+                    'email' => [__('Email belum diverifikasi.')]
+                ]);
             }
-            // $credentials = $request->only(['email', 'password']);
-            // $token = auth('api')->attempt($credentials);
             return $this->handleLogin($user, __('Sukses masuk ke dalam sistem'));
         }
         return response422([
-            'password' => [__('Password yang dimasukkan salah')]
+            'email' => [__('Email atau kata sandi yang dimasukkan salah.')]
         ]);
     }
 
@@ -112,8 +108,10 @@ class AuthController extends Controller
                 'verification_code' => rand(100000, 999999)
             ]);
             $this->emailService->verifyAccount($user, true);
+            logRegister($user);
             return response200($user, __('Cek inbox email anda untuk memverifikasi akun terlebih dahulu'));
         }
+        logRegister($user);
         return $this->handleLogin($user, __('Sukses mendaftar dan masuk ke dalam sistem'));
     }
 
@@ -129,11 +127,12 @@ class AuthController extends Controller
         DB::beginTransaction();
         try {
             $user = $this->userRepository->findByEmail($request->email);
-            $user->update([
-                'email_token'       => Str::random(150),
+            $userNew = $this->userRepository->update([
+                'email_token' => Str::random(100),
                 'verification_code' => rand(100000, 999999)
-            ]);
-            $this->emailService->forgotPassword($user, true);
+            ], $user->id);
+            $this->emailService->forgotPassword($userNew, true);
+            logForgotPassword($user, $userNew);
             DB::commit();
             return response200($user, __('Sukses mengirim ke ' . $request->email));
         } catch (Exception $e) {
@@ -164,11 +163,12 @@ class AuthController extends Controller
                 'verification_code' => [__('Kode verifikasi yang dimasukkan salah.')]
             ]);
         }
-        $user->update([
+        $userNew = $this->userRepository->update([
             'email_verified_at' => now(),
             'email_token'       => null,
             'verification_code' => null
-        ]);
+        ], $user->id);
+        logExecute(__('Verifikasi Akun'), UPDATE, $user, $userNew);
         return $this->handleLogin($user, __('Sukses memverifikasi akun, silakan masuk menggunakan akun anda'));
     }
 
@@ -217,14 +217,15 @@ class AuthController extends Controller
                 ]);
             } else if ($user->email_token !== $request->verification_token) {
                 return response422([
-                    'verification_code' => [__('Token verifikasi yang dimasukkan salah.')]
+                    'email_token' => [__('Token verifikasi yang dimasukkan salah.')]
                 ]);
             }
-            $user->update([
+            $userNew = $this->userRepository->update([
                 'password'          => bcrypt($request->new_password),
                 'email_token'       => null,
                 'verification_code' => null
-            ]);
+            ], $user->id);
+            logExecute(__('Reset Kata Sandi'), UPDATE, $user->password, $userNew->password);
             DB::commit();
             return response200(true, __('Sukses memperbarui kata sandi'));
         } catch (Exception $e) {
@@ -315,7 +316,7 @@ class AuthController extends Controller
             $data['avatar'] = $this->fileService->uploadAvatar($request->file('avatar'));
         }
         $newUser = $this->userRepository->updateProfile($data);
-        logUpdate(__('Perbarui Profil Pengguna'), $user, $newUser);
+        logUpdate('Profil Pengguna', $user, $newUser);
         return response200($user, __('Berhasil memperbarui profil'));
     }
 
@@ -331,7 +332,7 @@ class AuthController extends Controller
         $this->userRepository->updateProfile([
             'password' => $newPassword = bcrypt($request->new_password)
         ]);
-        logUpdate(__('Perbarui Kata Sandi'), $oldPassword, $newPassword);
+        logUpdate('Kata Sandi', $oldPassword, $newPassword);
         return response200(true, __('Berhasil memperbarui kata sandi'));
     }
 

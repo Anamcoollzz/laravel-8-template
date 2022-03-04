@@ -35,6 +35,7 @@ class RoleController extends Controller
         $this->middleware('can:Role');
         $this->middleware('can:Role Tambah')->only(['create', 'store']);
         $this->middleware('can:Role Ubah')->only(['edit', 'update']);
+        $this->middleware('can:Role Hapus')->only(['destroy']);
     }
 
     /**
@@ -72,8 +73,8 @@ class RoleController extends Controller
     public function store(RoleRequest $request)
     {
         $result = $this->userRepository->createRole($request->name, $request->only(['permissions']));
-        logCreate(__('Tambah Role'), $result);
-        return back()->with('successMessage', __('Berhasil memperbarui role'));
+        logCreate('Role', $result);
+        return back()->with('successMessage', __('Berhasil memperbarui data role'));
     }
 
     /**
@@ -107,8 +108,8 @@ class RoleController extends Controller
         if ($role->is_locked) abort(404);
         $before = $this->userRepository->findRole($role->id);
         $after = $this->userRepository->updateRole($role->id, $request->only(['permissions']));
-        logUpdate('Ubah Role', $before, $after);
-        return back()->with('successMessage', __('Berhasil memperbarui role'));
+        logUpdate('Role', $before, $after);
+        return back()->with('successMessage', __('Berhasil memperbarui data role'));
     }
 
     /**
@@ -124,9 +125,9 @@ class RoleController extends Controller
             if ($role->is_locked) abort(404);
             $before = $this->userRepository->findRole($role->id);
             $this->userRepository->deleteRole($role->id);
-            logDelete('Hapus Role', $before);
+            logDelete('Role', $before);
             DB::commit();
-            return back()->with('successMessage', __('Berhasil menghapus role'));
+            return back()->with('successMessage', __('Berhasil menghapus data role'));
         } catch (Exception $exception) {
             DB::rollBack();
             return back()->with('errorMessage', $exception->getMessage());

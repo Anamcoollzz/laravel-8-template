@@ -95,10 +95,13 @@ class AuthController extends Controller
         if ($this->settingRepository->loginMustVerified()) {
             $user->update(['email_token' => Str::random(150)]);
             $this->emailService->verifyAccount($user);
+            logRegister($user);
             return Helper::redirectSuccess(route('login'), __('Cek inbox email anda untuk memverifikasi akun terlebih dahulu'));
         }
         Auth::login($user);
         $user->update(['last_login' => now()]);
+        logRegister($user);
+        logLogin();
         return redirect()->route('dashboard.index')->with('successMessage', __('Sukses mendaftar dan masuk ke dalam sistem'));
     }
 
@@ -187,8 +190,12 @@ class AuthController extends Controller
         DB::beginTransaction();
         try {
             $user = $this->userRepository->findByEmail($request->email);
-            $user->update(['email_token' => Str::random(100)]);
-            $this->emailService->forgotPassword($user);
+            $userNew = $this->userRepository->update([
+                'email_token' => Str::random(100),
+                'verification_code' => rand(100000, 999999)
+            ], $user->id);
+            $this->emailService->forgotPassword($userNew);
+            logForgotPassword($user, $userNew);
             DB::commit();
             return back()->withInput()->with('successMessage', __('Sukses mengirim ke ' . $request->email));
         } catch (Exception $e) {
@@ -237,7 +244,8 @@ class AuthController extends Controller
             $user = $this->userRepository->findByEmailToken($token);
             if ($user === null)
                 return back()->withInput()->with('errorMessage', __('Gagal memperbarui kata sandi'));
-            $user->update(['password' => bcrypt($request->new_password), 'email_token' => null]);
+            $userNew = $this->userRepository->update(['password' => bcrypt($request->new_password), 'email_token' => null], $user->id);
+            logExecute(__('Reset Kata Sandi'), UPDATE, $user->password, $userNew->password);
             DB::commit();
             return redirect()->route('login')->withInput()->with('successMessage', __('Sukses memperbarui kata sandi'));
         } catch (Exception $e) {
@@ -271,14 +279,15 @@ class AuthController extends Controller
      * @param ForgotPasswordRequest $request
      * @return Response
      */
-    public function verification(ForgotPasswordRequest $request)
+    public function sendEmailVerification(ForgotPasswordRequest $request)
     {
         if ($this->settingRepository->loginMustVerified() === false) abort(404);
         DB::beginTransaction();
         try {
             $user = $this->userRepository->findByEmail($request->email);
-            $user->update(['email_token' => Str::random(150)]);
-            $this->emailService->verifyAccount($user);
+            $userNew = $this->userRepository->update(['email_token' => Str::random(150)], $user->id);
+            $this->emailService->verifyAccount($userNew);
+            logExecute(__('Email Verifikasi'), UPDATE, null, null);
             DB::commit();
             return back()->withInput()->with('successMessage', __('Sukses mengirim link verifikasi ke ' . $request->email));
         } catch (Exception $e) {
@@ -300,10 +309,13 @@ class AuthController extends Controller
     {
         if ($this->settingRepository->loginMustVerified() === false) abort(404);
         $user = $this->userRepository->findByEmailToken($token);
-        if ($user === null) {
-            abort(404);
-        }
-        $user->update(['email_verified_at' => now(), 'email_token' => null]);
+        if ($user === null) abort(404);
+        $userNew = $this->userRepository->update([
+            'email_verified_at' => now(),
+            'email_token'       => null,
+            'verification_code' => null
+        ], $user->id);
+        logExecute(__('Verifikasi Akun'), UPDATE, $user, $userNew);
         return redirect()->route('login')->with('successMessage', __('Sukses memverifikasi akun, silakan masuk menggunakan akun anda'));
     }
 }

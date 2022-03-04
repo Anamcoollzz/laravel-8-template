@@ -6,8 +6,8 @@ use Illuminate\Support\Facades\Route;
 # AUTH
 Route::get('auth/login', [AuthController::class, 'loginForm'])->name('login');
 Route::post('auth/login', [AuthController::class, 'login']);
-Route::get('auth/verification', [AuthController::class, 'verificationForm'])->name('verification');
-Route::post('auth/verification', [AuthController::class, 'verification']);
+Route::get('auth/send-email-verification', [AuthController::class, 'verificationForm'])->name('send-email-verification');
+Route::post('auth/verification', [AuthController::class, 'sendEmailVerification']);
 Route::get('auth/verify/{token}', [AuthController::class, 'verify'])->name('verify');
 Route::get('auth/register', [AuthController::class, 'registerForm'])->name('register');
 Route::post('auth/register', [AuthController::class, 'register']);
