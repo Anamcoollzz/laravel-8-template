@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Exports\CrudExampleExport;
 use App\Helpers\Helper;
-use App\Http\Requests\CrudExampleRequest;
-use App\Http\Requests\ImportExcelRequest;
+use App\Http\Requests\REQUESTNAME;
 use App\Imports\CrudExampleImport;
-use App\Models\CrudExample;
-use App\Repositories\CrudExampleRepository;
+use App\Models\MODELNAME;
+use App\Repositories\REPOSITORYNAME;
 use App\Services\EmailService;
 use App\Services\FileService;
 use Illuminate\Http\Request;
@@ -20,11 +19,11 @@ use Barryvdh\DomPDF\Facade as PDF;
 class CrudExampleController extends Controller
 {
     /**
-     * crudExampleRepository
+     * VARREPOSITORYNAME
      *
-     * @var CrudExampleRepository
+     * @var REPOSITORYNAME
      */
-    private CrudExampleRepository $crudExampleRepository;
+    private REPOSITORYNAME $VARREPOSITORYNAME;
 
     /**
      * file service
@@ -47,28 +46,28 @@ class CrudExampleController extends Controller
      */
     public function __construct()
     {
-        $this->crudExampleRepository = new CrudExampleRepository;
+        $this->VARREPOSITORYNAME = new REPOSITORYNAME;
         $this->fileService           = new FileService;
         $this->emailService          = new EmailService;
 
-        $this->middleware('can:Contoh CRUD');
-        $this->middleware('can:Contoh CRUD Tambah')->only(['create', 'store']);
-        $this->middleware('can:Contoh CRUD Ubah')->only(['edit', 'update']);
-        $this->middleware('can:Contoh CRUD Hapus')->only(['destroy']);
-        $this->middleware('can:Contoh CRUD Ekspor')->only(['json', 'excel', 'csv', 'pdf']);
-        $this->middleware('can:Contoh CRUD Impor Excel')->only(['importExcel', 'importExcelExample']);
+        $this->middleware('can:TITLE');
+        $this->middleware('can:TITLE Tambah')->only(['create', 'store']);
+        $this->middleware('can:TITLE Ubah')->only(['edit', 'update']);
+        $this->middleware('can:TITLE Hapus')->only(['destroy']);
+        $this->middleware('can:TITLE Ekspor')->only(['json', 'excel', 'csv', 'pdf']);
+        $this->middleware('can:TITLE Impor Excel')->only(['importExcel', 'importExcelExample']);
     }
 
     /**
-     * showing user management page
+     * showing data page
      *
      * @return Response
      */
     public function index()
     {
         $user = auth()->user();
-        return view('stisla.crud-example.index', [
-            'data'           => $this->crudExampleRepository->getLatest(),
+        return view('stisla.FOLDERVIEW.index', [
+            'data'           => $this->VARREPOSITORYNAME->getLatest(),
             'canCreate'      => $user->can('Contoh CRUD Tambah'),
             'canUpdate'      => $user->can('Contoh CRUD Ubah'),
             'canDelete'      => $user->can('Contoh CRUD Hapus'),
@@ -79,14 +78,13 @@ class CrudExampleController extends Controller
     }
 
     /**
-     * showing add new user page
+     * showing add new data form page
      *
      * @return Response
      */
     public function create()
     {
-        return view('stisla.crud-example.form', [
-            'selectOptions' => ['option 1' => 'option 1', 'option 2' => 'option 2', 'option 3' => 'option 3',],
+        return view('stisla.FOLDERVIEW.form', [
             'title'         => __('Contoh CRUD'),
             'fullTitle'     => __('Tambah Contoh CRUD'),
             'routeIndex'    => route('crud-examples.index'),
@@ -95,30 +93,23 @@ class CrudExampleController extends Controller
     }
 
     /**
-     * save new user to db
+     * save new data to db
      *
-     * @param CrudExampleRequest $request
+     * @param REQUESTNAME $request
      * @return Response
      */
-    public function store(CrudExampleRequest $request)
+    public function store(REQUESTNAME $request)
     {
         $data = $request->only([
-            'text',
-            "number",
-            "select",
-            "textarea",
-            "radio",
-            "date",
-            'checkbox',
-            "time",
-            "color",
-            'select2',
-            'select2_multiple'
+            COLUMNS
         ]);
-        if ($request->hasFile('file')) {
-            $data['file'] = $this->fileService->uploadCrudExampleFile($request->file('file'));
-        }
-        $result = $this->crudExampleRepository->create($data);
+
+        // gunakan jika ada file
+        // if ($request->hasFile('file')) {
+        //     $data['file'] = $this->fileService->uploadCrudExampleFile($request->file('file'));
+        // }
+
+        $result = $this->VARREPOSITORYNAME->create($data);
         logCreate("Contoh CRUD", $result);
         $successMessage = successMessageCreate("Contoh CRUD");
         return redirect()->back()->with('successMessage', $successMessage);
@@ -127,29 +118,29 @@ class CrudExampleController extends Controller
     /**
      * showing edit page
      *
-     * @param CrudExample $crudExample
+     * @param CrudExample VARMODELNAME
      * @return Response
      */
-    public function edit(CrudExample $crudExample)
+    public function edit(CrudExample VARMODELNAME)
     {
         return view('stisla.crud-example.form', [
             'selectOptions' => ['option 1' => 'option 1', 'option 2' => 'option 2', 'option 3' => 'option 3',],
-            'd'             => $crudExample,
+            'd'             => VARMODELNAME,
             'title'         => __('Contoh CRUD'),
             'fullTitle'     => __('Ubah Contoh CRUD'),
             'routeIndex'    => route('crud-examples.index'),
-            'action'        => route('crud-examples.update', [$crudExample->id])
+            'action'        => route('crud-examples.update', [VARMODELNAME->id])
         ]);
     }
 
     /**
      * update data to db
      *
-     * @param CrudExampleRequest $request
-     * @param CrudExample $crudExample
+     * @param REQUESTNAME $request
+     * @param CrudExample VARMODELNAME
      * @return Response
      */
-    public function update(CrudExampleRequest $request, CrudExample $crudExample)
+    public function update(REQUESTNAME $request, CrudExample VARMODELNAME)
     {
         $data = $request->only([
             'text',
@@ -167,8 +158,8 @@ class CrudExampleController extends Controller
         if ($request->hasFile('file')) {
             $data['file'] = $this->fileService->uploadCrudExampleFile($request->file('file'));
         }
-        $newData = $this->crudExampleRepository->update($data, $crudExample->id);
-        logUpdate("Contoh CRUD", $crudExample, $newData);
+        $newData = $this->VARREPOSITORYNAME->update($data, VARMODELNAME->id);
+        logUpdate("Contoh CRUD", VARMODELNAME, $newData);
         $successMessage = successMessageUpdate("Contoh CRUD");
         return redirect()->back()->with('successMessage', $successMessage);
     }
@@ -176,14 +167,14 @@ class CrudExampleController extends Controller
     /**
      * delete user from db
      *
-     * @param CrudExample $crudExample
+     * @param CrudExample VARMODELNAME
      * @return Response
      */
-    public function destroy(CrudExample $crudExample)
+    public function destroy(CrudExample VARMODELNAME)
     {
-        $this->fileService->deleteCrudExampleFile($crudExample);
-        $this->crudExampleRepository->delete($crudExample->id);
-        logDelete("Contoh CRUD", $crudExample);
+        $this->fileService->deleteCrudExampleFile(VARMODELNAME);
+        $this->VARREPOSITORYNAME->delete(VARMODELNAME->id);
+        logDelete("Contoh CRUD", VARMODELNAME);
         $successMessage = successMessageDelete("Contoh CRUD");
         return redirect()->back()->with('successMessage', $successMessage);
     }
@@ -196,17 +187,17 @@ class CrudExampleController extends Controller
     public function importExcelExample(): BinaryFileResponse
     {
         return Excel::download(new CrudExampleExport(
-            $this->crudExampleRepository->getLatest()
+            $this->VARREPOSITORYNAME->getLatest()
         ), 'crud_examples.xlsx');
     }
 
     /**
      * import excel file to db
      *
-     * @param ImportExcelRequest $request
+     * @param \App\Http\Requests\ImportExcelRequest $request
      * @return Response
      */
-    public function importExcel(ImportExcelRequest $request)
+    public function importExcel(\App\Http\Requests\ImportExcelRequest $request)
     {
         Excel::import(new CrudExampleImport, $request->file('import_file'));
         $successMessage = successMessageImportExcel("Contoh CRUD");
@@ -220,7 +211,7 @@ class CrudExampleController extends Controller
      */
     public function json()
     {
-        $data = $this->crudExampleRepository->getLatest();
+        $data = $this->VARREPOSITORYNAME->getLatest();
         return $this->fileService->downloadJson($data, 'crud_examples.json');
     }
 
@@ -231,7 +222,7 @@ class CrudExampleController extends Controller
      */
     public function excel()
     {
-        $data = $this->crudExampleRepository->getLatest();
+        $data = $this->VARREPOSITORYNAME->getLatest();
         return (new CrudExampleExport($data))->download('crud_examples.xlsx', \Maatwebsite\Excel\Excel::XLSX);
     }
 
@@ -242,7 +233,7 @@ class CrudExampleController extends Controller
      */
     public function csv()
     {
-        $data = $this->crudExampleRepository->getLatest();
+        $data = $this->VARREPOSITORYNAME->getLatest();
         return (new CrudExampleExport($data))->download('crud_examples.csv', \Maatwebsite\Excel\Excel::CSV);
     }
 
@@ -253,7 +244,7 @@ class CrudExampleController extends Controller
      */
     public function pdf()
     {
-        $data = $this->crudExampleRepository->getLatest();
+        $data = $this->VARREPOSITORYNAME->getLatest();
         return PDF::setPaper('Letter', 'landscape')
             ->loadView('stisla.crud-example.export-pdf', [
                 'data'     => $data,

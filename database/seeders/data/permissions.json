@@ -82,5 +82,36 @@
         "name": "Log Aktivitas",
         "roles": ["superadmin", "akuntesting"],
         "group": "Log Aktivitas"
+    },
+
+    {
+        "name": "Contoh CRUD",
+        "roles": ["superadmin", "akuntesting"],
+        "group": "Contoh CRUD"
+    },
+    {
+        "name": "Contoh CRUD Tambah",
+        "roles": ["superadmin", "akuntesting"],
+        "group": "Contoh CRUD"
+    },
+    {
+        "name": "Contoh CRUD Impor Excel",
+        "roles": ["superadmin", "akuntesting"],
+        "group": "Contoh CRUD"
+    },
+    {
+        "name": "Contoh CRUD Ubah",
+        "roles": ["superadmin", "akuntesting"],
+        "group": "Contoh CRUD"
+    },
+    {
+        "name": "Contoh CRUD Hapus",
+        "roles": ["superadmin", "akuntesting"],
+        "group": "Contoh CRUD"
+    },
+    {
+        "name": "Contoh CRUD Ekspor",
+        "roles": ["superadmin", "akuntesting"],
+        "group": "Contoh CRUD"
     }
 ]

@@ -8,7 +8,7 @@
  */
 function successMessageCreate($nextTitle = '')
 {
-    return __('Berhasil Menambahkan Data ' . ucwords($nextTitle));
+    return __('Berhasil Menambahkan Data ' . ($nextTitle));
 }
 
 /**
@@ -19,7 +19,7 @@ function successMessageCreate($nextTitle = '')
  */
 function successMessageUpdate($nextTitle = '')
 {
-    return __('Berhasil Memperbarui Data ' . ucwords($nextTitle));
+    return __('Berhasil Memperbarui Data ' . ($nextTitle));
 }
 
 /**
@@ -30,7 +30,18 @@ function successMessageUpdate($nextTitle = '')
  */
 function successMessageDelete($nextTitle = '')
 {
-    return __('Berhasil Menghapus Data ' . ucwords($nextTitle));
+    return __('Berhasil Menghapus Data ' . ($nextTitle));
+}
+
+/**
+ * successMessageImportExcel
+ *
+ * @param string $nextTitle
+ * @return string
+ */
+function successMessageImportExcel($nextTitle = '')
+{
+    return __('Berhasil Mengimpor Data ' . ($nextTitle) . ' Dari Excel');
 }
 
 
@@ -42,7 +53,7 @@ function successMessageDelete($nextTitle = '')
  */
 function successMessageLoadData($nextTitle = '')
 {
-    return __('Berhasil Mengambil Data ' . ucwords($nextTitle));
+    return __('Berhasil Mengambil Data ' . ($nextTitle));
 }
 
 
@@ -57,7 +68,7 @@ function successMessageLoadData($nextTitle = '')
  */
 function failedMessageCreate($nextTitle = '')
 {
-    return __('Gagal Menambahkan Data ' . ucwords($nextTitle));
+    return __('Gagal Menambahkan Data ' . ($nextTitle));
 }
 
 /**
@@ -68,7 +79,7 @@ function failedMessageCreate($nextTitle = '')
  */
 function failedMessageUpdate($nextTitle = '')
 {
-    return __('Gagal Memperbarui Data ' . ucwords($nextTitle));
+    return __('Gagal Memperbarui Data ' . ($nextTitle));
 }
 
 /**
@@ -79,7 +90,7 @@ function failedMessageUpdate($nextTitle = '')
  */
 function failedMessageDelete($nextTitle = '')
 {
-    return __('Gagal Menghapus Data ' . ucwords($nextTitle));
+    return __('Gagal Menghapus Data ' . ($nextTitle));
 }
 
 
@@ -91,5 +102,5 @@ function failedMessageDelete($nextTitle = '')
  */
 function failedMessageLoadData($nextTitle = '')
 {
-    return __('Gagal Mengambil Data ' . ucwords($nextTitle));
+    return __('Gagal Mengambil Data ' . ($nextTitle));
 }
