@@ -35,14 +35,18 @@ class MODELNAMEExport implements \Maatwebsite\Excel\Concerns\FromView
     public function view(): View
     {
         if ($this->data->count() === 0) {
+            $columns = [
+FILLABLES
+            ];
             $data = [];
+
             foreach (range(1, 10) as $i) {
-                $columns = [FILLABLES];
                 array_push($data, (object) array_combine($columns, $columns));
             }
+
             $this->data = collect($data);
         }
-        return view('FOLDERVIEW.export-excel-example', [
+        return view('stisla.FOLDERVIEW.export-excel-example', [
             'data'     => $this->data,
             'isExport' => true
         ]);

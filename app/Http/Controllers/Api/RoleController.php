@@ -34,6 +34,7 @@ class RoleController extends Controller
     public function __construct()
     {
         $this->userRepository = new UserRepository;
+
         $this->middleware('can:Role');
         $this->middleware('can:Role Tambah')->only(['store']);
         $this->middleware('can:Role Ubah')->only(['update']);

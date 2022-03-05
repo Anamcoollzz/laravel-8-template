@@ -33,6 +33,10 @@ class MakeCrudCommand extends Command
     private $requestName;
     private $folderViewName;
     private $routeName;
+    private $STOREVALIDATIONS;
+    private $UPDATEVALIDATIONS;
+    private $arrayColumns;
+    private $moduleName;
 
     /**
      * Create a new command instance.
@@ -42,6 +46,25 @@ class MakeCrudCommand extends Command
     public function __construct()
     {
         parent::__construct();
+    }
+
+    private function setColumnsWithTab($tab = 1)
+    {
+        $columns = '';
+        $i = 0;
+        $count = count($this->arrayColumns);
+        $tabs = collect(range(1, $tab))->transform(function ($item) {
+            return "\t";
+        })->toArray();
+        $tabs = implode('', $tabs);
+        foreach ($this->arrayColumns as $column) {
+            if ($i < $count - 1)
+                $columns .= "$tabs'$column',\n";
+            else
+                $columns .= "$tabs'$column',";
+            $i++;
+        }
+        return $columns;
     }
 
     /**
@@ -56,6 +79,7 @@ class MakeCrudCommand extends Command
             $this->error("CRUD file required");
             return 0;
         }
+        $filename = 'student';
         $filepath = app_path('Console/Commands/data/crud/files/' . $filename . '.json');
         if (File::exists($filepath) === false) {
             $this->error("File not found");
@@ -69,6 +93,7 @@ class MakeCrudCommand extends Command
         $this->repoName       = $modelName . 'Repository';
         $this->varRepoName    = Str::camel($modelName) . 'Repository';
         $controllerName = $this->controllerName = $modelName . 'Controller';
+        $this->moduleName = $this->json->title;
         $this->requestName = $modelName . 'Request';
         $routeName = $this->routeName = $this->folderViewName = $folderViewName = Str::plural(Str::kebab($modelName));
         $modelNameSnake       = Str::snake($modelName);
@@ -90,6 +115,13 @@ class MakeCrudCommand extends Command
         $FORM = '';
         $TYPESVALUE = '';
         $SEEDERCOLUMNS = '';
+        $this->arrayColumns = collect($this->json->columns)
+            ->pluck('name')
+            ->filter(function ($item) {
+                return $item !== null;
+            })
+            ->values()
+            ->toArray();
         foreach ($this->json->columns as $column) {
             if ($column->type === 'ai')
                 $STRUCTURE .= '$table->id();';
@@ -99,7 +131,13 @@ class MakeCrudCommand extends Command
                 $STRUCTURE .= '$table->' . $column->type . '(\'' . $column->name . '\');';
                 // $FILLABLES .= "\t\t'" . $column->name . "',\n";
                 $FILLABLES .= "'" . $column->name . "', ";
-                $SEEDERCOLUMNS .= "'" . $column->name . '\'' . ' => $faker->numberBetween(0,1000), // ganti method fakernya sesuai kebutuhan' . "\n\t\t\t\t";
+                if ($column->type === 'date')
+                    $SEEDERCOLUMNS .= "'" . $column->name . '\'' . ' => $faker->date("Y-m-d", $max = date("Y-m-d")), // ganti method fakernya sesuai kebutuhan' . "\n\t\t\t\t";
+                else if (isset($column->options)) {
+                    $max = count($column->options) - 1;
+                    $SEEDERCOLUMNS .= "'" . $column->name . '\'' . ' => $faker->numberBetween(0, ' . $max . '), // ganti method fakernya sesuai kebutuhan' . "\n\t\t\t\t";
+                } else
+                    $SEEDERCOLUMNS .= "'" . $column->name . '\'' . ' => $faker->numberBetween(0,1000), // ganti method fakernya sesuai kebutuhan' . "\n\t\t\t\t";
                 $label = $column->label ?? Str::title(str_replace('_', ' ', $column->name));
                 $TH .= "\t\t<th class=\"text-center\">{{ __('" . $label . "') }}</th>\n";
                 if (isset($column->options)) {
@@ -227,6 +265,8 @@ class MakeCrudCommand extends Command
             }
         }
 
+        $this->UPDATEVALIDATIONS = $UPDATEVALIDATIONS;
+        $this->STOREVALIDATIONS = $STOREVALIDATIONS;
         $this->FILLABLES = $FILLABLES;
 
         $migrationContent = str_replace('STRUCTURE', $STRUCTURE, $migrationContent);
@@ -271,7 +311,7 @@ class MakeCrudCommand extends Command
             )
         );
         $modelContent = str_replace('TABLENAME', $TABLENAME, $modelExample);
-        $modelContent = str_replace('FILLABLES', $FILLABLES, $modelContent);
+        $modelContent = str_replace('FILLABLES', $this->setColumnsWithTab(2), $modelContent);
         $modelContent = str_replace('MODELNAME', $modelName, $modelContent);
         $modelContent = str_replace('TYPESVALUE', '[' . $TYPESVALUE . "\n\t]", $modelContent);
         file_put_contents($modelPath = app_path('Models/' . $modelName . '.php'), $modelContent);
@@ -350,7 +390,7 @@ class MakeCrudCommand extends Command
         $exportExcelFile = file_get_contents(app_path('Console/Commands/data/crud/export.php.dummy'));
         $exportExcelFile = str_replace('FOLDERVIEW', $folderViewName, $exportExcelFile);
         $exportExcelFile = str_replace('MODELNAME', $modelName, $exportExcelFile);
-        $exportExcelFile = str_replace('FILLABLES', $FILLABLES, $exportExcelFile);
+        $exportExcelFile = str_replace('FILLABLES', $this->setColumnsWithTab(4), $exportExcelFile);
         $exportExcelPath = app_path('Exports/' . $modelName . 'Export.php');
         file_put_contents($exportExcelPath, $exportExcelFile);
 
@@ -377,20 +417,23 @@ class MakeCrudCommand extends Command
         $this->info('Created import excel file => ' . $importExcelPath);
         $this->info('Created view index file => ' . $viewIndexPath);
         $this->info('Created form index file => ' . $viewCreatePath);
-        $this->info('Don\'t forget to run php artisan migrate');
-        $this->info('copy this to your route file 👇');
+        // $this->info('Don\'t forget to run php artisan migrate');
+        // $this->info('copy this to your route file 👇');
 
         // for copy route
         $fullControllerName = '\App\Http\Controllers\\' . $controllerName . '::class';
-        $this->info('Route::get(\'' . $routeName . '/pdf\', [' . $fullControllerName . ', \'pdf\'])->name(\'' . $routeName . '.pdf\');');
-        $this->info('Route::get(\'' . $routeName . '/csv\', [' . $fullControllerName . ', \'csv\'])->name(\'' . $routeName . '.csv\');');
-        $this->info('Route::get(\'' . $routeName . '/json\', [' . $fullControllerName . ', \'json\'])->name(\'' . $routeName . '.json\');');
-        $this->info('Route::get(\'' . $routeName . '/excel\', [' . $fullControllerName . ', \'excel\'])->name(\'' . $routeName . '.excel\');');
-        $this->info('Route::get(\'' . $routeName . '/import-excel-example\', [' . $fullControllerName . ', \'importExcelExample\'])->name(\'' . $routeName . '.import-excel-example\');');
-        $this->info('Route::post(\'' . $routeName . '/import-excel\', [' . $fullControllerName . ', \'importExcel\'])->name(\'' . $routeName . '.import-excel\');');
-        $this->info('Route::resource(\'' . $routeName . '\', ' . $fullControllerName . ');');
+        // $this->info('Route::get(\'' . $routeName . '/pdf\', [' . $fullControllerName . ', \'pdf\'])->name(\'' . $routeName . '.pdf\');');
+        // $this->info('Route::get(\'' . $routeName . '/csv\', [' . $fullControllerName . ', \'csv\'])->name(\'' . $routeName . '.csv\');');
+        // $this->info('Route::get(\'' . $routeName . '/json\', [' . $fullControllerName . ', \'json\'])->name(\'' . $routeName . '.json\');');
+        // $this->info('Route::get(\'' . $routeName . '/excel\', [' . $fullControllerName . ', \'excel\'])->name(\'' . $routeName . '.excel\');');
+        // $this->info('Route::get(\'' . $routeName . '/import-excel-example\', [' . $fullControllerName . ', \'importExcelExample\'])->name(\'' . $routeName . '.import-excel-example\');');
+        // $this->info('Route::post(\'' . $routeName . '/import-excel\', [' . $fullControllerName . ', \'importExcel\'])->name(\'' . $routeName . '.import-excel\');');
+        // $this->info('Route::resource(\'' . $routeName . '\', ' . $fullControllerName . ');');
 
         $this->apiController();
+        $this->apiRequest();
+        $this->permission();
+        $this->routing();
         return 0;
     }
 
@@ -408,11 +451,49 @@ class MakeCrudCommand extends Command
         $content = str_replace('VARMODELNAME', $this->varModelName, $content);
         $content = str_replace('MODELNAME', $this->modelName, $content);
         $content = str_replace('REQUESTNAME', $this->requestName, $content);
-        $content = str_replace('COLUMNS', $this->FILLABLES, $content);
+        $content = str_replace('COLUMNS', $this->setColumnsWithTab(3), $content);
         $content = str_replace('FOLDERVIEW', $this->folderViewName, $content);
 
         // save to specific path
         $filepath = app_path('Http/Controllers/Api/' . $this->controllerName . '.php');
+        file_put_contents($filepath, $content);
+    }
+
+    private function apiRequest()
+    {
+        $path    = app_path('Console/Commands/data/crud/request.php.dummy');
+        $content = file_get_contents($path);
+
+        $content = str_replace('REQUESTNAME', $this->requestName, $content);
+        $content = str_replace('UPDATEVALIDATIONS', $this->UPDATEVALIDATIONS, $content);
+        $content = str_replace('STOREVALIDATIONS', $this->STOREVALIDATIONS, $content);
+        $content = str_replace("namespace App\Http\Requests;", "namespace App\Http\Requests\Api;", $content);
+
+        $filepath = app_path('Http/Requests/Api/' . $this->requestName . '.php');
+        file_put_contents($filepath, $content);
+    }
+
+    private function permission()
+    {
+        $path    = app_path('Console/Commands/data/crud/permission.json.dummy');
+        $content = file_get_contents($path);
+
+        $content = str_replace('MODULENAME', $this->moduleName, $content);
+
+        $filepath = database_path('seeders/data/permission-modules/' . $this->routeName . '.json');
+        file_put_contents($filepath, $content);
+    }
+
+    private function routing()
+    {
+        $path    = app_path('Console/Commands/data/crud/route.php.dummy');
+        $content = file_get_contents($path);
+
+        $content = str_replace('CONTROLLERNAME', $this->controllerName, $content);
+        $content = str_replace('ROUTENAME', $this->routeName, $content);
+
+        $filename = Str::singular($this->routeName);
+        $filepath = base_path('routes/modules/' . $filename . '.php');
         file_put_contents($filepath, $content);
     }
 }

@@ -57,6 +57,8 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace($this->namespace)
                 ->group(base_path('routes/stisla-web-auth.php'));
         });
+
+        $this->setupPerModule();
     }
 
     /**
@@ -69,5 +71,17 @@ class RouteServiceProvider extends ServiceProvider
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
         });
+    }
+
+    private function setupPerModule()
+    {
+        $filePaths = base_path('routes/modules');
+        $files = getFileNamesFromDir($filePaths);
+
+        foreach ($files as $file) {
+            $path = base_path('routes/modules/' . $file);
+            Route::namespace($this->namespace)
+                ->group($path);
+        }
     }
 }

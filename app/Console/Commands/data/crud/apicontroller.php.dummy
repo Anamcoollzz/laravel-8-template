@@ -78,18 +78,21 @@ class CONTROLLERNAME extends Controller
      * save new data to db
      *
      * @param REQUESTNAME $request
-     * @return Response
+     * @return JsonResponse
      */
     public function store(REQUESTNAME $request)
     {
         $data = $request->only([
-            COLUMNS
+COLUMNS
         ]);
 
         // bisa digunakan jika ada upload file dan ganti methodnya
         // if ($request->hasFile('file')) {
         //     $data['file'] = $this->fileService->uploadCrudExampleFile($request->file('file'));
         // }
+
+        // bisa digunakan jika ingim kirim email dan ganti methodnya
+        // $this->emailService->methodName($params);
 
         $result = $this->VARREPOSITORYNAME->create($data);
         logCreate('TITLE', $result);
@@ -103,18 +106,21 @@ class CONTROLLERNAME extends Controller
      *
      * @param REQUESTNAME $request
      * @param MODELNAME $VARMODELNAME
-     * @return Response
+     * @return JsonResponse
      */
     public function update(REQUESTNAME $request, MODELNAME $VARMODELNAME)
     {
         $data = $request->only([
-            COLUMNS
+COLUMNS
         ]);
 
         // bisa digunakan jika ada upload file dan ganti methodnya
         // if ($request->hasFile('file')) {
         //     $data['file'] = $this->fileService->uploadCrudExampleFile($request->file('file'));
         // }
+
+        // bisa digunakan jika ingim kirim email dan ganti methodnya
+        // $this->emailService->methodName($params);
 
         $result = $this->VARREPOSITORYNAME->update($data, $VARMODELNAME->id);
         logUpdate('TITLE', $VARMODELNAME, $result);
@@ -127,11 +133,15 @@ class CONTROLLERNAME extends Controller
      * delete data from db
      *
      * @param MODELNAME $VARMODELNAME
-     * @return Response
+     * @return JsonResponse
      */
     public function destroy(MODELNAME $VARMODELNAME)
     {
         $deletedRow = $this->VARREPOSITORYNAME->delete($VARMODELNAME->id);
+
+        // bisa digunakan jika ingim kirim email dan ganti methodnya
+        // $this->emailService->methodName($params);
+
         logDelete('TITLE', $VARMODELNAME);
 
         $successMessage = successMessageDelete("TITLE");

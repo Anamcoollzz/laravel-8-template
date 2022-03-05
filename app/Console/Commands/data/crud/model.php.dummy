@@ -22,7 +22,7 @@ class MODELNAME extends Model
      * @var array
      */
     protected $fillable = [
-        FILLABLES
+FILLABLES
     ];
 
     /**
@@ -45,4 +45,11 @@ class MODELNAME extends Model
      * @var array
      */
     const TYPES = TYPESVALUE;
+
+    /**
+     * Default with relationship
+     *
+     * @var array
+     */
+    protected $with = [];
 }
