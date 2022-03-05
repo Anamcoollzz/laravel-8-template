@@ -169,4 +169,22 @@ class Repository extends RepositoryAbstract
     {
         return $this->delete($id);
     }
+
+    /**
+     * get data as pagination
+     *
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function getPaginate()
+    {
+        $perPage = request('perPage', 20);
+        return $this->model->query()
+            ->when(request('sort') === 'oldest', function ($query) {
+                $query->sortBy('id', 'asc');
+            })
+            ->when(request('sort') === 'latest' || request('sort') === null, function ($query) {
+                $query->latest();
+            })
+            ->paginate($perPage);
+    }
 }
