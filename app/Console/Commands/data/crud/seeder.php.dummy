@@ -15,16 +15,19 @@ class MODELNAMESeeder extends Seeder
      */
     public function run()
     {
-        $data = [];
+        $data  = [];
         $faker = \Faker\Factory::create('id_ID');
+        $now   = date('Y-m-d H:i:s');
+
         foreach (range(1, 100) as $i) {
             array_push($data, [
-                SEEDERCOLUMNS'created_at' => now(),
-                'updated_at' => now(),
+                SEEDERCOLUMNS'created_at' => $now,
+                'updated_at' => $now,
             ]);
         }
-        foreach (collect($data)->chunk(20) as $chunkData) {
-            // dd($chunkData);
+
+        $chunkeds = collect($data)->chunk(20);
+        foreach ($chunkeds as $chunkData) {
             MODELNAME::insert($chunkData->toArray());
         }
     }

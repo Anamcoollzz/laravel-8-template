@@ -32,6 +32,7 @@ class MakeCrudCommand extends Command
     private $controllerName;
     private $requestName;
     private $folderViewName;
+    private $routeName;
 
     /**
      * Create a new command instance.
@@ -67,16 +68,16 @@ class MakeCrudCommand extends Command
         $this->varModelName = Str::camel($modelName);
         $this->repoName       = $modelName . 'Repository';
         $this->varRepoName    = Str::camel($modelName) . 'Repository';
-        $this->controllerName = $modelName . 'Controller';
+        $controllerName = $this->controllerName = $modelName . 'Controller';
         $this->requestName = $modelName . 'Request';
-        $this->folderViewName = $folderViewName = Str::plural(Str::kebab($modelName));
+        $routeName = $this->routeName = $this->folderViewName = $folderViewName = Str::plural(Str::kebab($modelName));
         $modelNameSnake       = Str::snake($modelName);
         $migrationExample     = file_get_contents(
             app_path(
                 'Console/Commands/data/crud/migration.php.dummy'
             )
         );
-        $this->tableName = $TABLENAME = $modelNameSnake . 's';
+        $this->tableName = $TABLENAME = Str::plural($modelNameSnake);
         $migrationContent = str_replace('TABLENAME', $TABLENAME, $migrationExample);
         $MIGRATIONNAME = 'Create' . $modelName . 'Table';
         $migrationContent = str_replace('MIGRATIONNAME', $MIGRATIONNAME, $migrationContent);
@@ -246,7 +247,22 @@ class MakeCrudCommand extends Command
         // ) {
         //     file_put_contents($migrationPath = database_path('migrations\\' . date('Y_m_d_His') . '_create_' . $modelNameSnake . '_table.php'), $migrationContent);
         // }
-        file_put_contents($migrationPath = database_path('migrations/' . date('Y_m_d_His') . '_create_' . $modelNameSnake . '_table.php'), $migrationContent);
+        $migrationFileNames = getFileNamesFromDir(database_path('migrations'));
+        $exist = false;
+        foreach ($migrationFileNames as $migrationFileName) {
+            $contain = Str::contains($migrationFileName, '_create_' . $modelNameSnake . '_table.php');
+            if ($contain) {
+                $migrationPath = database_path('migrations/' . $migrationFileName);
+                file_put_contents($migrationPath, $migrationContent);
+                $exist = true;
+                break;
+            }
+            // if($migrationFileName)
+        }
+        if ($exist === false) {
+            $migrationPath = database_path('migrations/' . date('Y_m_d_His') . '_create_' . $modelNameSnake . '_table.php');
+            file_put_contents($migrationPath, $migrationContent);
+        }
 
         // CREATE MODEL
         $modelExample = file_get_contents(
@@ -300,11 +316,11 @@ class MakeCrudCommand extends Command
         // CREATE VIEWS
         $viewIndexFile = file_get_contents(app_path('Console/Commands/data/crud/views/index.blade.php.dummy'));
         $viewIndexFile = str_replace('TITLE', $this->json->title, $viewIndexFile);
-        $viewIndexFile = str_replace('ROUTE', Str::slug($modelName) . 's', $viewIndexFile);
+        $viewIndexFile = str_replace('ROUTE', $routeName, $viewIndexFile);
         $viewIndexFile = str_replace('ICON', $this->json->icon, $viewIndexFile);
         $viewIndexFile = str_replace('TH', $TH, $viewIndexFile);
         $viewIndexFile = str_replace('TD', $TD, $viewIndexFile);
-        $folder = base_path('resources/views/stisla/') . Str::slug($modelName);
+        $folder = base_path('resources/views/stisla/') . $folderViewName;
         // dd($folder);
         if (!file_exists($folder)) {
             File::makeDirectory($folder);
@@ -315,7 +331,7 @@ class MakeCrudCommand extends Command
 
         $viewFormFile = file_get_contents(app_path('Console/Commands/data/crud/views/form.blade.php.dummy'));
         $viewFormFile = str_replace('TITLE', $this->json->title, $viewFormFile);
-        $viewFormFile = str_replace('ROUTE', Str::slug($modelName) . 's', $viewFormFile);
+        $viewFormFile = str_replace('ROUTE', $routeName, $viewFormFile);
         $viewFormFile = str_replace('ICON', $this->json->icon, $viewFormFile);
         $viewFormFile = str_replace('FORM', $FORM, $viewFormFile);
         $filepath    = $folder . '/form.blade.php';
@@ -323,7 +339,7 @@ class MakeCrudCommand extends Command
 
         $viewExportExcelFile = file_get_contents(app_path('Console/Commands/data/crud/views/export-excel-example.blade.php.dummy'));
         $viewExportExcelFile = str_replace('TITLE', $this->json->title, $viewExportExcelFile);
-        $viewExportExcelFile = str_replace('ROUTE', Str::slug($modelName) . 's', $viewExportExcelFile);
+        $viewExportExcelFile = str_replace('ROUTE', $routeName, $viewExportExcelFile);
         $viewExportExcelFile = str_replace('ICON', $this->json->icon, $viewExportExcelFile);
         $viewExportExcelFile = str_replace('FORM', $FORM, $viewExportExcelFile);
         $viewExportExcelFile = str_replace('TH', $TH, $viewExportExcelFile);
@@ -365,13 +381,14 @@ class MakeCrudCommand extends Command
         $this->info('copy this to your route file 👇');
 
         // for copy route
-        $this->info('Route::get(\'' . ($modelNameSlug = Str::slug($modelName)) . 's/pdf\', [\App\Http\Controllers\\' . $modelName . 'Controller::class, \'pdf\'])->name(\'' . $modelNameSlug . 's.pdf\');');
-        $this->info('Route::get(\'' . $modelNameSlug . 's/csv\', [\App\Http\Controllers\\' . $modelName . 'Controller::class, \'csv\'])->name(\'' . $modelNameSlug . 's.csv\');');
-        $this->info('Route::get(\'' . $modelNameSlug . 's/json\', [\App\Http\Controllers\\' . $modelName . 'Controller::class, \'json\'])->name(\'' . $modelNameSlug . 's.json\');');
-        $this->info('Route::get(\'' . $modelNameSlug . 's/excel\', [\App\Http\Controllers\\' . $modelName . 'Controller::class, \'excel\'])->name(\'' . $modelNameSlug . 's.excel\');');
-        $this->info('Route::get(\'' . $modelNameSlug . 's/import-excel-example\', [\App\Http\Controllers\\' . $modelName . 'Controller::class, \'importExcelExample\'])->name(\'' . $modelNameSlug . 's.import-excel-example\');');
-        $this->info('Route::post(\'' . $modelNameSlug . 's/import-excel\', [\App\Http\Controllers\\' . $modelName . 'Controller::class, \'importExcel\'])->name(\'' . $modelNameSlug . 's.import-excel\');');
-        $this->info('Route::resource(\'' . $modelNameSlug . 's\', \App\Http\Controllers\\' . $modelName . 'Controller::class);');
+        $fullControllerName = '\App\Http\Controllers\\' . $controllerName . '::class';
+        $this->info('Route::get(\'' . $routeName . '/pdf\', [' . $fullControllerName . ', \'pdf\'])->name(\'' . $routeName . '.pdf\');');
+        $this->info('Route::get(\'' . $routeName . '/csv\', [' . $fullControllerName . ', \'csv\'])->name(\'' . $routeName . '.csv\');');
+        $this->info('Route::get(\'' . $routeName . '/json\', [' . $fullControllerName . ', \'json\'])->name(\'' . $routeName . '.json\');');
+        $this->info('Route::get(\'' . $routeName . '/excel\', [' . $fullControllerName . ', \'excel\'])->name(\'' . $routeName . '.excel\');');
+        $this->info('Route::get(\'' . $routeName . '/import-excel-example\', [' . $fullControllerName . ', \'importExcelExample\'])->name(\'' . $routeName . '.import-excel-example\');');
+        $this->info('Route::post(\'' . $routeName . '/import-excel\', [' . $fullControllerName . ', \'importExcel\'])->name(\'' . $routeName . '.import-excel\');');
+        $this->info('Route::resource(\'' . $routeName . '\', ' . $fullControllerName . ');');
 
         $this->apiController();
         return 0;
