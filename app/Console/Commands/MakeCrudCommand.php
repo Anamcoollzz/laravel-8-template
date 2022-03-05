@@ -23,6 +23,15 @@ class MakeCrudCommand extends Command
     protected $description = 'Generate CRUD Files';
 
     private $json;
+    private $varModelName;
+    private $modelName;
+    private $varRepoName;
+    private $repoName;
+    private $tableName;
+    private $FILLABLES;
+    private $controllerName;
+    private $requestName;
+    private $folderViewName;
 
     /**
      * Create a new command instance.
@@ -54,14 +63,20 @@ class MakeCrudCommand extends Command
 
         $this->json = json_decode(file_get_contents($filepath));
 
-        $modelName = $this->json->model;
-        $modelNameSnake = Str::snake($modelName);
-        $migrationExample = file_get_contents(
+        $this->modelName      = $modelName = $this->json->model;
+        $this->varModelName = Str::camel($modelName);
+        $this->repoName       = $modelName . 'Repository';
+        $this->varRepoName    = Str::camel($modelName) . 'Repository';
+        $this->controllerName = $modelName . 'Controller';
+        $this->requestName = $modelName . 'Request';
+        $this->folderViewName = $folderViewName = Str::plural(Str::kebab($modelName));
+        $modelNameSnake       = Str::snake($modelName);
+        $migrationExample     = file_get_contents(
             app_path(
                 'Console\\Commands\\data\\crud\\migration.php.dummy'
             )
         );
-        $TABLENAME = $modelNameSnake . 's';
+        $this->tableName = $TABLENAME = $modelNameSnake . 's';
         $migrationContent = str_replace('TABLENAME', $TABLENAME, $migrationExample);
         $MIGRATIONNAME = 'Create' . $modelName . 'Table';
         $migrationContent = str_replace('MIGRATIONNAME', $MIGRATIONNAME, $migrationContent);
@@ -210,6 +225,9 @@ class MakeCrudCommand extends Command
                 }
             }
         }
+
+        $this->FILLABLES = $FILLABLES;
+
         $migrationContent = str_replace('STRUCTURE', $STRUCTURE, $migrationContent);
         $migrationFiles = File::files(database_path('migrations'));
         $migrationFiles = array_map(function ($item) {
@@ -263,7 +281,7 @@ class MakeCrudCommand extends Command
         $controllerFile = str_replace('MODELNAME', $modelName, $controllerFile);
         $controllerFile = str_replace('REQUESTNAME', $modelName . 'Request', $controllerFile);
         $controllerFile = str_replace('COLUMNS', $FILLABLES, $controllerFile);
-        $controllerFile = str_replace('FOLDERVIEW', Str::slug($modelName), $controllerFile);
+        $controllerFile = str_replace('FOLDERVIEW', $folderViewName, $controllerFile);
         $filepath = app_path('Http\\Controllers\\' . $modelName . 'Controller.php');
         file_put_contents($controllerPath = $filepath, $controllerFile);
 
@@ -314,7 +332,7 @@ class MakeCrudCommand extends Command
         file_put_contents($viewExportExcelPath, $viewExportExcelFile);
 
         $exportExcelFile = file_get_contents(app_path('Console\\Commands\\data\\crud\\export.php.dummy'));
-        $exportExcelFile = str_replace('FOLDERVIEW', Str::slug($modelName), $exportExcelFile);
+        $exportExcelFile = str_replace('FOLDERVIEW', $folderViewName, $exportExcelFile);
         $exportExcelFile = str_replace('MODELNAME', $modelName, $exportExcelFile);
         $exportExcelFile = str_replace('FILLABLES', $FILLABLES, $exportExcelFile);
         $exportExcelPath = app_path('Exports\\' . $modelName . 'Export.php');
@@ -355,6 +373,29 @@ class MakeCrudCommand extends Command
         $this->info('Route::post(\'' . $modelNameSlug . 's/import-excel\', [\App\Http\Controllers\\' . $modelName . 'Controller::class, \'importExcel\'])->name(\'' . $modelNameSlug . 's.import-excel\');');
         $this->info('Route::resource(\'' . $modelNameSlug . 's\', \App\Http\Controllers\\' . $modelName . 'Controller::class);');
 
+        $this->apiController();
         return 0;
+    }
+
+    private function apiController()
+    {
+
+        $master  = app_path('Console\\Commands\\data\\crud\\apicontroller.php.dummy');
+        $content = file_get_contents($master);
+
+        // replace specific var
+        $content = str_replace('TITLE', $this->json->title, $content);
+        $content = str_replace('CONTROLLERNAME', $this->controllerName, $content);
+        $content = str_replace('VARREPOSITORYNAME', $this->varRepoName, $content);
+        $content = str_replace('REPOSITORYNAME', $this->repoName, $content);
+        $content = str_replace('VARMODELNAME', $this->varModelName, $content);
+        $content = str_replace('MODELNAME', $this->modelName, $content);
+        $content = str_replace('REQUESTNAME', $this->requestName, $content);
+        $content = str_replace('COLUMNS', $this->FILLABLES, $content);
+        $content = str_replace('FOLDERVIEW', $this->folderViewName, $content);
+
+        // save to specific path
+        $filepath = app_path('Http\\Controllers\\Api\\' . $this->controllerName . '.php');
+        file_put_contents($filepath, $content);
     }
 }
