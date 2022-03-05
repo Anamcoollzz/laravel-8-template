@@ -1,5 +1,5 @@
 {
-    "title": "Mahasiswa",
+    "title": "Student",
     "icon": "fa fa-users",
     "model": "Student",
     "columns": [

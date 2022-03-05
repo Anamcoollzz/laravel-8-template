@@ -50,12 +50,12 @@ class MakeCrudCommand extends Command
      */
     public function handle()
     {
-        $filename = $this->ask('CRUD Filename? (check example in ' . app_path('Console\\Commands\\data\\crud\\files\\student.json') . ') type like this [student]');
+        $filename = $this->ask('CRUD Filename? (check example in ' . app_path('Console/Commands/data/crud/files/student.json') . ') type like this [student]');
         if (!$filename) {
             $this->error("CRUD file required");
             return 0;
         }
-        $filepath = app_path('Console\\Commands\\data\\crud\\files\\' . $filename . '.json');
+        $filepath = app_path('Console/Commands/data/crud/files/' . $filename . '.json');
         if (File::exists($filepath) === false) {
             $this->error("File not found");
             return 0;
@@ -73,7 +73,7 @@ class MakeCrudCommand extends Command
         $modelNameSnake       = Str::snake($modelName);
         $migrationExample     = file_get_contents(
             app_path(
-                'Console\\Commands\\data\\crud\\migration.php.dummy'
+                'Console/Commands/data/crud/migration.php.dummy'
             )
         );
         $this->tableName = $TABLENAME = $modelNameSnake . 's';
@@ -232,7 +232,7 @@ class MakeCrudCommand extends Command
         $migrationFiles = File::files(database_path('migrations'));
         $migrationFiles = array_map(function ($item) {
             return substr(
-                str_replace(database_path('migrations') . '\\', '', $item->getPathname()),
+                str_replace(database_path('migrations') . '/', '', $item->getPathname()),
                 18
             );
         }, $migrationFiles);
@@ -246,31 +246,31 @@ class MakeCrudCommand extends Command
         // ) {
         //     file_put_contents($migrationPath = database_path('migrations\\' . date('Y_m_d_His') . '_create_' . $modelNameSnake . '_table.php'), $migrationContent);
         // }
-        file_put_contents($migrationPath = database_path('migrations\\' . date('Y_m_d_His') . '_create_' . $modelNameSnake . '_table.php'), $migrationContent);
+        file_put_contents($migrationPath = database_path('migrations/' . date('Y_m_d_His') . '_create_' . $modelNameSnake . '_table.php'), $migrationContent);
 
         // CREATE MODEL
         $modelExample = file_get_contents(
             app_path(
-                'Console\\Commands\\data\\crud\\model.php.dummy'
+                'Console/Commands/data/crud/model.php.dummy'
             )
         );
         $modelContent = str_replace('TABLENAME', $TABLENAME, $modelExample);
         $modelContent = str_replace('FILLABLES', $FILLABLES, $modelContent);
         $modelContent = str_replace('MODELNAME', $modelName, $modelContent);
         $modelContent = str_replace('TYPESVALUE', '[' . $TYPESVALUE . "\n\t]", $modelContent);
-        file_put_contents($modelPath = app_path('Models\\' . $modelName . '.php'), $modelContent);
+        file_put_contents($modelPath = app_path('Models/' . $modelName . '.php'), $modelContent);
 
         // CREATE REPOSITORY
         $repositoryFile = file_get_contents(app_path('Console/Commands/data/NameRepository.php.dummy'));
         $repositoryFile = str_replace('ModelName', $modelName, $repositoryFile);
         $repositoryFile = str_replace('NameRepository', $modelName . 'Repository', $repositoryFile);
-        $filepath = app_path('Repositories\\' . $modelName . 'Repository.php');
+        $filepath = app_path('Repositories/' . $modelName . 'Repository.php');
         file_put_contents($repositoryPath = $filepath, $repositoryFile);
 
         // CREATE CONTROLLER
         $controllerFile = file_get_contents(
             app_path(
-                'Console\\Commands\\data\\crud\\controller.php.dummy'
+                'Console/Commands/data/crud/controller.php.dummy'
             )
         );
         $controllerFile = str_replace('TITLE', $this->json->title, $controllerFile);
@@ -282,72 +282,72 @@ class MakeCrudCommand extends Command
         $controllerFile = str_replace('REQUESTNAME', $modelName . 'Request', $controllerFile);
         $controllerFile = str_replace('COLUMNS', $FILLABLES, $controllerFile);
         $controllerFile = str_replace('FOLDERVIEW', $folderViewName, $controllerFile);
-        $filepath = app_path('Http\\Controllers\\' . $modelName . 'Controller.php');
+        $filepath = app_path('Http/Controllers/' . $modelName . 'Controller.php');
         file_put_contents($controllerPath = $filepath, $controllerFile);
 
         // CREATE REQUEST
         $requestFile = file_get_contents(
             app_path(
-                'Console\\Commands\\data\\crud\\request.php.dummy'
+                'Console/Commands/data/crud/request.php.dummy'
             )
         );
         $requestFile = str_replace('REQUESTNAME', $modelName . 'Request', $requestFile);
         $requestFile = str_replace('UPDATEVALIDATIONS', $UPDATEVALIDATIONS, $requestFile);
         $requestFile = str_replace('STOREVALIDATIONS', $STOREVALIDATIONS, $requestFile);
-        $filepath    = app_path('Http\\Requests\\' . $modelName . 'Request.php');
+        $filepath    = app_path('Http/Requests/' . $modelName . 'Request.php');
         file_put_contents($requestPath = $filepath, $requestFile);
 
         // CREATE VIEWS
-        $viewIndexFile = file_get_contents(app_path('Console\\Commands\\data\\crud\\views\\index.blade.php.dummy'));
+        $viewIndexFile = file_get_contents(app_path('Console/Commands/data/crud/views/index.blade.php.dummy'));
         $viewIndexFile = str_replace('TITLE', $this->json->title, $viewIndexFile);
         $viewIndexFile = str_replace('ROUTE', Str::slug($modelName) . 's', $viewIndexFile);
         $viewIndexFile = str_replace('ICON', $this->json->icon, $viewIndexFile);
         $viewIndexFile = str_replace('TH', $TH, $viewIndexFile);
         $viewIndexFile = str_replace('TD', $TD, $viewIndexFile);
-        $folder = base_path('resources\\views\\stisla\\') . Str::slug($modelName);
+        $folder = base_path('resources/views/stisla/') . Str::slug($modelName);
         // dd($folder);
         if (!file_exists($folder)) {
             File::makeDirectory($folder);
             // mkdir($folder);
         }
-        $filepath    = $folder . '\\index.blade.php';
+        $filepath    = $folder . '/index.blade.php';
         file_put_contents($viewIndexPath = $filepath, $viewIndexFile);
 
-        $viewFormFile = file_get_contents(app_path('Console\\Commands\\data\\crud\\views\\form.blade.php.dummy'));
+        $viewFormFile = file_get_contents(app_path('Console/Commands/data/crud/views/form.blade.php.dummy'));
         $viewFormFile = str_replace('TITLE', $this->json->title, $viewFormFile);
         $viewFormFile = str_replace('ROUTE', Str::slug($modelName) . 's', $viewFormFile);
         $viewFormFile = str_replace('ICON', $this->json->icon, $viewFormFile);
         $viewFormFile = str_replace('FORM', $FORM, $viewFormFile);
-        $filepath    = $folder . '\\form.blade.php';
+        $filepath    = $folder . '/form.blade.php';
         file_put_contents($viewCreatePath = $filepath, $viewFormFile);
 
-        $viewExportExcelFile = file_get_contents(app_path('Console\\Commands\\data\\crud\\views\\export-excel-example.blade.php.dummy'));
+        $viewExportExcelFile = file_get_contents(app_path('Console/Commands/data/crud/views/export-excel-example.blade.php.dummy'));
         $viewExportExcelFile = str_replace('TITLE', $this->json->title, $viewExportExcelFile);
         $viewExportExcelFile = str_replace('ROUTE', Str::slug($modelName) . 's', $viewExportExcelFile);
         $viewExportExcelFile = str_replace('ICON', $this->json->icon, $viewExportExcelFile);
         $viewExportExcelFile = str_replace('FORM', $FORM, $viewExportExcelFile);
         $viewExportExcelFile = str_replace('TH', $TH, $viewExportExcelFile);
         $viewExportExcelFile = str_replace('TD', $TD, $viewExportExcelFile);
-        $viewExportExcelPath    = $folder . '\\export-excel-example.blade.php';
+        $viewExportExcelPath    = $folder . '/export-excel-example.blade.php';
         file_put_contents($viewExportExcelPath, $viewExportExcelFile);
 
-        $exportExcelFile = file_get_contents(app_path('Console\\Commands\\data\\crud\\export.php.dummy'));
+        $exportExcelFile = file_get_contents(app_path('Console/Commands/data/crud/export.php.dummy'));
         $exportExcelFile = str_replace('FOLDERVIEW', $folderViewName, $exportExcelFile);
         $exportExcelFile = str_replace('MODELNAME', $modelName, $exportExcelFile);
         $exportExcelFile = str_replace('FILLABLES', $FILLABLES, $exportExcelFile);
-        $exportExcelPath = app_path('Exports\\' . $modelName . 'Export.php');
+        $exportExcelPath = app_path('Exports/' . $modelName . 'Export.php');
         file_put_contents($exportExcelPath, $exportExcelFile);
 
-        $importExcelFile = file_get_contents(app_path('Console\\Commands\\data\\crud\\import.php.dummy'));
+        $importExcelFile = file_get_contents(app_path('Console/Commands/data/crud/import.php.dummy'));
         $importExcelFile = str_replace('MODELNAME', $modelName, $importExcelFile);
-        $importExcelPath = app_path('Imports\\' . $modelName . 'Import.php');
+        $importExcelPath = app_path('Imports/' . $modelName . 'Import.php');
         file_put_contents($importExcelPath, $importExcelFile);
 
         // SEEDER
-        $seederFile = file_get_contents(app_path('Console\\Commands\\data\\crud\\seeder.php.dummy'));
+        $seederFile = file_get_contents(app_path('Console/Commands/data/crud/seeder.php.dummy'));
         $seederFile = str_replace('MODELNAME', $modelName, $seederFile);
         $seederFile = str_replace('SEEDERCOLUMNS', $SEEDERCOLUMNS, $seederFile);
-        $seederPath = database_path('Seeders\\' . $modelName . 'Seeder.php');
+        $seederPath = database_path('Seeders/' . $modelName . 'Seeder.php');
         file_put_contents($seederPath, $seederFile);
 
         if (isset($migrationPath))
@@ -380,7 +380,7 @@ class MakeCrudCommand extends Command
     private function apiController()
     {
 
-        $master  = app_path('Console\\Commands\\data\\crud\\apicontroller.php.dummy');
+        $master  = app_path('Console/Commands/data/crud/apicontroller.php.dummy');
         $content = file_get_contents($master);
 
         // replace specific var
@@ -395,7 +395,7 @@ class MakeCrudCommand extends Command
         $content = str_replace('FOLDERVIEW', $this->folderViewName, $content);
 
         // save to specific path
-        $filepath = app_path('Http\\Controllers\\Api\\' . $this->controllerName . '.php');
+        $filepath = app_path('Http/Controllers/Api/' . $this->controllerName . '.php');
         file_put_contents($filepath, $content);
     }
 }
