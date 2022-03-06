@@ -3,7 +3,14 @@ $name = $name ?? $id;
 $oldValue = old($name);
 $isMultiple = $multiple ?? ($isMultiple ?? false);
 $isRequired = $required ?? ($isRequired ?? false);
-$selected = $isMultiple ? $oldValue ?? ($selected ?? (is_array($d[$name]) ? $d[$name] : [$d[$name]] ?? [])) : $oldValue ?? ($selected ?? ($d[$name] ?? false));
+$dname = $d[$name] ?? false;
+if ($isMultiple) {
+    $selectedArray = is_array($dname) ? $dname : ($dname ? [$dname] : []);
+    $selected = $oldValue ?? ($selected ?? $selectedArray);
+} else {
+    $selected = $oldValue ?? ($selected ?? ($dname ?? false));
+}
+
 @endphp
 
 <div class="form-group">
