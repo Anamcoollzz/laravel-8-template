@@ -14,42 +14,48 @@
                 "route_name": "crud-examples.index",
                 "icon": "atom",
                 "permission": null,
-                "is_active_if_url_includes": "crud-examples*"
+                "is_active_if_url_includes": "crud-examples*",
+                "is_mockup": true
             },
             {
                 "menu_name": "Menu",
                 "route_name": null,
                 "icon": "bars",
                 "permission": null,
-                "is_active_if_url_includes": null
+                "is_active_if_url_includes": null,
+                "is_mockup": true
             },
             {
                 "menu_name": "Menu Dropdown",
                 "route_name": null,
                 "icon": "caret-square-down",
                 "permission": null,
-                "is_active_if_url_includes": null
+                "is_active_if_url_includes": null,
+                "is_mockup": true
             },
             {
                 "menu_name": "Datatable",
                 "route_name": "datatable.index",
                 "icon": "table",
                 "permission": null,
-                "is_active_if_url_includes": "datatable*"
+                "is_active_if_url_includes": "datatable*",
+                "is_mockup": true
             },
             {
                 "menu_name": "Form",
                 "route_name": "form.index",
                 "icon": "file-alt",
                 "permission": null,
-                "is_active_if_url_includes": "form*"
+                "is_active_if_url_includes": "form*",
+                "is_mockup": true
             },
             {
                 "menu_name": "Chart JS",
                 "route_name": "chart-js.index",
                 "icon": "chart-line",
                 "permission": null,
-                "is_active_if_url_includes": "chart-js*"
+                "is_active_if_url_includes": "chart-js*",
+                "is_mockup": true
             }
         ]
     },

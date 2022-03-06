@@ -24,3 +24,9 @@ h1 {
 h3 {
     text-align: center;
 }
+
+@media print {
+    body {
+        -webkit-print-color-adjust: exact;
+    }
+}

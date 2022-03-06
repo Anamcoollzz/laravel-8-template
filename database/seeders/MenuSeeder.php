@@ -10,6 +10,13 @@ use Illuminate\Support\Facades\Schema;
 class MenuSeeder extends Seeder
 {
     /**
+     * ini ganti aja ke false jika tidak ingin menampilkan menu2 contoh lainnya
+     *
+     * @var boolean
+     */
+    private $withMockup = true;
+
+    /**
      * Run the database seeds.
      *
      * @return void
@@ -22,10 +29,23 @@ class MenuSeeder extends Seeder
         Menu::truncate();
         $data = json_decode(file_get_contents(database_path('seeders/data/menus.json')), true);
         foreach ($data as $item) {
-            $group = MenuGroup::create([
-                'group_name' => $item['group_name']
-            ]);
-            foreach ($item['menus'] as $menu) {
+            $this->execute($item);
+        }
+
+        $files = getFileNamesFromDir(database_path('seeders/data/menu-modules'));
+        foreach ($files as $file) {
+            $item = json_decode(file_get_contents(database_path('seeders/data/menu-modules/' . $file)), true);
+            $this->execute($item);
+        }
+    }
+
+    public function execute(array $item)
+    {
+        $group = MenuGroup::updateOrCreate([
+            'group_name' => $item['group_name']
+        ]);
+        foreach ($item['menus'] as $menu) {
+            if ((isset($menu['is_mockup']) && $menu['is_mockup'] === true && $this->withMockup) || !isset($menu['is_mockup'])) {
                 $menuObj = Menu::create([
                     'menu_name'                 => $menu['menu_name'],
                     'icon'                      => $menu['icon'],

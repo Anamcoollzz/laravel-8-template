@@ -17,18 +17,25 @@
     <thead>
       <tr>
         <th>{{ __('#') }}</th>
-        TH
+TH
       </tr>
     </thead>
     <tbody>
       @foreach ($data as $item)
         <tr>
           <td>{{ $loop->iteration }}</td>
-          TD
+TD
         </tr>
       @endforeach
     </tbody>
   </table>
+
+  @if (($isPrint ?? false) === true)
+    <script>
+      window.print();
+    </script>
+  @endif
+
 </body>
 
 </html>

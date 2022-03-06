@@ -7,9 +7,10 @@
     { "key": "country", "value": "Indonesia" },
     {
         "key": "favicon",
-        "value": "http://127.0.0.1:8000/favicon.ico"
+        "value": "assets/icons/favicon.ico",
+        "is_url": true
     },
-    { "key": "logo", "value": "http://127.0.0.1:8000/images/logo.png" },
+    { "key": "logo", "value": "assets/images/logo.png", "is_url": true },
     { "key": "since", "value": "2021" },
 
     {
@@ -24,11 +25,13 @@
 
     {
         "key": "stisla_bg_home",
-        "value": "http://127.0.0.1:8000/stisla/assets/img/unsplash/andre-benz-1214056-unsplash.jpg"
+        "value": "stisla/assets/img/unsplash/andre-benz-1214056-unsplash.jpg",
+        "is_url": true
     },
     {
         "key": "stisla_bg_login",
-        "value": "http://127.0.0.1:8000/stisla/assets/img/unsplash/eberhard-grossgasteiger-1207565-unsplash.jpg"
+        "value": "stisla/assets/img/unsplash/eberhard-grossgasteiger-1207565-unsplash.jpg",
+        "is_url": true
     },
     { "key": "stisla_sidebar_mini", "value": "0" },
     { "key": "stisla_login_template", "value": "default" },

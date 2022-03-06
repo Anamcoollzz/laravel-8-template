@@ -41,6 +41,7 @@ class MakeCrudCommand extends Command
     private $arrayTD;
     private $exportClassName;
     private $importClassName;
+    private $icon;
 
     /**
      * Create a new command instance.
@@ -123,6 +124,7 @@ class MakeCrudCommand extends Command
         $controllerName = $this->controllerName = $modelName . 'Controller';
         $exportClassName = $this->exportClassName = $modelName . 'Export';
         $importClassName = $this->importClassName = $modelName . 'Import';
+        $this->icon = $this->json->icon;
         $this->moduleName = $this->json->title;
         $this->requestName = $modelName . 'Request';
         $routeName = $this->routeName = $this->folderViewName = $folderViewName = Str::plural(Str::kebab($modelName));
@@ -421,8 +423,8 @@ class MakeCrudCommand extends Command
 
         $viewExportPdf = file_get_contents(app_path('Console/Commands/data/crud/views/export-pdf.blade.php.dummy'));
         $viewExportPdf = str_replace('TITLE', $this->json->title, $viewExportPdf);
-        $viewExportPdf = str_replace('TH', $this->setTab($this->arrayTH, 3, 2), $viewExportPdf);
-        $viewExportPdf = str_replace('TD', $this->setTab($this->arrayTD, 4, 2), $viewExportPdf);
+        $viewExportPdf = str_replace('TH', $this->setTab($this->arrayTH, 4, 2), $viewExportPdf);
+        $viewExportPdf = str_replace('TD', $this->setTab($this->arrayTD, 5, 2), $viewExportPdf);
         $viewExportExcelPath    = $folder . '/export-pdf.blade.php';
         file_put_contents($viewExportExcelPath, $viewExportPdf);
 
@@ -442,8 +444,17 @@ class MakeCrudCommand extends Command
         $seederFile = file_get_contents(app_path('Console/Commands/data/crud/seeder.php.dummy'));
         $seederFile = str_replace('MODELNAME', $modelName, $seederFile);
         $seederFile = str_replace('SEEDERCOLUMNS', $SEEDERCOLUMNS, $seederFile);
-        $seederPath = database_path('Seeders/' . $modelName . 'Seeder.php');
+        $seederPath = database_path('seeders/' . $modelName . 'Seeder.php');
         file_put_contents($seederPath, $seederFile);
+
+        // MENU
+        $menuContent = file_get_contents(app_path('Console/Commands/data/crud/menu.json.dummy'));
+        $menuContent = str_replace('TITLE', $this->json->title, $menuContent);
+        $menuContent = str_replace('ROUTENAME', $this->routeName, $menuContent);
+        $menuContent = str_replace('ICON', $this->icon, $menuContent);
+        $menuContent = str_replace('PERMISSION', $this->json->title, $menuContent);
+        $menuPath = database_path('seeders/data/menu-modules/' . $this->routeName . '.json');
+        file_put_contents($menuPath, $menuContent);
 
         if (isset($migrationPath))
             $this->info('Created migration file => ' . $migrationPath);

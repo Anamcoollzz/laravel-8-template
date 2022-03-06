@@ -23,6 +23,7 @@
                   @include('stisla.includes.forms.buttons.btn-pdf-download', ['link' => $routePdf])
                   @include('stisla.includes.forms.buttons.btn-excel-download', ['link' => $routeExcel])
                   @include('stisla.includes.forms.buttons.btn-csv-download', ['link' => $routeCsv])
+                  @include('stisla.includes.forms.buttons.btn-print', ['link' => $routePrint])
                   @include('stisla.includes.forms.buttons.btn-json-download', ['link' => $routeJson])
                 </div>
               </div>

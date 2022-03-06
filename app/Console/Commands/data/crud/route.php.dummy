@@ -13,6 +13,7 @@ Route::prefix('api/v1')->as('api.')->middleware(['api', EnsureAppKey::class, 'au
 
 # WEB
 Route::middleware(['web', ViewShare::class, 'auth'])->group(function () {
+    Route::get('ROUTENAME/print', [WebController::class, 'exportPrint'])->name('ROUTENAME.print');
     Route::get('ROUTENAME/pdf', [WebController::class, 'pdf'])->name('ROUTENAME.pdf');
     Route::get('ROUTENAME/csv', [WebController::class, 'csv'])->name('ROUTENAME.csv');
     Route::get('ROUTENAME/json', [WebController::class, 'json'])->name('ROUTENAME.json');

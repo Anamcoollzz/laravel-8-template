@@ -75,6 +75,7 @@ class CONTROLLERNAME extends Controller
             'title'            => __('TITLE'),
             'routeCreate'      => route('ROUTENAME.create'),
             'routePdf'         => route('ROUTENAME.pdf'),
+            'routePrint'       => route('ROUTENAME.print'),
             'routeExcel'       => route('ROUTENAME.excel'),
             'routeCsv'         => route('ROUTENAME.csv'),
             'routeJson'        => route('ROUTENAME.json'),
@@ -258,15 +259,25 @@ COLUMNS
     public function pdf()
     {
         $data = $this->VARREPOSITORYNAME->getLatest();
-        return view('stisla.FOLDERVIEW.export-pdf', [
-                'data'     => $data,
-                'isExport' => true
-            ]);
         return PDF::setPaper('Letter', 'landscape')
             ->loadView('stisla.FOLDERVIEW.export-pdf', [
-                'data'     => $data,
-                'isExport' => true
+                'data'    => $data,
+                'isPrint' => false
             ])
             ->download('ROUTENAME.pdf');
+    }
+
+    /**
+     * export data to print html
+     *
+     * @return Response
+     */
+    public function exportPrint()
+    {
+        $data = $this->VARREPOSITORYNAME->getLatest();
+        return view('stisla.FOLDERVIEW.export-pdf', [
+            'data'    => $data,
+            'isPrint' => true
+        ]);
     }
 }
