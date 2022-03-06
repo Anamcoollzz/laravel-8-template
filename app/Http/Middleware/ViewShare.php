@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Repositories\MenuRepository;
 use App\Repositories\SettingRepository;
 use Closure;
 use Illuminate\Http\Request;
@@ -9,6 +10,24 @@ use Illuminate\Support\Facades\Session;
 
 class ViewShare
 {
+
+    /**
+     * menuRepository
+     *
+     * @var MenuRepository
+     */
+    private MenuRepository $menuRepository;
+
+    /**
+     * constructor method
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->menuRepository = new MenuRepository;
+    }
+
     /**
      * Handle an incoming request.
      *
@@ -56,6 +75,8 @@ class ViewShare
                 //     session(['_stisla_bg_login' => $value]);
                 // }
             }
+            $menus = $this->menuRepository->getMenus();
+            view()->share('_sidebar_menus', $menus);
         }
         return $next($request);
     }

@@ -319,5 +319,5 @@ function errorMsg(msg) {
 }
 
 function successMsg(msg) {
-  return swal('Berhasil', msg, 'success');
+  return swal('Sukses', msg, 'success');
 }

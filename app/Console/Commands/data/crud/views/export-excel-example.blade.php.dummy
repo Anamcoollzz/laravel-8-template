@@ -1,32 +1,15 @@
-<table class="table table-striped" id="datatable">
+<table>
   <thead>
     <tr>
-      @if ($isExport === false)
-        <th class="text-center">{{ __('#') }}</th>
-      @endif
+      <th>{{ __('#') }}</th>
 TH
-      @if ($isExport === false)
-        <th>{{ __('Aksi') }}</th>
-      @endif
     </tr>
   </thead>
   <tbody>
-
     @foreach ($data as $item)
       <tr>
-        @if ($isExport === false)
-          <td>{{ $loop->iteration }}</td>
-        @endif
+        <td>{{ $loop->iteration }}</td>
 TD
-        @if ($isExport === false)
-          <td>
-            {{-- @can('TITLE Ubah') --}}
-              @include('includes.form.buttons.btn-edit', ['link'=>route('ROUTE.edit', [$item->id])])
-            {{-- @can('TITLE Hapus') --}}
-              @include('includes.form.buttons.btn-delete', ['link'=>route('ROUTE.destroy', [$item->id])])
-            {{-- @endcan --}}
-          </td>
-        @endif
       </tr>
     @endforeach
   </tbody>

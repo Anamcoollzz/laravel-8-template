@@ -11,7 +11,7 @@ Route::middleware([
 ])->group(function () {
 
     # DASHBOARD
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
     # SETTINGS
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');

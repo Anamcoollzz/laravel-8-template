@@ -37,6 +37,10 @@ class MakeCrudCommand extends Command
     private $UPDATEVALIDATIONS;
     private $arrayColumns;
     private $moduleName;
+    private $arrayTH;
+    private $arrayTD;
+    private $exportClassName;
+    private $importClassName;
 
     /**
      * Create a new command instance.
@@ -67,6 +71,30 @@ class MakeCrudCommand extends Command
         return $columns;
     }
 
+    private function setTab(array $data, $tabSize = 0, $spacing = 2)
+    {
+        $spaces = collect(range(1, $spacing))->transform(function ($item) {
+            return " ";
+        })->toArray();
+        $spaces = implode('', $spaces);
+        $tabs = collect(range(1, $tabSize))->transform(function ($item) use ($spaces) {
+            return $spaces;
+        })->toArray();
+        $tabs = implode('', $tabs);
+
+        $columns = '';
+        $count = count($data);
+        $i = 0;
+        foreach ($data as $column) {
+            if ($i < $count - 1)
+                $columns .= "$tabs$column\n";
+            else
+                $columns .= "$tabs$column";
+            $i++;
+        }
+        return $columns;
+    }
+
     /**
      * Execute the console command.
      *
@@ -74,11 +102,11 @@ class MakeCrudCommand extends Command
      */
     public function handle()
     {
-        $filename = $this->ask('CRUD Filename? (check example in ' . app_path('Console/Commands/data/crud/files/student.json') . ') type like this [student]');
-        if (!$filename) {
-            $this->error("CRUD file required");
-            return 0;
-        }
+        // $filename = $this->ask('CRUD Filename? (check example in ' . app_path('Console/Commands/data/crud/files/student.json') . ') type like this [student]');
+        // if (!$filename) {
+        //     $this->error("CRUD file required");
+        //     return 0;
+        // }
         $filename = 'student';
         $filepath = app_path('Console/Commands/data/crud/files/' . $filename . '.json');
         if (File::exists($filepath) === false) {
@@ -93,6 +121,8 @@ class MakeCrudCommand extends Command
         $this->repoName       = $modelName . 'Repository';
         $this->varRepoName    = Str::camel($modelName) . 'Repository';
         $controllerName = $this->controllerName = $modelName . 'Controller';
+        $exportClassName = $this->exportClassName = $modelName . 'Export';
+        $importClassName = $this->importClassName = $modelName . 'Import';
         $this->moduleName = $this->json->title;
         $this->requestName = $modelName . 'Request';
         $routeName = $this->routeName = $this->folderViewName = $folderViewName = Str::plural(Str::kebab($modelName));
@@ -138,23 +168,26 @@ class MakeCrudCommand extends Command
                     $SEEDERCOLUMNS .= "'" . $column->name . '\'' . ' => $faker->numberBetween(0, ' . $max . '), // ganti method fakernya sesuai kebutuhan' . "\n\t\t\t\t";
                 } else
                     $SEEDERCOLUMNS .= "'" . $column->name . '\'' . ' => $faker->numberBetween(0,1000), // ganti method fakernya sesuai kebutuhan' . "\n\t\t\t\t";
-                $label = $column->label ?? Str::title(str_replace('_', ' ', $column->name));
-                $TH .= "\t\t<th class=\"text-center\">{{ __('" . $label . "') }}</th>\n";
-                if (isset($column->options)) {
-                    $TD .= "\t\t<td>" . '{{ \App\Models\\' . $modelName . '::TYPES[\'' . $column->name . '\'][$item->' . $column->name . "] }}</td>\n";
-                } else
-                    $TD .= "\t\t<td>" . '{{ $item->' . $column->name . " }}</td>\n";
             } else {
                 $STRUCTURE .= '$table->string(\'' . $column->name . '\', ' . ($column->length ?? 191) . ');';
                 // $FILLABLES .= "\t\t'" . $column->name . "',\n";
                 $FILLABLES .= "'" . $column->name . "', ";
                 $SEEDERCOLUMNS .= "'" . $column->name . '\'' . ' => Str::random(10),' . "\n\t\t\t\t";
+            }
+
+            // setup TH dan TD
+            if (!($column->type === 'ai' || $column->type === 'timestamps')) {
                 $label = $column->label ?? Str::title(str_replace('_', ' ', $column->name));
-                $TH .= "\t\t<th class=\"text-center\">{{ __('" . $label . "') }}</th>\n";
+                $th = "<th class=\"text-center\">{{ __('" . $label . "') }}</th>";
+                $TH .= "\t\t$th\n";
                 if (isset($column->options)) {
-                    $TD .= "\t\t<td>" . '{{ \App\Models\\' . $modelName . '::TYPES[\'' . $column->name . '\'][$item->' . $column->name . "] }}</td>\n";
-                } else
-                    $TD .= "\t\t<td>" . '{{ $item->' . $column->name . " }}</td>\n";
+                    $td = "<td>" . '{{ \App\Models\\' . $modelName . '::TYPES[\'' . $column->name . '\'][$item->' . $column->name . "] }}</td>";
+                } else {
+                    $td = "<td>" . '{{ $item->' . $column->name . " }}</td>";
+                }
+                $TD .= "\t\t$td\n";
+                $this->arrayTH[] = $th;
+                $this->arrayTD[] = $td;
             }
             $STRUCTURE .= "\n\t\t\t";
 
@@ -186,65 +219,65 @@ class MakeCrudCommand extends Command
                 switch ($column->form->type) {
                     case 'text':
                         $FORM .= "\t\t\t\t<div class=\"col-md-6\">
-                  @include('includes.form.input', ['required'=>true, 'type'=>'text', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
+                  @include('stisla.includes.forms.inputs.input', ['required'=>true, 'type'=>'text', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
                 </div>\n\n";
                         break;
                     case 'email':
                         $FORM .= "\t\t\t\t<div class=\"col-md-6\">
-                  @include('includes.form.input-email', ['required'=>true, 'type'=>'email', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
+                  @include('stisla.includes.forms.inputs.input-email', ['required'=>true, 'type'=>'email', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
                 </div>\n\n";
                         break;
                     case 'password':
                         $FORM .= "\t\t\t\t<div class=\"col-md-6\">
-                  @include('includes.form.input-password', ['required'=>true, 'type'=>'text', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
+                  @include('stisla.includes.forms.inputs.input-password', ['required'=>true, 'type'=>'text', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
                 </div>\n\n";
                         break;
                     case 'image':
                         $FORM .= "\t\t\t\t<div class=\"col-md-6\">
-                  @include('includes.form.input', ['required'=>true, 'type'=>'file', 'accept'=>'image/*', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
+                  @include('stisla.includes.forms.inputs.input', ['required'=>true, 'type'=>'file', 'accept'=>'image/*', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
                 </div>\n\n";
                         break;
                     case 'file':
                         $FORM .= "\t\t\t\t<div class=\"col-md-6\">
-                  @include('includes.form.input', ['required'=>true, 'type'=>'file', 'accept'=>'*', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
+                  @include('stisla.includes.forms.inputs.input', ['required'=>true, 'type'=>'file', 'accept'=>'*', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
                 </div>\n\n";
                         break;
                     case 'number':
                         $FORM .= "\t\t\t\t<div class=\"col-md-6\">
-                  @include('includes.form.input', ['required'=>true, 'type'=>'number', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "'), 'min'=>0])
+                  @include('stisla.includes.forms.inputs.input', ['required'=>true, 'type'=>'number', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "'), 'min'=>0])
                 </div>\n\n";
                         break;
                     case 'time':
                         $FORM .= "\t\t\t\t<div class=\"col-md-6\">
-                  @include('includes.form.input', ['required'=>true, 'type'=>'time', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
+                  @include('stisla.includes.forms.inputs.input', ['required'=>true, 'type'=>'time', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
                 </div>\n\n";
                         break;
                     case 'colorpicker':
                         $FORM .= "\t\t\t\t<div class=\"col-md-6\">
-                  @include('includes.form.colorpicker', ['required'=>true, 'type'=>'text', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
+                  @include('stisla.includes.forms.inputs.input-colorpicker', ['required'=>true, 'type'=>'text', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
                 </div>\n\n";
                         break;
                     case 'date':
                         $FORM .= "\t\t\t\t<div class=\"col-md-6\">
-                  @include('includes.form.input', ['required'=>true, 'type'=>'date', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
+                  @include('stisla.includes.forms.inputs.input', ['required'=>true, 'type'=>'date', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
                 </div>\n\n";
                         break;
                     case 'textarea':
                         $FORM .= "\t\t\t\t<div class=\"col-md-6\">
-                  @include('includes.form.textarea', ['required'=>true, 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
+                  @include('stisla.includes.forms.editors.textarea', ['required'=>true, 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
                 </div>\n\n";
                         break;
                     case 'select2':
                         $multiple = $column->form->multiple ?? false ? 'true' : 'false';
                         $options = json_encode($column->form->options ?? []);
                         $FORM .= "\t\t\t\t<div class=\"col-md-6\">
-                  @include('includes.form.select2', ['required'=>true, 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "'), 'options'=>" . $options . ", 'multiple'=>" . $multiple . "])
+                  @include('stisla.includes.forms.selects.select2', ['required'=>true, 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "'), 'options'=>" . $options . ", 'multiple'=>" . $multiple . "])
                 </div>\n\n";
                         break;
                     case 'select':
                         $options = json_encode($column->form->options ?? []);
                         $FORM .= "\t\t\t\t<div class=\"col-md-6\">
-                  @include('includes.form.select', ['required'=>true, 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "'), 'options'=>" . $options . "])
+                  @include('stisla.includes.forms.selects.select', ['required'=>true, 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "'), 'options'=>" . $options . "])
                 </div>\n\n";
                         break;
                     case 'radio':
@@ -258,7 +291,7 @@ class MakeCrudCommand extends Command
                         // $newOptions
                         $options = json_encode($newOptions);
                         $FORM .= "\t\t\t\t<div class=\"col-md-6\">
-                  @include('includes.form.radio-toggle', ['required'=>true, 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "'), 'options'=>" . $options . "])
+                  @include('stisla.includes.forms.inputs.input-radio-toggle', ['required'=>true, 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "'), 'options'=>" . $options . "])
                 </div>\n\n";
                         break;
                 }
@@ -326,7 +359,7 @@ class MakeCrudCommand extends Command
         // CREATE CONTROLLER
         $controllerFile = file_get_contents(
             app_path(
-                'Console/Commands/data/crud/controller.php.dummy'
+                'Console/Commands/data/crud/controller2.php.dummy'
             )
         );
         $controllerFile = str_replace('TITLE', $this->json->title, $controllerFile);
@@ -336,8 +369,11 @@ class MakeCrudCommand extends Command
         $controllerFile = str_replace('VARMODELNAME', Str::camel($modelName), $controllerFile);
         $controllerFile = str_replace('MODELNAME', $modelName, $controllerFile);
         $controllerFile = str_replace('REQUESTNAME', $modelName . 'Request', $controllerFile);
-        $controllerFile = str_replace('COLUMNS', $FILLABLES, $controllerFile);
+        $controllerFile = str_replace('COLUMNS', $this->setColumnsWithTab(3), $controllerFile);
         $controllerFile = str_replace('FOLDERVIEW', $folderViewName, $controllerFile);
+        $controllerFile = str_replace('ROUTENAME', $this->routeName, $controllerFile);
+        $controllerFile = str_replace('EXPORTCLASSNAME', $this->exportClassName, $controllerFile);
+        $controllerFile = str_replace('IMPORTCLASSNAME', $this->importClassName, $controllerFile);
         $filepath = app_path('Http/Controllers/' . $modelName . 'Controller.php');
         file_put_contents($controllerPath = $filepath, $controllerFile);
 
@@ -354,12 +390,12 @@ class MakeCrudCommand extends Command
         file_put_contents($requestPath = $filepath, $requestFile);
 
         // CREATE VIEWS
-        $viewIndexFile = file_get_contents(app_path('Console/Commands/data/crud/views/index.blade.php.dummy'));
+        $viewIndexFile = file_get_contents(app_path('Console/Commands/data/crud/views/index2.blade.php.dummy'));
         $viewIndexFile = str_replace('TITLE', $this->json->title, $viewIndexFile);
         $viewIndexFile = str_replace('ROUTE', $routeName, $viewIndexFile);
         $viewIndexFile = str_replace('ICON', $this->json->icon, $viewIndexFile);
-        $viewIndexFile = str_replace('TH', $TH, $viewIndexFile);
-        $viewIndexFile = str_replace('TD', $TD, $viewIndexFile);
+        $viewIndexFile = str_replace('TH', $this->setTab($this->arrayTH, 11, 2), $viewIndexFile);
+        $viewIndexFile = str_replace('TD', $this->setTab($this->arrayTD, 12, 2), $viewIndexFile);
         $folder = base_path('resources/views/stisla/') . $folderViewName;
         // dd($folder);
         if (!file_exists($folder)) {
@@ -378,14 +414,17 @@ class MakeCrudCommand extends Command
         file_put_contents($viewCreatePath = $filepath, $viewFormFile);
 
         $viewExportExcelFile = file_get_contents(app_path('Console/Commands/data/crud/views/export-excel-example.blade.php.dummy'));
-        $viewExportExcelFile = str_replace('TITLE', $this->json->title, $viewExportExcelFile);
-        $viewExportExcelFile = str_replace('ROUTE', $routeName, $viewExportExcelFile);
-        $viewExportExcelFile = str_replace('ICON', $this->json->icon, $viewExportExcelFile);
-        $viewExportExcelFile = str_replace('FORM', $FORM, $viewExportExcelFile);
-        $viewExportExcelFile = str_replace('TH', $TH, $viewExportExcelFile);
-        $viewExportExcelFile = str_replace('TD', $TD, $viewExportExcelFile);
+        $viewExportExcelFile = str_replace('TH', $this->setTab($this->arrayTH, 3, 2), $viewExportExcelFile);
+        $viewExportExcelFile = str_replace('TD', $this->setTab($this->arrayTD, 4, 2), $viewExportExcelFile);
         $viewExportExcelPath    = $folder . '/export-excel-example.blade.php';
         file_put_contents($viewExportExcelPath, $viewExportExcelFile);
+
+        $viewExportPdf = file_get_contents(app_path('Console/Commands/data/crud/views/export-pdf.blade.php.dummy'));
+        $viewExportPdf = str_replace('TITLE', $this->json->title, $viewExportPdf);
+        $viewExportPdf = str_replace('TH', $this->setTab($this->arrayTH, 3, 2), $viewExportPdf);
+        $viewExportPdf = str_replace('TD', $this->setTab($this->arrayTD, 4, 2), $viewExportPdf);
+        $viewExportExcelPath    = $folder . '/export-pdf.blade.php';
+        file_put_contents($viewExportExcelPath, $viewExportPdf);
 
         $exportExcelFile = file_get_contents(app_path('Console/Commands/data/crud/export.php.dummy'));
         $exportExcelFile = str_replace('FOLDERVIEW', $folderViewName, $exportExcelFile);

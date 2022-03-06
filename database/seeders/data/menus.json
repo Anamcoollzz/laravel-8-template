@@ -1,0 +1,106 @@
+[
+    {
+        "group_name": "Navigasi",
+        "menus": [
+            {
+                "menu_name": "Beranda",
+                "route_name": "dashboard.index",
+                "icon": "fire",
+                "permission": null,
+                "is_active_if_url_includes": "dashboard*"
+            },
+            {
+                "menu_name": "Contoh CRUD",
+                "route_name": "crud-examples.index",
+                "icon": "atom",
+                "permission": null,
+                "is_active_if_url_includes": "crud-examples*"
+            },
+            {
+                "menu_name": "Menu",
+                "route_name": null,
+                "icon": "bars",
+                "permission": null,
+                "is_active_if_url_includes": null
+            },
+            {
+                "menu_name": "Menu Dropdown",
+                "route_name": null,
+                "icon": "caret-square-down",
+                "permission": null,
+                "is_active_if_url_includes": null
+            },
+            {
+                "menu_name": "Datatable",
+                "route_name": "datatable.index",
+                "icon": "table",
+                "permission": null,
+                "is_active_if_url_includes": "datatable*"
+            },
+            {
+                "menu_name": "Form",
+                "route_name": "form.index",
+                "icon": "file-alt",
+                "permission": null,
+                "is_active_if_url_includes": "form*"
+            },
+            {
+                "menu_name": "Chart JS",
+                "route_name": "chart-js.index",
+                "icon": "chart-line",
+                "permission": null,
+                "is_active_if_url_includes": "chart-js*"
+            }
+        ]
+    },
+
+    {
+        "group_name": "Menu Lainnya",
+        "menus": [
+            {
+                "menu_name": "Manajemen Pengguna",
+                "route_name": null,
+                "icon": "users",
+                "permission": null,
+                "is_active_if_url_includes": "dashboard*",
+                "childs": [
+                    {
+                        "menu_name": "Pengguna",
+                        "route_name": "user-management.users.index",
+                        "icon": null,
+                        "permission": null,
+                        "is_active_if_url_includes": "user-management/users*"
+                    },
+                    {
+                        "menu_name": "Role",
+                        "route_name": "user-management.roles.index",
+                        "icon": null,
+                        "permission": null,
+                        "is_active_if_url_includes": "user-management/roles*"
+                    }
+                ]
+            },
+            {
+                "menu_name": "Profil",
+                "route_name": "profile.index",
+                "icon": "user",
+                "permission": "Profil",
+                "is_active_if_url_includes": "profile*"
+            },
+            {
+                "menu_name": "Pengaturan",
+                "route_name": "settings.index",
+                "icon": "cogs",
+                "permission": "Pengaturan",
+                "is_active_if_url_includes": "settings*"
+            },
+            {
+                "menu_name": "Keluar",
+                "route_name": "logout",
+                "icon": "sign-out-alt",
+                "permission": null,
+                "is_active_if_url_includes": null
+            }
+        ]
+    }
+]

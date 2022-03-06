@@ -1,0 +1,26 @@
+* {
+    font-family: sans-serif;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    border: 1px solid grey;
+    padding: 5px;
+}
+
+th {
+    background-color: rgba(226, 226, 226, 1);
+}
+
+h1 {
+    text-align: center;
+}
+
+h3 {
+    text-align: center;
+}

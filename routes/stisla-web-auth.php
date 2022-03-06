@@ -10,7 +10,7 @@ use App\Http\Controllers\UserManagementController;
 use Illuminate\Support\Facades\Route;
 
 # DASHBOARD
-Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
 # SETTINGS
 Route::get('settings', [SettingController::class, 'index'])->name('settings.index');

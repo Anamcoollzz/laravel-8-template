@@ -88,7 +88,7 @@
 @if (session('successMessage'))
   <input type="hidden" id="sessionSuccessMessage" value="{{ session('successMessage') }}">
   <script>
-    swal('Berhasil', $('#sessionSuccessMessage').val(), 'success');
+    swal('Sukses', $('#sessionSuccessMessage').val(), 'success');
   </script>
 @endif
 
