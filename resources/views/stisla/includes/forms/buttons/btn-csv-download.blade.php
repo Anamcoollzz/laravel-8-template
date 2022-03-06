@@ -1,4 +1,3 @@
-<a href="{{ $link }}" class="btn btn-icon" target="_blank" data-toggle="tooltip"
-  style="background-color: purple; color: white;" title="{{ $label ?? __('Download CSV') }}">
+<a href="{{ $link }}" class="btn btn-success btn-icon" target="_blank" data-toggle="tooltip" title="{{ $label ?? __('Download CSV') }}">
   <i class="fa fa-file-excel"></i>
 </a>
