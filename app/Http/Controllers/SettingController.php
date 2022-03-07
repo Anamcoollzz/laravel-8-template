@@ -42,14 +42,80 @@ class SettingController extends Controller
     /**
      * showing setting page
      *
-     * @return View
+     * @param mixed $type
+     * @return Response
      */
-    public function index()
+    public function index($type)
     {
         if (config('app.template') === 'stisla') {
             $skins = $this->settingRepository->getStislaSkins();
+            $fullTitle = 'Pengaturan Umum';
+            if ($type === 'meta') $fullTitle = 'Pengaturan Meta';
+            else if ($type === 'meta') $fullTitle = 'Pengaturan Meta';
+            else if ($type === 'view') $fullTitle = 'Pengaturan Tampilan';
+            else if ($type === 'other') $fullTitle = 'Pengaturan Lainnya';
             return view('stisla.settings.index', [
+                'skins'      => $skins,
+                'type'       => $type,
+                'routeIndex' => route('settings.all'),
+                'fullTitle'  => $fullTitle,
+                'title'      => __('Pengaturan'),
+            ]);
+        } else {
+            $skins = collect($this->settingRepository->getSkins())->map(function ($item) {
+                $item2['name'] = $item;
+                return $item2;
+            })->pluck('name', 'name')->toArray();
+            return view('sbadmin.settings.index', [
                 'skins' => $skins,
+            ]);
+        }
+    }
+
+    /**
+     * showing all setting page
+     *
+     * @return View
+     */
+    public function allSetting()
+    {
+        if (config('app.template') === 'stisla') {
+            $skins = $this->settingRepository->getStislaSkins();
+            $options = [
+                [
+                    'title' => __('Umum'),
+                    'desc'  => __('Pengaturan seperti nama aplikasi, nama perusahaan, tahun berdiri, dll.'),
+                    'route' => route('settings.index', ['type' => 'general']),
+                    'icon'  => 'cog',
+                ],
+                [
+                    'title' => __('Meta'),
+                    'desc'  => __('Pengaturan seperti meta author, description, dan keyword.'),
+                    'route' => route('settings.index', ['type' => 'meta']),
+                    'fullIcon'  => 'fab fa-chrome',
+                ],
+                [
+                    'title' => __('Tampilan'),
+                    'desc'  => __('Pengaturan seperti nama aplikasi, nama perusahaan, tahun berdiri, dll.'),
+                    'route' => route('settings.index', ['type' => 'view']),
+                    'icon'  => 'eye'
+                ],
+                [
+                    'title' => __('Email'),
+                    'desc'  => __('Pengaturan seperti provider email, pengirim, nama pengirim, dll.'),
+                    'route' => route('settings.index', ['type' => 'email']),
+                    'icon'  => 'envelope'
+                ],
+                [
+                    'title' => __('Lainnya'),
+                    'desc'  => __('Pengaturan email verifikasi, lupa password, halaman daftar.'),
+                    'route' => route('settings.index', ['type' => 'other']),
+                    'icon'  => 'cogs'
+                ],
+            ];
+            return view('stisla.settings.all', [
+                'title'      => __('Pengaturan'),
+                'options'    => $options
             ]);
         } else {
             $skins = collect($this->settingRepository->getSkins())->map(function ($item) {

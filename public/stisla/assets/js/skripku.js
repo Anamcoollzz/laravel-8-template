@@ -263,6 +263,8 @@ $('form')
     var $formControl = $form.find('.form-control:not(.note-form-control)');
     var tidakError = true;
     $formControl.each(function (index, item) {
+      // console.log('item', item);
+      // console.log('itemvalue', item.value);
       if (item.hasAttribute('required') && !item.value) {
         tidakError = false;
         $(item).addClass('is-invalid');

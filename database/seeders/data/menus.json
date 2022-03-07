@@ -109,7 +109,7 @@
             },
             {
                 "menu_name": "Pengaturan",
-                "route_name": "settings.index",
+                "route_name": "settings.all",
                 "icon": "cogs",
                 "permission": "Pengaturan",
                 "is_active_if_url_includes": "settings*"

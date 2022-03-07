@@ -15,7 +15,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
 # SETTINGS
-Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
+Route::get('settings/all', [SettingController::class, 'allSetting'])->name('settings.all');
+Route::get('settings/{type}', [SettingController::class, 'index'])->name('settings.index');
 Route::put('settings', [SettingController::class, 'update'])->name('settings.update');
 
 # PROFILE
