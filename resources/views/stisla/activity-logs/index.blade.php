@@ -69,6 +69,7 @@
             </form>
           </div>
         </div>
+
         @if ($data->count() > 0)
           @if ($canExport)
             <div class="card">

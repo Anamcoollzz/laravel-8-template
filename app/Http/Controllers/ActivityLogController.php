@@ -56,11 +56,12 @@ class ActivityLogController extends Controller
      */
     public function index()
     {
-        $user  = auth()->user();
-        $data  = $this->activityLogRepository->getFilter();
-        $roles = $this->userRepository->getRoleOptions();
-        $users = $this->userRepository->getUserOptions();
-        $kinds = $this->activityLogRepository->getActivityTypeOptions();
+        $user        = auth()->user();
+        $queryString = request()->query();
+        $data        = $this->activityLogRepository->getFilter();
+        $roles       = $this->userRepository->getRoleOptions();
+        $users       = $this->userRepository->getUserOptions();
+        $kinds       = $this->activityLogRepository->getActivityTypeOptions();
 
         return view('stisla.activity-logs.index', [
             'data'             => $data,
@@ -76,11 +77,11 @@ class ActivityLogController extends Controller
             'title'            => __('Log Aktivitas'),
             'routeCreate'      => null,
             // 'routeCreate'      => route('activity-logs.create'),
-            'routePdf'         => route('activity-logs.pdf'),
-            'routePrint'       => route('activity-logs.print'),
-            'routeExcel'       => route('activity-logs.excel'),
-            'routeCsv'         => route('activity-logs.csv'),
-            'routeJson'        => route('activity-logs.json'),
+            'routePdf'         => route('activity-logs.pdf', $queryString),
+            'routePrint'       => route('activity-logs.print', $queryString),
+            'routeExcel'       => route('activity-logs.excel', $queryString),
+            'routeCsv'         => route('activity-logs.csv', $queryString),
+            'routeJson'        => route('activity-logs.json', $queryString),
             // 'routeImportExcel' => route('activity-logs.import-excel'),
             // 'excelExampleLink' => route('activity-logs.import-excel-example'),
         ]);
