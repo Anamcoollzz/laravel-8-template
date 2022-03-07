@@ -7,6 +7,7 @@ use App\Http\Requests\REQUESTNAME;
 use App\Imports\IMPORTCLASSNAME;
 use App\Models\MODELNAME;
 use App\Repositories\REPOSITORYNAME;
+use App\Repositories\NotificationRepository;
 use App\Services\EmailService;
 use App\Services\FileService;
 use Illuminate\Http\Request;
@@ -23,6 +24,13 @@ class CONTROLLERNAME extends Controller
      * @var REPOSITORYNAME
      */
     private REPOSITORYNAME $VARREPOSITORYNAME;
+
+    /**
+     * NotificationRepository
+     *
+     * @var NotificationRepository
+     */
+    private NotificationRepository $NotificationRepository;
 
     /**
      * file service
@@ -45,9 +53,10 @@ class CONTROLLERNAME extends Controller
      */
     public function __construct()
     {
-        $this->VARREPOSITORYNAME = new REPOSITORYNAME;
-        $this->fileService           = new FileService;
-        $this->emailService          = new EmailService;
+        $this->VARREPOSITORYNAME      = new REPOSITORYNAME;
+        $this->fileService            = new FileService;
+        $this->emailService           = new EmailService;
+        $this->NotificationRepository = new NotificationRepository;
 
         $this->middleware('can:TITLE');
         $this->middleware('can:TITLE Tambah')->only(['create', 'store']);
@@ -118,6 +127,15 @@ COLUMNS
 
         $result = $this->VARREPOSITORYNAME->create($data);
 
+        // use this if you want to create notification data
+        // $title = 'Notify Title';
+        // $content = 'lorem ipsum dolor sit amet';
+        // $userId = 2;
+        // $notificationType = 'transaksi masuk';
+        // $icon = 'bell'; // font awesome
+        // $bgColor = 'primary'; // primary, danger, success, warning
+        // $this->NotificationRepository->createNotif($title,  $content, $userId,  $notificationType, $icon, $bgColor);
+
         // gunakan jika mau kirim email
         // $this->emailService->methodName($result);
 
@@ -164,6 +182,15 @@ COLUMNS
 
         $newData = $this->VARREPOSITORYNAME->update($data, $VARMODELNAME->id);
 
+        // use this if you want to create notification data
+        // $title = 'Notify Title';
+        // $content = 'lorem ipsum dolor sit amet';
+        // $userId = 2;
+        // $notificationType = 'transaksi masuk';
+        // $icon = 'bell'; // font awesome
+        // $bgColor = 'primary'; // primary, danger, success, warning
+        // $this->NotificationRepository->createNotif($title,  $content, $userId,  $notificationType, $icon, $bgColor);
+
         // gunakan jika mau kirim email
         // $this->emailService->methodName($newData);
 
@@ -183,6 +210,15 @@ COLUMNS
     {
         // delete file from storage if exists
         // $this->fileService->methodName($VARMODELNAME);
+
+        // use this if you want to create notification data
+        // $title = 'Notify Title';
+        // $content = 'lorem ipsum dolor sit amet';
+        // $userId = 2;
+        // $notificationType = 'transaksi masuk';
+        // $icon = 'bell'; // font awesome
+        // $bgColor = 'primary'; // primary, danger, success, warning
+        // $this->NotificationRepository->createNotif($title,  $content, $userId,  $notificationType, $icon, $bgColor);
 
         // gunakan jika mau kirim email
         // $this->emailService->methodName($VARMODELNAME);

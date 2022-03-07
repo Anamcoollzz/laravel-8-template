@@ -95,4 +95,29 @@ class NotificationRepository extends Repository
         return $this->model->query()->where('user_id', auth()->id())
             ->update(['is_read' => 1]);
     }
+
+    /**
+     * create notification
+     *
+     * @param string $title
+     * @param string $content
+     * @param string|integer $userId
+     * @param string $notificationType
+     * @param string $icon
+     * @param string $bgColor
+     * @return Notification
+     */
+    public function createNotif(string $title, string $content, $userId, string $notificationType, $icon = 'bell', $bgColor = 'primary')
+    {
+        $data = [
+            'title'             => $title,
+            'content'           => $content,
+            'user_id'           => $userId,
+            'is_read'           => false,
+            'notification_type' => $notificationType,
+            'icon'              => $icon,
+            'bg_color'          => $bgColor,
+        ];
+        return $this->create($data);
+    }
 }
