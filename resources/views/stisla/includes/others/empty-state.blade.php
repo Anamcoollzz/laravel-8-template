@@ -9,6 +9,7 @@
     <div class="empty-state" data-height="400">
       <div class="empty-state-icon">
         <i class="fas fa-question"></i>
+        {{-- <i class="fa fa-cloud-exclamation"></i> --}}
       </div>
       <h2>{{ $emptyTitle ?? __('Kami tidak dapat menemukan data apa pun') }}</h2>
       <p class="lead">

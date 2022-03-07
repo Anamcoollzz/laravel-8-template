@@ -187,4 +187,15 @@ class Repository extends RepositoryAbstract
             })
             ->paginate($perPage);
     }
+
+    /**
+     * getFilter
+     *
+     * @return Collection
+     */
+    public function getFilter()
+    {
+        return $this->model
+            ->get();
+    }
 }

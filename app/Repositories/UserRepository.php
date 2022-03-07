@@ -76,6 +76,18 @@ class UserRepository extends Repository
     }
 
     /**
+     * get user as option dropdown
+     *
+     * @return array
+     */
+    public function getUserOptions()
+    {
+        return $this->getUsers()
+            ->pluck('name', 'id')
+            ->toArray();
+    }
+
+    /**
      * get user data as pagination
      *
      * @param integer $perPage
@@ -96,6 +108,18 @@ class UserRepository extends Repository
     {
         $roles = Role::with(['permissions'])->get();
         return $roles;
+    }
+
+    /**
+     * get role as option dropdown
+     *
+     * @return array
+     */
+    public function getRoleOptions()
+    {
+        return $this->getRoles()
+            ->pluck('name', 'id')
+            ->toArray();
     }
 
     /**

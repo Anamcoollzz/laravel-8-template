@@ -11,6 +11,17 @@
     },
 
     {
+        "name": "Log Aktivitas",
+        "roles": ["superadmin", "akuntesting"],
+        "group": "Log Aktivitas"
+    },
+    {
+        "name": "Log Aktivitas Ekspor",
+        "roles": ["superadmin", "akuntesting"],
+        "group": "Log Aktivitas"
+    },
+
+    {
         "name": "Role",
         "roles": ["superadmin", "akuntesting"],
         "group": "Role"
@@ -76,12 +87,6 @@
         "name": "Pengaturan",
         "roles": ["superadmin", "akuntesting"],
         "group": "Pengaturan"
-    },
-
-    {
-        "name": "Log Aktivitas",
-        "roles": ["superadmin", "akuntesting"],
-        "group": "Log Aktivitas"
     },
 
     {

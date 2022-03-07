@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\CrudExampleController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
@@ -39,6 +40,14 @@ Route::prefix('user-management')->as('user-management.')->group(function () {
     Route::post('roles/import-excel', [RoleController::class, 'importExcel'])->name('roles.import-excel');
     Route::resource('roles', RoleController::class);
 });
+
+# ACTIVITY LOGS
+Route::get('activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
+Route::get('activity-logs/print', [ActivityLogController::class, 'exportPrint'])->name('activity-logs.print');
+Route::get('activity-logs/pdf', [ActivityLogController::class, 'pdf'])->name('activity-logs.pdf');
+Route::get('activity-logs/csv', [ActivityLogController::class, 'csv'])->name('activity-logs.csv');
+Route::get('activity-logs/json', [ActivityLogController::class, 'json'])->name('activity-logs.json');
+Route::get('activity-logs/excel', [ActivityLogController::class, 'excel'])->name('activity-logs.excel');
 
 # CONTOH CRUD
 Route::get('crud-examples/pdf', [CrudExampleController::class, 'pdf'])->name('crud-examples.pdf');

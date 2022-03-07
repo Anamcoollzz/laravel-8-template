@@ -87,6 +87,13 @@
                 ]
             },
             {
+                "menu_name": "Log Aktivitas",
+                "route_name": "activity-logs.index",
+                "icon": "clock-rotate-left",
+                "permission": "Log Aktivitas",
+                "is_active_if_url_includes": "activity-logs*"
+            },
+            {
                 "menu_name": "Profil",
                 "route_name": "profile.index",
                 "icon": "user",

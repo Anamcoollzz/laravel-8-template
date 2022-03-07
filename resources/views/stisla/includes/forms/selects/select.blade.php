@@ -22,6 +22,9 @@ if ($isMultiple) {
   </label>
   <select @if ($isRequired) required @endif @if ($isMultiple) multiple @endif name="{{ $isMultiple ? $name . '[]' : $name }}" id="{{ $id }}"
     class="form-control">
+    @if ($with_all ?? false)
+      <option value="">{{ __('Semua') }}</option>
+    @endif
     @if ($isMultiple)
       @foreach ($options as $value => $text)
         <option @if (in_array($value, $selected)) selected @endif value="{{ $value }}">{{ $text }}</option>
