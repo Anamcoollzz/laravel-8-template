@@ -3,6 +3,7 @@
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\CrudExampleController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
@@ -48,6 +49,11 @@ Route::get('activity-logs/pdf', [ActivityLogController::class, 'pdf'])->name('ac
 Route::get('activity-logs/csv', [ActivityLogController::class, 'csv'])->name('activity-logs.csv');
 Route::get('activity-logs/json', [ActivityLogController::class, 'json'])->name('activity-logs.json');
 Route::get('activity-logs/excel', [ActivityLogController::class, 'excel'])->name('activity-logs.excel');
+
+# NOTIFICATIONS
+Route::get('notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.read-all');
+Route::get('notifications/read/{notification}', [NotificationController::class, 'read'])->name('notifications.read');
+Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
 
 # CONTOH CRUD
 Route::get('crud-examples/pdf', [CrudExampleController::class, 'pdf'])->name('crud-examples.pdf');

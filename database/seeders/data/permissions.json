@@ -90,6 +90,12 @@
     },
 
     {
+        "name": "Notifikasi",
+        "roles": ["superadmin", "akuntesting"],
+        "group": "Notifikasi"
+    },
+
+    {
         "name": "Contoh CRUD",
         "roles": ["superadmin", "akuntesting"],
         "group": "Contoh CRUD"

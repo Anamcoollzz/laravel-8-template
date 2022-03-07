@@ -77,6 +77,8 @@ class ViewShare
             }
             $menus = $this->menuRepository->getMenus();
             view()->share('_sidebar_menus', $menus);
+
+            view()->share('_my_notifications', (new \App\Repositories\NotificationRepository)->myUnReadNotif(20));
         }
         return $next($request);
     }

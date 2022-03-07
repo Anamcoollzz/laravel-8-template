@@ -87,6 +87,13 @@
                 ]
             },
             {
+                "menu_name": "Notifikasi",
+                "route_name": "notifications.index",
+                "icon": "bell",
+                "permission": "Notifikasi",
+                "is_active_if_url_includes": "notifications*"
+            },
+            {
                 "menu_name": "Log Aktivitas",
                 "route_name": "activity-logs.index",
                 "icon": "clock-rotate-left",

@@ -68,11 +68,15 @@ class Repository extends RepositoryAbstract
      * find data by id
      *
      * @param mixed $id
+     * @param array $columns
      * @return Model
      */
-    public function find($id)
+    public function find($id, array $columns = ['*'])
     {
-        return $this->model->find($id);
+        return $this->model->query()
+            ->where('id', $id)
+            ->select($columns)
+            ->first();
     }
 
     /**
@@ -115,14 +119,15 @@ class Repository extends RepositoryAbstract
      *
      * @param array $data
      * @param int $id
+     * @param array $columns
      * @return Model
      */
-    public function update(array $data, int $id)
+    public function update(array $data, int $id, array $columns = ['*'])
     {
         $model = $this->find($id);
         if ($model) {
             $model->update($data);
-            return $this->find($id);
+            return $this->find($id, $columns);
         }
         return 0;
     }
@@ -196,6 +201,22 @@ class Repository extends RepositoryAbstract
     public function getFilter()
     {
         return $this->model
+            ->get();
+    }
+
+    /**
+     * getWhereIn
+     *
+     * @param string $column
+     * @param array $data
+     * @param array $columns
+     * @return Collection
+     */
+    public function getWhereIn(string $column, array $data, array $columns = ['*'])
+    {
+        return $this->model->query()
+            ->select($columns)
+            ->whereIn($column, $data)
             ->get();
     }
 }
