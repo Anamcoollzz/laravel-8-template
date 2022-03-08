@@ -237,6 +237,10 @@ COLUMNS
      */
     public function importExcelExample(): BinaryFileResponse
     {
+        // bisa gunakan file excel langsung sebagai contoh
+        // $filepath = public_path('example.xlsx');
+        // return response()->download($filepath);
+
         $data = $this->VARREPOSITORYNAME->getLatest();
         return Excel::download(new EXPORTCLASSNAME($data), 'ROUTENAME.xlsx');
     }

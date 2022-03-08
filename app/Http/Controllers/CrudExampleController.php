@@ -195,6 +195,10 @@ class CrudExampleController extends Controller
      */
     public function importExcelExample(): BinaryFileResponse
     {
+        // bisa gunakan file excel langsung sebagai contoh
+        // $filepath = public_path('example.xlsx');
+        // return response()->download($filepath);
+
         return Excel::download(new CrudExampleExport(
             $this->crudExampleRepository->getLatest()
         ), 'crud_examples.xlsx');
