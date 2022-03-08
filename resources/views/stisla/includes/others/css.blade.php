@@ -22,8 +22,8 @@
 
 <!-- Template CSS -->
 <link rel="stylesheet" href="{{ asset('stisla/assets/css/' . $_skin . '.css') }}">
-<link rel="stylesheet" href="{{ asset('stisla/assets/css/components.css') }}">
-<link rel="stylesheet" href="{{ asset('stisla/assets/css/styleku.css') }}">
+<link rel="stylesheet" href="{{ asset('stisla/assets/css/components.min.css') }}">
+<link rel="stylesheet" href="{{ asset('stisla/assets/css/styleku.min.css') }}">
 
 {{-- <style>
   .modal-backdrop {

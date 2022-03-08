@@ -1,15 +1,11 @@
 <div class="navbar-bg"></div>
 <nav class="navbar navbar-expand-lg main-navbar">
-  <ul class="navbar-nav mr-3">
-    <li>
-      <a href="#" data-toggle="sidebar" class="nav-link nav-link-lg">
-        <i class="fas fa-bars"></i>
-      </a>
-    </li>
-    {{-- <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i class="fas fa-search"></i></a> --}}
-    </li>
-  </ul>
-  {{-- <div class="search-element">
+  <form class="form-inline mr-auto">
+    <ul class="navbar-nav mr-3">
+      <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="fas fa-bars"></i></a></li>
+      {{-- <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i class="fas fa-search"></i></a></li> --}}
+    </ul>
+    {{-- <div class="search-element">
       <input class="form-control" type="search" placeholder="Search" aria-label="Search" data-width="250">
       <button class="btn" type="submit"><i class="fas fa-search"></i></button>
       <div class="search-backdrop"></div>
@@ -71,12 +67,13 @@
         </div>
       </div>
     </div> --}}
-  <div class="form-inline mr-auto w-50">
+    {{-- <div class="form-inline mr-auto w-50"> --}}
     <img class="logoku" src="{{ $_logo_url }}" alt="{{ $_company_name }}">
     <h5 class="nama_perusahaan">
       {{ $_company_name }}
     </h5>
-  </div>
+    {{-- </div> --}}
+  </form>
   <ul class="navbar-nav navbar-right">
     {{-- <li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown"
                 class="nav-link nav-link-lg message-toggle beep"><i class="far fa-envelope"></i></a>
@@ -227,6 +224,5 @@
         </div>
       </li>
     @endif
-    </li>
   </ul>
 </nav>

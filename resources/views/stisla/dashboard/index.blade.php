@@ -1,11 +1,10 @@
-@extends('stisla.layouts.app')
+@extends('stisla.layouts.app-table')
 
 @section('title')
   Dashboard
 @endsection
 
 @section('content')
-
   <div class="section-header">
     <h1>{{ __('Dashboard') }}</h1>
   </div>
@@ -28,25 +27,79 @@
       </div>
     </div>
 
-    @foreach (range(1, 4) as $item)
+    @foreach ($widgets ?? range(1, 8) as $item)
       <div class="col-lg-3 col-md-3 col-sm-6 col-12">
-        <div class="card card-statistic-1">
-          <div class="card-icon bg-{{ $bg ?? 'primary' }}">
-            <i class="fas fa-{{ $ikon ?? 'fire' }}"></i>
+        <div class="card card-statistic-1" @if ($item->route ?? false) onclick="openTo('{{ $item->route }}')" style="cursor: pointer;" @endif>
+          <div class="card-icon bg-{{ $item->bg ?? 'primary' }}">
+            <i class="fas fa-{{ $item->icon ?? 'fire' }}"></i>
           </div>
           <div class="card-wrap">
             <div class="card-header">
-              <h4>{{ $judul_widget ?? 'Nama Modul' }}</h4>
+              <h4>{{ $item->title ?? 'Nama Modul' }}</h4>
             </div>
             <div class="card-body">
-              {{ $jumlah_data ?? $loop->iteration . '00' }}
+              {{ $item->count ?? $loop->iteration . '00' }}
             </div>
           </div>
         </div>
       </div>
     @endforeach
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h4><i class="fa fa-clock-rotate-left"></i> {{ __('Log Aktivitas Terbaru') }}</h4>
+
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+
+            <table class="table table-striped table-hovered" id="datatable">
+              <thead>
+                <tr>
+                  <th class="text-center">#</th>
+                  <th class="text-center">{{ __('Judul') }}</th>
+                  <th class="text-center">{{ __('Jenis') }}</th>
+                  <th class="text-center">{{ __('Request Data') }}</th>
+                  <th class="text-center">{{ __('Before') }}</th>
+                  <th class="text-center">{{ __('After') }}</th>
+                  <th class="text-center">{{ __('IP') }}</th>
+                  <th class="text-center">{{ __('User Agent') }}</th>
+                  <th class="text-center">{{ __('Pengguna') }}</th>
+                  <th class="text-center">{{ __('Role') }}</th>
+                  <th class="text-center">{{ __('Created At') }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach ($logs as $item)
+                  <tr>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $item->title }}</td>
+                    <td>{{ $item->activity_type }}</td>
+                    <td>{{ $item->request_data }}</td>
+                    <td>{{ $item->before }}</td>
+                    <td>{{ $item->after }}</td>
+                    <td>{{ $item->ip }}</td>
+                    <td>{{ $item->user_agent }}</td>
+                    <td>{{ $item->user->name }}</td>
+                    <td>{{ $item->role->name ?? '-' }}</td>
+                    <td>{{ $item->created_at }}</td>
+                  </tr>
+                @endforeach
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
   </div>
-
 @endsection
+
+@push('js')
+  <script>
+    function openTo(link) {
+      window.location.href = link;
+    }
+  </script>
+@endpush

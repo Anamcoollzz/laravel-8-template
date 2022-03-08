@@ -8,26 +8,28 @@
     max-height: 40px;
 }
 
-
 footer span {
     margin-left: 10px;
     margin-right: 10px;
 }
 
-@media screen and (max-width: 425px){
-
+@media screen and (max-width: 425px) {
     .nama_perusahaan {
-        font-size: 14px;
+        font-size: 13px;
+        margin-left: 20px;
+        /* display: none; */
     }
-    
+
     .logoku {
-        margin-left: -10px;
+        margin-left: 40px;
         max-height: 30px;
         position: absolute;
         max-width: 30px;
+        /* display: none; */
     }
 
-    footer .footer-left, footer .footer-right {
+    footer .footer-left,
+    footer .footer-right {
         text-align: center;
         display: block;
         width: 100%;
@@ -43,15 +45,14 @@ footer span {
         margin: 0 !important;
     }
 
+    .card .card-header h4 + .card-header-action,
+    .card .card-header h4 + .card-header-form {
+        width: unset;
+    }
 }
 
-@media screen and (max-width: 375px){
-    
-    
+@media screen and (max-width: 375px) {
 }
 
-@media screen and (max-width: 320px){
-    
- 
-
+@media screen and (max-width: 320px) {
 }

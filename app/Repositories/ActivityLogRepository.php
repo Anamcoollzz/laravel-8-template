@@ -54,4 +54,20 @@ class ActivityLogRepository extends Repository
         $results = DB::select($query);
         return collect($results)->pluck('activity_type', 'activity_type')->toArray();
     }
+
+    /**
+     * getMineLatest
+     *
+     * @param integer $limit
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public function getMineLatest($limit = 10)
+    {
+        return $this->model->query()
+            ->where('user_id', auth()->id())
+            ->limit($limit)
+            ->with(['user', 'role'])
+            ->latest()
+            ->get();
+    }
 }
