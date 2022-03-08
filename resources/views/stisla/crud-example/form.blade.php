@@ -77,7 +77,7 @@
                   ])
                 </div>
                 <div class="col-md-6">
-                  @include('stisla.includes.forms.inputs.input-chekbox-custom', [
+                  @include('stisla.includes.forms.inputs.input-checkbox-custom', [
                       'required' => true,
                       'id' => 'checkbox',
                       'label' => 'Checkbox',

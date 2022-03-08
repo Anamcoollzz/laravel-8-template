@@ -13,7 +13,7 @@ class MakeCrudCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'make:crud';
+    protected $signature = 'make:crud {filename?}';
 
     /**
      * The console command description.
@@ -42,6 +42,11 @@ class MakeCrudCommand extends Command
     private $exportClassName;
     private $importClassName;
     private $icon;
+    private $controllerApiPath;
+    private $requestApiPath;
+    private $permissionPath;
+    private $menuSettingPath;
+    private $routePath;
 
     /**
      * Create a new command instance.
@@ -96,6 +101,77 @@ class MakeCrudCommand extends Command
         return $columns;
     }
 
+    public function getRequired($required)
+    {
+        if ($required == 2)
+            $requiredText = 'true';
+        else if ($required == 1)
+            $requiredText = 'isset($d)';
+        else if ($required == 0)
+            $requiredText = '!isset($d)';
+        return $requiredText ?? '';
+    }
+
+    public function generateMigration($column)
+    {
+        $STRUCTURE = '';
+        if ($column->type === 'ai')
+            $STRUCTURE .= '$table->id()';
+        else if ($column->type === 'timestamps')
+            $STRUCTURE .= '$table->timestamps()';
+        else if (in_array($column->type, ['date', 'tinyInteger', 'text', 'unsignedInteger', 'unsignedBigInteger'])) {
+            $STRUCTURE .= '$table->' . $column->type . '(\'' . $column->name . '\')';
+        } else {
+            $STRUCTURE .= '$table->string(\'' . $column->name . '\', ' . ($column->length ?? 191) . ')';
+        }
+        if ($column->nullable ?? false) {
+            $STRUCTURE .= '->nullable()';
+        }
+        if ($column->unique ?? false) {
+            $STRUCTURE .= '->unique()';
+        }
+        if (isset($column->foreign) && $column->foreign && $column->foreign->on) {
+            $STRUCTURE .= ";\n\t\t\t" . '$table->foreign(\'' . $column->name . '\')->on(\'' . $column->foreign->on . '\')->references(\'' . $column->foreign->references . '\')->onUpdate(\'' . ($column->foreign->onUpdate ?? 'cascade') . '\')->onDelete(\'' . ($column->foreign->onDelete ?? 'cascade') . '\')';
+        }
+        $STRUCTURE .= ";\n\t\t\t";
+        return $STRUCTURE;
+    }
+
+    public function generateInput($type, $label, $name, $required = 2, $accept = '')
+    {
+        $requiredText = $this->getRequired($required);
+
+        if ($accept) {
+            $accept = ", 'accept'=>'$accept'";
+        }
+
+        if ($type === 'colorpicker') {
+            return "\t\t\t\t<div class=\"col-md-6\">
+                  @include('stisla.includes.forms.inputs.input-colorpicker', ['required'=>$requiredText, 'type'=>'$type', 'id'=>'$name', 'name'=>'$name', 'label'=>__('" . $label . "')$accept])
+                </div>\n\n";
+        }
+
+        if ($type === 'textarea') {
+            return "\t\t\t\t<div class=\"col-md-6\">
+                  @include('stisla.includes.forms.editors.textarea', ['required'=>$requiredText, 'type'=>'$type', 'id'=>'$name', 'name'=>'$name', 'label'=>__('" . $label . "')$accept])
+                </div>\n\n";
+        }
+
+        $type = str_replace('input', '', $type);
+
+        return "\t\t\t\t<div class=\"col-md-6\">
+                  @include('stisla.includes.forms.inputs.input', ['required'=>$requiredText, 'type'=>'$type', 'id'=>'$name', 'name'=>'$name', 'label'=>__('" . $label . "')$accept])
+                </div>\n\n";
+    }
+
+    public function generateSelect($type, $label, $name, $required, $options, $multiple = false)
+    {
+        $multiple = ($multiple ?? false) ? 'true' : 'false';
+        return "\t\t\t\t<div class=\"col-md-6\">
+                  @include('stisla.includes.forms.selects.select2', ['required'=>true, 'id'=>'$name', 'name'=>'$name', 'label'=>__('" . $label . "'), 'options'=>" . $options . ", 'multiple'=>" . $multiple . "])
+                </div>\n\n";
+    }
+
     /**
      * Execute the console command.
      *
@@ -103,12 +179,18 @@ class MakeCrudCommand extends Command
      */
     public function handle()
     {
-        $filename = $this->ask('CRUD Filename? (check example in ' . app_path('Console/Commands/data/crud/files/student.json') . ') type like this [student]');
+        $filename = $this->argument('filename');
+        if (!$filename) {
+            $examplePath = app_path('Console/Commands/data/crud/files/student.json');
+            $filename = $this->ask('CRUD Filename? (check example in ' . $examplePath . ') type like this [student]');
+        }
         if (!$filename) {
             $this->error("CRUD file required");
             return 0;
         }
-        $filename = 'student';
+        // $filename = 'student';
+        // $filename = 'product';
+
         $filepath = app_path('Console/Commands/data/crud/files/' . $filename . '.json');
         if (File::exists($filepath) === false) {
             $this->error("File not found");
@@ -155,13 +237,12 @@ class MakeCrudCommand extends Command
             ->values()
             ->toArray();
         foreach ($this->json->columns as $column) {
-            if ($column->type === 'ai')
-                $STRUCTURE .= '$table->id();';
-            else if ($column->type === 'timestamps')
-                $STRUCTURE .= '$table->timestamps();';
-            else if (in_array($column->type, ['date', 'tinyInteger', 'text'])) {
-                $STRUCTURE .= '$table->' . $column->type . '(\'' . $column->name . '\');';
-                // $FILLABLES .= "\t\t'" . $column->name . "',\n";
+
+            // setup migration
+            $STRUCTURE .= $this->generateMigration($column);
+
+            // generate seeder
+            if (in_array($column->type, ['date', 'tinyInteger', 'text'])) {
                 $FILLABLES .= "'" . $column->name . "', ";
                 if ($column->type === 'date')
                     $SEEDERCOLUMNS .= "'" . $column->name . '\'' . ' => $faker->date("Y-m-d", $max = date("Y-m-d")), // ganti method fakernya sesuai kebutuhan' . "\n\t\t\t\t";
@@ -170,9 +251,8 @@ class MakeCrudCommand extends Command
                     $SEEDERCOLUMNS .= "'" . $column->name . '\'' . ' => $faker->numberBetween(0, ' . $max . '), // ganti method fakernya sesuai kebutuhan' . "\n\t\t\t\t";
                 } else
                     $SEEDERCOLUMNS .= "'" . $column->name . '\'' . ' => $faker->numberBetween(0,1000), // ganti method fakernya sesuai kebutuhan' . "\n\t\t\t\t";
+            } elseif (in_array($column->type, ['ai', 'timestamps'])) {
             } else {
-                $STRUCTURE .= '$table->string(\'' . $column->name . '\', ' . ($column->length ?? 191) . ');';
-                // $FILLABLES .= "\t\t'" . $column->name . "',\n";
                 $FILLABLES .= "'" . $column->name . "', ";
                 $SEEDERCOLUMNS .= "'" . $column->name . '\'' . ' => Str::random(10),' . "\n\t\t\t\t";
             }
@@ -191,7 +271,6 @@ class MakeCrudCommand extends Command
                 $this->arrayTH[] = $th;
                 $this->arrayTD[] = $td;
             }
-            $STRUCTURE .= "\n\t\t\t";
 
             if (isset($column->validations)) {
                 if (isset($column->validations->store)) {
@@ -218,69 +297,37 @@ class MakeCrudCommand extends Command
 
             if (isset($column->form)) {
                 $label = $column->label ?? Str::title(str_replace('_', ' ', $column->name));
+                $name = $column->name;
+                $required = $column->form->required;
+                $type = $column->form->type;
                 switch ($column->form->type) {
                     case 'text':
-                        $FORM .= "\t\t\t\t<div class=\"col-md-6\">
-                  @include('stisla.includes.forms.inputs.input', ['required'=>true, 'type'=>'text', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
-                </div>\n\n";
-                        break;
+                    case 'inputtext':
                     case 'email':
-                        $FORM .= "\t\t\t\t<div class=\"col-md-6\">
-                  @include('stisla.includes.forms.inputs.input-email', ['required'=>true, 'type'=>'email', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
-                </div>\n\n";
-                        break;
+                    case 'inputemail':
                     case 'password':
-                        $FORM .= "\t\t\t\t<div class=\"col-md-6\">
-                  @include('stisla.includes.forms.inputs.input-password', ['required'=>true, 'type'=>'text', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
-                </div>\n\n";
+                    case 'inputpassword':
+                    case 'number':
+                    case 'inputnumber':
+                    case 'time':
+                    case 'inputtime':
+                    case 'colorpicker':
+                    case 'date':
+                    case 'inputdate':
+                    case 'textarea':
+                        $FORM .= $this->generateInput($type, $label, $name, $required);
                         break;
                     case 'image':
-                        $FORM .= "\t\t\t\t<div class=\"col-md-6\">
-                  @include('stisla.includes.forms.inputs.input', ['required'=>true, 'type'=>'file', 'accept'=>'image/*', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
-                </div>\n\n";
+                        $FORM .= $this->generateInput('file', $label, $name, $required, 'image/*');
                         break;
                     case 'file':
-                        $FORM .= "\t\t\t\t<div class=\"col-md-6\">
-                  @include('stisla.includes.forms.inputs.input', ['required'=>true, 'type'=>'file', 'accept'=>'*', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
-                </div>\n\n";
-                        break;
-                    case 'number':
-                        $FORM .= "\t\t\t\t<div class=\"col-md-6\">
-                  @include('stisla.includes.forms.inputs.input', ['required'=>true, 'type'=>'number', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "'), 'min'=>0])
-                </div>\n\n";
-                        break;
-                    case 'time':
-                        $FORM .= "\t\t\t\t<div class=\"col-md-6\">
-                  @include('stisla.includes.forms.inputs.input', ['required'=>true, 'type'=>'time', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
-                </div>\n\n";
-                        break;
-                    case 'colorpicker':
-                        $FORM .= "\t\t\t\t<div class=\"col-md-6\">
-                  @include('stisla.includes.forms.inputs.input-colorpicker', ['required'=>true, 'type'=>'text', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
-                </div>\n\n";
-                        break;
-                    case 'date':
-                        $FORM .= "\t\t\t\t<div class=\"col-md-6\">
-                  @include('stisla.includes.forms.inputs.input', ['required'=>true, 'type'=>'date', 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
-                </div>\n\n";
-                        break;
-                    case 'textarea':
-                        $FORM .= "\t\t\t\t<div class=\"col-md-6\">
-                  @include('stisla.includes.forms.editors.textarea', ['required'=>true, 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "')])
-                </div>\n\n";
+                        $FORM .= $this->generateInput('file', $label, $name, $required, '*');
                         break;
                     case 'select2':
-                        $multiple = $column->form->multiple ?? false ? 'true' : 'false';
-                        $options = json_encode($column->form->options ?? []);
-                        $FORM .= "\t\t\t\t<div class=\"col-md-6\">
-                  @include('stisla.includes.forms.selects.select2', ['required'=>true, 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "'), 'options'=>" . $options . ", 'multiple'=>" . $multiple . "])
-                </div>\n\n";
-                        break;
                     case 'select':
                         $options = json_encode($column->form->options ?? []);
-                        $FORM .= "\t\t\t\t<div class=\"col-md-6\">
-                  @include('stisla.includes.forms.selects.select', ['required'=>true, 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "'), 'options'=>" . $options . "])
-                </div>\n\n";
+                        $multiple = $column->form->multiple ?? false;
+                        $FORM .= $this->generateSelect($type, $label, $name, $required, $options, $multiple);
                         break;
                     case 'radio':
                         $options = json_decode(json_encode($column->options), true);
@@ -289,11 +336,10 @@ class MakeCrudCommand extends Command
                         $values->each(function ($item) use (&$newOptions, $options) {
                             return $newOptions[(string)$item] = $options[$item]['label'];
                         });
-                        // dd($newOptions);
-                        // $newOptions
+                        $requiredText = $this->getRequired($required);
                         $options = json_encode($newOptions);
                         $FORM .= "\t\t\t\t<div class=\"col-md-6\">
-                  @include('stisla.includes.forms.inputs.input-radio-toggle', ['required'=>true, 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "'), 'options'=>" . $options . "])
+                  @include('stisla.includes.forms.inputs.input-radio-toggle', ['required'=>$requiredText, 'id'=>'$column->name', 'name'=>'$column->name', 'label'=>__('" . $label . "'), 'options'=>" . $options . "])
                 </div>\n\n";
                         break;
                 }
@@ -312,16 +358,6 @@ class MakeCrudCommand extends Command
                 18
             );
         }, $migrationFiles);
-        // dd($migrationFiles);
-        // if (
-        //     // !Str::contains(
-        //     //     $migrationFiles[0]->getPathname(),
-        //     //     '_create_' . $modelNameSnake . '_table'
-        //     // )
-        //     !in_array('create_' . $modelNameSnake . '_table.php', $migrationFiles)
-        // ) {
-        //     file_put_contents($migrationPath = database_path('migrations\\' . date('Y_m_d_His') . '_create_' . $modelNameSnake . '_table.php'), $migrationContent);
-        // }
         $migrationFileNames = getFileNamesFromDir(database_path('migrations'));
         $exist = false;
         foreach ($migrationFileNames as $migrationFileName) {
@@ -425,8 +461,8 @@ class MakeCrudCommand extends Command
         $viewExportPdf = str_replace('TITLE', $this->json->title, $viewExportPdf);
         $viewExportPdf = str_replace('TH', $this->setTab($this->arrayTH, 4, 2), $viewExportPdf);
         $viewExportPdf = str_replace('TD', $this->setTab($this->arrayTD, 5, 2), $viewExportPdf);
-        $viewExportExcelPath    = $folder . '/export-pdf.blade.php';
-        file_put_contents($viewExportExcelPath, $viewExportPdf);
+        $viewExportPdfPath    = $folder . '/export-pdf.blade.php';
+        file_put_contents($viewExportPdfPath, $viewExportPdf);
 
         $exportExcelFile = file_get_contents(app_path('Console/Commands/data/crud/export.php.dummy'));
         $exportExcelFile = str_replace('FOLDERVIEW', $folderViewName, $exportExcelFile);
@@ -453,20 +489,63 @@ class MakeCrudCommand extends Command
         $menuContent = str_replace('ROUTENAME', $this->routeName, $menuContent);
         $menuContent = str_replace('ICON', $this->icon, $menuContent);
         $menuContent = str_replace('PERMISSION', $this->json->title, $menuContent);
-        $menuPath = database_path('seeders/data/menu-modules/' . $this->routeName . '.json');
+        $this->menuSettingPath = $menuPath = database_path('seeders/data/menu-modules/' . $this->routeName . '.json');
         file_put_contents($menuPath, $menuContent);
 
+        $this->apiController();
+        $this->apiRequest();
+        $this->permission();
+        $this->routing();
+
+        $logs = [];
+        $createdFile = 0;
         if (isset($migrationPath))
-            $this->info('Created migration file => ' . $migrationPath);
-        $this->info('Created seeder file => ' . $seederPath);
-        $this->info('Created model file => ' . $modelPath);
-        $this->info('Created controller file => ' . $controllerPath);
-        $this->info('Created repository file => ' . $repositoryPath);
-        $this->info('Created request file => ' . $requestPath);
-        $this->info('Created export excel file => ' . $exportExcelPath);
-        $this->info('Created import excel file => ' . $importExcelPath);
-        $this->info('Created view index file => ' . $viewIndexPath);
-        $this->info('Created form index file => ' . $viewCreatePath);
+            $this->info($logs[] = 'Created migration file => ' . $migrationPath);
+        $createdFile++;
+        $this->info($logs[] = 'Created seeder file => ' . $seederPath);
+        $createdFile++;
+        $this->info($logs[] = 'Created model file => ' . $modelPath);
+        $createdFile++;
+        $this->info($logs[] = 'Created controller file => ' . $controllerPath);
+        $createdFile++;
+        $this->info($logs[] = 'Created api controller file => ' . $this->controllerApiPath);
+        $createdFile++;
+        $this->info($logs[] = 'Created repository file => ' . $repositoryPath);
+        $createdFile++;
+        $this->info($logs[] = 'Created request file => ' . $requestPath);
+        $createdFile++;
+        $this->info($logs[] = 'Created api request file => ' . $this->requestApiPath);
+        $createdFile++;
+        $this->info($logs[] = 'Created export excel file => ' . $exportExcelPath);
+        $createdFile++;
+        $this->info($logs[] = 'Created import excel file => ' . $importExcelPath);
+        $createdFile++;
+        $this->info($logs[] = 'Created view index file => ' . $viewIndexPath);
+        $createdFile++;
+        $this->info($logs[] = 'Created view form file => ' . $viewCreatePath);
+        $createdFile++;
+        $this->info($logs[] = 'Created view export pdf file => ' . $viewExportPdfPath);
+        $createdFile++;
+        $this->info($logs[] = 'Created view export excel example file => ' . $viewExportExcelPath);
+        $createdFile++;
+        $this->info($logs[] = 'Created permission file => ' . $this->permissionPath);
+        $createdFile++;
+        $this->info($logs[] = 'Created routing file => ' . $this->routePath);
+        $createdFile++;
+        $this->info($logs[] = 'Created menu setting file => ' . $this->menuSettingPath);
+        $createdFile++;
+        $this->info($logs[] = "Created $createdFile files");
+
+        $logComplete = implode("\n", $logs);
+        $logPath = app_path('Console/Commands/data/crud/logs/' . $filename . '.log');
+        file_put_contents($logPath, $logComplete);
+
+        $logs = collect($logs)->transform(function ($item) {
+            return explode(' => ', $item);
+        })->toArray();
+        $logComplete = json_encode($logs);
+        $logPath = app_path('Console/Commands/data/crud/logs/' . $filename . '.json');
+        file_put_contents($logPath, $logComplete);
         // $this->info('Don\'t forget to run php artisan migrate');
         // $this->info('copy this to your route file 👇');
 
@@ -480,10 +559,6 @@ class MakeCrudCommand extends Command
         // $this->info('Route::post(\'' . $routeName . '/import-excel\', [' . $fullControllerName . ', \'importExcel\'])->name(\'' . $routeName . '.import-excel\');');
         // $this->info('Route::resource(\'' . $routeName . '\', ' . $fullControllerName . ');');
 
-        $this->apiController();
-        $this->apiRequest();
-        $this->permission();
-        $this->routing();
         return 0;
     }
 
@@ -505,7 +580,7 @@ class MakeCrudCommand extends Command
         $content = str_replace('FOLDERVIEW', $this->folderViewName, $content);
 
         // save to specific path
-        $filepath = app_path('Http/Controllers/Api/' . $this->controllerName . '.php');
+        $this->controllerApiPath = $filepath = app_path('Http/Controllers/Api/' . $this->controllerName . '.php');
         file_put_contents($filepath, $content);
     }
 
@@ -519,7 +594,7 @@ class MakeCrudCommand extends Command
         $content = str_replace('STOREVALIDATIONS', $this->STOREVALIDATIONS, $content);
         $content = str_replace("namespace App\Http\Requests;", "namespace App\Http\Requests\Api;", $content);
 
-        $filepath = app_path('Http/Requests/Api/' . $this->requestName . '.php');
+        $this->requestApiPath = $filepath = app_path('Http/Requests/Api/' . $this->requestName . '.php');
         file_put_contents($filepath, $content);
     }
 
@@ -530,7 +605,7 @@ class MakeCrudCommand extends Command
 
         $content = str_replace('MODULENAME', $this->moduleName, $content);
 
-        $filepath = database_path('seeders/data/permission-modules/' . $this->routeName . '.json');
+        $this->permissionPath = $filepath = database_path('seeders/data/permission-modules/' . $this->routeName . '.json');
         file_put_contents($filepath, $content);
     }
 
@@ -543,7 +618,7 @@ class MakeCrudCommand extends Command
         $content = str_replace('ROUTENAME', $this->routeName, $content);
 
         $filename = Str::singular($this->routeName);
-        $filepath = base_path('routes/modules/' . $filename . '.php');
+        $this->routePath = $filepath = base_path('routes/modules/' . $filename . '.php');
         file_put_contents($filepath, $content);
     }
 }

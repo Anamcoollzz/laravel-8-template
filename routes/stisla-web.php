@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CrudController;
 use Illuminate\Support\Facades\Route;
 
 # AUTH
@@ -16,3 +17,7 @@ Route::get('auth/forgot-password', [AuthController::class, 'forgotPasswordForm']
 Route::post('auth/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::get('auth/reset-password/{token}', [AuthController::class, 'resetPasswordForm'])->name('reset-password');
 Route::post('auth/reset-password/{token}', [AuthController::class, 'resetPassword']);
+
+# CRUD GENERATOR
+Route::get('crud-generator', [CrudController::class, 'index']);
+Route::post('crud-generator', [CrudController::class, 'generateJson']);
