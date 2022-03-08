@@ -281,7 +281,13 @@
       <a href="" class="btn btn-primary" @click.prevent="pushColumn"><i class="fa fa-plus"></i></a>
     </div>
     <div class="col-12">
-      <a @click.prevent="onGenerate" href="" class="btn btn-primary"> <i class="fa fa-check"></i> Generate </a>
+      <a @click.prevent="onGenerate" href="" :class="`btn btn-primary ${isProcessing ? 'disabled' : ''}`"> <i class="fa fa-check"></i> {{ isProcessing ? 'Memproses...' : 'Generate' }} </a>
+    </div>
+    <div class="col-12 mt-3" v-if="logs.length > 0">
+      <h6 class="text-primary">Silakan cek beberapa file yang tergenerate di bawah</h6>
+      <div v-for="(log, index) in logs" :key="index">
+        {{ log }}
+      </div>
     </div>
   </div>
 </template>
@@ -290,144 +296,22 @@
 export default {
   data() {
     return {
-      title: 'Produk',
-      icon: 'cubes',
-      modelName: 'Product',
-      timestamps: true,
-      columns: [
-        {
-          name: 'id',
-          type: 'bigIncrements',
-          column_length: null,
-          column_default: null,
-          nullable: false,
-          form: {
-            label: 'id',
-            type: 'inputtext',
-            validations: {
-              store: ['required'],
-              update: ['required'],
-              store_custom: null,
-              update_custom: null,
-            },
-          },
-        },
-        {
-          name: 'category_id',
-          type: 'unsignedBigInteger',
-          column_length: 20,
-          column_default: null,
-          nullable: false,
-          isForeignKey: true,
-          foreign: {
-            on: 'users',
-            references: 'id',
-            onUpdate: 'cascade',
-            onDelete: 'set null',
-          },
-          form: {
-            label: 'Kategori',
-            type: 'select',
-            validations: {
-              store: ['required'],
-              update: ['required'],
-              store_custom: null,
-              update_custom: null,
-            },
-          },
-        },
-        {
-          name: 'name',
-          type: 'varchar',
-          column_length: 20,
-          column_default: 'hehe',
-          nullable: true,
-          unique: true,
-          foreign: {
-            on: null,
-            references: null,
-            onUpdate: null,
-            onDelete: null,
-          },
-          form: {
-            label: 'Name',
-            type: 'inputtext',
-            validations: {
-              store: ['required'],
-              update: ['required'],
-              store_custom: null,
-              update_custom: null,
-            },
-          },
-        },
-        {
-          name: 'birth_date',
-          type: 'date',
-          column_length: 20,
-          column_default: null,
-          nullable: false,
-          foreign: {
-            on: null,
-            references: null,
-            onUpdate: null,
-            onDelete: null,
-          },
-          form: {
-            label: 'Birth Date',
-            type: 'inputdate',
-            validations: {
-              store: ['required'],
-              update: ['required'],
-              store_custom: 'date_format:Y-m-d',
-              update_custom: 'date_format:Y-m-d',
-            },
-          },
-        },
-        {
-          name: 'email',
-          type: 'varchar',
-          column_length: 20,
-          column_default: null,
-          nullable: false,
-          foreign: {
-            on: null,
-            references: null,
-            onUpdate: null,
-            onDelete: null,
-          },
-          form: {
-            label: 'Email',
-            type: 'email',
-            validations: {
-              store: ['required'],
-              update: ['required'],
-              store_custom: 'email',
-              update_custom: 'date_format:Y-m-d',
-            },
-          },
-        },
-      ],
+      isProcessing: false,
+      logs: [],
 
-      // title: '',
-      // icon: '',
-      // modelName: '',
+      // title: 'Produk',
+      // icon: 'cubes',
+      // modelName: 'Product',
       // timestamps: true,
       // columns: [
       //   {
-      //     name: null,
+      //     name: 'id',
       //     type: 'bigIncrements',
       //     column_length: null,
       //     column_default: null,
       //     nullable: false,
-      //     isAi: true,
-      //     foreign: {
-      //       on: null,
-      //       references: null,
-      //       onUpdate: null,
-      //       onDelete: null,
-      //     },
       //     form: {
-      //       label: '',
+      //       label: 'id',
       //       type: 'inputtext',
       //       validations: {
       //         store: ['required'],
@@ -437,7 +321,132 @@ export default {
       //       },
       //     },
       //   },
+      //   {
+      //     name: 'category_id',
+      //     type: 'unsignedBigInteger',
+      //     column_length: 20,
+      //     column_default: null,
+      //     nullable: false,
+      //     isForeignKey: true,
+      //     foreign: {
+      //       on: 'users',
+      //       references: 'id',
+      //       onUpdate: 'cascade',
+      //       onDelete: 'set null',
+      //     },
+      //     form: {
+      //       label: 'Kategori',
+      //       type: 'select',
+      //       validations: {
+      //         store: ['required'],
+      //         update: ['required'],
+      //         store_custom: null,
+      //         update_custom: null,
+      //       },
+      //     },
+      //   },
+      //   {
+      //     name: 'name',
+      //     type: 'varchar',
+      //     column_length: 20,
+      //     column_default: 'hehe',
+      //     nullable: true,
+      //     unique: true,
+      //     foreign: {
+      //       on: null,
+      //       references: null,
+      //       onUpdate: null,
+      //       onDelete: null,
+      //     },
+      //     form: {
+      //       label: 'Name',
+      //       type: 'inputtext',
+      //       validations: {
+      //         store: ['required'],
+      //         update: ['required'],
+      //         store_custom: null,
+      //         update_custom: null,
+      //       },
+      //     },
+      //   },
+      //   {
+      //     name: 'birth_date',
+      //     type: 'date',
+      //     column_length: 20,
+      //     column_default: null,
+      //     nullable: false,
+      //     foreign: {
+      //       on: null,
+      //       references: null,
+      //       onUpdate: null,
+      //       onDelete: null,
+      //     },
+      //     form: {
+      //       label: 'Birth Date',
+      //       type: 'inputdate',
+      //       validations: {
+      //         store: ['required'],
+      //         update: ['required'],
+      //         store_custom: 'date_format:Y-m-d',
+      //         update_custom: 'date_format:Y-m-d',
+      //       },
+      //     },
+      //   },
+      //   {
+      //     name: 'email',
+      //     type: 'varchar',
+      //     column_length: 20,
+      //     column_default: null,
+      //     nullable: false,
+      //     foreign: {
+      //       on: null,
+      //       references: null,
+      //       onUpdate: null,
+      //       onDelete: null,
+      //     },
+      //     form: {
+      //       label: 'Email',
+      //       type: 'email',
+      //       validations: {
+      //         store: ['required'],
+      //         update: ['required'],
+      //         store_custom: 'email',
+      //         update_custom: 'date_format:Y-m-d',
+      //       },
+      //     },
+      //   },
       // ],
+
+      title: '',
+      icon: '',
+      modelName: '',
+      timestamps: true,
+      columns: [
+        {
+          name: null,
+          type: 'bigIncrements',
+          column_length: null,
+          column_default: null,
+          nullable: false,
+          isAi: true,
+          foreign: {
+            on: null,
+            references: null,
+            onUpdate: null,
+            onDelete: null,
+          },
+          form: {
+            label: '',
+            type: 'inputtext',
+            validations: {
+              store: ['required'],
+              update: ['required'],
+              store_custom: null,
+              update_custom: null,
+            },
+          },
+        },
+      ],
     };
   },
 
@@ -499,29 +508,40 @@ export default {
     },
 
     onGenerate() {
-      if (!this.title) {
-        alert('Judul modul required');
-        return;
+      if (this.isProcessing === false) {
+        if (!this.title) {
+          alert('Judul modul required');
+          return;
+        }
+        if (!this.title) {
+          alert('Ikon required');
+          return;
+        }
+        if (!this.title) {
+          alert('Nama model required');
+          return;
+        }
+        this.isProcessing = true;
+        this.logs = [];
+        // console.log(this.columns);
+        const data = {
+          title: this.title,
+          icon: this.icon,
+          modelName: this.modelName,
+          columns: this.columns,
+          timestamps: this.timestamps,
+        };
+        window.axios
+          .post('crud-generator', data)
+          .then((res) => {
+            // console.log(res.data);
+            this.logs = res.data.data;
+            swal('Good job!', 'CRUD Berhasil dilakukan', 'success');
+          })
+          .finally(() => {
+            this.isProcessing = false;
+          });
       }
-      if (!this.title) {
-        alert('Ikon required');
-        return;
-      }
-      if (!this.title) {
-        alert('Nama model required');
-        return;
-      }
-      // console.log(this.columns);
-      const data = {
-        title: this.title,
-        icon: this.icon,
-        modelName: this.modelName,
-        columns: this.columns,
-        timestamps: this.timestamps,
-      };
-      window.axios.post('crud-generator', data).then((res) => {
-        console.log(res.data);
-      });
     },
 
     deleteColumn(index) {

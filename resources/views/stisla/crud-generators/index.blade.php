@@ -32,5 +32,5 @@
 @endpush
 
 @push('js')
-  <script src="{{ asset('js/crud-generator.js') }}"></script>
+  <script src="{{ asset('js/crud-generator.min.js?id=1') }}"></script>
 @endpush

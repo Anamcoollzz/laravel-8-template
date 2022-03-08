@@ -94,9 +94,14 @@ class CrudController extends Controller
         $filename = Str::slug($request->modelName);
         $fullpath = app_path('Console/Commands/data/crud/files/' . $filename . '.json');
         file_put_contents($fullpath, $json);
+
         $artisan = Artisan::call('make:crud', [
             'filename' => $filename,
         ]);
-        return [$artisan, $fullpath];
+
+        $path = app_path('Console/Commands/data/crud/logs/' . $filename . '.json');
+        $response = json_decode(file_get_contents($path));
+
+        return response200($response, 'Crud Berhasil');
     }
 }
