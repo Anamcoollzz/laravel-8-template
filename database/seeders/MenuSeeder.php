@@ -32,10 +32,13 @@ class MenuSeeder extends Seeder
             $this->execute($item);
         }
 
-        $files = getFileNamesFromDir(database_path('seeders/data/menu-modules'));
-        foreach ($files as $file) {
-            $item = json_decode(file_get_contents(database_path('seeders/data/menu-modules/' . $file)), true);
-            $this->execute($item);
+        $path = database_path('seeders/data/menu-modules');
+        if (file_exists($path)) {
+            $files = getFileNamesFromDir($path);
+            foreach ($files as $file) {
+                $item = json_decode(file_get_contents(database_path('seeders/data/menu-modules/' . $file)), true);
+                $this->execute($item);
+            }
         }
     }
 
