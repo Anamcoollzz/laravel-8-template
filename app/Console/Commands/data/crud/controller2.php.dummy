@@ -8,6 +8,7 @@ use App\Imports\IMPORTCLASSNAME;
 use App\Models\MODELNAME;
 use App\Repositories\REPOSITORYNAME;
 use App\Repositories\NotificationRepository;
+use App\Repositories\UserRepository;
 use App\Services\EmailService;
 use App\Services\FileService;
 use Illuminate\Http\Request;
@@ -31,6 +32,13 @@ class CONTROLLERNAME extends Controller
      * @var NotificationRepository
      */
     private NotificationRepository $NotificationRepository;
+
+    /**
+     * UserRepository
+     *
+     * @var UserRepository
+     */
+    private UserRepository $UserRepository;
 
     /**
      * file service
@@ -57,6 +65,7 @@ class CONTROLLERNAME extends Controller
         $this->fileService            = new FileService;
         $this->emailService           = new EmailService;
         $this->NotificationRepository = new NotificationRepository;
+        $this->UserRepository         = new UserRepository;
 
         $this->middleware('can:TITLE');
         $this->middleware('can:TITLE Tambah')->only(['create', 'store']);
