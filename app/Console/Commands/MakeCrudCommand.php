@@ -103,7 +103,9 @@ class MakeCrudCommand extends Command
 
     public function getRequired($required)
     {
-        if ($required == 2)
+        if ($required === false)
+            $requiredText = 'false';
+        else if ($required == 2)
             $requiredText = 'true';
         else if ($required == 1)
             $requiredText = 'isset($d)';
@@ -166,9 +168,10 @@ class MakeCrudCommand extends Command
 
     public function generateSelect($type, $label, $name, $required, $options, $multiple = false)
     {
+        $requiredText = $this->getRequired($required);
         $multiple = ($multiple ?? false) ? 'true' : 'false';
         return "\t\t\t\t<div class=\"col-md-6\">
-                  @include('stisla.includes.forms.selects.select2', ['required'=>true, 'id'=>'$name', 'name'=>'$name', 'label'=>__('" . $label . "'), 'options'=>" . $options . ", 'multiple'=>" . $multiple . "])
+                  @include('stisla.includes.forms.selects.select2', ['required'=>$requiredText, 'id'=>'$name', 'name'=>'$name', 'label'=>__('" . $label . "'), 'options'=>" . $options . ", 'multiple'=>" . $multiple . "])
                 </div>\n\n";
     }
 
