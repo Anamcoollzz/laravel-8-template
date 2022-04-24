@@ -17,3 +17,16 @@ function getFileNamesFromDir(string $path)
     });
     return $fileNames;
 }
+
+/**
+ * create folder
+ *
+ * @param string $folderName
+ * @return void
+ */
+function createFolder(string $folderName)
+{
+    if (!file_exists($folderName)) {
+        mkdir($folderName);
+    }
+}
