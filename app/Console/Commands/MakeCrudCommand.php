@@ -489,7 +489,11 @@ class MakeCrudCommand extends Command
         $menuContent = str_replace('ROUTENAME', $this->routeName, $menuContent);
         $menuContent = str_replace('ICON', $this->icon, $menuContent);
         $menuContent = str_replace('PERMISSION', $this->json->title, $menuContent);
-        $this->menuSettingPath = $menuPath = database_path('seeders/data/menu-modules/' . $this->routeName . '.json');
+        $folderMenu = database_path('seeders/data/menu-modules');
+        if (!file_exists($folderMenu)) {
+            mkdir($folderMenu);
+        }
+        $this->menuSettingPath = $menuPath = $folderMenu . '/' . $this->routeName . '.json';
         file_put_contents($menuPath, $menuContent);
 
         $this->apiController();
@@ -537,7 +541,9 @@ class MakeCrudCommand extends Command
         $this->info($logs[] = "Created $createdFile files");
 
         $logComplete = implode("\n", $logs);
-        $logPath = app_path('Console/Commands/data/crud/logs/' . $filename . '.log');
+        $folderLog   = app_path('Console/Commands/data/crud/logs');
+        createFolder($folderLog);
+        $logPath     = $folderLog . '/' . $filename . '.log';
         file_put_contents($logPath, $logComplete);
 
         $logs = collect($logs)->transform(function ($item) {
@@ -594,7 +600,11 @@ class MakeCrudCommand extends Command
         $content = str_replace('STOREVALIDATIONS', $this->STOREVALIDATIONS, $content);
         $content = str_replace("namespace App\Http\Requests;", "namespace App\Http\Requests\Api;", $content);
 
-        $this->requestApiPath = $filepath = app_path('Http/Requests/Api/' . $this->requestName . '.php');
+        $folder = app_path('Http/Requests/Api');
+        if (!file_exists($folder)) {
+            mkdir($folder);
+        }
+        $this->requestApiPath = $filepath = $folder . '/' . $this->requestName . '.php';
         file_put_contents($filepath, $content);
     }
 
@@ -605,7 +615,11 @@ class MakeCrudCommand extends Command
 
         $content = str_replace('MODULENAME', $this->moduleName, $content);
 
-        $this->permissionPath = $filepath = database_path('seeders/data/permission-modules/' . $this->routeName . '.json');
+        $folder = database_path('seeders/data/permission-modules');
+        if (!file_exists($folder)) {
+            mkdir($folder);
+        }
+        $this->permissionPath = $filepath = $folder . '/' . $this->routeName . '.json';
         file_put_contents($filepath, $content);
     }
 
