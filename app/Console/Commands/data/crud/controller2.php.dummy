@@ -53,6 +53,20 @@ class CONTROLLERNAME extends Controller
      * @var FileService
      */
     private EmailService $emailService;
+    
+    /**
+     * exportable
+     *
+     * @var bool
+     */
+    private bool $exportable = false;
+
+    /**
+     * importable
+     *
+     * @var bool
+     */
+    private bool $importable = false;
 
     /**
      * constructor method
@@ -88,8 +102,8 @@ class CONTROLLERNAME extends Controller
             'canCreate'        => $user->can('TITLE Tambah'),
             'canUpdate'        => $user->can('TITLE Ubah'),
             'canDelete'        => $user->can('TITLE Hapus'),
-            'canImportExcel'   => $user->can('TITLE Impor Excel'),
-            'canExport'        => $user->can('TITLE Ekspor'),
+            'canImportExcel'   => $user->can('Order Impor Excel') && $this->importable,
+            'canExport'        => $user->can('Order Ekspor') && $this->exportable,
             'title'            => __('TITLE'),
             'routeCreate'      => route('ROUTENAME.create'),
             'routePdf'         => route('ROUTENAME.pdf'),
