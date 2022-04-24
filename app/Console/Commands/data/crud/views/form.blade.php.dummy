@@ -5,10 +5,7 @@
 @endsection
 
 @section('content')
-  <div class="section-header">
-    <h1>{{ $title }}</h1>
-    @include('stisla.includes.breadcrumbs.breadcrumb-form')
-  </div>
+  @include('stisla.includes.breadcrumbs.breadcrumb-form')
 
   <div class="section-body">
 
@@ -29,7 +26,7 @@
 
         <div class="card">
           <div class="card-header">
-            <h4><i class="ICON"></i> {{ $fullTitle }}</h4>
+            <h4><i class="fa fa-ICON"></i> {{ $fullTitle }}</h4>
           </div>
           <div class="card-body">
             <form action="{{ $action }}" method="POST" enctype="multipart/form-data">
