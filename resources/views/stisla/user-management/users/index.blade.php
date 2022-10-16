@@ -33,7 +33,10 @@
                 <thead>
                   <tr>
                     <th class="text-center">#</th>
-                    <th>{{ __('Name') }}</th>
+                    <th>{{ __('Nama') }}</th>
+                    <th>{{ __('No HP') }}</th>
+                    <th>{{ __('Tanggal Lahir') }}</th>
+                    <th>{{ __('Alamat') }}</th>
                     <th>{{ __('Email') }}</th>
                     <th>{{ __('Role') }}</th>
                     <th>{{ __('Terakhir Masuk') }}</th>
@@ -48,6 +51,9 @@
                     <tr>
                       <td>{{ $loop->iteration }}</td>
                       <td>{{ $item->name }}</td>
+                      <td>{{ $item->phone_number }}</td>
+                      <td>{{ $item->birth_date }}</td>
+                      <td>{{ $item->address }}</td>
                       <td>{{ $item->email }}</td>
                       <td>
                         @foreach ($item->roles as $role)

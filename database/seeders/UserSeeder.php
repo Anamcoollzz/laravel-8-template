@@ -25,7 +25,10 @@ class UserSeeder extends Seeder
                 'email'             => $user['email'],
                 'email_verified_at' => $user['email_verified_at'],
                 'password'          => bcrypt($user['password']),
-                'is_locked'         => $user['is_locked'] ?? 0
+                'is_locked'         => $user['is_locked'] ?? 0,
+                'phone_number'      => $user['phone_number'] ?? null,
+                'birth_date'        => $user['birth_date'] ?? null,
+                'address'           => $user['address'] ?? null,
             ]);
             foreach ($user['roles'] as $role)
                 $userObj->assignRole($role);

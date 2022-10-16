@@ -71,7 +71,10 @@ class UserManagementController extends Controller
                 ],
                 $request->only([
                     'name',
-                    'email'
+                    'email',
+                    'phone_number',
+                    'birth_date',
+                    'address',
                 ])
             )
         );
@@ -93,7 +96,10 @@ class UserManagementController extends Controller
         $user = $this->userRepository->findOrFail($userId);
         $data = $request->only([
             'name',
-            'email'
+            'email',
+            'phone_number',
+            'birth_date',
+            'address',
         ]);
         $userNew = $this->userRepository->update($data, $user->id);
         $userNew->syncRoles([$request->role]);

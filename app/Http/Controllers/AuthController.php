@@ -84,13 +84,14 @@ class AuthController extends Controller
      */
     public function register(RegisterRequest $request)
     {
+        $data = $request->only(
+            [
+                'name', 'email', 'phone_number', 'birth_date', 'address',
+            ]
+        );
         $data = array_merge([
             'password' => bcrypt($request->password)
-        ], $request->only(
-            [
-                'name', 'email'
-            ]
-        ));
+        ], $data);
         $user = $this->userRepository->create($data);
         if ($this->settingRepository->loginMustVerified()) {
             $user->update(['email_token' => Str::random(150)]);

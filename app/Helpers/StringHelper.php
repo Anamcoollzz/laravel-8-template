@@ -35,11 +35,14 @@ class StringHelper
     /**
      * isUrl
      *
-     * @param string $words
+     * @param string $url
      * @return boolean
      */
-    public static function isUrl(string $words)
+    public static function isUrl(string $url)
     {
-        return Str::contains($words, 'https://') || Str::contains($words, 'http://');
+        if (filter_var($url, FILTER_VALIDATE_URL) === FALSE) {
+            return false;
+        }
+        return true;
     }
 }

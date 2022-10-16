@@ -24,6 +24,9 @@ class CreateUsersTable extends Migration
             $table->string('email_token', 191)->nullable();
             $table->string('verification_code', 6)->nullable();
             $table->boolean('is_locked')->default(0);
+            $table->string('phone_number', 50)->nullable();
+            $table->date('birth_date')->nullable();
+            $table->text('address')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

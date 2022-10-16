@@ -74,7 +74,10 @@ class UserManagementController extends Controller
                 ],
                 $request->only([
                     'name',
-                    'email'
+                    'email',
+                    'phone_number',
+                    'birth_date',
+                    'address',
                 ])
             )
         );
@@ -112,7 +115,10 @@ class UserManagementController extends Controller
     {
         $data = $request->only([
             'name',
-            'email'
+            'email',
+            'phone_number',
+            'birth_date',
+            'address',
         ]);
         if ($request->filled('password')) {
             $data['password'] = bcrypt($request->password);
