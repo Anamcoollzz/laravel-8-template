@@ -7,8 +7,11 @@
 @section('content')
   <div class="section-header">
     <h1>{{ $title }}</h1>
-    @include('stisla.includes.breadcrumbs.breadcrumb-form')
+    @include('stisla.includes.breadcrumbs.breadcrumb', [
+        'breadcrumbs' => [['label' => __('Dashboard'), 'link' => route('dashboard.index')], ['label' => $title, 'link' => $routeIndex], ['label' => $fullTitle]],
+    ])
   </div>
+
 
   <div class="section-body">
     <h2 class="section-title">{{ $fullTitle }}</h2>

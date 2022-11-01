@@ -33,5 +33,12 @@ function time_since($waktu)
     }
 
     $print = ($count == 1) ? '1 ' . $name : "$count {$name}";
+
+    if ($count <= 10) {
+        return 'baru saja';
+    } else if ($count <= 60) {
+        return $since . ' detik yang lalu';
+    }
+
     return $print . ' yang lalu';
 }

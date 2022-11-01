@@ -65,9 +65,11 @@
         @if ($data->count() > 0)
           <div class="card">
             <div class="card-body">
-              <div class="@if ($data->hasPages()) mb-4 @endif">
-                <a href="{{ route('notifications.read-all') }}" class="btn btn-success icon"><i class="fa fa-check"></i> Tandai Semua Sudah Dibaca</a>
-              </div>
+              @if ($countUnRead > 0)
+                <div class="@if ($data->hasPages()) mb-4 @endif">
+                  <a href="{{ route('notifications.read-all') }}" class="btn btn-success icon"><i class="fa fa-check"></i> Tandai Semua Sudah Dibaca</a>
+                </div>
+              @endif
               {{ $data->links('pagination::bootstrap-4') }}
             </div>
           </div>
