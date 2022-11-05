@@ -7,6 +7,9 @@
     <div class="container mt-5">
       <div class="page-error">
         <div class="page-inner">
+          <div class="login-brand">
+            <img src="{{ $_logo_url }}" alt="{{ $_app_name }}" width="100" class="shadow-light rounded-circle">
+          </div>
           <h1 style="font-size: 40px;">{{ $_app_name }}</h1>
           <div class="page-description">
             {{ $_app_description }}
