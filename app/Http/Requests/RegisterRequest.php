@@ -33,11 +33,15 @@ class RegisterRequest extends FormRequest
                 'password_confirmation' => 'required|min:6',
             ];
         }
+
+        $isGoogleCaptcha = SettingRepository::isGoogleCaptchaRegister();
+
         return [
             'name'                  => 'required',
             'email'                 => 'required|email|unique:users,email',
             'password'              => 'required|min:6|confirmed',
             'password_confirmation' => 'required|min:6',
+            'g-recaptcha-response'  => $isGoogleCaptcha ? 'required|captcha' : 'nullable'
         ];
     }
 }

@@ -425,4 +425,44 @@ class SettingRepository
     {
         return ((int)Setting::firstOrCreate(['key' => 'stisla_sidebar_mini'], ['value' => '0'])->value) === 1;
     }
+
+    /**
+     * isGoogleCaptchaLogin
+     *
+     * @return bool
+     */
+    public static function isGoogleCaptchaLogin()
+    {
+        return ((int)Setting::firstOrCreate(['key' => 'is_google_captcha_login'], ['value' => '1'])->value) === 1;
+    }
+
+    /**
+     * isGoogleCaptchaRegister
+     *
+     * @return bool
+     */
+    public static function isGoogleCaptchaRegister()
+    {
+        return ((int)Setting::firstOrCreate(['key' => 'is_google_captcha_register'], ['value' => '1'])->value) === 1;
+    }
+
+    /**
+     * isGoogleCaptchaForgotPassword
+     *
+     * @return bool
+     */
+    public static function isGoogleCaptchaForgotPassword()
+    {
+        return ((int)Setting::firstOrCreate(['key' => 'is_google_captcha_forgot_password'], ['value' => '1'])->value) === 1;
+    }
+
+    /**
+     * isGoogleCaptchaResetPassword
+     *
+     * @return bool
+     */
+    public static function isGoogleCaptchaResetPassword()
+    {
+        return ((int)Setting::firstOrCreate(['key' => 'is_google_captcha_reset_password'], ['value' => '1'])->value) === 1;
+    }
 }
