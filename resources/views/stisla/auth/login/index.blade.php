@@ -12,12 +12,14 @@
         {{ __('Sebelum memulai, anda harus masuk terlebih dahulu dengan akun anda.') }}
       </p>
     </div>
-    <form method="POST" action="" class="needs-validation" novalidate="">
+    <form method="POST" action="" class="needs-validation" novalidate="" id="formLogin">
       @csrf
       @include('stisla.includes.forms.inputs.input-email')
       {{-- @include('stisla.includes.form.input-password') --}}
 
       @include('stisla.auth.login.input-password')
+
+      @include('stisla.auth.gcaptcha')
 
       <div class="form-group">
         <div class="custom-control custom-checkbox">
@@ -49,3 +51,5 @@
 
   </div>
 @endsection
+
+@include('stisla.auth.script-gcaptcha')

@@ -47,11 +47,17 @@ class SettingRequest extends FormRequest
                     'stisla_bg_home'      => 'nullable|file',
                     'stisla_bg_login'     => 'nullable|file',
                 ];
-            else if ($this->type === 'lainnya')
+            else if ($this->type === 'lainnya') {
                 return [
-                    'login_must_verified' => 'required|numeric',
+                    'is_login_must_verified'            => 'required|numeric',
+                    'is_active_register_page'           => 'required|numeric',
+                    'is_forgot_password_send_to_email'  => 'required|numeric',
+                    'is_google_captcha_login'           => 'required|numeric',
+                    'is_google_captcha_register'        => 'required|numeric',
+                    'is_google_captcha_forgot_password' => 'required|numeric',
+                    'is_google_captcha_reset_password'  => 'required|numeric',
                 ];
-            else if ($this->type === 'email')
+            } else if ($this->type === 'email')
                 return [
                     'mail_from_address' => 'required',
                     'mail_from_name'    => 'required',

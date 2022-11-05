@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Repositories\SettingRepository;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Route;
 
@@ -30,9 +31,12 @@ class LoginRequest extends FormRequest
                 'password' => 'required|min:5',
             ];
         }
+
+        $isGoogleCaptcha = SettingRepository::isGoogleCaptchaLogin();
         return [
-            'email'    => 'required|exists:users,email',
-            'password' => 'required|min:5',
+            'email'                => 'required|exists:users,email',
+            'password'             => 'required|min:5',
+            'g-recaptcha-response' => $isGoogleCaptcha ? 'required|captcha' : 'nullable'
         ];
     }
 }
