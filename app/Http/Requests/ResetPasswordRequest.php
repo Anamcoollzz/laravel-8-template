@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Repositories\SettingRepository;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Route;
 
@@ -33,9 +34,13 @@ class ResetPasswordRequest extends FormRequest
                 "verification_token"        => 'required|exists:users,email_token',
             ];
         }
+
+        $isGoogleCaptcha = SettingRepository::isGoogleCaptchaResetPassword();
+
         return [
             'new_password'              => 'required|min:6|confirmed',
             'new_password_confirmation' => 'required|min:6',
+            'g-recaptcha-response'      => $isGoogleCaptcha ? 'required|captcha' : 'nullable',
         ];
     }
 }

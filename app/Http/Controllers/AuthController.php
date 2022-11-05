@@ -72,8 +72,11 @@ class AuthController extends Controller
         //         return view('stisla.auth.login.index-stisla');
         // }
         // return view('stisla.auth.login.index');
+        $isGoogleCaptcha = $this->settingRepository->isGoogleCaptchaRegister();
         if (TEMPLATE === STISLA)
-            return view('stisla.auth.register.index');
+            return view('stisla.auth.register.index', [
+                'isGoogleCaptcha' => $isGoogleCaptcha
+            ]);
     }
 
     /**
@@ -113,9 +116,12 @@ class AuthController extends Controller
      */
     public function loginForm()
     {
+        $isGoogleCaptcha = SettingRepository::isGoogleCaptchaLogin();
         if (TEMPLATE === STISLA) {
             $template = $this->settingRepository->stislaLoginTemplate();
-            $data     = [];
+            $data     = [
+                'isGoogleCaptcha' => $isGoogleCaptcha,
+            ];
             if ($template === 'tampilan 2')
                 return view('stisla.auth.login.index2', $data);
             else
@@ -168,13 +174,20 @@ class AuthController extends Controller
      */
     public function forgotPasswordForm()
     {
-        if ($this->settingRepository->isForgotPasswordSendToEmail() === false) abort(404);
+        if ($this->settingRepository->isForgotPasswordSendToEmail() === false) {
+            abort(404);
+        }
+
+        $isGoogleCaptcha = $this->settingRepository->isGoogleCaptchaForgotPassword();
+
         if (TEMPLATE === STISLA) {
             // $template = \App\Models\Setting::firstOrCreate(['key' => 'login_template'], ['value' => 'default'])->value;
             // if ($template === 'tampilan 2')
             // return view('stisla.auth.login.index-stisla-2');
             // else
-            return view('stisla.auth.forgot-password.index2');
+            return view('stisla.auth.forgot-password.index2', [
+                'isGoogleCaptcha' => $isGoogleCaptcha
+            ]);
         }
         return view('stisla.auth.login.index');
     }
@@ -216,16 +229,25 @@ class AuthController extends Controller
      */
     public function resetPasswordForm($token)
     {
-        if ($this->settingRepository->isForgotPasswordSendToEmail() === false) abort(404);
-        $user = $this->userRepository->findByEmailToken($token);
-        if ($user === null)
+        if ($this->settingRepository->isForgotPasswordSendToEmail() === false) {
             abort(404);
+        }
+
+        $user = $this->userRepository->findByEmailToken($token);
+        if ($user === null) {
+            abort(404);
+        }
+
+        $isGoogleCaptcha = $this->settingRepository->isGoogleCaptchaResetPassword();
+
         if (TEMPLATE === STISLA) {
             // $template = \App\Models\Setting::firstOrCreate(['key' => 'login_template'], ['value' => 'default'])->value;
             // if ($template === 'tampilan 2')
             // return view('stisla.auth.login.index-stisla-2');
             // else
-            return view('stisla.auth.reset-password.index-stisla-2');
+            return view('stisla.auth.reset-password.index2', [
+                'isGoogleCaptcha' => $isGoogleCaptcha,
+            ]);
         }
         return view('stisla.auth.login.index');
     }
@@ -239,13 +261,19 @@ class AuthController extends Controller
      */
     public function resetPassword($token, ResetPasswordRequest $request)
     {
-        if ($this->settingRepository->isForgotPasswordSendToEmail() === false) abort(404);
+        if ($this->settingRepository->isForgotPasswordSendToEmail() === false) {
+            abort(404);
+        }
+
         DB::beginTransaction();
         try {
             $user = $this->userRepository->findByEmailToken($token);
-            if ($user === null)
+            if ($user === null) {
                 return back()->withInput()->with('errorMessage', __('Gagal memperbarui kata sandi'));
+            }
+
             $userNew = $this->userRepository->update(['password' => bcrypt($request->new_password), 'email_token' => null], $user->id);
+
             logExecute(__('Reset Kata Sandi'), UPDATE, $user->password, $userNew->password);
             DB::commit();
             return redirect()->route('login')->withInput()->with('successMessage', __('Berhasil memperbarui kata sandi'));

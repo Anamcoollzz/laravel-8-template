@@ -12,7 +12,7 @@
         {{ __('Sebelum memulai, anda harus mendaftar terlebih dahulu.') }}
       </p>
     </div>
-    <form method="POST" action="" class="needs-validation" novalidate="">
+    <form method="POST" action="" class="needs-validation" novalidate="" id="formAuth">
       @csrf
       @include('stisla.includes.forms.inputs.input-name')
       @include('stisla.includes.forms.inputs.input', [
@@ -47,6 +47,7 @@
           'label' => 'Konfirmasi Password',
       ])
 
+      @include('stisla.auth.gcaptcha')
 
       <div class="form-group text-right">
         @include('stisla.includes.forms.buttons.btn-success', [
@@ -61,3 +62,5 @@
     @include('stisla.includes.auth.auth-footer')
   </div>
 @endsection
+
+@include('stisla.auth.script-gcaptcha')
