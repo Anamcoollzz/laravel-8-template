@@ -469,4 +469,24 @@ class SettingRepository
         if (config('captcha.secret') === 'default_secret') return false;
         return ((int)Setting::firstOrCreate(['key' => 'is_google_captcha_reset_password'], ['value' => '1'])->value) === 1;
     }
+
+    /**
+     * googleCaptchaSiteKey
+     *
+     * @return string
+     */
+    public static function googleCaptchaSiteKey()
+    {
+        return decrypt(Setting::where(['key' => 'google_captcha_site_key'])->first()->value);
+    }
+
+    /**
+     * googleCaptchaSecret
+     *
+     * @return string
+     */
+    public static function googleCaptchaSecret()
+    {
+        return decrypt(Setting::where(['key' => 'google_captcha_secret'])->first()->value);
+    }
 }

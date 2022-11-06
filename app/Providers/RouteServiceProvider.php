@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Http\Middleware\EnsureAppKey;
+use App\Http\Middleware\OverrideConfig;
 use App\Http\Middleware\ViewShare;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -41,7 +42,7 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->routes(function () {
             Route::prefix('api')
-                ->middleware(['api', EnsureAppKey::class])
+                ->middleware([OverrideConfig::class, 'api', EnsureAppKey::class,])
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api.php'));
 
@@ -49,11 +50,11 @@ class RouteServiceProvider extends ServiceProvider
             //     ->namespace($this->namespace)
             //     ->group(base_path('routes/web.php'));
 
-            Route::middleware('web', ViewShare::class)
+            Route::middleware([OverrideConfig::class, 'web', ViewShare::class,])
                 ->namespace($this->namespace)
                 ->group(base_path('routes/stisla-web.php'));
 
-            Route::middleware('web', ViewShare::class, 'auth')
+            Route::middleware([OverrideConfig::class, 'web', ViewShare::class, 'auth',])
                 ->namespace($this->namespace)
                 ->group(base_path('routes/stisla-web-auth.php'));
         });
