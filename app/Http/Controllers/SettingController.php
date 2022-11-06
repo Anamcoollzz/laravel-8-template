@@ -148,7 +148,12 @@ class SettingController extends Controller
             } else if ($key === 'stisla_bg_home') {
                 $value = $this->fileService->uploadStislaBgHome($request->file('stisla_bg_home'));
             }
-            $this->settingRepository->updateByKey(['value' => $value], $key);
+
+            if ($key === 'google_captcha_site_key' || $key === 'google_captcha_secret') {
+                $this->settingRepository->updateByKey(['value' => encrypt($value)], $key);
+            } else {
+                $this->settingRepository->updateByKey(['value' => $value], $key);
+            }
         }
         $settings = SettingRepository::settings();
         foreach ($settings as $key => $setting) {
