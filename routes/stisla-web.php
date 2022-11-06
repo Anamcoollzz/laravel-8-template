@@ -2,7 +2,11 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CrudController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
+
+# DASHBOARD
+Route::get('/', [DashboardController::class, 'home'])->name('home');
 
 # AUTH
 Route::get('auth/login', [AuthController::class, 'loginForm'])->name('login');

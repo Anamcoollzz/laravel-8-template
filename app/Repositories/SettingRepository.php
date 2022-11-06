@@ -433,6 +433,7 @@ class SettingRepository
      */
     public static function isGoogleCaptchaLogin()
     {
+        if (config('captcha.secret') === 'default_secret') return false;
         return ((int)Setting::firstOrCreate(['key' => 'is_google_captcha_login'], ['value' => '1'])->value) === 1;
     }
 
@@ -443,6 +444,7 @@ class SettingRepository
      */
     public static function isGoogleCaptchaRegister()
     {
+        if (config('captcha.secret') === 'default_secret') return false;
         return ((int)Setting::firstOrCreate(['key' => 'is_google_captcha_register'], ['value' => '1'])->value) === 1;
     }
 
@@ -453,6 +455,7 @@ class SettingRepository
      */
     public static function isGoogleCaptchaForgotPassword()
     {
+        if (config('captcha.secret') === 'default_secret') return false;
         return ((int)Setting::firstOrCreate(['key' => 'is_google_captcha_forgot_password'], ['value' => '1'])->value) === 1;
     }
 
@@ -463,6 +466,7 @@ class SettingRepository
      */
     public static function isGoogleCaptchaResetPassword()
     {
+        if (config('captcha.secret') === 'default_secret') return false;
         return ((int)Setting::firstOrCreate(['key' => 'is_google_captcha_reset_password'], ['value' => '1'])->value) === 1;
     }
 }

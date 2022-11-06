@@ -6,6 +6,7 @@ use App\Models\ActivityLog;
 use App\Models\Notification;
 use App\Models\User;
 use App\Repositories\ActivityLogRepository;
+use App\Repositories\SettingRepository;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Spatie\Permission\Models\Role;
@@ -80,6 +81,18 @@ class DashboardController extends Controller
         return view('stisla.dashboard.index', [
             'widgets' => $widgets,
             'logs'    => $logs,
+        ]);
+    }
+
+    /**
+     * home page
+     *
+     * @return Response
+     */
+    public function home()
+    {
+        return view('stisla.homes.index', [
+            'title' => _('Selamat datang di ') . SettingRepository::applicationName(),
         ]);
     }
 }

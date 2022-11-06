@@ -2,7 +2,8 @@
   <div class="container mt-5">
     <div class="page-error">
       <div class="page-inner">
-        <h1>{{ $code ?? 404 }}</h1>
+        <h1
+          @isset($h1FontSize) style="font-size: {{ $h1FontSize }};" @endif>{{ $code ?? 404 }}</h1>
         <div class="page-description">
           {{ $description ?? __('Halaman yang anda tuju tidak ada') }}
         </div>
@@ -38,7 +39,7 @@
         <span> ♥ Aplikasi dibuat oleh {{ developer_name() }}</span>
         <span> ♥ WhatsApp di <a href="https://wa.me/{{ $_whatsapp_developer = whatsapp_developer() }}" target="_blank">{{ $_whatsapp_developer }}</a></span>
       @endif
-    </div>
-    {{-- @include('stisla.includes.footer') --}}
-  </div>
+          </div>
+          {{-- @include('stisla.includes.footer') --}}
+      </div>
 </section>
