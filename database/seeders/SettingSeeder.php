@@ -27,11 +27,19 @@ class SettingSeeder extends Seeder
                     'key' => $setting['key'],
                     'value' => url($setting['value'])
                 ]);
-            } else
-                Setting::create([
-                    'key' => $setting['key'],
-                    'value' => $setting['value']
-                ]);
+            } else {
+                if ($setting['key'] === 'google_captcha_secret' || $setting['key'] === 'google_captcha_site_key') {
+                    Setting::create([
+                        'key' => $setting['key'],
+                        'value' => encrypt($setting['value']),
+                    ]);
+                } else {
+                    Setting::create([
+                        'key' => $setting['key'],
+                        'value' => $setting['value']
+                    ]);
+                }
+            }
         }
     }
 }

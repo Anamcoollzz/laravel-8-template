@@ -136,7 +136,7 @@
                     @include('stisla.includes.forms.inputs.input', [
                         'id' => 'meta_description',
                         'label' => __('Meta
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        Description'),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Description'),
                         'value' => $_meta_description,
                         'required' => true,
                     ])
@@ -186,7 +186,7 @@
                     @include('stisla.includes.forms.selects.select', [
                         'id' => 'stisla_login_template',
                         'label' => __('Tampilan
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        Halaman Masuk'),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Halaman Masuk'),
                         'selected' => $_stisla_login_template,
                         'options' => ['default' => 'default', 'tampilan 2' => 'tampilan 2'],
                         'required' => true,
@@ -196,7 +196,7 @@
                     @include('stisla.includes.forms.selects.select', [
                         'id' => 'stisla_sidebar_mini',
                         'label' => __('Sidebar
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        Mini'),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Mini'),
                         'selected' => $_stisla_sidebar_mini,
                         'options' => ['0' => 'Tidak', '1' => 'Ya'],
                         'required' => true,
@@ -224,7 +224,7 @@
                     @include('stisla.includes.forms.inputs.input', [
                         'id' => 'stisla_bg_login',
                         'label' => __('Background Halaman
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        Masuk / Daftar'),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Masuk / Daftar'),
                         'required' => false,
                         'accept' => 'image/png,image/jpg',
                         'type' => 'file',
@@ -235,7 +235,7 @@
                         'id' => 'stisla_bg_home',
                         'label' =>
                             __('Background
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        Halaman ') .
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Halaman ') .
                             __('Dashboard'),
                         'required' => false,
                         'accept' => 'image/png,image/jpg',
@@ -484,6 +484,22 @@
                     <h6>Aktivasi Google Captcha</h6>
                   </div>
 
+                  <div class="col-sm-6">
+                    @include('stisla.includes.forms.inputs.input', [
+                        'id' => 'google_captcha_site_key',
+                        'label' => __('Google Captcha Site Key'),
+                        'value' => old('google_captcha_site_key') ?? decrypt($_google_captcha_site_key),
+                        'required' => true,
+                    ])
+                  </div>
+                  <div class="col-sm-6">
+                    @include('stisla.includes.forms.inputs.input', [
+                        'id' => 'google_captcha_secret',
+                        'label' => __('Google Captcha Secret'),
+                        'value' => old('google_captcha_secret') ?? decrypt($_google_captcha_secret),
+                        'required' => true,
+                    ])
+                  </div>
                   <div class="col-sm-6">
                     @include('stisla.includes.forms.inputs.input-radio-toggle', [
                         'id' => 'is_google_captcha_login',
