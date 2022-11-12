@@ -115,6 +115,13 @@
                 "is_active_if_url_includes": "settings*"
             },
             {
+                "menu_name": "Backup Database",
+                "route_name": "backup-databases.index",
+                "icon": "database",
+                "permission": "Backup Database",
+                "is_active_if_url_includes": "backup-databases*"
+            },
+            {
                 "menu_name": "Keluar",
                 "route_name": "logout",
                 "icon": "sign-out-alt",

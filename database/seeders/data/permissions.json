@@ -90,6 +90,12 @@
     },
 
     {
+        "name": "Backup Database",
+        "roles": ["superadmin", "akuntesting"],
+        "group": "Backup Database"
+    },
+
+    {
         "name": "Notifikasi",
         "roles": ["superadmin", "akuntesting"],
         "group": "Notifikasi"
