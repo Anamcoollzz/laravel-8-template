@@ -33,6 +33,19 @@ class UserRepository extends Repository
     }
 
     /**
+     * set and get user login
+     *
+     * @return User
+     */
+    public function login(User $user)
+    {
+        auth()->login($user, request()->filled('remember'));
+        $user->update(['last_login' => now()]);
+        logLogin();
+        return $user;
+    }
+
+    /**
      * find user by email
      *
      * @param string $email

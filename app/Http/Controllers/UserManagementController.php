@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Helper;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
 use App\Repositories\UserRepository;
@@ -27,6 +28,7 @@ class UserManagementController extends Controller
         $this->middleware('can:Pengguna Tambah')->only(['create', 'store']);
         $this->middleware('can:Pengguna Ubah')->only(['edit', 'update']);
         $this->middleware('can:Pengguna Hapus')->only(['destroy']);
+        $this->middleware('can:Pengguna Force Login')->only(['forceLogin']);
     }
 
     /**
@@ -43,6 +45,7 @@ class UserManagementController extends Controller
             'canCreate'      => $user->can('Pengguna Tambah'),
             'canUpdate'      => $user->can('Pengguna Ubah'),
             'canDelete'      => $user->can('Pengguna Hapus'),
+            'canForceLogin'  => $user->can('Pengguna Force Login'),
         ]);
     }
 
@@ -142,5 +145,17 @@ class UserManagementController extends Controller
         logDelete('Pengguna', $user);
         $successMessage = successMessageDelete('Pengguna');
         return redirect()->back()->with('successMessage', $successMessage);
+    }
+
+    /**
+     * force login with specific user
+     *
+     * @param User $user
+     * @return Response
+     */
+    public function forceLogin(User $user)
+    {
+        $this->userRepository->login($user);
+        return Helper::redirectSuccess(route('dashboard.index'), __('Berhasil masuk ke dalam sistem'));
     }
 }

@@ -82,6 +82,11 @@
         "roles": ["superadmin", "akuntesting"],
         "group": "Pengguna"
     },
+    {
+        "name": "Pengguna Force Login",
+        "roles": ["superadmin", "akuntesting"],
+        "group": "Pengguna"
+    },
 
     {
         "name": "Pengaturan",

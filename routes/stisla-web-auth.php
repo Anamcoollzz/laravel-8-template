@@ -37,6 +37,7 @@ Route::view('chart-js', 'stisla.examples.chart-js.index')->name('chart-js.index'
 
 # USER MANAGEMENT
 Route::prefix('user-management')->as('user-management.')->group(function () {
+    Route::get('users/force-login/{user}', [UserManagementController::class, 'forceLogin'])->name('users.force-login');
     Route::resource('users', UserManagementController::class);
 
     # ROLES

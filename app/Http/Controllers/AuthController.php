@@ -146,9 +146,7 @@ class AuthController extends Controller
                     return Helper::backError(['email' => __('Email belum diverifikasi')]);
                 }
             }
-            Auth::login($user, $request->filled('remember'));
-            $user->update(['last_login' => now()]);
-            logLogin();
+            $this->userRepository->login($user);
             return Helper::redirectSuccess(route('dashboard.index'), __('Berhasil masuk ke dalam sistem'));
         }
         return Helper::backError(['password' => __('Password yang dimasukkan salah')]);
