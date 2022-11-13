@@ -102,10 +102,8 @@ class AuthController extends Controller
             logRegister($user);
             return Helper::redirectSuccess(route('login'), __('Cek inbox email anda untuk memverifikasi akun terlebih dahulu'));
         }
-        Auth::login($user);
-        $user->update(['last_login' => now()]);
         logRegister($user);
-        logLogin();
+        $this->userRepository->login($user);
         return redirect()->route('dashboard.index')->with('successMessage', __('Berhasil mendaftar dan masuk ke dalam sistem'));
     }
 
