@@ -14,7 +14,7 @@
       <div class="col-12">
         <div class="card">
           <div class="card-header">
-            <h4><i class="fa fa-users"></i> {{ $title }}</h4>
+            <h4><i class="fa fa-lock"></i> {{ $title }}</h4>
 
             <div class="card-header-action">
               @if ($canImportExcel)
@@ -45,7 +45,11 @@
                       </td>
                       <td>
                         @if ($canUpdate)
-                          @include('stisla.includes.forms.buttons.btn-edit', ['link' => route('user-management.roles.edit', [$item->id])])
+                          @if ($item->name === 'superadmin')
+                            @include('stisla.includes.forms.buttons.btn-detail', ['link' => route('user-management.roles.edit', [$item->id])])
+                          @else
+                            @include('stisla.includes.forms.buttons.btn-edit', ['link' => route('user-management.roles.edit', [$item->id])])
+                          @endif
                         @endif
                         @if ($canDelete && !$item->is_locked)
                           @include('stisla.includes.forms.buttons.btn-delete', ['link' => route('user-management.roles.destroy', [$item->id])])
