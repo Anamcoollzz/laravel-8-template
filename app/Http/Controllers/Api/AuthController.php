@@ -334,7 +334,8 @@ class AuthController extends Controller
     {
         $oldPassword = auth('api')->user()->password;
         $this->userRepository->updateProfile([
-            'password' => $newPassword = bcrypt($request->new_password)
+            'password'             => $newPassword = bcrypt($request->new_password),
+            'last_password_change' => now(),
         ]);
         logUpdate('Kata Sandi', $oldPassword, $newPassword);
         return response200(true, __('Berhasil memperbarui kata sandi'));

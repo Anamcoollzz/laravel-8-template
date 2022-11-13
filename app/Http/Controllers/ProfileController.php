@@ -45,9 +45,12 @@ class ProfileController extends Controller
     public function index()
     {
         $user = auth()->user();
+        $totalDay = \Carbon\Carbon::parse($user->last_password_change)->diffInDays(now());
+
         return view('stisla.profile.index', [
-            'user' => $user,
-            'd'    => $user,
+            'user'     => $user,
+            'd'        => $user,
+            'totalDay' => $totalDay,
         ]);
     }
 
@@ -86,7 +89,8 @@ class ProfileController extends Controller
     {
         $oldPassword = auth()->user()->password;
         $data = [
-            'password' => $newPassword = bcrypt($request->new_password)
+            'password'             => $newPassword = bcrypt($request->new_password),
+            'last_password_change' => date('Y-m-d H:i:s'),
         ];
         $this->userRepository->updateProfile($data);
 
