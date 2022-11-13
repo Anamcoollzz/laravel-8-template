@@ -100,7 +100,7 @@
                           Aksi
                         </button>
                         <div class="dropdown-menu">
-                          <a onclick="hapus(event, '{{ route('backup-databases.destroy', $name) }}')" class="dropdown-item has-icon" href="#">
+                          <a onclick="hapus(event, '{{ route('backup-databases.destroy', $name) }}')" class="dropdown-item has-icon text-danger" href="#">
                             <i class="fas fa-trash"></i> Hapus
                           </a>
                           <a onclick="restore(event, '{{ route('backup-databases.update', $name) }}')" class="dropdown-item has-icon" href="#">

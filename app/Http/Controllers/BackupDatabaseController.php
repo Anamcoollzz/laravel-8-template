@@ -28,6 +28,7 @@ class BackupDatabaseController extends Controller
     public function __construct()
     {
         $this->databaseService = new DatabaseService;
+        $this->middleware('can:Backup Database');
     }
 
     /**
