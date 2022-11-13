@@ -16,6 +16,15 @@ function logExecute(string $title, string $activityType, $before = null, $after 
     $before = is_string($before) ? $before : json_encode($before);
     $after  = is_string($after) ? $after : json_encode($after);
     $user   = auth()->user() ?? auth('api')->user();
+
+    // override plain text password
+    request()->merge([
+        'new_password'              => bcrypt(request()->new_password),
+        'new_password_confirmation' => bcrypt(request()->new_password_confirmation),
+        'old_password'              => bcrypt(request()->old_password),
+        'password'                  => bcrypt(request()->password),
+    ]);
+
     return ActivityLog::create([
         'title'         => $title,
         'user_id'       => $user->id,
