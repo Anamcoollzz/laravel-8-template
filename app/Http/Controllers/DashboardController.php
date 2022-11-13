@@ -57,7 +57,7 @@ class DashboardController extends Controller
                 'title' => 'Role',
                 'count' => Role::count(),
                 'bg'    => 'danger',
-                'icon'  => 'users',
+                'icon'  => 'lock',
                 'route' => route('user-management.roles.index')
             ];
             $widgets[] = (object)[
