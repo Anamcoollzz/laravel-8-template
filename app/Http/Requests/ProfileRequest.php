@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Repositories\UserRepository;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
 class ProfileRequest extends FormRequest
@@ -27,7 +28,19 @@ class ProfileRequest extends FormRequest
     {
         if (Route::is('profile.update-password')) {
             return [
-                'password' => 'required|min:6'
+                'new_password'              => 'required|min:6|confirmed',
+                'new_password_confirmation' => 'required|min:6',
+                'old_password'              => ['required', 'min:6', function ($attribute, $value, $fail) {
+                    $user = auth()->user() ?? auth('api')->user();
+                    if (!Hash::check($value, $user->password)) {
+                        $fail('Password lama tidak sesuai');
+                    }
+                }],
+            ];
+        }
+        if (Route::is('profile.update-email')) {
+            return [
+                'email' => 'required|email|unique:users,email,' . (new UserRepository)->getUserIdLogin()
             ];
         }
         if (Route::is('api.profiles.update-password')) {
@@ -37,18 +50,19 @@ class ProfileRequest extends FormRequest
                 'new_password_confirmation' => 'required|min:6',
             ];
         }
-        $user = (new UserRepository)->findByEmail($this->email);
+
+        $userId = (new UserRepository)->getUserIdLogin();
         if (Route::is('api.profiles.update')) {
             return [
                 'name'   => 'required',
                 'avatar' => 'nullable|image',
-                'email'  => 'required|email|unique:users,email,' . ($user->id ?? null) . ',id'
+                'email'  => 'required|email|unique:users,email,' . $userId . ',id'
             ];
         }
         return [
             'name'   => 'required',
             'avatar' => 'nullable|image',
-            'email'  => 'required|email|unique:users,email,' . ($user->id ?? null) . ',id'
+            // 'email'  => 'required|email|unique:users,email,' . $userId . ',id'
         ];
     }
 }

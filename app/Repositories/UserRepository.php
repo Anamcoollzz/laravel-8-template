@@ -11,12 +11,6 @@ use Spatie\Permission\Models\Role;
 
 class UserRepository extends Repository
 {
-    /**
-     * userId
-     *
-     * @var mixed
-     */
-    private $userId;
 
     /**
      * constructor method
@@ -26,7 +20,16 @@ class UserRepository extends Repository
     public function __construct()
     {
         $this->model = new User();
-        $this->userId = auth()->id() ?? auth('api')->id();
+    }
+
+    /**
+     * get user id login
+     *
+     * @return int
+     */
+    public function getUserIdLogin()
+    {
+        return auth()->id() ?? auth('api')->id();
     }
 
     /**
@@ -59,8 +62,9 @@ class UserRepository extends Repository
      */
     public function updateProfile(array $data)
     {
-        $this->model->where('id', $this->userId)->update($data);
-        return $this->find($this->userId);
+        $userId = $this->getUserIdLogin();
+        $this->model->where('id', $userId)->update($data);
+        return $this->find($userId);
     }
 
     /**
@@ -71,7 +75,6 @@ class UserRepository extends Repository
     public function getUsers()
     {
         $users = $this->model->with(['roles'])->latest()->get();
-        // dd($users);
         return $users;
     }
 
@@ -223,7 +226,7 @@ class UserRepository extends Repository
     public function getLogActivitiesPaginate($perPage = 20)
     {
         return ActivityLog::query()
-            ->where('user_id', $this->userId)
+            ->where('user_id', $this->getUserIdLogin())
             ->latest()
             ->paginate($perPage);
     }

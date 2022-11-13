@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\StringHelper;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -60,7 +61,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $appends = [
-        // 'avatar_hehe'
+        'avatar_url'
     ];
 
     /**
@@ -71,9 +72,10 @@ class User extends Authenticatable implements JWTSubject
     public function getAvatarUrlAttribute()
     {
         if ($this->avatar) {
-            if (Storage::exists('public/avatars/' . $this->avatar))
+            if (Storage::exists('public/avatars/' . $this->avatar)) {
                 return asset('storage/avatars/' . $this->avatar);
-            if (Str::contains($this->avatar, 'https://') || Str::contains($this->avatar, 'http://')) {
+            }
+            if (StringHelper::isUrl($this->avatar)) {
                 return $this->avatar;
             }
         }

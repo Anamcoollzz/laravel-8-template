@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileRequest;
+use App\Models\User;
 use App\Repositories\UserRepository;
 use App\Services\FileService;
 
@@ -43,8 +44,10 @@ class ProfileController extends Controller
      */
     public function index()
     {
+        $user = auth()->user();
         return view('stisla.profile.index', [
-            'user' => auth()->user(),
+            'user' => $user,
+            'd'    => $user,
         ]);
     }
 
@@ -58,13 +61,17 @@ class ProfileController extends Controller
     {
         $data = $request->only([
             'name',
-            'email'
+            'email',
+            'phone_number',
+            'birth_date',
+            'address',
         ]);
         $user = auth()->user();
         if ($request->hasFile('avatar')) {
             $data['avatar'] = $this->fileService->uploadAvatar($request->file('avatar'));
         }
         $newUser = $this->userRepository->updateProfile($data);
+
         logUpdate('Profil Pengguna', $user, $newUser);
         return back()->with('successMessage', __('Berhasil memperbarui profil'));
     }
@@ -78,10 +85,30 @@ class ProfileController extends Controller
     public function updatePassword(ProfileRequest $request)
     {
         $oldPassword = auth()->user()->password;
-        $this->userRepository->updateProfile([
-            'password' => $newPassword = bcrypt($request->password)
-        ]);
+        $data = [
+            'password' => $newPassword = bcrypt($request->new_password)
+        ];
+        $this->userRepository->updateProfile($data);
+
         logUpdate('Kata Sandi', $oldPassword, $newPassword);
         return back()->with('successMessage', __('Berhasil memperbarui password'));
+    }
+
+    /**
+     * update email user login
+     *
+     * @param ProfileRequest $request
+     * @return Response
+     */
+    public function updateEmail(ProfileRequest $request)
+    {
+        $oldEmail = auth()->user()->email;
+        $data = [
+            'email' => $request->email
+        ];
+        $this->userRepository->updateProfile($data);
+
+        logUpdate('Email', $oldEmail, $request->email);
+        return back()->with('successMessage', __('Berhasil memperbarui email'));
     }
 }
