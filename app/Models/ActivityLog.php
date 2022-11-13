@@ -25,6 +25,9 @@ class ActivityLog extends Model
         'user_agent',
         'user_id',
         'role_id',
+        'browser',
+        'platform',
+        'device',
     ];
 
     public function user()

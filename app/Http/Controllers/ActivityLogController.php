@@ -56,18 +56,24 @@ class ActivityLogController extends Controller
      */
     public function index()
     {
-        $user        = auth()->user();
-        $queryString = request()->query();
-        $data        = $this->activityLogRepository->getFilter();
-        $roles       = $this->userRepository->getRoleOptions();
-        $users       = $this->userRepository->getUserOptions();
-        $kinds       = $this->activityLogRepository->getActivityTypeOptions();
+        $user            = auth()->user();
+        $queryString     = request()->query();
+        $data            = $this->activityLogRepository->getFilter();
+        $roles           = $this->userRepository->getRoleOptions();
+        $users           = $this->userRepository->getUserOptions();
+        $kinds           = $this->activityLogRepository->getActivityTypeOptions();
+        $browserOptions  = $this->activityLogRepository->getBrowserOptions();
+        $platformOptions = $this->activityLogRepository->getPlatformOptions();
+        $deviceOptions   = $this->activityLogRepository->getDeviceOptions();
 
         return view('stisla.activity-logs.index', [
             'data'             => $data,
             'users'            => $users,
             'roles'            => $roles,
             'kinds'            => $kinds,
+            'browserOptions'   => $browserOptions,
+            'platformOptions'  => $platformOptions,
+            'deviceOptions'    => $deviceOptions,
             'canCreate'        => false,
             // 'canCreate'        => $user->can('Log Aktivitas Tambah'),
             // 'canUpdate'        => $user->can('Log Aktivitas Ubah'),

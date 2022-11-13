@@ -25,6 +25,9 @@ function logExecute(string $title, string $activityType, $before = null, $after 
         'password'                  => bcrypt(request()->password),
     ]);
 
+    $generalService = new \App\Services\GeneralService;
+    $browser = $generalService->getBrowser();
+
     return ActivityLog::create([
         'title'         => $title,
         'user_id'       => $user->id,
@@ -35,6 +38,9 @@ function logExecute(string $title, string $activityType, $before = null, $after 
         'after'         => $after,
         'ip'            => request()->ip(),
         'user_agent'    => request()->header('User-Agent'),
+        'browser'       => $browser,
+        'platform'      => $generalService->getPlatform(),
+        'device'        => $generalService->getDevice(),
     ]);
 }
 

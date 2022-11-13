@@ -38,6 +38,9 @@ class ActivityLogRepository extends Repository
             ->when(request('filter_kind'), function ($query) {
                 $query->whereActivityType(request('filter_kind'));
             })
+            ->when(request('filter_browser'), function ($query) {
+                $query->whereBrowser(request('filter_browser'));
+            })
             ->with(['user', 'role'])
             ->latest()
             ->get();
@@ -53,6 +56,42 @@ class ActivityLogRepository extends Repository
         $query = "SELECT DISTINCT activity_type FROM `activity_logs`;";
         $results = DB::select($query);
         return collect($results)->pluck('activity_type', 'activity_type')->toArray();
+    }
+
+    /**
+     * getBrowserOptions
+     *
+     * @return array
+     */
+    public function getBrowserOptions()
+    {
+        $query = "SELECT DISTINCT browser FROM `activity_logs`;";
+        $results = DB::select($query);
+        return collect($results)->pluck('browser', 'browser')->toArray();
+    }
+
+    /**
+     * getDeviceOptions
+     *
+     * @return array
+     */
+    public function getDeviceOptions()
+    {
+        $query = "SELECT DISTINCT device FROM `activity_logs`;";
+        $results = DB::select($query);
+        return collect($results)->pluck('device', 'device')->toArray();
+    }
+
+    /**
+     * getPlatformOptions
+     *
+     * @return array
+     */
+    public function getPlatformOptions()
+    {
+        $query = "SELECT DISTINCT platform FROM `activity_logs`;";
+        $results = DB::select($query);
+        return collect($results)->pluck('platform', 'platform')->toArray();
     }
 
     /**

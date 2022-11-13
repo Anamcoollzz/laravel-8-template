@@ -64,6 +64,42 @@
                       'with_all' => true,
                   ])
                 </div>
+                @if (count($deviceOptions) > 0)
+                  <div class="col-md-3">
+                    @include('stisla.includes.forms.selects.select2', [
+                        'id' => 'filter_device',
+                        'name' => 'filter_device',
+                        'label' => __('Pilih Device'),
+                        'options' => $deviceOptions,
+                        'selected' => request('filter_device'),
+                        'with_all' => true,
+                    ])
+                  </div>
+                @endif
+                @if (count($platformOptions) > 0)
+                  <div class="col-md-3">
+                    @include('stisla.includes.forms.selects.select2', [
+                        'id' => 'filter_platform',
+                        'name' => 'filter_platform',
+                        'label' => __('Pilih Platform'),
+                        'options' => $platformOptions,
+                        'selected' => request('filter_platform'),
+                        'with_all' => true,
+                    ])
+                  </div>
+                @endif
+                @if (count($browserOptions) > 0)
+                  <div class="col-md-3">
+                    @include('stisla.includes.forms.selects.select2', [
+                        'id' => 'filter_browser',
+                        'name' => 'filter_browser',
+                        'label' => __('Pilih Browser'),
+                        'options' => $browserOptions,
+                        'selected' => request('filter_browser'),
+                        'with_all' => true,
+                    ])
+                  </div>
+                @endif
               </div>
               <button class="btn btn-primary icon"><i class="fa fa-search"></i> Cari Data</button>
             </form>
@@ -109,6 +145,9 @@
                       <th class="text-center">{{ __('After') }}</th>
                       <th class="text-center">{{ __('IP') }}</th>
                       <th class="text-center">{{ __('User Agent') }}</th>
+                      <th class="text-center">{{ __('Device') }}</th>
+                      <th class="text-center">{{ __('Platform') }}</th>
+                      <th class="text-center">{{ __('Browser') }}</th>
                       <th class="text-center">{{ __('Pengguna') }}</th>
                       <th class="text-center">{{ __('Role') }}</th>
                       <th class="text-center">{{ __('Created At') }}</th>
@@ -126,6 +165,9 @@
                         <td>{{ $item->after }}</td>
                         <td>{{ $item->ip }}</td>
                         <td>{{ $item->user_agent }}</td>
+                        <td>{{ $item->device }}</td>
+                        <td>{{ $item->platform }}</td>
+                        <td>{{ $item->browser }}</td>
                         <td>{{ $item->user->name }}</td>
                         <td>{{ $item->role->name ?? '-' }}</td>
                         <td>{{ $item->created_at }}</td>
@@ -165,9 +207,7 @@
 @endpush
 
 @push('scripts')
-  <script>
-
-  </script>
+  <script></script>
 @endpush
 
 @push('modals')
