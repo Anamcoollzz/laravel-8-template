@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\BackupDatabaseController;
 use App\Http\Controllers\CrudExampleController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NotificationController;
@@ -55,6 +56,9 @@ Route::get('activity-logs/excel', [ActivityLogController::class, 'excel'])->name
 Route::get('notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.read-all');
 Route::get('notifications/read/{notification}', [NotificationController::class, 'read'])->name('notifications.read');
 Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
+
+# BACKUP DATABASE
+Route::resource('backup-databases', BackupDatabaseController::class);
 
 # CONTOH CRUD
 Route::get('crud-examples/pdf', [CrudExampleController::class, 'pdf'])->name('crud-examples.pdf');

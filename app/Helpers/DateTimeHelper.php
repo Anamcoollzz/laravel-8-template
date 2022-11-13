@@ -42,3 +42,37 @@ function time_since($waktu)
 
     return $print . ' yang lalu';
 }
+
+function namaBulan($b)
+{
+    $b = (int) $b;
+    $bulan = array(
+        1 =>   'Januari',
+        'Februari',
+        'Maret',
+        'April',
+        'Mei',
+        'Juni',
+        'Juli',
+        'Agustus',
+        'September',
+        'Oktober',
+        'November',
+        'Desember'
+    );
+    return $bulan[$b];
+}
+
+function array_bulan()
+{
+    return ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'April', '5' => 'Mei', '6' => 'Juni', '7' => 'Juli', '8' => 'Agustus', '9' => 'September', '10' => 'Oktober', '11' => 'November', '12' => 'Desember'];
+}
+
+function array_year($start, $end)
+{
+    $years = [];
+    foreach (range($start, $end) as $thn) {
+        $years[$thn] = $thn;
+    }
+    return $years;
+}
