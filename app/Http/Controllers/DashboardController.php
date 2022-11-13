@@ -7,6 +7,7 @@ use App\Models\Notification;
 use App\Models\User;
 use App\Repositories\ActivityLogRepository;
 use App\Repositories\SettingRepository;
+use App\Services\DatabaseService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Spatie\Permission\Models\Role;
@@ -67,7 +68,8 @@ class DashboardController extends Controller
                 'route' => route('activity-logs.index')
             ];
         }
-        if ($user->can('Notifikasi'))
+
+        if ($user->can('Notifikasi')) {
             $widgets[] = (object)[
                 'title' => 'Notifikasi',
                 'count' => Notification::where('user_id', $user->id)->count(),
@@ -75,6 +77,17 @@ class DashboardController extends Controller
                 'icon'  => 'bell',
                 'route' => route('notifications.index'),
             ];
+        }
+
+        if ($user->can('Backup Database')) {
+            $widgets[] = (object)[
+                'title' => 'Backup Database',
+                'count' => count((new DatabaseService)->getAllBackupMysql()),
+                'bg'    => 'primary',
+                'icon'  => 'database',
+                'route' => route('backup-databases.index')
+            ];
+        }
 
         $logs = $this->activityLogRepository->getMineLatest();
 
