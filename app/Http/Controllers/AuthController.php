@@ -7,7 +7,6 @@ use App\Http\Requests\ForgotPasswordRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\ResetPasswordRequest;
-use App\Models\User;
 use App\Repositories\SettingRepository;
 use App\Repositories\UserRepository;
 use App\Services\EmailService;
@@ -39,11 +38,18 @@ class AuthController extends Controller
     private SettingRepository $settingRepository;
 
     /**
-     * emailservice
+     * email service
      *
      * @var EmailService
      */
     private EmailService $emailService;
+
+    private array $socialiteProviders = [
+        'google',
+        'facebook',
+        // 'twitter',
+        // 'github',
+    ];
 
     /**
      * constructor method
@@ -354,7 +360,7 @@ class AuthController extends Controller
      */
     public function socialLogin($provider)
     {
-        if (!in_array($provider, ['google', 'facebook'])) {
+        if (!in_array($provider, $this->socialiteProviders)) {
             abort(404);
         }
 
@@ -377,10 +383,11 @@ class AuthController extends Controller
     public function socialCallback($provider)
     {
         try {
-            if (!in_array($provider, ['google', 'facebook'])) {
+            if (!in_array($provider, $this->socialiteProviders)) {
                 abort(404);
             }
             $user = Socialite::driver($provider)->user();
+
             if ($user->getEmail()) {
                 $user = $this->userRepository->findByEmail($email = $user->getEmail());
 
