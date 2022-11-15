@@ -75,7 +75,7 @@
                         @if ($canDelete)
                           @include('stisla.includes.forms.buttons.btn-delete', ['link' => route('user-management.users.destroy', [$item->id])])
                         @endif
-                        @if ($canForceLogin)
+                        @if ($canForceLogin && $item->id != Auth::user()->id)
                           @include('stisla.includes.forms.buttons.btn-success', [
                               'link' => route('user-management.users.force-login', [$item->id]),
                               'icon' => 'fa fa-door-open',
