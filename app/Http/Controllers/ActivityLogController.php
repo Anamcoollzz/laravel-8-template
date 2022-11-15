@@ -57,6 +57,7 @@ class ActivityLogController extends Controller
     public function index()
     {
         $user            = auth()->user();
+        $user            = $this->userRepository->find($user->id);
         $queryString     = request()->query();
         $data            = $this->activityLogRepository->getFilter();
         $roles           = $this->userRepository->getRoleOptions();
@@ -88,6 +89,7 @@ class ActivityLogController extends Controller
             'routeExcel'       => route('activity-logs.excel', $queryString),
             'routeCsv'         => route('activity-logs.csv', $queryString),
             'routeJson'        => route('activity-logs.json', $queryString),
+            'isSuperAdmin'     => $user->hasRole('superadmin'),
             // 'routeImportExcel' => route('activity-logs.import-excel'),
             // 'excelExampleLink' => route('activity-logs.import-excel-example'),
         ]);

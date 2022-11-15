@@ -34,36 +34,39 @@
                       'value' => request('filter_date', date('Y-m-d')),
                   ])
                 </div>
-                <div class="col-md-3">
-                  @include('stisla.includes.forms.selects.select2', [
-                      'id' => 'filter_user',
-                      'name' => 'filter_user',
-                      'label' => __('Pilih Pengguna'),
-                      'options' => $users,
-                      'selected' => request('filter_user'),
-                      'with_all' => true,
-                  ])
-                </div>
-                <div class="col-md-3">
-                  @include('stisla.includes.forms.selects.select2', [
-                      'id' => 'filter_role',
-                      'name' => 'filter_role',
-                      'label' => __('Pilih Role'),
-                      'options' => $roles,
-                      'selected' => request('filter_role'),
-                      'with_all' => true,
-                  ])
-                </div>
-                <div class="col-md-3">
-                  @include('stisla.includes.forms.selects.select2', [
-                      'id' => 'filter_kind',
-                      'name' => 'filter_kind',
-                      'label' => __('Pilih Jenis Aktivitas'),
-                      'options' => $kinds,
-                      'selected' => request('filter_kind'),
-                      'with_all' => true,
-                  ])
-                </div>
+                @if ($isSuperAdmin)
+                  <div class="col-md-3">
+                    @include('stisla.includes.forms.selects.select2', [
+                        'id' => 'filter_user',
+                        'name' => 'filter_user',
+                        'label' => __('Pilih Pengguna'),
+                        'options' => $users,
+                        'selected' => request('filter_user'),
+                        'with_all' => true,
+                    ])
+                  </div>
+                  <div class="col-md-3">
+                    @include('stisla.includes.forms.selects.select2', [
+                        'id' => 'filter_role',
+                        'name' => 'filter_role',
+                        'label' => __('Pilih Role'),
+                        'options' => $roles,
+                        'selected' => request('filter_role'),
+                        'with_all' => true,
+                    ])
+                  </div>
+
+                  <div class="col-md-3">
+                    @include('stisla.includes.forms.selects.select2', [
+                        'id' => 'filter_kind',
+                        'name' => 'filter_kind',
+                        'label' => __('Pilih Jenis Aktivitas'),
+                        'options' => $kinds,
+                        'selected' => request('filter_kind'),
+                        'with_all' => true,
+                    ])
+                  </div>
+                @endif
                 @if (count($deviceOptions) > 0)
                   <div class="col-md-3">
                     @include('stisla.includes.forms.selects.select2', [
@@ -148,8 +151,10 @@
                       <th class="text-center">{{ __('Device') }}</th>
                       <th class="text-center">{{ __('Platform') }}</th>
                       <th class="text-center">{{ __('Browser') }}</th>
-                      <th class="text-center">{{ __('Pengguna') }}</th>
-                      <th class="text-center">{{ __('Role') }}</th>
+                      @if ($isSuperAdmin)
+                        <th class="text-center">{{ __('Pengguna') }}</th>
+                        <th class="text-center">{{ __('Role') }}</th>
+                      @endif
                       <th class="text-center">{{ __('Created At') }}</th>
                       {{-- <th>{{ __('Aksi') }}</th> --}}
                     </tr>
@@ -160,16 +165,24 @@
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $item->title }}</td>
                         <td>{{ $item->activity_type }}</td>
-                        <td>{{ $item->request_data }}</td>
-                        <td>{{ $item->before }}</td>
-                        <td>{{ $item->after }}</td>
+                        <td>
+                          <textarea>{{ $item->request_data }}</textarea>
+                        </td>
+                        <td>
+                          <textarea>{{ $item->before }}</textarea>
+                        </td>
+                        <td>
+                          <textarea>{{ $item->after }}</textarea>
+                        </td>
                         <td>{{ $item->ip }}</td>
                         <td>{{ $item->user_agent }}</td>
                         <td>{{ $item->device }}</td>
                         <td>{{ $item->platform }}</td>
                         <td>{{ $item->browser }}</td>
-                        <td>{{ $item->user->name }}</td>
-                        <td>{{ $item->role->name ?? '-' }}</td>
+                        @if ($isSuperAdmin)
+                          <td>{{ $item->user->name }}</td>
+                          <td>{{ $item->role->name ?? '-' }}</td>
+                        @endif
                         <td>{{ $item->created_at }}</td>
                         {{-- <td>
                           @if ($canUpdate)

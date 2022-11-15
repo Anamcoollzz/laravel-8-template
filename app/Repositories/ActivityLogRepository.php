@@ -26,8 +26,8 @@ class ActivityLogRepository extends Repository
     public function getFilter()
     {
         return $this->model->query()
-            ->when(request('filter_date'), function ($query) {
-                $query->whereDate('created_at', request('filter_date'));
+            ->when(request('filter_date', date('Y-m-d')), function ($query) {
+                $query->whereDate('created_at', request('filter_date', date('Y-m-d')));
             })
             ->when(request('filter_role'), function ($query) {
                 $query->whereRoleId(request('filter_role'));
@@ -40,6 +40,9 @@ class ActivityLogRepository extends Repository
             })
             ->when(request('filter_browser'), function ($query) {
                 $query->whereBrowser(request('filter_browser'));
+            })
+            ->when(!auth()->user()->hasRole('superadmin'), function ($query) {
+                $query->where('user_id', auth()->user()->id);
             })
             ->with(['user', 'role'])
             ->latest()

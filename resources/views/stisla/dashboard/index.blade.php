@@ -75,9 +75,15 @@
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $item->title }}</td>
                     <td>{{ $item->activity_type }}</td>
-                    <td>{{ $item->request_data }}</td>
-                    <td>{{ $item->before }}</td>
-                    <td>{{ $item->after }}</td>
+                    <td>
+                      <textarea>{{ $item->request_data }}</textarea>
+                    </td>
+                    <td>
+                      <textarea>{{ $item->before }}</textarea>
+                    </td>
+                    <td>
+                      <textarea>{{ $item->after }}</textarea>
+                    </td>
                     <td>{{ $item->ip }}</td>
                     <td>{{ $item->user_agent }}</td>
                     <td>{{ $item->user->name }}</td>
