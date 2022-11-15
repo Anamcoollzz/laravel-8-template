@@ -7,6 +7,7 @@ use App\Http\Requests\ForgotPasswordRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\ResetPasswordRequest;
+use App\Models\User;
 use App\Repositories\SettingRepository;
 use App\Repositories\UserRepository;
 use App\Services\EmailService;
@@ -15,8 +16,10 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
@@ -120,7 +123,7 @@ class AuthController extends Controller
             $data     = [
                 'isGoogleCaptcha' => $isGoogleCaptcha,
             ];
-            if ($template === 'tampilan 2')
+            if ($template === 'tampilan 2' || Route::is('login2'))
                 return view('stisla.auth.login.index2', $data);
             else
                 return view('stisla.auth.login.index', $data);
@@ -342,5 +345,58 @@ class AuthController extends Controller
         ], $user->id);
         logExecute(__('Verifikasi Akun'), UPDATE, $user, $userNew);
         return redirect()->route('login')->with('successMessage', __('Berhasil memverifikasi akun, silakan masuk menggunakan akun anda'));
+    }
+
+    /**
+     * save temp session provider
+     *
+     * @return Response
+     */
+    public function socialLogin($provider)
+    {
+        if (!in_array($provider, ['google', 'facebook'])) {
+            abort(404);
+        }
+
+        $isValidFb     = $provider === 'facebook' && $this->settingRepository->isLoginWithFacebook();
+        $isValidGoogle = $provider === 'google' && $this->settingRepository->isLoginWithGoogle();
+
+        if ($isValidFb || $isValidGoogle) {
+            return Socialite::driver($provider)->redirect();
+        }
+
+        abort(404);
+    }
+
+    /**
+     * callback social login
+     * @param mixed $provider
+     *
+     * @return Response
+     */
+    public function socialCallback($provider)
+    {
+        try {
+            if (!in_array($provider, ['google', 'facebook'])) {
+                abort(404);
+            }
+            $user = Socialite::driver($provider)->user();
+            if ($user->getEmail()) {
+                $user = $this->userRepository->findByEmail($email = $user->getEmail());
+
+                if ($user === null) {
+                    return redirect()->route('login')->with('errorMessage', __('Akun ' . $email . ' belum terdaftar'));
+                }
+
+                $this->userRepository->login($user);
+                return Helper::redirectSuccess(route('dashboard.index'), __('Berhasil masuk ke dalam sistem'));
+            }
+            return redirect()->route('login')->with('errorMessage', __('Akun tidak ditemukan'));
+        } catch (Exception $e) {
+            if (config('app.debug')) {
+                throw $e;
+            }
+            return redirect()->route('login')->with('errorMessage', __('Ada error'));
+        }
     }
 }
