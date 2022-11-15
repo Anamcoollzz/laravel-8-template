@@ -87,6 +87,14 @@
                 ]
             },
             {
+                "menu_name": "Manajemen File",
+                "uri": "file-managers",
+                "icon": "folder",
+                "permission": "Manajemen File",
+                "is_blank": true,
+                "is_active_if_url_includes": "file-managers*"
+            },
+            {
                 "menu_name": "Notifikasi",
                 "route_name": "notifications.index",
                 "icon": "bell",

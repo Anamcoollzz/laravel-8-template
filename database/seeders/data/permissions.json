@@ -95,6 +95,12 @@
     },
 
     {
+        "name": "Manajemen File",
+        "roles": ["superadmin", "akuntesting"],
+        "group": "Manajemen File"
+    },
+
+    {
         "name": "Backup Database",
         "roles": ["superadmin", "akuntesting"],
         "group": "Backup Database"

@@ -29,7 +29,7 @@
             @endphp
             @if ($_menu_condition)
               <li @if (Request::is($_menu->is_active_if_url_includes)) class="active" @endif>
-                <a class="nav-link" href="{{ $_menu->route_name ? route($_menu->route_name) : '#' }}">
+                <a class="nav-link" href="{{ $_menu->fix_url }}" @if ($_menu->is_blank) target="_blank" @endif>
                   <i class="fas fa-{{ $_menu->icon }}"></i>
                   <span>{{ __($_menu->menu_name) }}</span>
                 </a>
@@ -54,7 +54,7 @@
               <ul class="dropdown-menu">
                 @foreach ($_menu->childs as $_child_menu)
                   <li @if (Request::is($_child_menu->is_active_if_url_includes)) class="active" @endif>
-                    <a class="nav-link" href="{{ $_child_menu->route_name ? route($_child_menu->route_name) : '#' }}">
+                    <a class="nav-link" href="{{ $_child_menu->fix_url }}" @if ($_child_menu->is_blank) target="_blank" @endif>
                       {{ __($_child_menu->menu_name) }}
                     </a>
                   </li>
