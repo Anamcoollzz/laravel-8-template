@@ -10,6 +10,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TestingController;
 use App\Http\Controllers\UserManagementController;
+use App\Http\Middleware\FileManagerPermission;
 use Illuminate\Support\Facades\Route;
 
 # DASHBOARD
@@ -61,6 +62,11 @@ Route::get('notifications', [NotificationController::class, 'index'])->name('not
 
 # BACKUP DATABASE
 Route::resource('backup-databases', BackupDatabaseController::class);
+
+# FILE MANAGER
+Route::group(['prefix' => 'file-managers', 'middleware' => [FileManagerPermission::class]], function () {
+    \UniSharp\LaravelFilemanager\Lfm::routes();
+});
 
 # CONTOH CRUD
 Route::get('crud-examples/pdf', [CrudExampleController::class, 'pdf'])->name('crud-examples.pdf');

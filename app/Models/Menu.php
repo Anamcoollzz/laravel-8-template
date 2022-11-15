@@ -21,6 +21,17 @@ class Menu extends Model
         'parent_menu_id',
         'permission',
         'is_active_if_url_includes',
+        'is_blank',
+        'uri',
+    ];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'fix_url',
     ];
 
     /**
@@ -38,6 +49,17 @@ class Menu extends Model
      * @var array
      */
     protected $casts = [];
+
+    public function getFixUrlAttribute()
+    {
+        if ($this->uri) {
+            return url($this->uri);
+        }
+        if ($this->route_name) {
+            return route($this->route_name);
+        }
+        return '#';
+    }
 
     public function childs()
     {

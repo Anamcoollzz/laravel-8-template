@@ -52,8 +52,10 @@ class MenuSeeder extends Seeder
                 $menuObj = Menu::create([
                     'menu_name'                 => $menu['menu_name'],
                     'icon'                      => $menu['icon'],
-                    'route_name'                => $menu['route_name'],
+                    'route_name'                => $menu['route_name'] ?? null,
+                    'uri'                       => $menu['uri'] ?? null,
                     'permission'                => $menu['permission'],
+                    'is_blank'                  => $menu['is_blank'] ?? false,
                     'menu_group_id'             => $group->id,
                     'is_active_if_url_includes' => $menu['is_active_if_url_includes'],
                 ]);
@@ -61,8 +63,10 @@ class MenuSeeder extends Seeder
                     Menu::create([
                         'menu_name'                 => $child['menu_name'],
                         'icon'                      => $child['icon'],
-                        'route_name'                => $child['route_name'],
+                        'route_name'                => $child['route_name'] ?? null,
+                        'uri'                       => $child['uri'] ?? null,
                         'permission'                => $child['permission'],
+                        'is_blank'                  => $child['is_blank'] ?? false,
                         'parent_menu_id'            => $menuObj->id,
                         'is_active_if_url_includes' => $child['is_active_if_url_includes'],
                     ]);
