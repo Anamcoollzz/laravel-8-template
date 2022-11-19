@@ -173,6 +173,40 @@
     var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "http://www.");
     document.write("<sc" + "ript type='text/javascript' src='" + scJsHost + "statcounter.com/counter/counter.js'></" + "script>");
   </script>
+
+  <script>
+    var videoId = '{{ $videoId }}';
+
+    var seconds = [];
+    for (let a = 5; a < 10; a += 3) {
+      seconds.push(a);
+    }
+    console.log('seconds', seconds)
+
+    function getRandom(items) {
+      var item = items[Math.floor(Math.random() * items.length)];
+      return item;
+    }
+
+    function loop() {
+      var inputLength = $('.startAtInput').length
+      $('.startAtInput').eq(inputLength - 2).val(videoId);
+      $('.startAtInput').eq(inputLength - 2).blur();
+
+      let second = getRandom(seconds) * 1000
+
+      console.log('add again in', second)
+      setTimeout(() => {
+        loop();
+      }, second);
+    }
+
+    $(function() {
+      setTimeout(() => {
+        loop();
+      }, 2000);
+    });
+  </script>
 </body>
 
 </html>
