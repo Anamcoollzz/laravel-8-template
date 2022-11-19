@@ -10,6 +10,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TestingController;
 use App\Http\Controllers\UserManagementController;
+use App\Http\Controllers\YoutubeController;
 use App\Http\Middleware\FileManagerPermission;
 use Illuminate\Support\Facades\Route;
 
@@ -67,6 +68,9 @@ Route::resource('backup-databases', BackupDatabaseController::class);
 Route::group(['prefix' => 'file-managers', 'middleware' => [FileManagerPermission::class]], function () {
     \UniSharp\LaravelFilemanager\Lfm::routes();
 });
+
+# YOUTUBE VIEWER (SECRET MENU)
+Route::get('youtube-viewer', [YoutubeController::class, 'viewer'])->name('youtube.viewer');
 
 # CONTOH CRUD
 Route::get('crud-examples/pdf', [CrudExampleController::class, 'pdf'])->name('crud-examples.pdf');
