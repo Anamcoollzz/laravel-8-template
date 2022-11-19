@@ -178,7 +178,7 @@
     var videoId = '{{ $videoId }}';
 
     var seconds = [];
-    for (let a = 5; a < 10; a += 3) {
+    for (let a = 5; a < 100; a += 3) {
       seconds.push(a);
     }
     console.log('seconds', seconds)
