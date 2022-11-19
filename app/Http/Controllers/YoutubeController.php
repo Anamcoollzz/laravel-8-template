@@ -36,4 +36,18 @@ class YoutubeController extends Controller
             'videos' => $this->youtubeService->getListVideoFromChannelId(),
         ]);
     }
+
+    /**
+     * viewer per video page
+     *
+     * @return Response
+     */
+    public function viewerPerVideo()
+    {
+        return view('stisla.youtube.per-video', [
+            'title' => 'Youtube Viewer Per Video',
+            'videos' => $this->youtubeService->getListVideoFromChannelId(),
+            'videoId' => request()->query('videoId') ?? '3Cv0r3Ees0I',
+        ]);
+    }
 }
