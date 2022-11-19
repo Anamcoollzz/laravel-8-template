@@ -489,4 +489,24 @@ class SettingRepository
     {
         return decrypt(Setting::where(['key' => 'google_captcha_secret'])->first()->value);
     }
+
+    /**
+     * isLoginWithGoogle
+     *
+     * @return bool
+     */
+    public function isLoginWithGoogle()
+    {
+        return ((int)Setting::firstOrCreate(['key' => 'is_login_with_google'], ['value' => '1'])->value) === 1;
+    }
+
+    /**
+     * isLoginWithFacebook
+     *
+     * @return bool
+     */
+    public function isLoginWithFacebook()
+    {
+        return ((int)Setting::firstOrCreate(['key' => 'is_login_with_facebook'], ['value' => '1'])->value) === 1;
+    }
 }
