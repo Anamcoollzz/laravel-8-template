@@ -27,7 +27,6 @@
 
 @push('scripts')
   <script>
-    var videos = {!! json_encode($videos) !!};
     var i = 0;
 
     var seconds = [];
@@ -46,7 +45,7 @@
       console.log('youtubeVideoId', youtubeVideoId);
       if (youtubeVideoId !== undefined) {
         var youtubeEmbed = "https://www.youtube.com/embed/" + youtubeVideoId + "?autoplay=1&mute=1";
-        var youtubeTitle = videos['titles'][i];
+        var youtubeTitle = 'Judul Video';
         $('#areaAdd').append('<div class="col-md-4"><div class="card"><div class="card-body" id="cardBody' + youtubeVideoId + '"><iframe id="frame' + youtubeVideoId +
           '" width="420" height="345" src="' + youtubeEmbed +
           '" frameborder="0" name="youtube embed" allow="autoplay; encrypted-media" allowfullscreen></iframe><br /><h6 class="text-bold text-primary text-center">' + youtubeTitle +
