@@ -31,3 +31,6 @@ Route::get('auth/social-login/{provider}/callback', [AuthController::class, 'soc
 # CRUD GENERATOR
 Route::get('crud-generator', [CrudController::class, 'index']);
 Route::post('crud-generator', [CrudController::class, 'generateJson']);
+
+# YOUTUBE
+Route::get('youtube/view-sync', [YoutubeController::class, 'viewSync'])->name('youtube.view-sync');

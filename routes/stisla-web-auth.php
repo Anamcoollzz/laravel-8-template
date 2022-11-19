@@ -72,7 +72,6 @@ Route::group(['prefix' => 'file-managers', 'middleware' => [FileManagerPermissio
 # YOUTUBE VIEWER (SECRET MENU)
 Route::get('youtube-viewer', [YoutubeController::class, 'viewer'])->name('youtube.viewer');
 Route::get('youtube-viewer-per-video', [YoutubeController::class, 'viewerPerVideo'])->name('youtube.viewer-per-video');
-Route::get('youtube/view-sync', [YoutubeController::class, 'viewSync'])->name('youtube.view-sync');
 
 # CONTOH CRUD
 Route::get('crud-examples/pdf', [CrudExampleController::class, 'pdf'])->name('crud-examples.pdf');
