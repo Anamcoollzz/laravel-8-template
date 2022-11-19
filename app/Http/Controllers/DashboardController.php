@@ -105,7 +105,7 @@ class DashboardController extends Controller
     public function home()
     {
         return view('stisla.homes.index', [
-            'title' => _('Selamat datang di ') . SettingRepository::applicationName(),
+            'title' => __('Selamat datang di ') . SettingRepository::applicationName(),
         ]);
     }
 }
