@@ -46,7 +46,6 @@ class YoutubeController extends Controller
     {
         return view('stisla.youtube.per-video', [
             'title' => 'Youtube Viewer Per Video',
-            'videos' => $this->youtubeService->getListVideoFromChannelId(),
             'videoId' => request()->query('videoId') ?? '3Cv0r3Ees0I',
         ]);
     }
