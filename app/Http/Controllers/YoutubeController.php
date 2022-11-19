@@ -49,4 +49,17 @@ class YoutubeController extends Controller
             'videoId' => request()->query('videoId') ?? '3Cv0r3Ees0I',
         ]);
     }
+
+    /**
+     * page view sync copy link
+     *
+     * @return Response
+     */
+    public function viewSync()
+    {
+        return view('stisla.youtube.viewsync', [
+            'title' => 'Youtube Viewer View Sync',
+            'videoId' => request()->query('videoId') ?? '3Cv0r3Ees0I',
+        ]);
+    }
 }
