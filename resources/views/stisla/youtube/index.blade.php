@@ -45,7 +45,7 @@
       var youtubeVideoId = videos['id'][i];
       console.log('youtubeVideoId', youtubeVideoId);
       if (youtubeVideoId !== undefined) {
-        var youtubeEmbed = "http://www.youtube.com/embed/" + youtubeVideoId + "?autoplay=1&mute=1";
+        var youtubeEmbed = "https://www.youtube.com/embed/" + youtubeVideoId + "?autoplay=1&mute=1";
         var youtubeTitle = videos['titles'][i];
         $('#areaAdd').append('<div class="col-md-4"><div class="card"><div class="card-body" id="cardBody' + youtubeVideoId + '"><iframe id="frame' + youtubeVideoId +
           '" width="420" height="345" src="' + youtubeEmbed +
