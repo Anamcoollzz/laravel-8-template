@@ -68,5 +68,8 @@
     { "key": "is_google_captcha_reset_password", "value": "1" },
 
     { "key": "is_login_with_google", "value": "1" },
-    { "key": "is_login_with_facebook", "value": "1" }
+    { "key": "is_login_with_facebook", "value": "1" },
+
+    { "key": "is_register_with_google", "value": "1" },
+    { "key": "is_register_with_facebook", "value": "1" }
 ]
