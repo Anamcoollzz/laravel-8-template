@@ -136,7 +136,7 @@
                     @include('stisla.includes.forms.inputs.input', [
                         'id' => 'meta_description',
                         'label' => __('Meta
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Description'),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Description'),
                         'value' => $_meta_description,
                         'required' => true,
                     ])
@@ -186,7 +186,7 @@
                     @include('stisla.includes.forms.selects.select', [
                         'id' => 'stisla_login_template',
                         'label' => __('Tampilan
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Halaman Masuk'),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Halaman Masuk'),
                         'selected' => $_stisla_login_template,
                         'options' => ['default' => 'default', 'tampilan 2' => 'tampilan 2'],
                         'required' => true,
@@ -196,7 +196,7 @@
                     @include('stisla.includes.forms.selects.select', [
                         'id' => 'stisla_sidebar_mini',
                         'label' => __('Sidebar
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Mini'),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Mini'),
                         'selected' => $_stisla_sidebar_mini,
                         'options' => ['0' => 'Tidak', '1' => 'Ya'],
                         'required' => true,
@@ -224,7 +224,7 @@
                     @include('stisla.includes.forms.inputs.input', [
                         'id' => 'stisla_bg_login',
                         'label' => __('Background Halaman
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Masuk / Daftar'),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Masuk / Daftar'),
                         'required' => false,
                         'accept' => 'image/png,image/jpg',
                         'type' => 'file',
@@ -235,7 +235,7 @@
                         'id' => 'stisla_bg_home',
                         'label' =>
                             __('Background
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Halaman ') .
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Halaman ') .
                             __('Dashboard'),
                         'required' => false,
                         'accept' => 'image/png,image/jpg',
@@ -544,7 +544,7 @@
                   <div class="col-sm-6">
                     @include('stisla.includes.forms.inputs.input-radio-toggle', [
                         'id' => 'is_login_with_google',
-                        'label' => __('Login dengan google'),
+                        'label' => __('Login dengan Google'),
                         'value' => $_is_login_with_google,
                         'options' => ['0' => 'Tidak', '1' => 'Ya'],
                         'required' => true,
@@ -553,11 +553,38 @@
                   <div class="col-sm-6">
                     @include('stisla.includes.forms.inputs.input-radio-toggle', [
                         'id' => 'is_login_with_facebook',
-                        'label' => __('Login dengan facebook'),
+                        'label' => __('Login dengan Facebook'),
                         'value' => $_is_login_with_facebook,
                         'options' => ['0' => 'Tidak', '1' => 'Ya'],
                         'required' => true,
                     ])
+                  </div>
+
+                  {{-- sso register --}}
+                  <div class="col-sm-6">
+                    @include('stisla.includes.forms.inputs.input-radio-toggle', [
+                        'id' => 'is_register_with_google',
+                        'label' => __('Register dengan Google'),
+                        'value' => $_is_register_with_google,
+                        'options' => ['0' => 'Tidak', '1' => 'Ya'],
+                        'required' => true,
+                    ])
+                  </div>
+                  <div class="col-sm-6">
+                    @include('stisla.includes.forms.inputs.input-radio-toggle', [
+                        'id' => 'is_register_with_facebook',
+                        'label' => __('Register dengan Facebook'),
+                        'value' => $_is_register_with_facebook,
+                        'options' => ['0' => 'Tidak', '1' => 'Ya'],
+                        'required' => true,
+                    ])
+                  </div>
+                  <div class="col-md-12">
+                    Pastikan redirect url (callback) nya sebagai berikut:
+                    <ul>
+                      <li>Google: <code>{{ config('services.google.redirect') }}</code></li>
+                      <li>Facebook: <code>{{ config('services.facebook.redirect') }}</code></li>
+                    </ul>
                   </div>
 
                   <div class="col-md-12">

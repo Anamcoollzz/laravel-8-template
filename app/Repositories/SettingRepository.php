@@ -509,4 +509,24 @@ class SettingRepository
     {
         return ((int)Setting::firstOrCreate(['key' => 'is_login_with_facebook'], ['value' => '1'])->value) === 1;
     }
+
+    /**
+     * isRegisterWithFacebook
+     *
+     * @return bool
+     */
+    public function isRegisterWithFacebook()
+    {
+        return ((int)Setting::firstOrCreate(['key' => 'is_register_with_facebook'], ['value' => '1'])->value) === 1;
+    }
+
+    /**
+     * isRegisterWithGoogle
+     *
+     * @return bool
+     */
+    public function isRegisterWithGoogle()
+    {
+        return ((int)Setting::firstOrCreate(['key' => 'is_register_with_google'], ['value' => '1'])->value) === 1;
+    }
 }

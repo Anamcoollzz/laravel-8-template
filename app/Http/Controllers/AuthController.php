@@ -368,6 +368,7 @@ class AuthController extends Controller
         $isValidGoogle = $provider === 'google' && $this->settingRepository->isLoginWithGoogle();
 
         if ($isValidFb || $isValidGoogle) {
+            session(['social_action' => 'login']);
             return Socialite::driver($provider)->redirect();
         }
 
@@ -375,7 +376,7 @@ class AuthController extends Controller
     }
 
     /**
-     * callback social login
+     * callback social login and register callback
      * @param mixed $provider
      *
      * @return Response
@@ -389,14 +390,37 @@ class AuthController extends Controller
             $user = Socialite::driver($provider)->user();
 
             if ($user->getEmail()) {
-                $user = $this->userRepository->findByEmail($email = $user->getEmail());
 
-                if ($user === null) {
+                $successMsg = __('Berhasil masuk ke dalam sistem');
+
+                $userModel = $this->userRepository->findByEmail($email = $user->getEmail());
+                if (session('social_action') === 'register') {
+                    session(['social_action' => null]);
+                    if ($userModel) {
+                        return redirect()->route('register')->with('errorMessage', __('Akun ' . $email . ' sudah terdaftar'));
+                    }
+
+                    $data = [
+                        'name'                 => $user->getName(),
+                        'email'                => $user->getEmail(),
+                        'avatar'               => $user->getAvatar(),
+                        'email_verified_at'    => date('Y-m-d H:i:s'),
+                        'password'             => bcrypt(Str::random(10)),
+                        'last_login'           => date('Y-m-d H:i:s'),
+                        'last_password_change' => date('Y-m-d H:i:s'),
+                    ];
+                    $userModel = $this->userRepository->create($data);
+                    $userModel->syncRoles(['akuntesting']);
+
+                    $successMsg = __('Berhasil mendaftar dan masuk ke dalam sistem');
+                }
+
+                if ($userModel === null) {
                     return redirect()->route('login')->with('errorMessage', __('Akun ' . $email . ' belum terdaftar'));
                 }
 
-                $this->userRepository->login($user);
-                return Helper::redirectSuccess(route('dashboard.index'), __('Berhasil masuk ke dalam sistem'));
+                $this->userRepository->login($userModel);
+                return Helper::redirectSuccess(route('dashboard.index'), $successMsg);
             }
             return redirect()->route('login')->with('errorMessage', __('Akun tidak ditemukan'));
         } catch (Exception $e) {
@@ -405,5 +429,27 @@ class AuthController extends Controller
             }
             return redirect()->route('login')->with('errorMessage', __('Ada error'));
         }
+    }
+
+    /**
+     * social register
+     *
+     * @return Response
+     */
+    public function socialRegister($provider)
+    {
+        if (!in_array($provider, $this->socialiteProviders)) {
+            abort(404);
+        }
+
+        $isValidFb     = $provider === 'facebook' && $this->settingRepository->isRegisterWithFacebook();
+        $isValidGoogle = $provider === 'google' && $this->settingRepository->isRegisterWithGoogle();
+
+        if ($isValidFb || $isValidGoogle) {
+            session(['social_action' => 'register']);
+            return Socialite::driver($provider)->redirect();
+        }
+
+        abort(404);
     }
 }
