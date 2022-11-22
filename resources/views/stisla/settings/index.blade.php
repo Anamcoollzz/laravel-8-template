@@ -135,8 +135,7 @@
                   <div class="col-sm-6">
                     @include('stisla.includes.forms.inputs.input', [
                         'id' => 'meta_description',
-                        'label' => __('Meta
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Description'),
+                        'label' => __('Meta Description'),
                         'value' => $_meta_description,
                         'required' => true,
                     ])
@@ -185,8 +184,7 @@
                   <div class="col-sm-6">
                     @include('stisla.includes.forms.selects.select', [
                         'id' => 'stisla_login_template',
-                        'label' => __('Tampilan
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Halaman Masuk'),
+                        'label' => __('Tampilan Halaman Masuk'),
                         'selected' => $_stisla_login_template,
                         'options' => ['default' => 'default', 'tampilan 2' => 'tampilan 2'],
                         'required' => true,
@@ -195,8 +193,7 @@
                   <div class="col-sm-6">
                     @include('stisla.includes.forms.selects.select', [
                         'id' => 'stisla_sidebar_mini',
-                        'label' => __('Sidebar
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Mini'),
+                        'label' => __('Sidebar Mini'),
                         'selected' => $_stisla_sidebar_mini,
                         'options' => ['0' => 'Tidak', '1' => 'Ya'],
                         'required' => true,
@@ -223,8 +220,7 @@
                   <div class="col-sm-6">
                     @include('stisla.includes.forms.inputs.input', [
                         'id' => 'stisla_bg_login',
-                        'label' => __('Background Halaman
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Masuk / Daftar'),
+                        'label' => __('Background Halaman Masuk / Daftar'),
                         'required' => false,
                         'accept' => 'image/png,image/jpg',
                         'type' => 'file',
@@ -233,10 +229,7 @@
                   <div class="col-sm-6">
                     @include('stisla.includes.forms.inputs.input', [
                         'id' => 'stisla_bg_home',
-                        'label' =>
-                            __('Background
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Halaman ') .
-                            __('Dashboard'),
+                        'label' => __('Background Halaman ') . __('Dashboard'),
                         'required' => false,
                         'accept' => 'image/png,image/jpg',
                         'type' => 'file',
@@ -539,9 +532,9 @@
 
                   <div class="col-12">
                     <hr>
-                    <h6>SSO Login</h6>
+                    <h6>SSO Login dan Register</h6>
                   </div>
-                  <div class="col-sm-6">
+                  <div class="col-sm-4">
                     @include('stisla.includes.forms.inputs.input-radio-toggle', [
                         'id' => 'is_login_with_google',
                         'label' => __('Login dengan Google'),
@@ -550,7 +543,7 @@
                         'required' => true,
                     ])
                   </div>
-                  <div class="col-sm-6">
+                  <div class="col-sm-4">
                     @include('stisla.includes.forms.inputs.input-radio-toggle', [
                         'id' => 'is_login_with_facebook',
                         'label' => __('Login dengan Facebook'),
@@ -559,9 +552,18 @@
                         'required' => true,
                     ])
                   </div>
+                  <div class="col-sm-4">
+                    @include('stisla.includes.forms.inputs.input-radio-toggle', [
+                        'id' => 'is_login_with_twitter',
+                        'label' => __('Login dengan Twitter'),
+                        'value' => $_is_login_with_twitter,
+                        'options' => ['0' => 'Tidak', '1' => 'Ya'],
+                        'required' => true,
+                    ])
+                  </div>
 
                   {{-- sso register --}}
-                  <div class="col-sm-6">
+                  <div class="col-sm-4">
                     @include('stisla.includes.forms.inputs.input-radio-toggle', [
                         'id' => 'is_register_with_google',
                         'label' => __('Register dengan Google'),
@@ -570,7 +572,7 @@
                         'required' => true,
                     ])
                   </div>
-                  <div class="col-sm-6">
+                  <div class="col-sm-4">
                     @include('stisla.includes.forms.inputs.input-radio-toggle', [
                         'id' => 'is_register_with_facebook',
                         'label' => __('Register dengan Facebook'),
@@ -579,11 +581,22 @@
                         'required' => true,
                     ])
                   </div>
+                  <div class="col-sm-4">
+                    @include('stisla.includes.forms.inputs.input-radio-toggle', [
+                        'id' => 'is_register_with_twitter',
+                        'label' => __('Register dengan Twitter'),
+                        'value' => $_is_register_with_twitter,
+                        'options' => ['0' => 'Tidak', '1' => 'Ya'],
+                        'required' => true,
+                    ])
+                  </div>
+
                   <div class="col-md-12">
                     Pastikan redirect url (callback) nya sebagai berikut:
                     <ul>
                       <li>Google: <code>{{ config('services.google.redirect') }}</code></li>
                       <li>Facebook: <code>{{ config('services.facebook.redirect') }}</code></li>
+                      <li>Twitter: <code>{{ config('services.twitter.redirect') }}</code></li>
                     </ul>
                   </div>
 

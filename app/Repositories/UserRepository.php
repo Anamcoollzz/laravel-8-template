@@ -57,6 +57,17 @@ class UserRepository extends Repository
     }
 
     /**
+     * find user by twitter id
+     *
+     * @param string $twitterId
+     * @return User
+     */
+    public function findByTwitterId(string $twitterId)
+    {
+        return $this->model->where('twitter_id', $twitterId)->first();
+    }
+
+    /**
      * find user by email token
      *
      * @param string $emailToken
