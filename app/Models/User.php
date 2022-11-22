@@ -35,6 +35,7 @@ class User extends Authenticatable implements JWTSubject
         'birth_date',
         'address',
         'last_password_change',
+        'twitter_id',
     ];
 
     /**

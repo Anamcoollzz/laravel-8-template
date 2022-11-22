@@ -87,6 +87,11 @@
               @method('PUT')
               @csrf
               <div class="row">
+                @if ($user->twitter_id)
+                  <div class="col-md-6">
+                    @include('stisla.includes.forms.inputs.input', ['value' => $user->twitter_id, 'label' => 'Twitter ID', 'disabled' => true])
+                  </div>
+                @endif
                 <div class="col-md-6">
                   @include('stisla.includes.forms.inputs.input-email', ['value' => $user->email])
                 </div>

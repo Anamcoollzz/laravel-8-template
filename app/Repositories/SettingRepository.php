@@ -511,6 +511,16 @@ class SettingRepository
     }
 
     /**
+     * isLoginWithTwitter
+     *
+     * @return bool
+     */
+    public function isLoginWithTwitter()
+    {
+        return ((int)Setting::firstOrCreate(['key' => 'is_login_with_twitter'], ['value' => '1'])->value) === 1;
+    }
+
+    /**
      * isRegisterWithFacebook
      *
      * @return bool
@@ -528,5 +538,15 @@ class SettingRepository
     public function isRegisterWithGoogle()
     {
         return ((int)Setting::firstOrCreate(['key' => 'is_register_with_google'], ['value' => '1'])->value) === 1;
+    }
+
+    /**
+     * isRegisterWithTwitter
+     *
+     * @return bool
+     */
+    public function isRegisterWithTwitter()
+    {
+        return ((int)Setting::firstOrCreate(['key' => 'is_register_with_twitter'], ['value' => '1'])->value) === 1;
     }
 }

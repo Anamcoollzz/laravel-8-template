@@ -47,7 +47,7 @@ class AuthController extends Controller
     private array $socialiteProviders = [
         'google',
         'facebook',
-        // 'twitter',
+        'twitter',
         // 'github',
     ];
 
@@ -364,10 +364,11 @@ class AuthController extends Controller
             abort(404);
         }
 
-        $isValidFb     = $provider === 'facebook' && $this->settingRepository->isLoginWithFacebook();
-        $isValidGoogle = $provider === 'google' && $this->settingRepository->isLoginWithGoogle();
+        $isValidFb      = $provider === 'facebook' && $this->settingRepository->isLoginWithFacebook();
+        $isValidGoogle  = $provider === 'google' && $this->settingRepository->isLoginWithGoogle();
+        $isValidTwitter = $provider === 'twitter' && $this->settingRepository->isLoginWithTwitter();
 
-        if ($isValidFb || $isValidGoogle) {
+        if ($isValidFb || $isValidGoogle || $isValidTwitter) {
             session(['social_action' => 'login']);
             return Socialite::driver($provider)->redirect();
         }
@@ -388,16 +389,23 @@ class AuthController extends Controller
                 abort(404);
             }
             $user = Socialite::driver($provider)->user();
+            $isRegister = session('social_action') === 'register';
 
-            if ($user->getEmail()) {
+            if ($user->getEmail() || $provider === 'twitter') {
 
                 $successMsg = __('Berhasil masuk ke dalam sistem');
 
-                $userModel = $this->userRepository->findByEmail($email = $user->getEmail());
-                if (session('social_action') === 'register') {
+                if ($provider === 'twitter') {
+                    $userModel = $this->userRepository->findByTwitterId($user->getId());
+                } else {
+                    $userModel = $this->userRepository->findByEmail($email = $user->getEmail());
+                }
+
+                if ($isRegister || ($isRegister && $provider === 'twitter')) {
                     session(['social_action' => null]);
                     if ($userModel) {
-                        return redirect()->route('register')->with('errorMessage', __('Akun ' . $email . ' sudah terdaftar'));
+                        $msg = $provider === 'twitter' ? __('Akun anda sudah terdaftar, silakan menggunakan form login') : __('Akun ' . $email . ' sudah terdaftar');
+                        return redirect()->route('register')->with('errorMessage', $msg);
                     }
 
                     $data = [
@@ -408,6 +416,7 @@ class AuthController extends Controller
                         'password'             => bcrypt(Str::random(10)),
                         'last_login'           => date('Y-m-d H:i:s'),
                         'last_password_change' => date('Y-m-d H:i:s'),
+                        'twitter_id'           => $user->getId(),
                     ];
                     $userModel = $this->userRepository->create($data);
                     $userModel->syncRoles(['akuntesting']);
@@ -416,7 +425,8 @@ class AuthController extends Controller
                 }
 
                 if ($userModel === null) {
-                    return redirect()->route('login')->with('errorMessage', __('Akun ' . $email . ' belum terdaftar'));
+                    $msg = $provider === 'twitter' ? __('Akun anda belum terdaftar') : __('Akun ' . $email . ' belum terdaftar');
+                    return redirect()->route('login')->with('errorMessage', $msg);
                 }
 
                 $this->userRepository->login($userModel);
@@ -442,10 +452,11 @@ class AuthController extends Controller
             abort(404);
         }
 
-        $isValidFb     = $provider === 'facebook' && $this->settingRepository->isRegisterWithFacebook();
-        $isValidGoogle = $provider === 'google' && $this->settingRepository->isRegisterWithGoogle();
+        $isValidFb      = $provider === 'facebook' && $this->settingRepository->isRegisterWithFacebook();
+        $isValidGoogle  = $provider === 'google' && $this->settingRepository->isRegisterWithGoogle();
+        $isValidTwitter = $provider === 'twitter' && $this->settingRepository->isRegisterWithTwitter();
 
-        if ($isValidFb || $isValidGoogle) {
+        if ($isValidFb || $isValidGoogle || $isValidTwitter) {
             session(['social_action' => 'register']);
             return Socialite::driver($provider)->redirect();
         }
