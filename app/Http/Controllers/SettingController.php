@@ -50,10 +50,15 @@ class SettingController extends Controller
         if (config('app.template') === 'stisla') {
             $skins = $this->settingRepository->getStislaSkins();
             $fullTitle = 'Pengaturan Umum';
-            if ($type === 'meta') $fullTitle = 'Pengaturan Meta';
-            else if ($type === 'meta') $fullTitle = 'Pengaturan Meta';
-            else if ($type === 'view') $fullTitle = 'Pengaturan Tampilan';
-            else if ($type === 'other') $fullTitle = 'Pengaturan Lainnya';
+            if ($type === 'meta') {
+                $fullTitle = 'Pengaturan Meta';
+            } else if ($type === 'view') {
+                $fullTitle = 'Pengaturan Tampilan';
+            } else if ($type === 'other') {
+                $fullTitle = 'Pengaturan Lainnya';
+            } else if ($type === 'sso') {
+                $fullTitle = __('SSO Login dan Register');
+            }
             return view('stisla.settings.index', [
                 'skins'      => $skins,
                 'type'       => $type,
@@ -107,6 +112,12 @@ class SettingController extends Controller
                     'icon'  => 'envelope'
                 ],
                 [
+                    'title' => __('SSO Login dan Register'),
+                    'desc'  => __('Pengaturan untuk SSO menggunakan media sosial seperti google, facebook, twitter dan github.'),
+                    'route' => route('settings.index', ['type' => 'sso']),
+                    'icon'  => 'key'
+                ],
+                [
                     'title' => __('Lainnya'),
                     'desc'  => __('Pengaturan email verifikasi, lupa password, halaman daftar.'),
                     'route' => route('settings.index', ['type' => 'other']),
@@ -137,6 +148,7 @@ class SettingController extends Controller
     public function update(SettingRequest $request)
     {
         $before = $this->settingRepository->all();
+        $encrypts = SettingRepository::getEncryptedKeys();
         foreach ($request->all() as $key => $input) {
             $value = $input;
             if ($key === 'favicon') {
@@ -149,7 +161,7 @@ class SettingController extends Controller
                 $value = $this->fileService->uploadStislaBgHome($request->file('stisla_bg_home'));
             }
 
-            if ($key === 'google_captcha_site_key' || $key === 'google_captcha_secret') {
+            if (in_array($key, $encrypts)) {
                 $this->settingRepository->updateByKey(['value' => encrypt($value)], $key);
             } else {
                 $this->settingRepository->updateByKey(['value' => $value], $key);

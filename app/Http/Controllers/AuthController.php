@@ -44,11 +44,16 @@ class AuthController extends Controller
      */
     private EmailService $emailService;
 
+    /**
+     * active socialite providers
+     *
+     * @var array
+     */
     private array $socialiteProviders = [
         'google',
         'facebook',
         'twitter',
-        // 'github',
+        'github',
     ];
 
     /**
@@ -364,11 +369,18 @@ class AuthController extends Controller
             abort(404);
         }
 
-        $isValidFb      = $provider === 'facebook' && $this->settingRepository->isLoginWithFacebook();
-        $isValidGoogle  = $provider === 'google' && $this->settingRepository->isLoginWithGoogle();
-        $isValidTwitter = $provider === 'twitter' && $this->settingRepository->isLoginWithTwitter();
+        $isValid = false;
+        if ($provider === 'facebook') {
+            $isValid = $this->settingRepository->isLoginWithFacebook();
+        } else if ($provider === 'google') {
+            $isValid = $this->settingRepository->isLoginWithGoogle();
+        } else if ($provider === 'twitter') {
+            $isValid = $this->settingRepository->isLoginWithTwitter();
+        } else if ($provider === 'github') {
+            $isValid = $this->settingRepository->isLoginWithGithub();
+        }
 
-        if ($isValidFb || $isValidGoogle || $isValidTwitter) {
+        if ($isValid) {
             session(['social_action' => 'login']);
             return Socialite::driver($provider)->redirect();
         }
@@ -452,11 +464,18 @@ class AuthController extends Controller
             abort(404);
         }
 
-        $isValidFb      = $provider === 'facebook' && $this->settingRepository->isRegisterWithFacebook();
-        $isValidGoogle  = $provider === 'google' && $this->settingRepository->isRegisterWithGoogle();
-        $isValidTwitter = $provider === 'twitter' && $this->settingRepository->isRegisterWithTwitter();
+        $isValid = false;
+        if ($provider === 'facebook') {
+            $isValid = $this->settingRepository->isRegisterWithFacebook();
+        } else if ($provider === 'google') {
+            $isValid = $this->settingRepository->isRegisterWithGoogle();
+        } else if ($provider === 'twitter') {
+            $isValid = $this->settingRepository->isRegisterWithTwitter();
+        } else if ($provider === 'github') {
+            $isValid = $this->settingRepository->isRegisterWithGithub();
+        }
 
-        if ($isValidFb || $isValidGoogle || $isValidTwitter) {
+        if ($isValid) {
             session(['social_action' => 'register']);
             return Socialite::driver($provider)->redirect();
         }
