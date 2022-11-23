@@ -59,7 +59,7 @@
       </div>
     </form>
 
-    @if ($_is_register_with_google || $_is_register_with_facebook || $_is_register_with_twitter)
+    @if ($_is_register_with_google || $_is_register_with_facebook || $_is_register_with_twitter || $_is_register_with_github)
       <div class="text-center mt-4 mb-3">
         <div class="text-job text-muted">Atau Mendaftar Dengan</div>
       </div>
@@ -79,6 +79,11 @@
           @if ($_is_register_with_twitter)
             <a href="{{ route('social-register', ['twitter']) }}" class="btn btn-social-icon btn-twitter mr-1">
               <i class="fab fa-twitter"></i>
+            </a>
+          @endif
+          @if ($_is_register_with_github)
+            <a href="{{ route('social-register', ['github']) }}" class="btn btn-social-icon btn-github mr-1">
+              <i class="fab fa-github"></i>
             </a>
           @endif
         </div>

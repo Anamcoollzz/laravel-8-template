@@ -530,76 +530,6 @@
                     ])
                   </div>
 
-                  <div class="col-12">
-                    <hr>
-                    <h6>SSO Login dan Register</h6>
-                  </div>
-                  <div class="col-sm-4">
-                    @include('stisla.includes.forms.inputs.input-radio-toggle', [
-                        'id' => 'is_login_with_google',
-                        'label' => __('Login dengan Google'),
-                        'value' => $_is_login_with_google,
-                        'options' => ['0' => 'Tidak', '1' => 'Ya'],
-                        'required' => true,
-                    ])
-                  </div>
-                  <div class="col-sm-4">
-                    @include('stisla.includes.forms.inputs.input-radio-toggle', [
-                        'id' => 'is_login_with_facebook',
-                        'label' => __('Login dengan Facebook'),
-                        'value' => $_is_login_with_facebook,
-                        'options' => ['0' => 'Tidak', '1' => 'Ya'],
-                        'required' => true,
-                    ])
-                  </div>
-                  <div class="col-sm-4">
-                    @include('stisla.includes.forms.inputs.input-radio-toggle', [
-                        'id' => 'is_login_with_twitter',
-                        'label' => __('Login dengan Twitter'),
-                        'value' => $_is_login_with_twitter,
-                        'options' => ['0' => 'Tidak', '1' => 'Ya'],
-                        'required' => true,
-                    ])
-                  </div>
-
-                  {{-- sso register --}}
-                  <div class="col-sm-4">
-                    @include('stisla.includes.forms.inputs.input-radio-toggle', [
-                        'id' => 'is_register_with_google',
-                        'label' => __('Register dengan Google'),
-                        'value' => $_is_register_with_google,
-                        'options' => ['0' => 'Tidak', '1' => 'Ya'],
-                        'required' => true,
-                    ])
-                  </div>
-                  <div class="col-sm-4">
-                    @include('stisla.includes.forms.inputs.input-radio-toggle', [
-                        'id' => 'is_register_with_facebook',
-                        'label' => __('Register dengan Facebook'),
-                        'value' => $_is_register_with_facebook,
-                        'options' => ['0' => 'Tidak', '1' => 'Ya'],
-                        'required' => true,
-                    ])
-                  </div>
-                  <div class="col-sm-4">
-                    @include('stisla.includes.forms.inputs.input-radio-toggle', [
-                        'id' => 'is_register_with_twitter',
-                        'label' => __('Register dengan Twitter'),
-                        'value' => $_is_register_with_twitter,
-                        'options' => ['0' => 'Tidak', '1' => 'Ya'],
-                        'required' => true,
-                    ])
-                  </div>
-
-                  <div class="col-md-12">
-                    Pastikan redirect url (callback) nya sebagai berikut:
-                    <ul>
-                      <li>Google: <code>{{ config('services.google.redirect') }}</code></li>
-                      <li>Facebook: <code>{{ config('services.facebook.redirect') }}</code></li>
-                      <li>Twitter: <code>{{ config('services.twitter.redirect') }}</code></li>
-                    </ul>
-                  </div>
-
                   <div class="col-md-12">
                     @include('stisla.includes.forms.buttons.btn-save')
                     @include('stisla.includes.forms.buttons.btn-reset')
@@ -608,6 +538,106 @@
               </form>
             </div>
           </div>
+        @endif
+
+        @if ($type === 'sso')
+          @php
+            $i = 0;
+            $providers = ['google', 'facebook', 'twitter', 'github'];
+            $url = ['https://console.cloud.google.com/apis/credentials', 'https://developers.facebook.com/apps/?show_reminder=true', 'https://developer.twitter.com/en/portal/dashboard', 'https://github.com/settings/developers'];
+          @endphp
+
+          @foreach ($providers as $provider)
+            @php
+
+              $varLogin = 'is_login_with_' . $provider;
+              $varRegister = 'is_register_with_' . $provider;
+              $_varLogin = '_' . $varLogin;
+              $_varRegister = '_' . $varRegister;
+
+              $varClientId = '_sso_' . $provider . '_client_id';
+              $varClientSecret = '_sso_' . $provider . '_client_secret';
+              $varRedirect = '_sso_' . $provider . '_redirect';
+            @endphp
+            <div class="card">
+              <div class="card-header">
+                <h4><i class="fa fa-key"></i> {{ __('SSO ' . ($title = ucwords($provider))) }}</h4>
+              </div>
+              <div class="card-body">
+                <form action="{{ route('settings.update', ['provider' => $provider]) }}" method="POST" enctype="multipart/form-data">
+                  <input type="hidden" name="type" value="sso">
+                  @method('put')
+                  @csrf
+                  <div class="row clearfix">
+                    <div class="col-sm-6">
+                      @include('stisla.includes.forms.inputs.input-radio-toggle', [
+                          'id' => $varLogin,
+                          'label' => __('Login dengan ' . $title),
+                          'value' => $_is_login_with_google,
+                          'options' => ['0' => 'Tidak', '1' => 'Ya'],
+                          'required' => true,
+                      ])
+                    </div>
+                    <div class="col-sm-6">
+                      @include('stisla.includes.forms.inputs.input-radio-toggle', [
+                          'id' => $varRegister,
+                          'label' => __('Register dengan ' . $title),
+                          'value' => $_is_register_with_google,
+                          'options' => ['0' => 'Tidak', '1' => 'Ya'],
+                          'required' => true,
+                      ])
+                    </div>
+                    <div class="col-sm-4">
+                      @include('stisla.includes.forms.inputs.input', [
+                          'id' => 'sso_' . $provider . '_client_id',
+                          'label' => __('Client ID'),
+                          'value' => old('sso_google_client_id') ?? decrypt($$varClientId),
+                          'required' => true,
+                      ])
+                    </div>
+                    <div class="col-sm-4">
+                      @include('stisla.includes.forms.inputs.input', [
+                          'id' => 'sso_' . $provider . '_client_secret',
+                          'label' => __('Client Secret'),
+                          'value' => old('sso_' . $provider . '_client_secret') ?? decrypt($$varClientSecret),
+                          'required' => true,
+                      ])
+                    </div>
+                    <div class="col-sm-4">
+                      @include('stisla.includes.forms.inputs.input', [
+                          'id' => 'sso_' . $provider . '_redirect',
+                          'label' => __('Callback URL'),
+                          'value' => old('sso_' . $provider . '_redirect') ?? decrypt($$varRedirect),
+                          'required' => true,
+                      ])
+                    </div>
+                    <div class="col-md-12">
+                      Dashboard untuk mendapatkan client id dan secret bisa mengakses <a target="_blank" href="{{ $url[$i] ?? '#' }}">{{ $url[$i] ?? '#' }}</a>
+                      <br>
+                      <br>
+                    </div>
+
+                    {{-- <div class="col-md-12">
+                    Pastikan redirect url (callback) nya sebagai berikut:
+                    <ul>
+                      <li>Google: <code>{{ config('services.google.redirect') }}</code></li>
+                      <li>Facebook: <code>{{ config('services.facebook.redirect') }}</code></li>
+                      <li>Twitter: <code>{{ config('services.twitter.redirect') }}</code></li>
+                    </ul>
+                  </div> --}}
+
+                    <div class="col-md-12">
+                      @include('stisla.includes.forms.buttons.btn-save')
+                      @include('stisla.includes.forms.buttons.btn-reset')
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            @php
+              $i++;
+            @endphp
+          @endforeach
         @endif
       </div>
 

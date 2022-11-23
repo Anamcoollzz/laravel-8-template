@@ -70,8 +70,26 @@
     { "key": "is_login_with_google", "value": "1" },
     { "key": "is_login_with_facebook", "value": "1" },
     { "key": "is_login_with_twitter", "value": "1" },
+    { "key": "is_login_with_github", "value": "1" },
 
     { "key": "is_register_with_google", "value": "1" },
     { "key": "is_register_with_facebook", "value": "1" },
-    { "key": "is_register_with_twitter", "value": "1" }
+    { "key": "is_register_with_twitter", "value": "1" },
+    { "key": "is_register_with_github", "value": "1" },
+
+    { "key": "sso_google_client_id", "value": "-" },
+    { "key": "sso_google_client_secret", "value": "-" },
+    { "key": "sso_google_redirect", "value": "/auth/social/google/callback", "is_url": true },
+
+    { "key": "sso_facebook_client_id", "value": "-" },
+    { "key": "sso_facebook_client_secret", "value": "-" },
+    { "key": "sso_facebook_redirect", "value": "/auth/social/facebook/callback", "is_url": true },
+
+    { "key": "sso_twitter_client_id", "value": "-" },
+    { "key": "sso_twitter_client_secret", "value": "-" },
+    { "key": "sso_twitter_redirect", "value": "/auth/social/twitter/callback", "is_url": true },
+
+    { "key": "sso_github_client_id", "value": "-" },
+    { "key": "sso_github_client_secret", "value": "-" },
+    { "key": "sso_github_redirect", "value": "/auth/social/github/callback", "is_url": true }
 ]

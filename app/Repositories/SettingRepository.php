@@ -23,6 +23,32 @@ class SettingRepository
     }
 
     /**
+     * get all key encrypted
+     *
+     * @return array
+     */
+    public static function getEncryptedKeys()
+    {
+        $encrypts = [
+            'google_captcha_secret',
+            'google_captcha_site_key',
+            'sso_google_client_id',
+            'sso_google_client_secret',
+            'sso_google_redirect',
+            'sso_facebook_client_id',
+            'sso_facebook_client_secret',
+            'sso_facebook_redirect',
+            'sso_twitter_client_id',
+            'sso_twitter_client_secret',
+            'sso_twitter_redirect',
+            'sso_github_client_id',
+            'sso_github_client_secret',
+            'sso_github_redirect',
+        ];
+        return $encrypts;
+    }
+
+    /**
      * update data by key
      *
      * @param array $data
@@ -521,6 +547,16 @@ class SettingRepository
     }
 
     /**
+     * isLoginWithGithub
+     *
+     * @return bool
+     */
+    public function isLoginWithGithub()
+    {
+        return ((int)Setting::firstOrCreate(['key' => 'is_login_with_github'], ['value' => '1'])->value) === 1;
+    }
+
+    /**
      * isRegisterWithFacebook
      *
      * @return bool
@@ -548,5 +584,15 @@ class SettingRepository
     public function isRegisterWithTwitter()
     {
         return ((int)Setting::firstOrCreate(['key' => 'is_register_with_twitter'], ['value' => '1'])->value) === 1;
+    }
+
+    /**
+     * isRegisterWithGithub
+     *
+     * @return bool
+     */
+    public function isRegisterWithGithub()
+    {
+        return ((int)Setting::firstOrCreate(['key' => 'is_register_with_github'], ['value' => '1'])->value) === 1;
     }
 }
