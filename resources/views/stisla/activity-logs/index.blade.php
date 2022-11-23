@@ -180,7 +180,7 @@
                         <td>{{ $item->platform }}</td>
                         <td>{{ $item->browser }}</td>
                         @if ($isSuperAdmin)
-                          <td>{{ $item->user->name }}</td>
+                          <td>{{ $item->user->name ?? '-' }}</td>
                           <td>{{ $item->role->name ?? '-' }}</td>
                         @endif
                         <td>{{ $item->created_at }}</td>
