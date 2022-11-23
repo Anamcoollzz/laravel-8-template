@@ -130,6 +130,14 @@
                 "is_active_if_url_includes": "backup-databases*"
             },
             {
+                "menu_name": "Log Viewer",
+                "route_name": "logs.index",
+                "icon": "circle-exclamation",
+                "permission": "Log Viewer",
+                "is_active_if_url_includes": "logs*",
+                "is_blank": true
+            },
+            {
                 "menu_name": "Keluar",
                 "route_name": "logout",
                 "icon": "sign-out-alt",

@@ -69,6 +69,9 @@ Route::group(['prefix' => 'file-managers', 'middleware' => [FileManagerPermissio
     \UniSharp\LaravelFilemanager\Lfm::routes();
 });
 
+# LOG VIEWER
+Route::get('logs-viewer', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index'])->name('logs.index')->middleware('can:Log Viewer');
+
 # YOUTUBE VIEWER (SECRET MENU)
 Route::get('youtube-viewer', [YoutubeController::class, 'viewer'])->name('youtube.viewer');
 Route::get('youtube-viewer-per-video', [YoutubeController::class, 'viewerPerVideo'])->name('youtube.viewer-per-video');

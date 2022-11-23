@@ -107,6 +107,12 @@
     },
 
     {
+        "name": "Log Viewer",
+        "roles": ["superadmin", "akuntesting"],
+        "group": "Log Viewer"
+    },
+
+    {
         "name": "Notifikasi",
         "roles": ["superadmin", "akuntesting"],
         "group": "Notifikasi"
