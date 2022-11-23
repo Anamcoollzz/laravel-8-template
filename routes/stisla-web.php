@@ -24,10 +24,10 @@ Route::post('auth/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::get('auth/reset-password/{token}', [AuthController::class, 'resetPasswordForm'])->name('reset-password');
 Route::post('auth/reset-password/{token}', [AuthController::class, 'resetPassword']);
 
-# SOCIAL LOGIN
+# SOCIAL LOGIN AND REGISTER
 Route::get('auth/social-login/{provider}', [AuthController::class, 'socialLogin'])->name('social-login');
-Route::get('auth/social-login/{provider}/execute', [AuthController::class, 'socialLoginExecute'])->name('social-login-execute');
-Route::get('auth/social-login/{provider}/callback', [AuthController::class, 'socialCallback'])->name('social-login-callback');
+Route::get('auth/social-register/{provider}', [AuthController::class, 'socialRegister'])->name('social-register');
+Route::get('auth/social/{provider}/callback', [AuthController::class, 'socialCallback'])->name('social-callback');
 
 # CRUD GENERATOR
 Route::get('crud-generator', [CrudController::class, 'index']);

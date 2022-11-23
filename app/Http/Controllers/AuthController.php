@@ -7,7 +7,6 @@ use App\Http\Requests\ForgotPasswordRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\ResetPasswordRequest;
-use App\Models\User;
 use App\Repositories\SettingRepository;
 use App\Repositories\UserRepository;
 use App\Services\EmailService;
@@ -39,11 +38,23 @@ class AuthController extends Controller
     private SettingRepository $settingRepository;
 
     /**
-     * emailservice
+     * email service
      *
      * @var EmailService
      */
     private EmailService $emailService;
+
+    /**
+     * active socialite providers
+     *
+     * @var array
+     */
+    private array $socialiteProviders = [
+        'google',
+        'facebook',
+        'twitter',
+        'github',
+    ];
 
     /**
      * constructor method
@@ -354,14 +365,23 @@ class AuthController extends Controller
      */
     public function socialLogin($provider)
     {
-        if (!in_array($provider, ['google', 'facebook'])) {
+        if (!in_array($provider, $this->socialiteProviders)) {
             abort(404);
         }
 
-        $isValidFb     = $provider === 'facebook' && $this->settingRepository->isLoginWithFacebook();
-        $isValidGoogle = $provider === 'google' && $this->settingRepository->isLoginWithGoogle();
+        $isValid = false;
+        if ($provider === 'facebook') {
+            $isValid = $this->settingRepository->isLoginWithFacebook();
+        } else if ($provider === 'google') {
+            $isValid = $this->settingRepository->isLoginWithGoogle();
+        } else if ($provider === 'twitter') {
+            $isValid = $this->settingRepository->isLoginWithTwitter();
+        } else if ($provider === 'github') {
+            $isValid = $this->settingRepository->isLoginWithGithub();
+        }
 
-        if ($isValidFb || $isValidGoogle) {
+        if ($isValid) {
+            session(['social_action' => 'login']);
             return Socialite::driver($provider)->redirect();
         }
 
@@ -369,7 +389,7 @@ class AuthController extends Controller
     }
 
     /**
-     * callback social login
+     * callback social login and register callback
      * @param mixed $provider
      *
      * @return Response
@@ -377,19 +397,52 @@ class AuthController extends Controller
     public function socialCallback($provider)
     {
         try {
-            if (!in_array($provider, ['google', 'facebook'])) {
+            if (!in_array($provider, $this->socialiteProviders)) {
                 abort(404);
             }
             $user = Socialite::driver($provider)->user();
-            if ($user->getEmail()) {
-                $user = $this->userRepository->findByEmail($email = $user->getEmail());
+            $isRegister = session('social_action') === 'register';
 
-                if ($user === null) {
-                    return redirect()->route('login')->with('errorMessage', __('Akun ' . $email . ' belum terdaftar'));
+            if ($user->getEmail() || $provider === 'twitter') {
+
+                $successMsg = __('Berhasil masuk ke dalam sistem');
+
+                if ($provider === 'twitter') {
+                    $userModel = $this->userRepository->findByTwitterId($user->getId());
+                } else {
+                    $userModel = $this->userRepository->findByEmail($email = $user->getEmail());
                 }
 
-                $this->userRepository->login($user);
-                return Helper::redirectSuccess(route('dashboard.index'), __('Berhasil masuk ke dalam sistem'));
+                if ($isRegister || ($isRegister && $provider === 'twitter')) {
+                    session(['social_action' => null]);
+                    if ($userModel) {
+                        $msg = $provider === 'twitter' ? __('Akun anda sudah terdaftar, silakan menggunakan form login') : __('Akun ' . $email . ' sudah terdaftar');
+                        return redirect()->route('register')->with('errorMessage', $msg);
+                    }
+
+                    $data = [
+                        'name'                 => $user->getName(),
+                        'email'                => $user->getEmail(),
+                        'avatar'               => $user->getAvatar(),
+                        'email_verified_at'    => date('Y-m-d H:i:s'),
+                        'password'             => bcrypt(Str::random(10)),
+                        'last_login'           => date('Y-m-d H:i:s'),
+                        'last_password_change' => date('Y-m-d H:i:s'),
+                        'twitter_id'           => $user->getId(),
+                    ];
+                    $userModel = $this->userRepository->create($data);
+                    $userModel->syncRoles(['akuntesting']);
+
+                    $successMsg = __('Berhasil mendaftar dan masuk ke dalam sistem');
+                }
+
+                if ($userModel === null) {
+                    $msg = $provider === 'twitter' ? __('Akun anda belum terdaftar') : __('Akun ' . $email . ' belum terdaftar');
+                    return redirect()->route('login')->with('errorMessage', $msg);
+                }
+
+                $this->userRepository->login($userModel);
+                return Helper::redirectSuccess(route('dashboard.index'), $successMsg);
             }
             return redirect()->route('login')->with('errorMessage', __('Akun tidak ditemukan'));
         } catch (Exception $e) {
@@ -398,5 +451,35 @@ class AuthController extends Controller
             }
             return redirect()->route('login')->with('errorMessage', __('Ada error'));
         }
+    }
+
+    /**
+     * social register
+     *
+     * @return Response
+     */
+    public function socialRegister($provider)
+    {
+        if (!in_array($provider, $this->socialiteProviders)) {
+            abort(404);
+        }
+
+        $isValid = false;
+        if ($provider === 'facebook') {
+            $isValid = $this->settingRepository->isRegisterWithFacebook();
+        } else if ($provider === 'google') {
+            $isValid = $this->settingRepository->isRegisterWithGoogle();
+        } else if ($provider === 'twitter') {
+            $isValid = $this->settingRepository->isRegisterWithTwitter();
+        } else if ($provider === 'github') {
+            $isValid = $this->settingRepository->isRegisterWithGithub();
+        }
+
+        if ($isValid) {
+            session(['social_action' => 'register']);
+            return Socialite::driver($provider)->redirect();
+        }
+
+        abort(404);
     }
 }
