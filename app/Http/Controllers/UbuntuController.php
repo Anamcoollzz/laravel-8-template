@@ -11,10 +11,10 @@ class UbuntuController extends Controller
 {
     public function index(Request $request)
     {
-        $files  = File::files('/etc/nginx/sites-available');
-        $path = $request->query('folder') ?? '/var/www';
-        $filesWww  = File::files($path);
-        $foldersWww  = File::files($path);
+        $files      = File::files('/etc/nginx/sites-available');
+        $path       = $request->query('folder') ?? '/var/www';
+        $filesWww   = File::files($path);
+        $foldersWww = File::directories($path);
 
         $i = 0;
         foreach ($files as $file) {
