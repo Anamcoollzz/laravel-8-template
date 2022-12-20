@@ -41,7 +41,7 @@ class UbuntuController extends Controller
     public function update($pathname, Request $request)
     {
         $pathnameD = decrypt($pathname);
-        EditFileJob::dispatch($pathnameD, $request->content);
+        EditFileJob::dispatch($pathnameD, $request->filename);
 
         return redirect()->back()->with('successMessage', 'Berhasil memperbarui file');
     }
