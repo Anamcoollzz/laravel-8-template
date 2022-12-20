@@ -23,7 +23,7 @@
               <thead>
                 <tr>
                   <th class="text-center">#</th>
-                  <th class="text-center">{{ __('Filename') }}</th>
+                  <th class="text-center">{{ __('Path') }}</th>
                   <th class="text-center">{{ __('Enabled') }}</th>
                 </tr>
               </thead>
@@ -31,6 +31,7 @@
                 @foreach ($foldersWww as $item)
                   <tr>
                     <td>{{ $loop->iteration }}</td>
+                    <td>{{ $item }}</td>
                     <td>
                       <a href="?folder={{ encrypt($item) }}">
                         {{ $item }}
