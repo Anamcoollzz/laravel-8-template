@@ -24,26 +24,37 @@
                 <tr>
                   <th class="text-center">#</th>
                   <th class="text-center">{{ __('Path') }}</th>
+                  <th class="text-center">{{ __('Type') }}</th>
+                  <th class="text-center">{{ __('Aksi') }}</th>
                 </tr>
               </thead>
               <tbody>
+                @php
+                  $i = 1;
+                @endphp
                 @foreach ($foldersWww as $item)
                   <tr>
-                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $i++ }}</td>
                     <td>
                       <a href="?folder={{ encrypt($item) }}">
                         {{ $item }}
                       </a>
                     </td>
+                    <td>Dir</td>
+                    <td></td>
                   </tr>
                 @endforeach
                 @foreach ($filesWww as $item)
                   <tr>
-                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $i++ }}</td>
                     <td>
                       <a target="_blank" href="?download={{ encrypt($item->getPathname()) }}">
                         {{ $item->getPathname() }}
                       </a>
+                    </td>
+                    <td>File</td>
+                    <td>
+                      @include('stisla.includes.forms.buttons.btn-edit', ['link' => route('ubuntu.edit', [encrypt($item->getPathname())])])
                     </td>
                   </tr>
                 @endforeach
