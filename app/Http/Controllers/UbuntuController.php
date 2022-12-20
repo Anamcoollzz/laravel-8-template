@@ -12,7 +12,10 @@ class UbuntuController extends Controller
     public function index(Request $request)
     {
         $files      = File::files('/etc/nginx/sites-available');
-        $path       = $request->query('folder') ?? '/var/www';
+        $path       = '/var/www';
+        if ($request->query('folder')) {
+            $path = decrypt($request->query('folder'));
+        }
         $filesWww   = File::files($path);
         $foldersWww = File::directories($path);
 
