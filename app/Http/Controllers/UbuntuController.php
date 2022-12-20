@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\EditFileJob;
+use App\Jobs\ShellJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -53,5 +54,13 @@ class UbuntuController extends Controller
         EditFileJob::dispatch($pathnameD . '_copy', $content);
 
         return redirect()->back()->with('successMessage', 'Berhasil menduplikasi file');
+    }
+
+    public function destroy($pathname)
+    {
+        $command = 'rm ' . $pathname;
+        ShellJob::dispatch($command);
+
+        return redirect()->back()->with('successMessage', 'Berhasil menghapus file');
     }
 }

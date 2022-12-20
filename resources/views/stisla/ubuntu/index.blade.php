@@ -36,7 +36,12 @@
                     <td>{{ $item->enabled ? 'true' : 'false' }}</td>
                     <td>
                       @include('stisla.includes.forms.buttons.btn-edit', ['link' => route('ubuntu.edit', [encrypt($item->getPathname())])])
-                      @include('stisla.includes.forms.buttons.btn-edit', ['link' => route('ubuntu.duplicate', [encrypt($item->getPathname())]), 'icon' => 'copy'])
+                      @include('stisla.includes.forms.buttons.btn-edit', [
+                          'link' => route('ubuntu.duplicate', [encrypt($item->getPathname())]),
+                          'icon' => 'fa fa-copy',
+                          'label' => 'Duplikasi',
+                      ])
+                      @include('stisla.includes.forms.buttons.btn-delete', ['link' => route('ubuntu.destroy', [encrypt($item->getPathname())])])
                     </td>
                   </tr>
                 @endforeach
