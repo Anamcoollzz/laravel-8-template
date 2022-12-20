@@ -35,7 +35,7 @@
                     <td>{{ $item->getFilename() }}</td>
                     <td>{{ $item->enabled ? 'true' : 'false' }}</td>
                     <td>
-                      @include('stisla.includes.forms.buttons.btn-edit', ['link' => route('ubuntu.edit', [$item->getPathname()])])
+                      @include('stisla.includes.forms.buttons.btn-edit', ['link' => route('ubuntu.edit', [encrypt($item->getPathname())])])
                     </td>
                   </tr>
                 @endforeach

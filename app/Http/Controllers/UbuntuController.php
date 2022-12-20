@@ -24,6 +24,7 @@ class UbuntuController extends Controller
 
     public function edit($pathname)
     {
+        $pathname = decrypt($pathname);
         $view = file_get_contents($pathname);
         dd($view);
         return view('stisla.crud-example.form', [
