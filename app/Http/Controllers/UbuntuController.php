@@ -70,6 +70,7 @@ class UbuntuController extends Controller
         $pathnameD = decrypt($pathname);
         if ($nextStatus === 'true') {
             $command = 'ln -s ' . $pathname . ' /etc/nginx/sites-enabled/';
+            dd($command);
             ShellJob::dispatch($command);
         } else if ($nextStatus === 'false') {
             $paths = explode('/', $pathnameD);
