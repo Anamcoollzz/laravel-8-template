@@ -39,7 +39,7 @@
                       @include('stisla.includes.forms.buttons.btn-edit', [
                           'link' => route('ubuntu.duplicate', [encrypt($item->getPathname())]),
                           'icon' => 'fa fa-copy',
-                          'label' => 'Duplikasi',
+                          'tooltip' => 'Duplikasi',
                       ])
                       @include('stisla.includes.forms.buttons.btn-delete', ['link' => route('ubuntu.destroy', [encrypt($item->getPathname())])])
                     </td>
