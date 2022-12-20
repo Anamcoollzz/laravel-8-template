@@ -24,14 +24,14 @@
                 <tr>
                   <th class="text-center">#</th>
                   <th class="text-center">{{ __('Filename') }}</th>
-                  <th class="text-center">{{ __('Size') }}</th>
+                  <th class="text-center">{{ __('Enabled') }}</th>
                 </tr>
               </thead>
               <tbody>
                 @foreach ($files as $item)
                   <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $item->filename }}</td>
+                    <td>{{ $item->enabled ? 'true' : 'false' }}</td>
                   </tr>
                 @endforeach
               </tbody>

@@ -9,9 +9,14 @@ class UbuntuController extends Controller
 {
     public function index()
     {
-        $files = File::allFiles('/etc/nginx/sites-available');
-        $files2 = File::allFiles('/etc/nginx/sites-enabled');
-        dd($files2);
+        $files  = File::allFiles('/etc/nginx/sites-available');
+
+        $i = 0;
+        foreach ($files as $file) {
+            File::exists('/etc/nginx/sites-enabled/' . $file->getFilename()) ? $files[$i]->enabled = true : $files[$i]->enabled = false;
+            $i++;
+        }
+
         return view('stisla.ubuntu.index', [
             'files' => $files,
         ]);
