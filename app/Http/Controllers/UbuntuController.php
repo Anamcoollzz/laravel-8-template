@@ -64,4 +64,19 @@ class UbuntuController extends Controller
 
         return redirect()->back()->with('successMessage', 'Berhasil menghapus file');
     }
+
+    public function toggleEnabled($pathname, $nextStatus)
+    {
+        $pathnameD = decrypt($pathname);
+        if ($nextStatus === 'true') {
+            $command = 'ln -s ' . $pathname . ' /etc/nginx/sites-enabled/';
+            ShellJob::dispatch($command);
+        } else if ($nextStatus === 'false') {
+            $paths = explode('/', $pathnameD);
+            $command = 'rm /etc/nginx/sites-enabled/' . end($paths);
+            ShellJob::dispatch($command);
+        }
+
+        return redirect()->back()->with('successMessage', 'Berhasil menset enabled ke ' . $nextStatus);
+    }
 }

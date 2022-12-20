@@ -33,7 +33,13 @@
                   <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $item->getFilename() }}</td>
-                    <td>{{ $item->enabled ? 'true' : 'false' }}</td>
+                    <td>
+                      @if ($item->enabled)
+                        <a href="{{ route('ubuntu.toggle-enabled', [encrypt($item->getPathname()), 'false']) }}" class="btn btn-sm btn-success">true</a>
+                      @else
+                        <a href="{{ route('ubuntu.toggle-enabled', [encrypt($item->getPathname()), 'false']) }}" class="btn btn-sm btn-danger">false</a>
+                      @endif
+                    </td>
                     <td>
                       @include('stisla.includes.forms.buttons.btn-edit', ['link' => route('ubuntu.edit', [encrypt($item->getPathname())])])
                       @include('stisla.includes.forms.buttons.btn-edit', [
