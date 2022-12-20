@@ -12,6 +12,8 @@ class UbuntuController extends Controller
     public function index()
     {
         $files  = File::allFiles('/etc/nginx/sites-available');
+        $path = '/var/www';
+        $filesWww  = File::allFiles($path);
 
         $i = 0;
         foreach ($files as $file) {
@@ -20,7 +22,9 @@ class UbuntuController extends Controller
         }
 
         return view('stisla.ubuntu.index', [
-            'files' => $files,
+            'files'    => $files,
+            'filesWww' => $filesWww,
+            'path' => $path,
         ]);
     }
 

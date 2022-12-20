@@ -13,6 +13,41 @@
     <div class="col-12">
       <div class="card">
         <div class="card-header">
+          <h4><i class="fa fa-ubuntu"></i> {{ __($path) }}</h4>
+
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+
+            <table class="table table-striped table-hovered" id="datatable">
+              <thead>
+                <tr>
+                  <th class="text-center">#</th>
+                  <th class="text-center">{{ __('Filename') }}</th>
+                  <th class="text-center">{{ __('Enabled') }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach ($filesWww as $item)
+                  <tr>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>
+                      <a href="?pathname={{ encrypt($item->getPathname()) }}">
+                        {{ $item->getPathname() }}
+                      </a>
+                    </td>
+                  </tr>
+                @endforeach
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
           <h4><i class="fa fa-ubuntu"></i> {{ __('Nginx Sites Available') }}</h4>
 
         </div>
