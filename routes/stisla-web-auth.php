@@ -9,6 +9,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TestingController;
+use App\Http\Controllers\UbuntuController;
 use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\YoutubeController;
 use App\Http\Middleware\FileManagerPermission;
