@@ -9,12 +9,12 @@ use Illuminate\Support\Facades\File;
 
 class UbuntuController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $files  = File::allFiles('/etc/nginx/sites-available');
-        dd($files);
-        $path = '/var/www';
-        $filesWww  = File::allFiles($path);
+        $files  = File::files('/etc/nginx/sites-available');
+        $path = $request->query('folder') ?? '/var/www';
+        $filesWww  = File::files($path);
+        $foldersWww  = File::files($path);
 
         $i = 0;
         foreach ($files as $file) {
@@ -25,6 +25,7 @@ class UbuntuController extends Controller
         return view('stisla.ubuntu.index', [
             'files'    => $files,
             'filesWww' => $filesWww,
+            'foldersWww' => $foldersWww,
             'path'     => $path,
         ]);
     }

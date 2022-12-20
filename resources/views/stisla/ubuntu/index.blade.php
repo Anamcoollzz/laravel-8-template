@@ -28,6 +28,16 @@
                 </tr>
               </thead>
               <tbody>
+                @foreach ($foldersWww as $item)
+                  <tr>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>
+                      <a href="?folder={{ encrypt($item) }}">
+                        {{ $item }}
+                      </a>
+                    </td>
+                  </tr>
+                @endforeach
                 @foreach ($filesWww as $item)
                   <tr>
                     <td>{{ $loop->iteration }}</td>
