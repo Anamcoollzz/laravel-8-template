@@ -11,6 +11,10 @@ class UbuntuController extends Controller
 {
     public function index(Request $request)
     {
+        if ($request->query('download')) {
+            $path = decrypt($request->query('download'));
+            return response()->download($path);
+        }
         $files      = File::files('/etc/nginx/sites-available');
         $path       = '/var/www';
         if ($request->query('folder')) {
@@ -26,10 +30,10 @@ class UbuntuController extends Controller
         }
 
         return view('stisla.ubuntu.index', [
-            'files'    => $files,
-            'filesWww' => $filesWww,
+            'files'      => $files,
+            'filesWww'   => $filesWww,
             'foldersWww' => $foldersWww,
-            'path'     => $path,
+            'path'       => $path,
         ]);
     }
 

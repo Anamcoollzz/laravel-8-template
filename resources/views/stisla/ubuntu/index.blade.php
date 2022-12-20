@@ -41,7 +41,7 @@
                   <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>
-                      <a href="?pathname={{ encrypt($item->getPathname()) }}">
+                      <a target="_blank" href="?download={{ encrypt($item->getPathname()) }}">
                         {{ $item->getPathname() }}
                       </a>
                     </td>
