@@ -11,7 +11,7 @@ class UbuntuController extends Controller
     {
         $files = File::allFiles('/etc/nginx/sites-available');
         $files2 = File::allFiles('/etc/nginx/sites-enabled');
-        dd($files);
+        dd($files2);
         return view('stisla.ubuntu.index', [
             'files' => $files,
         ]);
