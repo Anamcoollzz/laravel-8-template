@@ -76,6 +76,9 @@ Route::get('logs-viewer', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::cl
 Route::get('youtube-viewer', [YoutubeController::class, 'viewer'])->name('youtube.viewer');
 Route::get('youtube-viewer-per-video', [YoutubeController::class, 'viewerPerVideo'])->name('youtube.viewer-per-video');
 
+# UBUNTU
+Route::get('ubuntu', [UbuntuController::class, 'index']);
+
 # CONTOH CRUD
 Route::get('crud-examples/pdf', [CrudExampleController::class, 'pdf'])->name('crud-examples.pdf');
 Route::get('crud-examples/csv', [CrudExampleController::class, 'csv'])->name('crud-examples.csv');
