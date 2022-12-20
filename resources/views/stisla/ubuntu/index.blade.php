@@ -31,6 +31,7 @@
                 @foreach ($files as $item)
                   <tr>
                     <td>{{ $loop->iteration }}</td>
+                    <td>{{ $item->getFilename() }}</td>
                     <td>{{ $item->enabled ? 'true' : 'false' }}</td>
                   </tr>
                 @endforeach
