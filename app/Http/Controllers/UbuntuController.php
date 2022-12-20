@@ -58,7 +58,8 @@ class UbuntuController extends Controller
 
     public function destroy($pathname)
     {
-        $command = 'rm ' . $pathname;
+        $pathnameD = decrypt($pathname);
+        $command = 'rm ' . $pathnameD;
         ShellJob::dispatch($command);
 
         return redirect()->back()->with('successMessage', 'Berhasil menghapus file');
