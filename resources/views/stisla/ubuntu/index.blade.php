@@ -31,7 +31,7 @@
                 @foreach ($files as $item)
                   <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $item->title }}</td>
+                    <td>{{ $item->filename }}</td>
                   </tr>
                 @endforeach
               </tbody>
@@ -46,7 +46,5 @@
 @endsection
 
 @push('js')
-  <script>
-
-  </script>
+  <script></script>
 @endpush

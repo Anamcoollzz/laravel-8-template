@@ -10,7 +10,10 @@ class UbuntuController extends Controller
     public function index()
     {
         $files = File::allFiles('/etc/nginx/sites-available');
+        $files2 = File::allFiles('/etc/nginx/sites-enabled');
         dd($files);
-        return view('stisla.ubuntu.index');
+        return view('stisla.ubuntu.index', [
+            'files' => $files,
+        ]);
     }
 }
