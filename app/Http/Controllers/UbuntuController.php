@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\EditFileJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -40,7 +41,7 @@ class UbuntuController extends Controller
     public function update($pathname, Request $request)
     {
         $pathnameD = decrypt($pathname);
-        file_put_contents($pathnameD, $request->filename);
+        EditFileJob::dispatch($pathnameD, $request->content);
 
         return redirect()->back()->with('successMessage', 'Berhasil memperbarui file');
     }
