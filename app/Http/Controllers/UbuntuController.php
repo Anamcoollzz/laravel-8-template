@@ -40,6 +40,8 @@ class UbuntuController extends Controller
     public function update($pathname, Request $request)
     {
         $pathnameD = decrypt($pathname);
-        dd($request->filename);
+        file_put_contents($pathnameD, $request->filename);
+
+        return redirect()->back()->with('successMessage', 'Berhasil memperbarui file');
     }
 }
