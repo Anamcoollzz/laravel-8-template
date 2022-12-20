@@ -21,4 +21,17 @@ class UbuntuController extends Controller
             'files' => $files,
         ]);
     }
+
+    public function edit($pathname)
+    {
+        $view = file_get_contents($pathname);
+        dd($view);
+        return view('stisla.crud-example.form', [
+            'd'             => $crudExample,
+            'title'         => __('Contoh CRUD'),
+            'fullTitle'     => __('Ubah Contoh CRUD'),
+            'routeIndex'    => route('crud-examples.index'),
+            'action'        => route('crud-examples.update', [$crudExample->id])
+        ]);
+    }
 }

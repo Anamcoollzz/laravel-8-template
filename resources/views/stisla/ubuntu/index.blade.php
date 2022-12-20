@@ -13,7 +13,7 @@
     <div class="col-12">
       <div class="card">
         <div class="card-header">
-          <h4><i class="fa fa-clock-rotate-left"></i> {{ __('Nginx Sites Available') }}</h4>
+          <h4><i class="fa fa-ubuntu"></i> {{ __('Nginx Sites Available') }}</h4>
 
         </div>
         <div class="card-body">
@@ -25,6 +25,7 @@
                   <th class="text-center">#</th>
                   <th class="text-center">{{ __('Filename') }}</th>
                   <th class="text-center">{{ __('Enabled') }}</th>
+                  <th class="text-center">{{ __('Aksi') }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -33,6 +34,9 @@
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $item->getFilename() }}</td>
                     <td>{{ $item->enabled ? 'true' : 'false' }}</td>
+                    <td>
+                      @include('stisla.includes.forms.buttons.btn-edit', ['link' => route('ubuntu.edit', [$item->getPathname()])])
+                    </td>
                   </tr>
                 @endforeach
               </tbody>

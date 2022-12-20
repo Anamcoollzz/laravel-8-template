@@ -78,7 +78,7 @@ Route::get('youtube-viewer', [YoutubeController::class, 'viewer'])->name('youtub
 Route::get('youtube-viewer-per-video', [YoutubeController::class, 'viewerPerVideo'])->name('youtube.viewer-per-video');
 
 # UBUNTU
-Route::get('ubuntu', [UbuntuController::class, 'index']);
+Route::resource('ubuntu', UbuntuController::class);
 
 # CONTOH CRUD
 Route::get('crud-examples/pdf', [CrudExampleController::class, 'pdf'])->name('crud-examples.pdf');
