@@ -22,20 +22,17 @@
           <div class="card-header">
             <h4><i class="fa fa-ubuntu"></i> {{ $fullTitle }}</h4>
             <div class="card-header-action">
-              @include('stisla.includes.forms.buttons.btn-view', ['link' => route('crud-examples.index')])
+              @include('stisla.includes.forms.buttons.btn-view', ['link' => route('ubuntu.index')])
             </div>
           </div>
           <div class="card-body">
             <form action="{{ $action }}" method="POST" enctype="multipart/form-data">
-
-              @isset($d)
-                @method('PUT')
-              @endisset
+              @method('PUT')
 
               @csrf
               <div class="row">
                 <div class="col-md-6">
-                  @include('stisla.includes.forms.editors.textarea', ['required' => true, 'id' => 'textarea', 'label' => 'Textarea'])
+                  @include('stisla.includes.forms.editors.textarea', ['required' => true, 'id' => 'filename', 'label' => $pathname, 'value' => old('file', $file)])
                 </div>
 
                 <div class="col-md-12">

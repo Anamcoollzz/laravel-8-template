@@ -24,15 +24,22 @@ class UbuntuController extends Controller
 
     public function edit($pathname)
     {
-        $pathname = decrypt($pathname);
-        $view = file_get_contents($pathname);
-        dd($view);
-        return view('stisla.crud-example.form', [
-            'd'             => $crudExample,
-            'title'         => __('Contoh CRUD'),
-            'fullTitle'     => __('Ubah Contoh CRUD'),
-            'routeIndex'    => route('crud-examples.index'),
-            'action'        => route('crud-examples.update', [$crudExample->id])
+        $pathnameD = decrypt($pathname);
+        $file = file_get_contents($pathnameD);
+
+        return view('stisla.ubuntu.form', [
+            'file'       => $file,
+            'title'      => __('Ubuntu'),
+            'fullTitle'  => __('Ubah File'),
+            'routeIndex' => route('ubuntu.index'),
+            'action'     => route('ubuntu.update', [$pathname]),
+            'pathname'   => $pathnameD,
         ]);
+    }
+
+    public function update($pathname, Request $request)
+    {
+        $pathnameD = decrypt($pathname);
+        dd($request->filename);
     }
 }
