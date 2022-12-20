@@ -45,4 +45,13 @@ class UbuntuController extends Controller
 
         return redirect()->back()->with('successMessage', 'Berhasil memperbarui file');
     }
+
+    public function duplicate($pathname)
+    {
+        $pathnameD = decrypt($pathname);
+        $content = file_get_contents($pathnameD);
+        EditFileJob::dispatch($pathnameD . '_copy', $content);
+
+        return redirect()->back()->with('successMessage', 'Berhasil menduplikasi file');
+    }
 }
