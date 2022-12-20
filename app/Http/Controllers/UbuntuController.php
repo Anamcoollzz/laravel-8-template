@@ -12,9 +12,9 @@ class UbuntuController extends Controller
     public function index()
     {
         $files  = File::allFiles('/etc/nginx/sites-available');
+        dd($files);
         $path = '/var/www';
         $filesWww  = File::allFiles($path);
-        dd($filesWww);
 
         $i = 0;
         foreach ($files as $file) {
