@@ -31,7 +31,7 @@
 
               @csrf
               <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                   @include('stisla.includes.forms.editors.textarea', ['required' => true, 'id' => 'filename', 'label' => $pathname, 'value' => old('file', $file)])
                 </div>
 
@@ -68,7 +68,7 @@
           lineNumbers: true,
           theme: "duotone-dark",
           mode: 'javascript',
-          height: 200
+          height: 500
         });
         editor.setSize("100%", 200);
       });
