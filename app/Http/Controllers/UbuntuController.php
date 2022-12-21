@@ -97,8 +97,6 @@ class UbuntuController extends Controller
 
     public function gitPull($pathname)
     {
-
-
         $pathnameD = decrypt($pathname);
 
         $command = 'cd ' . $pathnameD . ' && git pull origin';
