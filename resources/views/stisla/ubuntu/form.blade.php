@@ -70,7 +70,7 @@
           mode: 'javascript',
           height: 500
         });
-        editor.setSize("100%", 200);
+        editor.setSize("100%", 500);
       });
     }
   </script>
