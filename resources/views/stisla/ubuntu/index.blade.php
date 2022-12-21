@@ -17,7 +17,7 @@
 
           @if ($isGit)
             <div class="card-header-action">
-              @include('stisla.includes.forms.buttons.btn-edit', ['link' => route('ubuntu.git-pull', [encrypt($path)]), 'icon' => 'fab fa-github'])
+              @include('stisla.includes.forms.buttons.btn-edit', ['link' => route('ubuntu.git-pull', [encrypt($path)]), 'icon' => 'fab fa-github', 'tooltip' => 'git pull origin'])
             </div>
           @endif
         </div>

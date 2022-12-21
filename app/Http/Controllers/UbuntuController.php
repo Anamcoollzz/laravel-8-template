@@ -100,6 +100,7 @@ class UbuntuController extends Controller
         $pathnameD = decrypt($pathname);
 
         $command = 'cd ' . $pathnameD . ' && git pull origin';
+        dd($command);
         ShellJob::dispatch($command);
 
         return redirect()->back()->with('successMessage', 'Berhasil run command git pull origin di ' . $pathnameD);
