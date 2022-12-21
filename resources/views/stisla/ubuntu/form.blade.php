@@ -20,7 +20,7 @@
       <div class="col-12">
         <div class="card">
           <div class="card-header">
-            <h4><i class="fa fa-ubuntu"></i> {{ $fullTitle }}</h4>
+            <h4><i class="fab fa-ubuntu"></i> {{ $fullTitle }}</h4>
             <div class="card-header-action">
               @include('stisla.includes.forms.buttons.btn-view', ['link' => route('ubuntu.index')])
             </div>

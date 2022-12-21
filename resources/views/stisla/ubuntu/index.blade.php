@@ -13,11 +13,11 @@
     <div class="col-12">
       <div class="card">
         <div class="card-header">
-          <h4><i class="fa fa-ubuntu"></i> {{ __($path) }}</h4>
+          <h4><i class="fab fa-ubuntu"></i> {{ __($path) }}</h4>
 
           @if ($isGit)
             <div class="card-header-action">
-              @include('stisla.includes.forms.buttons.btn-edit', ['link' => route('ubuntu.git-pull', [encrypt($path)]), 'icon' => 'fa fa-github'])
+              @include('stisla.includes.forms.buttons.btn-edit', ['link' => route('ubuntu.git-pull', [encrypt($path)]), 'icon' => 'fab fa-github'])
             </div>
           @endif
         </div>
