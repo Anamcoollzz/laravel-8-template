@@ -49,3 +49,29 @@
     </div>
   </div>
 @endsection
+
+@push('js')
+  <script src="{{ asset('stisla/node_modules/codemirror/lib/codemirror.js') }}"></script>
+  <script src="{{ asset('stisla/node_modules/codemirror/mode/javascript/javascript.js') }}"></script>
+@endpush
+
+@push('css')
+  <link rel="stylesheet" href="{{ asset('stisla/node_modules/codemirror/lib/codemirror.css') }}">
+  <link rel="stylesheet" href="{{ asset('stisla/node_modules/codemirror/theme/duotone-dark.css') }}">
+@endpush
+
+@push('scripts')
+  <script>
+    if (window.CodeMirror) {
+      $("#filename").each(function() {
+        let editor = CodeMirror.fromTextArea(this, {
+          lineNumbers: true,
+          theme: "duotone-dark",
+          mode: 'javascript',
+          height: 200
+        });
+        editor.setSize("100%", 200);
+      });
+    }
+  </script>
+@endpush
