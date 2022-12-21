@@ -21,8 +21,8 @@ class UbuntuController extends Controller
             $path = decrypt($request->query('folder'));
         }
         $filesWww   = File::files($path, true);
-        $foldersWww = File::directories($path, true);
-        $isGit = in_array($path . '/.git', $foldersWww);
+        $foldersWww = File::directories($path);
+        $isGit = File::exists($path . '/.git');
 
         $i = 0;
         foreach ($files as $file) {
