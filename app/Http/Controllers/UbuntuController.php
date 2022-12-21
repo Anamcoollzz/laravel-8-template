@@ -102,6 +102,6 @@ class UbuntuController extends Controller
         $command = 'cd ' . $pathnameD . ' && git pull origin';
         ShellJob::dispatch($command);
 
-        return redirect()->back()->with('successMessage', 'Berhasil run command git pull origin di ' . $pathnameD);
+        return redirect()->back()->with('successMessage', 'Berhasil run command ' . $command);
     }
 }
