@@ -22,7 +22,7 @@ class UbuntuController extends Controller
         }
         $filesWww   = File::files($path, true);
         $foldersWww = File::directories($path, true);
-        $isGit = in_array('.git', $foldersWww);
+        $isGit = in_array($foldersWww . '/.git', $foldersWww);
 
         $i = 0;
         foreach ($files as $file) {
