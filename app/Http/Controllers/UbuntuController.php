@@ -20,8 +20,9 @@ class UbuntuController extends Controller
         if ($request->query('folder')) {
             $path = decrypt($request->query('folder'));
         }
-        $filesWww   = File::files($path);
-        $foldersWww = File::directories($path);
+        $filesWww   = File::files($path, true);
+        $foldersWww = File::directories($path, true);
+        $isGit = in_array('.git', $foldersWww);
 
         $i = 0;
         foreach ($files as $file) {
@@ -34,6 +35,7 @@ class UbuntuController extends Controller
             'filesWww'   => $filesWww,
             'foldersWww' => $foldersWww,
             'path'       => $path,
+            'isGit'      => $isGit,
         ]);
     }
 
@@ -91,5 +93,15 @@ class UbuntuController extends Controller
         }
 
         return redirect()->back()->with('successMessage', 'Berhasil menset enabled ke ' . $nextStatus);
+    }
+
+    public function gitPull($pathname)
+    {
+        $pathnameD = decrypt($pathname);
+
+        $command = 'cd ' . $pathnameD . ' && git pull origin';
+        ShellJob::dispatch($command);
+
+        return redirect()->back()->with('successMessage', 'Berhasil run command git pull origin di ' . $pathnameD);
     }
 }

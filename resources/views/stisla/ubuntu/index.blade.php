@@ -15,6 +15,11 @@
         <div class="card-header">
           <h4><i class="fa fa-ubuntu"></i> {{ __($path) }}</h4>
 
+          @if ($isGit)
+            <div class="card-header-action">
+              @include('stisla.includes.forms.buttons.btn-edit', ['link' => route('ubuntu.git-pull', [encrypt($path)]), 'icon' => 'fa fa-github'])
+            </div>
+          @endif
         </div>
         <div class="card-body">
           <div class="table-responsive">
