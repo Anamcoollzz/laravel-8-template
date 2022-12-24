@@ -109,6 +109,11 @@ class UbuntuController extends Controller
         $pathnameD = decrypt($pathname);
         EditFileJob::dispatch($pathnameD, $request->filename);
 
+        if ($pathnameD !== request('pathname')) {
+            $command = 'mv ' . $pathnameD . ' ' . request('pathname');
+            ShellJob::dispatch($command);
+        }
+
         return redirect()->back()->with('successMessage', 'Berhasil memperbarui file');
     }
 

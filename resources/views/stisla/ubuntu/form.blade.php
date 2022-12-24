@@ -31,6 +31,9 @@
 
               @csrf
               <div class="row">
+                <div class="col-md-6">
+                  @include('stisla.includes.forms.inputs.input', ['required' => true, 'name' => 'pathname', 'label' => 'Rename', 'value' => $pathname])
+                </div>
                 <div class="col-md-12">
                   @include('stisla.includes.forms.editors.textarea', ['required' => true, 'id' => 'filename', 'label' => $pathname, 'value' => old('file', $file)])
                 </div>
