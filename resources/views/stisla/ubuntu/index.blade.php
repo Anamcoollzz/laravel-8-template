@@ -118,6 +118,156 @@
       </div>
     </div>
 
+    @if (request('database') && request('table'))
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h4><i class="fa fa-database"></i> {{ __('MySql Database') }} > {{ request('database') }} > {{ request('table') }}</h4>
+
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+
+              <table class="table table-striped table-hovered datatable">
+                <thead>
+                  <tr>
+                    <th class="text-center">#</th>
+                    @foreach ($structure as $item)
+                      <th class="text-center">{{ $item->column }}</th>
+                    @endforeach
+
+                    <th class="text-center">{{ __('Aksi') }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @foreach ($rows as $item)
+                    <tr>
+                      <td>{{ $loop->iteration }}</td>
+                      @foreach ($structure as $column)
+                        <td>{{ $item->{$column->column} }}</td>
+                      @endforeach
+                      <td>
+                        {{-- @include('stisla.includes.forms.buttons.btn-edit', [
+                            'link' => route('ubuntu.index', ['database' => request('database'), 'table' => $item->table]),
+                            'icon' => 'fa fa-table',
+                            'tooltip' => 'Lihat Data',
+                        ]) --}}
+                      </td>
+                    </tr>
+                  @endforeach
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    @elseif (request('database'))
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h4><i class="fa fa-database"></i> {{ __('MySql Database') }} > {{ request('database') }}</h4>
+
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+
+              <table class="table table-striped table-hovered datatable">
+                <thead>
+                  <tr>
+                    <th class="text-center">#</th>
+                    <th class="text-center">{{ __('Tabel') }}</th>
+                    <th class="text-center">{{ __('Size') }}</th>
+                    <th class="text-center">{{ __('Rows') }}</th>
+                    <th class="text-center">{{ __('Aksi') }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @foreach ($tables as $item)
+                    <tr>
+                      <td>{{ $loop->iteration }}</td>
+                      <td>{{ $item->table }}</td>
+                      <td>{{ $item->size_mb }} Mb</td>
+                      <td>{{ $item->total_row }}</td>
+                      <td>
+                        @include('stisla.includes.forms.buttons.btn-edit', [
+                            'link' => route('ubuntu.index', ['database' => request('database'), 'table' => $item->table]),
+                            'icon' => 'fa fa-table',
+                            'tooltip' => 'Lihat Data',
+                        ])
+                        @include('stisla.includes.forms.buttons.btn-edit', [
+                            'link' => route('ubuntu.index', ['database' => request('database'), 'table' => $item->table, 'action' => 'json']),
+                            'icon' => 'fa fa-code',
+                            'tooltip' => 'Lihat JSON',
+                        ])
+                      </td>
+                    </tr>
+                  @endforeach
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    @else
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h4><i class="fa fa-database"></i> {{ __('MySql Database') }}</h4>
+
+          </div>
+          <div class="card-body">
+
+            <form action="{{ route('ubuntu.create-db') }}" method="POST">
+              @csrf
+              <div class="row">
+                <div class="col-md-6">
+                  @include('stisla.includes.forms.inputs.input', ['required' => true, 'name' => 'database_name', 'label' => 'Nama Database'])
+                </div>
+                <div class="col-md-12">
+                  @include('stisla.includes.forms.buttons.btn-save', ['label' => 'Buat Database Baru'])
+                  <br>
+                  <br>
+                  <br>
+                </div>
+              </div>
+            </form>
+
+            <div class="table-responsive">
+
+              <table class="table table-striped table-hovered datatable">
+                <thead>
+                  <tr>
+                    <th class="text-center">#</th>
+                    <th class="text-center">{{ __('Database') }}</th>
+                    <th class="text-center">{{ __('Tabel') }}</th>
+                    <th class="text-center">{{ __('Size') }}</th>
+                    <th class="text-center">{{ __('Aksi') }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @foreach ($databases as $item)
+                    <tr>
+                      <td>{{ $loop->iteration }}</td>
+                      <td>{{ $item->database }}</td>
+                      <td>{{ $item->total_table }}</td>
+                      <td>{{ $item->size_mb }} Mb</td>
+                      <td>
+                        @include('stisla.includes.forms.buttons.btn-edit', [
+                            'link' => route('ubuntu.index', ['database' => $item->database]),
+                            'icon' => 'fa fa-table',
+                            'tooltip' => 'Lihat Tabel',
+                        ])
+                      </td>
+                    </tr>
+                  @endforeach
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    @endif
+
 
   </div>
 @endsection

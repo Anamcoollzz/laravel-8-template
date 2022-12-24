@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Jobs\EditFileJob;
 use App\Jobs\ShellJob;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
 class UbuntuController extends Controller
@@ -15,13 +16,23 @@ class UbuntuController extends Controller
             $path = decrypt($request->query('download'));
             return response()->download($path);
         }
-        $files      = File::files('/etc/nginx/sites-available');
+
+        $files = collect([]);
+        if (File::exists('/etc/nginx/sites-available')) {
+            $files      = File::files('/etc/nginx/sites-available');
+        }
+
         $path       = '/var/www';
         if ($request->query('folder')) {
             $path = decrypt($request->query('folder'));
         }
-        $filesWww   = File::files($path, true);
-        $foldersWww = File::directories($path);
+
+        $filesWww = [];
+        $foldersWww = [];
+        if (File::exists($path)) {
+            $filesWww   = File::files($path, true);
+            $foldersWww = File::directories($path);
+        }
         $isGit = File::exists($path . '/.git');
 
         $i = 0;
@@ -30,12 +41,51 @@ class UbuntuController extends Controller
             $i++;
         }
 
+        $databases = [];
+        $tables    = [];
+        $structure = [];
+        $rows      = [];
+        $database  = $request->query('database');
+        $table     = $request->query('table');
+        $action    = $request->query('action');
+        if ($database && $table && $action == 'json') {
+            $query = 'SELECT * FROM ' . $database . '.' . $table . ';';
+            $rows = collect(DB::select($query));
+            return ['count' => count($rows), 'rows' => $rows];
+        } else if ($database && $table) {
+            $query = 'SELECT COLUMN_NAME AS `column`, DATA_TYPE AS `type`, CHARACTER_MAXIMUM_LENGTH AS `length`, IS_NULLABLE AS `nullable`, COLUMN_DEFAULT AS `default`, COLUMN_COMMENT AS `comment` FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?;';
+            $structure = collect(DB::select($query, [$database, $table]));
+            $query = 'SELECT * FROM ' . $database . '.' . $table . ';';
+            $rows = collect(DB::select($query));
+        } else if ($database) {
+            $query = 'SELECT TABLE_NAME AS `table`, ROUND((DATA_LENGTH + INDEX_LENGTH) / 1024 / 1024, 2) AS `size_mb` FROM information_schema.TABLES WHERE TABLE_SCHEMA = ? ORDER BY (DATA_LENGTH + INDEX_LENGTH) DESC;';
+            $tables = collect(DB::select($query, [$database]));
+            $tables = $tables->transform(function ($item) use ($database) {
+                $item->total_row = DB::select('SELECT COUNT(*) as total_row FROM ' . $database . '.' . $item->table)[0]->total_row;
+                return $item;
+            })->sortByDesc('total_row')->values();
+        } else {
+            $query = 'SHOW DATABASES';
+            $databases = collect(DB::select($query));
+            $databases = $databases->transform(function ($item) {
+                $item->total_table = DB::select('SELECT COUNT(*) as total_table FROM information_schema.TABLES WHERE table_schema = ?', [$item->Database])[0]->total_table;
+                $query = 'SELECT ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) AS "size_mb" FROM information_schema.TABLES WHERE table_schema = ?';
+                $item->size_mb = DB::select($query, [$item->Database])[0]->size_mb ?? 0;
+                $item->database = $item->Database;
+                return $item;
+            })->sortBy('database')->values();
+        }
+
         return view('stisla.ubuntu.index', [
             'files'      => $files,
             'filesWww'   => $filesWww,
             'foldersWww' => $foldersWww,
             'path'       => $path,
             'isGit'      => $isGit,
+            'databases'  => $databases,
+            'tables'     => $tables,
+            'rows'       => $rows,
+            'structure'  => $structure,
         ]);
     }
 
@@ -104,5 +154,15 @@ class UbuntuController extends Controller
         ShellJob::dispatch($command);
 
         return redirect()->back()->with('successMessage', 'Berhasil run command ' . $command);
+    }
+
+    public function createDb()
+    {
+        $schemaName = request('database_name');
+        $charset    = config("database.connections.mysql.charset", 'utf8mb4');
+        $collation  = config("database.connections.mysql.collation", 'utf8mb4_unicode_ci');
+        $query      = "CREATE DATABASE IF NOT EXISTS $schemaName CHARACTER SET $charset COLLATE $collation;";
+        DB::statement($query);
+        return redirect()->back()->with('successMessage', 'Berhasil membuat database ' . $schemaName);
     }
 }
