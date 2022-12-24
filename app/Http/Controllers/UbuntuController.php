@@ -112,6 +112,7 @@ class UbuntuController extends Controller
         if ($pathnameD !== request('pathname')) {
             $command = 'mv ' . $pathnameD . ' ' . request('pathname');
             ShellJob::dispatch($command);
+            return redirect('/ubuntu')->with('successMessage', 'Berhasil memperbarui file');
         }
 
         return redirect()->back()->with('successMessage', 'Berhasil memperbarui file');
