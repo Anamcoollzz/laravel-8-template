@@ -162,7 +162,7 @@ class UbuntuController extends Controller
         $commands = [];
         $commands[] = 'cd ' . $pathnameD;
         $commands[] = 'git config --global --add safe.directory ' . $pathnameD;
-        $commands[] = 'git pull origin';
+        $commands[] = '/usr/bin/git pull origin 2>&1';
         $command = implode(' && ', $commands);
         ShellJob::dispatch($command);
 
