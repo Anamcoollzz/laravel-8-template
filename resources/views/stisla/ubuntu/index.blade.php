@@ -176,6 +176,7 @@
                 <tr>
                   <th class="text-center">#</th>
                   <th class="text-center">{{ __('Filename') }}</th>
+                  <th class="text-center">{{ __('Domain') }}</th>
                   <th class="text-center">{{ __('Enabled') }}</th>
                   <th class="text-center">{{ __('Aksi') }}</th>
                 </tr>
@@ -185,6 +186,7 @@
                   <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $item->getFilename() }}</td>
+                    <td>{{ $item->domain }}</td>
                     <td>
                       @if ($item->enabled)
                         <a href="{{ route('ubuntu.toggle-enabled', [encrypt($item->getPathname()), 'false']) }}" class="btn btn-sm btn-success">true</a>

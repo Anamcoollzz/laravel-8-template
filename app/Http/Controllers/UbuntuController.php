@@ -36,23 +36,27 @@ class UbuntuController extends Controller
         if (File::exists('/etc/nginx/sites-available')) {
             $files      = File::files('/etc/nginx/sites-available');
         }
+        // $files = File::files('/Users/anamkun/Documents/PROJEK/ME');
 
-        // $path       = '/Users/anamkun/Documents/PROJEK/ME';
-        $path = '/var/www';
+        $path       = '/Users/anamkun/Documents/PROJEK/ME';
+        // $path = '/var/www';
         if ($request->query('folder')) {
             $path = decrypt($request->query('folder'));
         }
         $parentPath = dirname($path);
 
-        $phps = File::directories('/etc/php');
-        $phps = collect($phps)->map(function ($php) {
-            return [
-                'version' => basename($php),
-                'status_fpm' => shell_exec('service php' . basename($php) . '-fpm status'),
-                'path' => $php,
-                'directories' => File::directories($php),
-            ];
-        });
+        $phps = [];
+        if (File::exists('/etc/php')) {
+            $phps = File::directories('/etc/php');
+            $phps = collect($phps)->map(function ($php) {
+                return [
+                    'version' => basename($php),
+                    'status_fpm' => shell_exec('service php' . basename($php) . '-fpm status'),
+                    'path' => $php,
+                    'directories' => File::directories($php),
+                ];
+            });
+        }
 
         $filesWww = [];
         $foldersWww = [];
@@ -66,6 +70,8 @@ class UbuntuController extends Controller
         $i = 0;
         foreach ($files as $file) {
             File::exists('/etc/nginx/sites-enabled/' . $file->getFilename()) ? $files[$i]->enabled = true : $files[$i]->enabled = false;
+            $content = $files[$i]->content = file_get_contents($file->getPathname());
+            $domain = $files[$i]->domain = explode('server_name', $content)[1];
             $i++;
         }
 
