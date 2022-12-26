@@ -72,7 +72,7 @@ class UbuntuController extends Controller
             File::exists('/etc/nginx/sites-enabled/' . $file->getFilename()) ? $files[$i]->enabled = true : $files[$i]->enabled = false;
             $content = $files[$i]->content = file_get_contents($file->getPathname());
             $domain =  explode('server_name', $content)[1];
-            $domain = explode(';', $domain)[0];
+            $domain = trim(explode(';', $domain)[0]);
             $files[$i]->domain = $domain ?? null;
             $i++;
         }
