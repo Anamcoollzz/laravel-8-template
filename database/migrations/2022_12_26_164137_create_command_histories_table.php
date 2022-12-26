@@ -15,6 +15,7 @@ class CreateCommandHistoriesTable extends Migration
     {
         Schema::create('command_histories', function (Blueprint $table) {
 
+
             $table->id();
             $table->text("command");
             $table->longText("output")->nullable();
