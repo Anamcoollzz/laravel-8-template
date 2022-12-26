@@ -8,6 +8,7 @@ use App\Services\CommandService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Spatie\Ssh\Ssh;
 
 class UbuntuController extends Controller
 {
@@ -21,6 +22,9 @@ class UbuntuController extends Controller
 
     public function index(Request $request)
     {
+        // $process = Ssh::create('root', '206.189.46.21', 'JCTkxTU6Lf5sWOg')->execute('your favorite command');
+        // return $process->getOutput();
+        dd($process);
         if ($request->query('download')) {
             $path = decrypt($request->query('download'));
             return response()->download($path);
@@ -170,6 +174,8 @@ class UbuntuController extends Controller
 
 
         $command = 'git config --global --add safe.directory ' . $pathnameD . ' 2>&1';
+        $output = shell_exec($command);
+        return $output;
         // $command = 'git config --global --add safe.directory ' . $pathnameD . ' && /usr/bin/git pull origin 2>&1';
         ShellJob::dispatch($command, $pathnameD);
 
