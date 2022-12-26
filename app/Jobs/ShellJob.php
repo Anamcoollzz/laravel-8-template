@@ -35,6 +35,7 @@ class ShellJob implements ShouldQueue
     {
         $output = shell_exec($this->command);
 
+
         CommandHistory::create([
             'command' => $this->command,
             'output' => $output,
