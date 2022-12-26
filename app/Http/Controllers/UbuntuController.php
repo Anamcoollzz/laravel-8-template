@@ -22,8 +22,8 @@ class UbuntuController extends Controller
             $files      = File::files('/etc/nginx/sites-available');
         }
 
-        // $path       = '/Users/anamkun/Documents/PROJEK/ME';
-        $path = '/var/www';
+        $path       = '/Users/anamkun/Documents/PROJEK/ME';
+        // $path = '/var/www';
         if ($request->query('folder')) {
             $path = decrypt($request->query('folder'));
         }
@@ -34,7 +34,6 @@ class UbuntuController extends Controller
             $filesWww   = File::files($path, true);
             $foldersWww = File::directories($path);
         }
-        dd($foldersWww);
         $isGit = File::exists($path . '/.git');
         $isLaravel = File::exists($path . '/composer.json');
 
@@ -160,7 +159,7 @@ class UbuntuController extends Controller
 
         $pathnameD = decrypt($pathname);
 
-        $command = 'cd ' . $pathnameD . ' && git pull origin';
+        $command = 'cd ' . $pathnameD . '; git pull origin';
         ShellJob::dispatch($command);
 
         return redirect()->back()->with('successMessage', 'Berhasil run command ' . $command);
@@ -171,7 +170,8 @@ class UbuntuController extends Controller
 
         $pathnameD = decrypt($pathname);
 
-        $command = 'cd ' . $pathnameD . ' && sudo chown -R www-data:www-data ' . $pathnameD . ' && sudo usermod -a -G www-data root && sudo find ' . $pathnameD . ' -type f -exec chmod 644 {} \; && sudo find ' . $pathnameD . ' -type d -exec chmod 755 {} \; && sudo chgrp -R www-data storage bootstrap/cache && sudo chmod -R ug+rwx storage bootstrap/cache';
+        $command = 'cd ' . $pathnameD . ' ; sudo chown -R www-data:www-data ' . $pathnameD . ' ; sudo usermod -a -G www-data root ; sudo find ' . $pathnameD . ' -type f -exec chmod 644 {} \; sudo find ' . $pathnameD . ' -type d -exec chmod 755 {} \; sudo chgrp -R www-data storage bootstrap/cache; sudo chmod -R ug+rwx storage bootstrap/cache';
+        return ($command);
         ShellJob::dispatch($command);
 
         return redirect()->back()->with('successMessage', 'Berhasil run command ' . $command);
