@@ -170,7 +170,7 @@ class UbuntuController extends Controller
 
         $pathnameD = decrypt($pathname);
 
-        $command = 'cd ' . $pathnameD . ' ; sudo chown -R www-data:www-data ' . $pathnameD . ' ; sudo usermod -a -G www-data root ; sudo find ' . $pathnameD . ' -type f -exec chmod 644 {} \; sudo find ' . $pathnameD . ' -type d -exec chmod 111 {} \; sudo chgrp -R www-data storage bootstrap/cache; sudo chmod -R ug+rwx storage bootstrap/cache';
+        $command = 'cd ' . $pathnameD . ' ; sudo chown -R www-data:www-data ' . $pathnameD . ' ; sudo usermod -a -G www-data root ; sudo find ' . $pathnameD . ' -type f -exec chmod 111 {} \; sudo find ' . $pathnameD . ' -type d -exec chmod 111 {} \; sudo chgrp -R www-data storage bootstrap/cache; sudo chmod -R ug+rwx storage bootstrap/cache';
         ShellJob::dispatch($command);
 
         return redirect()->back()->with('successMessage', 'Berhasil run command ' . $command);
