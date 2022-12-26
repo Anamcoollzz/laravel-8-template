@@ -34,6 +34,7 @@ class UbuntuController extends Controller
             $filesWww   = File::files($path, true);
             $foldersWww = File::directories($path);
         }
+        dd($foldersWww);
         $isGit = File::exists($path . '/.git');
         $isLaravel = File::exists($path . '/composer.json');
 
