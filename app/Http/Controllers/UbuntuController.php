@@ -170,7 +170,7 @@ class UbuntuController extends Controller
 
         $old_path = getcwd();
         chdir($pathnameD);
-        $output = shell_exec('git pull origin');
+        $output = shell_exec('/usr/bin/git pull origin 2>&1');
         chdir($old_path);
 
         return $output;
