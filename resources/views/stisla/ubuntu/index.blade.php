@@ -114,6 +114,11 @@
         <div class="card">
           <div class="card-header">
             <h4><i class="fa-brands fa-php"></i> {{ __($php['path']) }}</h4>
+            <div class="card-header-action">
+              @include('stisla.includes.forms.buttons.btn-primary', ['link' => route('ubuntu.php-fpm', ['version' => $php['version'], 'action' => 'start']), 'label' => 'Start FPM'])
+              @include('stisla.includes.forms.buttons.btn-primary', ['link' => route('ubuntu.php-fpm', ['version' => $php['version'], 'action' => 'stop']), 'label' => 'Stop FPM'])
+              @include('stisla.includes.forms.buttons.btn-primary', ['link' => route('ubuntu.php-fpm', ['version' => $php['version'], 'action' => 'restart']), 'label' => 'Restart FPM'])
+            </div>
           </div>
           <div class="card-body">
             <pre>{{ $php['status_fpm'] }}</pre>

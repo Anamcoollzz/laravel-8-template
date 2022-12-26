@@ -47,6 +47,7 @@ class UbuntuController extends Controller
         $phps = File::directories('/etc/php');
         $phps = collect($phps)->map(function ($php) {
             return [
+                'version' => basename($php),
                 'status_fpm' => shell_exec('service php' . basename($php) . '-fpm status'),
                 'path' => $php,
                 'directories' => File::directories($php),
@@ -270,5 +271,15 @@ class UbuntuController extends Controller
     {
         DB::table($database . '.' . $table)->where('id', $id)->delete();
         return redirect()->back()->with('successMessage', 'Berhasil menghapus data');
+    }
+
+    public function phpFpm($version, $action)
+    {
+        if (!in_array($action, ['start', 'stop', 'restart', 'reload', 'status'])) {
+            abort(404);
+        }
+        $command = "service php" . $version . "-fpm " . $action;
+        ShellJob::dispatch($command);
+        return redirect()->back()->with('successMessage', 'Berhasil menjalankan command  ' . $command);
     }
 }
