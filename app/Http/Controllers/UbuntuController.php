@@ -159,6 +159,7 @@ class UbuntuController extends Controller
 
         $pathnameD = decrypt($pathname);
 
+
         $command = 'cd ' . $pathnameD . '; /usr/bin/git pull origin 2>&1';
         ShellJob::dispatch($command);
 
