@@ -159,8 +159,12 @@ class UbuntuController extends Controller
 
         $pathnameD = decrypt($pathname);
 
+        $commands = [];
+        $commands[] = 'cd ' . $pathnameD;
+        $commands[] = 'git config --global --add safe.directory ' . $pathnameD;
+        $commands[] = 'git pull origin';
+        $command = implode(' && ', $commands);
 
-        $command = 'git config --global --add safe.directory ' . $pathnameD . '; cd ' . $pathnameD . '; /usr/bin/git pull origin 2>&1';
         ShellJob::dispatch($command);
 
         return redirect()->back()->with('successMessage', 'Berhasil run command ' . $command);
@@ -175,8 +179,8 @@ class UbuntuController extends Controller
         $commands[] = 'cd ' . $pathnameD;
         $commands[] = 'sudo chown -R www-data:www-data ' . $pathnameD;
         $commands[] = 'sudo usermod -a -G www-data root';
-        $commands[] = 'sudo find ' . $pathnameD . ' -type f -exec chmod 111 {} \;';
-        $commands[] = 'sudo find ' . $pathnameD . ' -type d -exec chmod 111 {} \;';
+        $commands[] = 'sudo find ' . $pathnameD . ' -type f -exec chmod 644 {} \;';
+        $commands[] = 'sudo find ' . $pathnameD . ' -type d -exec chmod 755 {} \;';
         $commands[] = 'sudo chmod -R ug+rwx ' . $pathnameD . '/storage';
         $commands[] = 'sudo chmod -R ug+rwx ' . $pathnameD . '/bootstrap/cache';
 
