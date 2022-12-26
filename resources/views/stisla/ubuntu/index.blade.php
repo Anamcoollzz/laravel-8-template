@@ -13,11 +13,11 @@
     <div class="col-12">
       <div class="card">
         <div class="card-header">
-          <h4><i class="fab fa-ubuntu"></i> {{ __($path) }}</h4>
+          <h4><i class="fa fa-folder"></i> {{ __($path) }}</h4>
 
           @if ($isGit)
             <div class="card-header-action">
-              @include('stisla.includes.forms.buttons.btn-edit', ['link' => route('ubuntu.git-pull', [encrypt($path)]), 'icon' => 'fab fa-github', 'tooltip' => 'git pull origin'])
+              {{-- @include('stisla.includes.forms.buttons.btn-edit', ['link' => route('ubuntu.git-pull', [encrypt($path)]), 'icon' => 'fab fa-github', 'tooltip' => 'git pull origin']) --}}
               @include('stisla.includes.forms.buttons.btn-edit', [
                   'link' => route('ubuntu.set-laravel-permission', [encrypt($path)]),
                   'icon' => 'fab fa-laravel',
@@ -42,6 +42,18 @@
                 @php
                   $i = 1;
                 @endphp
+                @if ($parentPath)
+                  <tr>
+                    <td>{{ $i++ }}</td>
+                    <td>
+                      <a href="?folder={{ encrypt($parentPath) }}">
+                        ..
+                      </a>
+                    </td>
+                    <td>Dir</td>
+                    <td></td>
+                  </tr>
+                @endif
                 @foreach ($foldersWww as $item)
                   <tr>
                     <td>{{ $i++ }}</td>
@@ -84,7 +96,7 @@
     <div class="col-12">
       <div class="card">
         <div class="card-header">
-          <h4><i class="fab fa-ubuntu"></i> {{ __('Nginx Sites Available') }}</h4>
+          <h4><i class="fa fa-server"></i> {{ __('Nginx Sites Available') }}</h4>
           <div class="card-header-action">
             @include('stisla.includes.forms.buttons.btn-primary', ['link' => route('ubuntu.nginx', ['nginx' => 'start']), 'label' => 'Start Nginx'])
             @include('stisla.includes.forms.buttons.btn-primary', ['link' => route('ubuntu.nginx', ['nginx' => 'stop']), 'label' => 'Stop Nginx'])
@@ -135,6 +147,20 @@
 
     @if (request('database') && request('table'))
       <div class="col-12">
+
+        <div class="section-header">
+          <h1>MySQL Database</h1>
+          <div class="section-header-breadcrumb">
+            <div class="breadcrumb-item active">
+              <a href="{{ route('ubuntu.index') }}">{{ __('MySQL') }}</a>
+            </div>
+            <div class="breadcrumb-item active">
+              <a href="{{ route('ubuntu.index', ['database' => request('database')]) }}">{{ request('database') }}</a>
+            </div>
+            <div class="breadcrumb-item">{{ request('table') }}</div>
+          </div>
+        </div>
+
         <div class="card">
           <div class="card-header">
             <h4><i class="fa fa-database"></i> {{ __('MySql Database') }} > {{ request('database') }} > {{ request('table') }}</h4>
@@ -162,11 +188,12 @@
                         <td>{{ $item->{$column->column} }}</td>
                       @endforeach
                       <td>
-                        {{-- @include('stisla.includes.forms.buttons.btn-edit', [
-                            'link' => route('ubuntu.index', ['database' => request('database'), 'table' => $item->table]),
-                            'icon' => 'fa fa-table',
-                            'tooltip' => 'Lihat Data',
-                        ]) --}}
+                        @include('stisla.includes.forms.buttons.btn-edit', [
+                            'link' => route('ubuntu.edit-row', ['database' => request('database'), 'table' => request('table'), 'id' => $item->id]),
+                        ])
+                        @include('stisla.includes.forms.buttons.btn-delete', [
+                            'link' => route('ubuntu.delete-row', ['database' => request('database'), 'table' => request('table'), 'id' => $item->id]),
+                        ])
                       </td>
                     </tr>
                   @endforeach
@@ -178,6 +205,16 @@
       </div>
     @elseif (request('database'))
       <div class="col-12">
+        <div class="section-header">
+          <h1>MySQL Database</h1>
+          <div class="section-header-breadcrumb">
+            <div class="breadcrumb-item active">
+              <a href="{{ route('ubuntu.index') }}">{{ __('MySQL') }}</a>
+            </div>
+            <div class="breadcrumb-item">{{ request('database') }}</div>
+          </div>
+        </div>
+
         <div class="card">
           <div class="card-header">
             <h4><i class="fa fa-database"></i> {{ __('MySql Database') }} > {{ request('database') }}</h4>
@@ -225,6 +262,14 @@
       </div>
     @else
       <div class="col-12">
+        <div class="section-header">
+          <h1>MySQL Database</h1>
+          <div class="section-header-breadcrumb">
+            <div class="breadcrumb-item active">
+              <a href="{{ route('ubuntu.index') }}">{{ __('MySQL') }}</a>
+            </div>
+          </div>
+        </div>
         <div class="card">
           <div class="card-header">
             <h4><i class="fa fa-database"></i> {{ __('MySql Database') }}</h4>

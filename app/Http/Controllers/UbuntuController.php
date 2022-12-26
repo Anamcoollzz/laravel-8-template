@@ -8,7 +8,6 @@ use App\Services\CommandService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use Spatie\Ssh\Ssh;
 
 class UbuntuController extends Controller
 {
@@ -22,9 +21,6 @@ class UbuntuController extends Controller
 
     public function index(Request $request)
     {
-        // $process = Ssh::create('root', '206.189.46.21', 'JCTkxTU6Lf5sWOg')->execute('your favorite command');
-        // return $process->getOutput();
-        // dd($process);
         if ($request->query('download')) {
             $path = decrypt($request->query('download'));
             return response()->download($path);
@@ -35,11 +31,12 @@ class UbuntuController extends Controller
             $files      = File::files('/etc/nginx/sites-available');
         }
 
-        // $path       = '/Users/anamkun/Documents/PROJEK/ME';
-        $path = '/var/www';
+        $path       = '/Users/anamkun/Documents/PROJEK/ME';
+        // $path = '/var/www';
         if ($request->query('folder')) {
             $path = decrypt($request->query('folder'));
         }
+        $parentPath = dirname($path);
 
         $filesWww = [];
         $foldersWww = [];
@@ -102,6 +99,7 @@ class UbuntuController extends Controller
             'tables'     => $tables,
             'rows'       => $rows,
             'structure'  => $structure,
+            'parentPath' => $parentPath,
         ]);
     }
 
@@ -118,6 +116,31 @@ class UbuntuController extends Controller
             'action'     => route('ubuntu.update', [$pathname]),
             'pathname'   => $pathnameD,
         ]);
+    }
+
+    public function editRow($database, $table, $id)
+    {
+        $d = DB::table($database . '.' . $table)->where('id', $id)->first();
+
+        if (!$d) abort(404);
+
+        $d = json_decode(json_encode($d), true);
+
+        return view('stisla.ubuntu.form-row', [
+            'title'      => __('MySQL Database'),
+            'fullTitle'  => __('MySQL Database'),
+            'routeIndex' => route('ubuntu.index'),
+            'action'     => route('ubuntu.update-row', [$database, $table, $id]),
+            'd'          => $d,
+            'keys'       => array_keys($d),
+        ]);
+    }
+
+    public function updateRow($database, $table, $id, Request $request)
+    {
+        $data = ($request->except('_token', '_method'));
+        DB::table($database . '.' . $table)->where('id', $id)->update($data);
+        return redirect()->back()->with('successMessage', 'Berhasil memperbarui data');
     }
 
     public function update($pathname, Request $request)
@@ -221,5 +244,11 @@ class UbuntuController extends Controller
         $command = "service nginx " . $nginx;
         ShellJob::dispatch($command);
         return redirect()->back()->with('successMessage', 'Berhasil menjalankan command  ' . $command);
+    }
+
+    public function deleteRow($database, $table, $id)
+    {
+        DB::table($database . '.' . $table)->where('id', $id)->delete();
+        return redirect()->back()->with('successMessage', 'Berhasil menghapus data');
     }
 }
