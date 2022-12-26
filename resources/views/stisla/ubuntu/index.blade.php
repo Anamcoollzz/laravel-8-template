@@ -27,6 +27,22 @@
           @endif
         </div>
         <div class="card-body">
+
+          <form action="{{ route('ubuntu.index') }}" method="GET">
+            @csrf
+            <div class="row">
+              <div class="col-md-6">
+                @include('stisla.includes.forms.inputs.input', ['required' => true, 'name' => 'redirect_folder', 'label' => 'Path', 'value' => $path])
+              </div>
+              <div class="col-md-12">
+                @include('stisla.includes.forms.buttons.btn-save', ['label' => 'Let\'s Go'])
+                <br>
+                <br>
+                <br>
+              </div>
+            </div>
+          </form>
+
           <div class="table-responsive">
 
             <table class="table table-striped table-hovered" id="datatable">
@@ -104,6 +120,7 @@
           </div>
         </div>
         <div class="card-body">
+          <pre>{{ $nginxStatus }}</pre>
           <div class="table-responsive">
 
             <table class="table table-striped table-hovered" id="datatable">

@@ -21,6 +21,12 @@ class UbuntuController extends Controller
 
     public function index(Request $request)
     {
+
+        if ($request->query('redirect_folder')) {
+            $path = $request->query('redirect_folder');
+            return redirect()->route('ubuntu.index', ['folder' => encrypt($path)]);
+        }
+
         if ($request->query('download')) {
             $path = decrypt($request->query('download'));
             return response()->download($path);
@@ -88,18 +94,22 @@ class UbuntuController extends Controller
             })->sortBy('database')->values();
         }
 
+
+        $nginxStatus = shell_exec('service nginx status');
+
         return view('stisla.ubuntu.index', [
-            'files'      => $files,
-            'filesWww'   => $filesWww,
-            'foldersWww' => $foldersWww,
-            'path'       => $path,
-            'isGit'      => $isGit,
-            'isLaravel'  => $isLaravel,
-            'databases'  => $databases,
-            'tables'     => $tables,
-            'rows'       => $rows,
-            'structure'  => $structure,
-            'parentPath' => $parentPath,
+            'files'       => $files,
+            'filesWww'    => $filesWww,
+            'foldersWww'  => $foldersWww,
+            'path'        => $path,
+            'isGit'       => $isGit,
+            'isLaravel'   => $isLaravel,
+            'databases'   => $databases,
+            'tables'      => $tables,
+            'rows'        => $rows,
+            'structure'   => $structure,
+            'parentPath'  => $parentPath,
+            'nginxStatus' => $nginxStatus,
         ]);
     }
 
