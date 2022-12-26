@@ -24,7 +24,7 @@ class UbuntuController extends Controller
     {
         // $process = Ssh::create('root', '206.189.46.21', 'JCTkxTU6Lf5sWOg')->execute('your favorite command');
         // return $process->getOutput();
-        dd($process);
+        // dd($process);
         if ($request->query('download')) {
             $path = decrypt($request->query('download'));
             return response()->download($path);
