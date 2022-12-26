@@ -168,6 +168,13 @@ class UbuntuController extends Controller
 
         $pathnameD = decrypt($pathname);
 
+        $old_path = getcwd();
+        chdir($pathnameD);
+        $output = shell_exec('git pull origin');
+        chdir($old_path);
+
+        return $output;
+
         $commands = [];
         $commands[] = 'chown -R www-agent:www-agent ' . $pathnameD . '/';
         $commands[] = 'cd ' . $pathnameD;
