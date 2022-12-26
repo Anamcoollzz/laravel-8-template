@@ -15,15 +15,17 @@ class ShellJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $command;
+    public $path;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($command)
+    public function __construct($command, $path = null)
     {
         $this->command = $command;
+        $this->path = $path;
     }
 
     /**
@@ -33,8 +35,9 @@ class ShellJob implements ShouldQueue
      */
     public function handle()
     {
+        if ($this->path)
+            chdir($this->path);
         $output = shell_exec($this->command);
-
 
         CommandHistory::create([
             'command' => $this->command,

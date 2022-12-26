@@ -168,23 +168,19 @@ class UbuntuController extends Controller
 
         $pathnameD = decrypt($pathname);
 
-        $old_path = getcwd();
-        chdir($pathnameD);
-        $output = shell_exec('/usr/bin/git pull origin 2>&1');
-        chdir($old_path);
+        $command = '/usr/bin/git pull origin 2>&1';
+        ShellJob::dispatch($command, $pathnameD);
 
-        return $output;
-
-        $commands = [];
-        $commands[] = 'chown -R www-agent:www-agent ' . $pathnameD . '/';
-        $commands[] = 'cd ' . $pathnameD;
-        $commands[] = 'git config --global --add safe.directory ' . $pathnameD;
-        $commands[] = '/usr/bin/git pull origin 2>&1';
-        $command = implode(' && ', $commands);
-        $output = shell_exec($command);
-        return $output;
-        ShellJob::dispatch($command);
-        ShellJob::dispatch($this->commandService->setLaravelPermission($pathnameD));
+        // $commands = [];
+        // $commands[] = 'chown -R www-agent:www-agent ' . $pathnameD . '/';
+        // $commands[] = 'cd ' . $pathnameD;
+        // $commands[] = 'git config --global --add safe.directory ' . $pathnameD;
+        // $commands[] = '/usr/bin/git pull origin 2>&1';
+        // $command = implode(' && ', $commands);
+        // $output = shell_exec($command);
+        // return $output;
+        // ShellJob::dispatch($command);
+        // ShellJob::dispatch($this->commandService->setLaravelPermission($pathnameD));
 
         return redirect()->back()->with('successMessage', 'Berhasil run command ' . $command);
     }
