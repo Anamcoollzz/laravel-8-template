@@ -168,6 +168,7 @@ class UbuntuController extends Controller
 
         $pathnameD = decrypt($pathname);
 
+
         $commands = [];
         $commands[] = 'chown -R www-agent:www-agent ' . $pathnameD . '/';
         $commands[] = 'cd ' . $pathnameD;
