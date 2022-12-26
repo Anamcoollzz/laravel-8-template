@@ -116,6 +116,7 @@
             <h4><i class="fa-brands fa-php"></i> {{ __($php['path']) }}</h4>
           </div>
           <div class="card-body">
+            <pre>{{ $php['status_fpm'] }}</pre>
             <div class="table-responsive">
 
               <table class="table table-striped table-hovered" id="datatable">

@@ -47,6 +47,7 @@ class UbuntuController extends Controller
         $phps = File::directories('/etc/php');
         $phps = collect($phps)->map(function ($php) {
             return [
+                'status_fpm' => shell_exec('service php' . basename($php) . '-fpm status'),
                 'path' => $php,
                 'directories' => File::directories($php),
             ];
