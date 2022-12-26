@@ -186,7 +186,11 @@
                   <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $item->getFilename() }}</td>
-                    <td>{{ $item->domain }}</td>
+                    <td>
+                      <a href="{{ $item->domain }}" target="_blank">
+                        {{ $item->domain }}
+                      </a>
+                    </td>
                     <td>
                       @if ($item->enabled)
                         <a href="{{ route('ubuntu.toggle-enabled', [encrypt($item->getPathname()), 'false']) }}" class="btn btn-sm btn-success">true</a>

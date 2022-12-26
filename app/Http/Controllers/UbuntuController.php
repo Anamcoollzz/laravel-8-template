@@ -71,7 +71,9 @@ class UbuntuController extends Controller
         foreach ($files as $file) {
             File::exists('/etc/nginx/sites-enabled/' . $file->getFilename()) ? $files[$i]->enabled = true : $files[$i]->enabled = false;
             $content = $files[$i]->content = file_get_contents($file->getPathname());
-            $domain = $files[$i]->domain = explode('server_name', $content)[1];
+            $domain =  explode('server_name', $content)[1];
+            $domain = explode(';', $domain)[0];
+            $files[$i]->domain = $domain ?? null;
             $i++;
         }
 
