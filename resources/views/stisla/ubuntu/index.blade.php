@@ -187,7 +187,7 @@
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $item->getFilename() }}</td>
                     <td>
-                      <a href="{{ $item->domain }}" target="_blank">
+                      <a href="http://{{ $item->domain }}" target="_blank">
                         {{ $item->domain }}
                       </a>
                     </td>
