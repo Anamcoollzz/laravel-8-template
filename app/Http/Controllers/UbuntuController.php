@@ -4,12 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Jobs\EditFileJob;
 use App\Jobs\ShellJob;
+use App\Services\CommandService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
 class UbuntuController extends Controller
 {
+
+    private CommandService $commandService;
+
+    public function __construct()
+    {
+        $this->commandService = new CommandService();
+    }
+
     public function index(Request $request)
     {
         if ($request->query('download')) {
@@ -57,7 +66,7 @@ class UbuntuController extends Controller
         } else if ($database && $table) {
             $query = 'SELECT COLUMN_NAME AS `column`, DATA_TYPE AS `type`, CHARACTER_MAXIMUM_LENGTH AS `length`, IS_NULLABLE AS `nullable`, COLUMN_DEFAULT AS `default`, COLUMN_COMMENT AS `comment` FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?;';
             $structure = collect(DB::select($query, [$database, $table]));
-            $query = 'SELECT * FROM ' . $database . '.' . $table . ';';
+            $query = 'SELECT * FROM ' . $database . '.' . $table . ' ORDER BY id desc;';
             $rows = collect(DB::select($query));
         } else if ($database) {
             $query = 'SELECT TABLE_NAME AS `table`, ROUND((DATA_LENGTH + INDEX_LENGTH) / 1024 / 1024, 2) AS `size_mb` FROM information_schema.TABLES WHERE TABLE_SCHEMA = ? ORDER BY (DATA_LENGTH + INDEX_LENGTH) DESC;';
@@ -160,32 +169,22 @@ class UbuntuController extends Controller
         $pathnameD = decrypt($pathname);
 
         $commands = [];
+        $commands[] = 'chown -R www-agent:www-agent ' . $pathnameD . '/';
         $commands[] = 'cd ' . $pathnameD;
         $commands[] = 'git config --global --add safe.directory ' . $pathnameD;
         $commands[] = '/usr/bin/git pull origin 2>&1';
         $command = implode(' && ', $commands);
         ShellJob::dispatch($command);
+        ShellJob::dispatch($this->commandService->setLaravelPermission($pathnameD));
 
         return redirect()->back()->with('successMessage', 'Berhasil run command ' . $command);
     }
 
     public function setLaravelPermission($pathname)
     {
-
         $pathnameD = decrypt($pathname);
 
-        $commands = [];
-        $commands[] = 'cd ' . $pathnameD;
-        $commands[] = 'sudo chown -R www-data:www-data ' . $pathnameD;
-        $commands[] = 'sudo usermod -a -G www-data root';
-        $commands[] = 'sudo find ' . $pathnameD . ' -type f -exec chmod 644 {} \;';
-        $commands[] = 'sudo find ' . $pathnameD . ' -type d -exec chmod 755 {} \;';
-        $commands[] = 'sudo chmod -R ug+rwx ' . $pathnameD . '/storage';
-        $commands[] = 'sudo chmod -R ug+rwx ' . $pathnameD . '/bootstrap/cache';
-
-        $command = implode(' && ', $commands);
-
-        ShellJob::dispatch($command);
+        ShellJob::dispatch($command = $this->commandService->setLaravelPermission($pathnameD));
 
         return redirect()->back()->with('successMessage', 'Berhasil run command ' . $command);
     }
