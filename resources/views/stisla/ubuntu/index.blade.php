@@ -109,6 +109,107 @@
       </div>
     </div>
 
+    @foreach ($phps as $php)
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h4><i class="fa fa-php"></i> {{ __($php) }}</h4>
+
+            @if ($isGit)
+              <div class="card-header-action">
+                {{-- @include('stisla.includes.forms.buttons.btn-edit', ['link' => route('ubuntu.git-pull', [encrypt($path)]), 'icon' => 'fab fa-github', 'tooltip' => 'git pull origin']) --}}
+                @include('stisla.includes.forms.buttons.btn-edit', [
+                    'link' => route('ubuntu.set-laravel-permission', [encrypt($path)]),
+                    'icon' => 'fab fa-laravel',
+                    'tooltip' => 'set laravel permission',
+                ])
+              </div>
+            @endif
+          </div>
+          <div class="card-body">
+
+            <form action="{{ route('ubuntu.index') }}" method="GET">
+              @csrf
+              <div class="row">
+                <div class="col-md-6">
+                  @include('stisla.includes.forms.inputs.input', ['required' => true, 'name' => 'redirect_folder', 'label' => 'Path', 'value' => $path])
+                </div>
+                <div class="col-md-12">
+                  @include('stisla.includes.forms.buttons.btn-save', ['label' => 'Let\'s Go'])
+                  <br>
+                  <br>
+                  <br>
+                </div>
+              </div>
+            </form>
+
+            <div class="table-responsive">
+
+              <table class="table table-striped table-hovered" id="datatable">
+                <thead>
+                  <tr>
+                    <th class="text-center">#</th>
+                    <th class="text-center">{{ __('Path') }}</th>
+                    <th class="text-center">{{ __('Type') }}</th>
+                    <th class="text-center">{{ __('Aksi') }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @php
+                    $i = 1;
+                  @endphp
+                  @if ($parentPath)
+                    <tr>
+                      <td>{{ $i++ }}</td>
+                      <td>
+                        <a href="?folder={{ encrypt($parentPath) }}">
+                          ..
+                        </a>
+                      </td>
+                      <td>Dir</td>
+                      <td></td>
+                    </tr>
+                  @endif
+                  @foreach ($foldersWww as $item)
+                    <tr>
+                      <td>{{ $i++ }}</td>
+                      <td>
+                        <a href="?folder={{ encrypt($item) }}">
+                          {{ $item }}
+                        </a>
+                      </td>
+                      <td>Dir</td>
+                      <td></td>
+                    </tr>
+                  @endforeach
+                  @foreach ($filesWww as $item)
+                    <tr>
+                      <td>{{ $i++ }}</td>
+                      <td>
+                        <a target="_blank" href="?download={{ encrypt($item->getPathname()) }}">
+                          {{ $item->getPathname() }}
+                        </a>
+                      </td>
+                      <td>File</td>
+                      <td>
+                        @include('stisla.includes.forms.buttons.btn-edit', ['link' => route('ubuntu.edit', [encrypt($item->getPathname())])])
+                        @include('stisla.includes.forms.buttons.btn-edit', [
+                            'link' => route('ubuntu.duplicate', [encrypt($item->getPathname())]),
+                            'icon' => 'fa fa-copy',
+                            'tooltip' => 'Duplikasi',
+                        ])
+                        @include('stisla.includes.forms.buttons.btn-delete', ['link' => route('ubuntu.destroy', [encrypt($item->getPathname())])])
+                      </td>
+                    </tr>
+                  @endforeach
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    @endforeach
+
     <div class="col-12">
       <div class="card">
         <div class="card-header">

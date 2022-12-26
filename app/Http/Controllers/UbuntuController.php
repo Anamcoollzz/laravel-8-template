@@ -44,6 +44,8 @@ class UbuntuController extends Controller
         }
         $parentPath = dirname($path);
 
+        $phps = File::directories('/etc/php');
+
         $filesWww = [];
         $foldersWww = [];
         if (File::exists($path)) {
@@ -110,6 +112,7 @@ class UbuntuController extends Controller
             'structure'   => $structure,
             'parentPath'  => $parentPath,
             'nginxStatus' => $nginxStatus,
+            'phps'        => $phps,
         ]);
     }
 
