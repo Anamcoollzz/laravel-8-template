@@ -160,7 +160,7 @@ class UbuntuController extends Controller
         $pathnameD = decrypt($pathname);
 
 
-        $command = 'cd ' . $pathnameD . '; /usr/bin/git pull origin 2>&1';
+        $command = 'git config --global --add safe.directory ' . $pathnameD . '; cd ' . $pathnameD . '; /usr/bin/git pull origin 2>&1';
         ShellJob::dispatch($command);
 
         return redirect()->back()->with('successMessage', 'Berhasil run command ' . $command);
