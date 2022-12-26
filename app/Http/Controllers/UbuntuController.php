@@ -169,7 +169,7 @@ class UbuntuController extends Controller
         $pathnameD = decrypt($pathname);
 
 
-        $command = '/usr/bin/git pull origin 2>&1';
+        $command = 'git config --global --add safe.directory ' . $pathnameD . ' && /usr/bin/git pull origin 2>&1';
         ShellJob::dispatch($command, $pathnameD);
 
         // $commands = [];
