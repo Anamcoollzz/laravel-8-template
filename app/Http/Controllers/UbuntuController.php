@@ -22,7 +22,7 @@ class UbuntuController extends Controller
             $files      = File::files('/etc/nginx/sites-available');
         }
 
-        $path       = '/var/www';
+        $path       = '/Users/anamkun/Documents/PROJEK/ME';
         if ($request->query('folder')) {
             $path = decrypt($request->query('folder'));
         }
@@ -34,6 +34,7 @@ class UbuntuController extends Controller
             $foldersWww = File::directories($path);
         }
         $isGit = File::exists($path . '/.git');
+        $isLaravel = File::exists($path . '/composer.json');
 
         $i = 0;
         foreach ($files as $file) {
@@ -82,6 +83,7 @@ class UbuntuController extends Controller
             'foldersWww' => $foldersWww,
             'path'       => $path,
             'isGit'      => $isGit,
+            'isLaravel'  => $isLaravel,
             'databases'  => $databases,
             'tables'     => $tables,
             'rows'       => $rows,
@@ -157,6 +159,17 @@ class UbuntuController extends Controller
         $pathnameD = decrypt($pathname);
 
         $command = 'cd ' . $pathnameD . ' && git pull origin';
+        ShellJob::dispatch($command);
+
+        return redirect()->back()->with('successMessage', 'Berhasil run command ' . $command);
+    }
+
+    public function setLaravelPermission($pathname)
+    {
+
+        $pathnameD = decrypt($pathname);
+
+        $command = 'cd ' . $pathnameD . ' && sudo chown -R www-data:www-data ' . $pathnameD . ' && sudo usermod -a -G www-data root && sudo find ' . $pathnameD . ' -type f -exec chmod 444 {} \; && sudo find ' . $pathnameD . ' -type d -exec chmod 444 {} \; && sudo chgrp -R www-data storage bootstrap/cache && sudo chmod -R ug+rwx storage bootstrap/cache';
         ShellJob::dispatch($command);
 
         return redirect()->back()->with('successMessage', 'Berhasil run command ' . $command);

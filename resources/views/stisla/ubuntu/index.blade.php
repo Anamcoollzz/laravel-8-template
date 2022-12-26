@@ -18,6 +18,11 @@
           @if ($isGit)
             <div class="card-header-action">
               @include('stisla.includes.forms.buttons.btn-edit', ['link' => route('ubuntu.git-pull', [encrypt($path)]), 'icon' => 'fab fa-github', 'tooltip' => 'git pull origin'])
+              @include('stisla.includes.forms.buttons.btn-edit', [
+                  'link' => route('ubuntu.set-laravel-permission', [encrypt($path)]),
+                  'icon' => 'fab fa-laravel',
+                  'tooltip' => 'set laravel permission',
+              ])
             </div>
           @endif
         </div>
@@ -65,6 +70,7 @@
                           'icon' => 'fa fa-copy',
                           'tooltip' => 'Duplikasi',
                       ])
+                      @include('stisla.includes.forms.buttons.btn-delete', ['link' => route('ubuntu.destroy', [encrypt($item->getPathname())])])
                     </td>
                   </tr>
                 @endforeach
