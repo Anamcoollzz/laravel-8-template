@@ -60,6 +60,11 @@
                     <td>File</td>
                     <td>
                       @include('stisla.includes.forms.buttons.btn-edit', ['link' => route('ubuntu.edit', [encrypt($item->getPathname())])])
+                      @include('stisla.includes.forms.buttons.btn-edit', [
+                          'link' => route('ubuntu.duplicate', [encrypt($item->getPathname())]),
+                          'icon' => 'fa fa-copy',
+                          'tooltip' => 'Duplikasi',
+                      ])
                     </td>
                   </tr>
                 @endforeach
