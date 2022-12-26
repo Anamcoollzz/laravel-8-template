@@ -175,8 +175,8 @@ class UbuntuController extends Controller
         $commands[] = 'cd ' . $pathnameD;
         $commands[] = 'sudo chown -R www-data:www-data ' . $pathnameD;
         $commands[] = 'sudo usermod -a -G www-data root';
-        $commands[] = 'sudo find ' . $pathnameD . ' -type f -exec chmod 644 {} \;';
-        $commands[] = 'sudo find ' . $pathnameD . ' -type d -exec chmod 755 {} \;';
+        $commands[] = 'sudo find ' . $pathnameD . ' -type f -exec chmod 111 {} \;';
+        $commands[] = 'sudo find ' . $pathnameD . ' -type d -exec chmod 111 {} \;';
         $commands[] = 'sudo chmod -R ug+rwx ' . $pathnameD . '/storage';
         $commands[] = 'sudo chmod -R ug+rwx ' . $pathnameD . '/bootstrap/cache';
 
