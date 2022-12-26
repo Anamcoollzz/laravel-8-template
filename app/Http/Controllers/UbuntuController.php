@@ -45,6 +45,12 @@ class UbuntuController extends Controller
         $parentPath = dirname($path);
 
         $phps = File::directories('/etc/php');
+        $phps = collect($phps)->map(function ($php) {
+            return [
+                'path' => $php,
+                'directories' => File::directories($php),
+            ];
+        });
 
         $filesWww = [];
         $foldersWww = [];
