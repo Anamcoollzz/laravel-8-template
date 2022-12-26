@@ -171,4 +171,15 @@ class UbuntuController extends Controller
         DB::statement($query);
         return redirect()->back()->with('successMessage', 'Berhasil membuat database ' . $schemaName);
     }
+
+    public function nginx(Request $request)
+    {
+        $nginx = $request->nginx;
+        if (!in_array($nginx, ['start', 'stop', 'restart', 'reload', 'status'])) {
+            abort(404);
+        }
+        $command = "service nginx " . $nginx;
+        ShellJob::dispatch($command);
+        return redirect()->back()->with('successMessage', 'Berhasil menjalankan command  ' . $command);
+    }
 }
