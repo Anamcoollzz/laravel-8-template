@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\CommandHistory;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -32,6 +33,10 @@ class ShellJob implements ShouldQueue
      */
     public function handle()
     {
-        shell_exec($this->command);
+        $output = shell_exec($this->command);
+        CommandHistory::create([
+            'command' => $this->command,
+            'output' => $output,
+        ]);
     }
 }
