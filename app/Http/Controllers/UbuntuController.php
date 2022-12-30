@@ -60,9 +60,12 @@ class UbuntuController extends Controller
 
         $supervisors = [];
         if (File::exists('/etc/supervisor')) {
-            $supervisors = [File::files('/etc/supervisor')[0]];
+            $supervisors = collect(File::files('/etc/supervisor'))->first()->getPathname();
             if (File::exists('/etc/supervisor/conf.d')) {
-                $supervisors = array_merge($supervisors, File::files('/etc/supervisor/conf.d'));
+                $confs = File::files('/etc/supervisor/conf.d');
+                foreach ($confs as $conf) {
+                    $supervisors[] = $conf->getPathname();
+                }
             }
         }
 
