@@ -113,7 +113,7 @@
     <div class="col-12">
       <div class="card">
         <div class="card-header">
-          <h4><i class="fa-brands fa-php"></i> {{ __($php['path']) }}</h4>
+          <h4><i class="fa-brands fa-php"></i> {{ __('Supervisor') }}</h4>
           <div class="card-header-action">
             @include('stisla.includes.forms.buttons.btn-primary', ['link' => route('ubuntu.php-fpm', ['version' => 1, 'action' => 'start']), 'label' => 'Start Supervisor'])
             @include('stisla.includes.forms.buttons.btn-primary', ['link' => route('ubuntu.php-fpm', ['version' => 1, 'action' => 'stop']), 'label' => 'Stop Supervisor'])
@@ -124,7 +124,7 @@
           </div>
         </div>
         <div class="card-body">
-          <pre>{{ $php['status_fpm'] }}</pre>
+          <pre>{{ $supervisorStatus }}</pre>
           <div class="table-responsive">
 
             <table class="table table-striped table-hovered" id="datatable">

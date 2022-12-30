@@ -122,22 +122,24 @@ class UbuntuController extends Controller
 
 
         $nginxStatus = shell_exec('service nginx status');
+        $supervisorStatus = shell_exec('service supervisor status');
 
         return view('stisla.ubuntu.index', [
-            'files'       => $files,
-            'filesWww'    => $filesWww,
-            'foldersWww'  => $foldersWww,
-            'path'        => $path,
-            'isGit'       => $isGit,
-            'isLaravel'   => $isLaravel,
-            'databases'   => $databases,
-            'tables'      => $tables,
-            'rows'        => $rows,
-            'structure'   => $structure,
-            'parentPath'  => $parentPath,
-            'nginxStatus' => $nginxStatus,
-            'phps'        => $phps,
-            'supervisors' => $supervisors,
+            'files'            => $files,
+            'filesWww'         => $filesWww,
+            'foldersWww'       => $foldersWww,
+            'path'             => $path,
+            'isGit'            => $isGit,
+            'isLaravel'        => $isLaravel,
+            'databases'        => $databases,
+            'tables'           => $tables,
+            'rows'             => $rows,
+            'structure'        => $structure,
+            'parentPath'       => $parentPath,
+            'nginxStatus'      => $nginxStatus,
+            'phps'             => $phps,
+            'supervisors'      => $supervisors,
+            'supervisorStatus' => $supervisorStatus,
         ]);
     }
 
