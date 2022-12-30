@@ -38,8 +38,8 @@ class UbuntuController extends Controller
         }
         // $files = File::files('/Users/anamkun/Documents/PROJEK/ME');
 
-        $path       = '/Users/anamkun/Documents/PROJEK/ME';
-        // $path = '/var/www';
+        // $path       = '/Users/anamkun/Documents/PROJEK/ME';
+        $path = '/var/www';
         if ($request->query('folder')) {
             $path = decrypt($request->query('folder'));
         }
@@ -56,6 +56,14 @@ class UbuntuController extends Controller
                     'directories' => File::directories($php),
                 ];
             });
+        }
+
+        $supervisors = [];
+        if (File::exists('/etc/supervisor')) {
+            $supervisors = [File::files('/etc/supervisor')[0]];
+            if (File::exists('/etc/supervisor/conf.d')) {
+                $supervisors = array_merge($supervisors, File::files('/etc/supervisor/conf.d'));
+            }
         }
 
         $filesWww = [];
@@ -129,6 +137,7 @@ class UbuntuController extends Controller
             'parentPath'  => $parentPath,
             'nginxStatus' => $nginxStatus,
             'phps'        => $phps,
+            'supervisors' => $supervisors,
         ]);
     }
 
