@@ -109,16 +109,16 @@
       </div>
     </div>
 
-
+    {{-- supervisor --}}
     <div class="col-12">
       <div class="card">
         <div class="card-header">
-          <h4><i class="fa-brands fa-php"></i> {{ __('Supervisor') }}</h4>
+          <h4><i class="fa fa-folder"></i> {{ __('Supervisor') }}</h4>
           <div class="card-header-action">
-            @include('stisla.includes.forms.buttons.btn-primary', ['link' => route('ubuntu.php-fpm', ['version' => 1, 'action' => 'start']), 'label' => 'Start Supervisor'])
-            @include('stisla.includes.forms.buttons.btn-primary', ['link' => route('ubuntu.php-fpm', ['version' => 1, 'action' => 'stop']), 'label' => 'Stop Supervisor'])
+            @include('stisla.includes.forms.buttons.btn-primary', ['link' => route('ubuntu.supervisor', ['action' => 'start']), 'label' => 'Start Supervisor'])
+            @include('stisla.includes.forms.buttons.btn-primary', ['link' => route('ubuntu.supervisor', ['action' => 'stop']), 'label' => 'Stop Supervisor'])
             @include('stisla.includes.forms.buttons.btn-primary', [
-                'link' => route('ubuntu.php-fpm', ['version' => 1, 'action' => 'restart']),
+                'link' => route('ubuntu.supervisor', ['action' => 'restart']),
                 'label' => 'Restart Supervisor',
             ])
           </div>
@@ -132,7 +132,6 @@
                 <tr>
                   <th class="text-center">#</th>
                   <th class="text-center">{{ __('Path') }}</th>
-                  <th class="text-center">{{ __('Type') }}</th>
                   <th class="text-center">{{ __('Aksi') }}</th>
                 </tr>
               </thead>
@@ -148,8 +147,15 @@
                         {{ $item }}
                       </a>
                     </td>
-                    <td>Dir</td>
-                    <td></td>
+                    <td>
+                      @include('stisla.includes.forms.buttons.btn-edit', ['link' => route('ubuntu.edit', [encrypt($item)])])
+                      @include('stisla.includes.forms.buttons.btn-edit', [
+                          'link' => route('ubuntu.duplicate', [encrypt($item)]),
+                          'icon' => 'fa fa-copy',
+                          'tooltip' => 'Duplikasi',
+                      ])
+                      @include('stisla.includes.forms.buttons.btn-delete', ['link' => route('ubuntu.destroy', [encrypt($item)])])
+                    </td>
                   </tr>
                 @endforeach
               </tbody>

@@ -304,4 +304,14 @@ class UbuntuController extends Controller
         ShellJob::dispatch($command);
         return redirect()->back()->with('successMessage', 'Berhasil menjalankan command  ' . $command);
     }
+
+    public function supervisor($action)
+    {
+        if (!in_array($action, ['start', 'stop', 'restart', 'reload', 'status'])) {
+            abort(404);
+        }
+        $command = "service supervisor " . $action;
+        ShellJob::dispatch($command);
+        return redirect()->back()->with('successMessage', 'Berhasil menjalankan command  ' . $command);
+    }
 }
