@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Jobs\EditFileJob;
 use App\Jobs\ShellJob;
 use App\Services\CommandService;
+use App\Services\DatabaseService;
+use App\Services\FileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -13,10 +15,14 @@ class UbuntuController extends Controller
 {
 
     private CommandService $commandService;
+    private DatabaseService $dbService;
+    private FileService $fileService;
 
     public function __construct()
     {
         $this->commandService = new CommandService();
+        $this->dbService = new DatabaseService();
+        $this->fileService = new FileService();
     }
 
     public function index(Request $request)
@@ -36,7 +42,6 @@ class UbuntuController extends Controller
         if (File::exists('/etc/nginx/sites-available')) {
             $files      = File::files('/etc/nginx/sites-available');
         }
-        // $files = File::files('/Users/anamkun/Documents/PROJEK/ME');
 
         // $path       = '/Users/anamkun/Documents/PROJEK/ME';
         $path = '/var/www';
@@ -45,29 +50,9 @@ class UbuntuController extends Controller
         }
         $parentPath = dirname($path);
 
-        $phps = [];
-        if (File::exists('/etc/php')) {
-            $phps = File::directories('/etc/php');
-            $phps = collect($phps)->map(function ($php) {
-                return [
-                    'version' => basename($php),
-                    'status_fpm' => shell_exec('service php' . basename($php) . '-fpm status'),
-                    'path' => $php,
-                    'directories' => File::directories($php),
-                ];
-            });
-        }
+        $phps = $this->fileService->getAllPhp();
 
-        $supervisors = [];
-        if (File::exists('/etc/supervisor')) {
-            $supervisors[] = collect(File::files('/etc/supervisor'))->first()->getPathname();
-            if (File::exists('/etc/supervisor/conf.d')) {
-                $confs = File::files('/etc/supervisor/conf.d');
-                foreach ($confs as $conf) {
-                    $supervisors[] = $conf->getPathname();
-                }
-            }
-        }
+        $supervisors = $this->fileService->getSupervisor();
 
         $filesWww = [];
         $foldersWww = [];
@@ -95,32 +80,17 @@ class UbuntuController extends Controller
         $database  = $request->query('database');
         $table     = $request->query('table');
         $action    = $request->query('action');
+
         if ($database && $table && $action == 'json') {
-            $query = 'SELECT * FROM ' . $database . '.' . $table . ';';
-            $rows = collect(DB::select($query));
-            return ['count' => count($rows), 'rows' => $rows];
+            return $this->dbService->getAllRowMySqlAsJson($database, $table);
         } else if ($database && $table) {
-            $query = 'SELECT COLUMN_NAME AS `column`, DATA_TYPE AS `type`, CHARACTER_MAXIMUM_LENGTH AS `length`, IS_NULLABLE AS `nullable`, COLUMN_DEFAULT AS `default`, COLUMN_COMMENT AS `comment` FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?;';
-            $structure = collect(DB::select($query, [$database, $table]));
-            $query = 'SELECT * FROM ' . $database . '.' . $table . ' ORDER BY id desc;';
-            $rows = collect(DB::select($query));
+            $result    = $this->dbService->getAllRowMySql($database, $table);
+            $rows      = $result['rows'];
+            $structure = $result['structure'];
         } else if ($database) {
-            $query = 'SELECT TABLE_NAME AS `table`, ROUND((DATA_LENGTH + INDEX_LENGTH) / 1024 / 1024, 2) AS `size_mb` FROM information_schema.TABLES WHERE TABLE_SCHEMA = ? ORDER BY (DATA_LENGTH + INDEX_LENGTH) DESC;';
-            $tables = collect(DB::select($query, [$database]));
-            $tables = $tables->transform(function ($item) use ($database) {
-                $item->total_row = DB::select('SELECT COUNT(*) as total_row FROM ' . $database . '.' . $item->table)[0]->total_row;
-                return $item;
-            })->sortByDesc('total_row')->values();
+            $tables = $this->dbService->getAllTableMySql($database);
         } else {
-            $query = 'SHOW DATABASES';
-            $databases = collect(DB::select($query));
-            $databases = $databases->transform(function ($item) {
-                $item->total_table = DB::select('SELECT COUNT(*) as total_table FROM information_schema.TABLES WHERE table_schema = ?', [$item->Database])[0]->total_table;
-                $query = 'SELECT ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) AS "size_mb" FROM information_schema.TABLES WHERE table_schema = ?';
-                $item->size_mb = DB::select($query, [$item->Database])[0]->size_mb ?? 0;
-                $item->database = $item->Database;
-                return $item;
-            })->sortBy('database')->values();
+            $databases = $this->dbService->getAllDbMySql();
         }
 
 
@@ -212,7 +182,7 @@ class UbuntuController extends Controller
     public function destroy($pathname)
     {
         $pathnameD = decrypt($pathname);
-        $command = 'rm ' . $pathnameD;
+        $command = $this->commandService->deleteFile($pathnameD);
         ShellJob::dispatch($command);
 
         return redirect()->back()->with('successMessage', 'Berhasil menghapus file');
@@ -222,15 +192,15 @@ class UbuntuController extends Controller
     {
         $pathnameD = decrypt($pathname);
         if ($nextStatus === 'true') {
-            $command = 'ln -s ' . $pathnameD . ' /etc/nginx/sites-enabled/';
+            $command = $this->commandService->enableNginxConf($pathnameD);
             ShellJob::dispatch($command);
+            return redirect()->back()->with('successMessage', 'Berhasil menjalankan command ' . $command);
         } else if ($nextStatus === 'false') {
-            $paths = explode('/', $pathnameD);
-            $command = 'rm /etc/nginx/sites-enabled/' . end($paths);
+            $command = $this->commandService->disableNginxConf($pathnameD);
             ShellJob::dispatch($command);
+            return redirect()->back()->with('successMessage', 'Berhasil menjalankan command ' . $command);
         }
-
-        return redirect()->back()->with('successMessage', 'Berhasil menset enabled ke ' . $nextStatus);
+        abort(404);
     }
 
     public function gitPull($pathname)
@@ -244,17 +214,6 @@ class UbuntuController extends Controller
         return $output;
         // $command = 'git config --global --add safe.directory ' . $pathnameD . ' && /usr/bin/git pull origin 2>&1';
         ShellJob::dispatch($command, $pathnameD);
-
-        // $commands = [];
-        // $commands[] = 'chown -R www-agent:www-agent ' . $pathnameD . '/';
-        // $commands[] = 'cd ' . $pathnameD;
-        // $commands[] = 'git config --global --add safe.directory ' . $pathnameD;
-        // $commands[] = '/usr/bin/git pull origin 2>&1';
-        // $command = implode(' && ', $commands);
-        // $output = shell_exec($command);
-        // return $output;
-        // ShellJob::dispatch($command);
-        // ShellJob::dispatch($this->commandService->setLaravelPermission($pathnameD));
 
         return redirect()->back()->with('successMessage', 'Berhasil run command ' . $command);
     }
@@ -271,46 +230,33 @@ class UbuntuController extends Controller
     public function createDb()
     {
         $schemaName = request('database_name');
-        $charset    = config("database.connections.mysql.charset", 'utf8mb4');
-        $collation  = config("database.connections.mysql.collation", 'utf8mb4_unicode_ci');
-        $query      = "CREATE DATABASE IF NOT EXISTS $schemaName CHARACTER SET $charset COLLATE $collation;";
-        DB::statement($query);
+        $this->dbService->createMySqlDb($schemaName);
         return redirect()->back()->with('successMessage', 'Berhasil membuat database ' . $schemaName);
     }
 
     public function nginx(Request $request)
     {
-        $nginx = $request->nginx;
-        if (!in_array($nginx, ['start', 'stop', 'restart', 'reload', 'status'])) {
-            abort(404);
-        }
-        $command = "service nginx " . $nginx;
+        $command = $this->commandService->nginx($request->nginx);
         ShellJob::dispatch($command);
         return redirect()->back()->with('successMessage', 'Berhasil menjalankan command  ' . $command);
     }
 
     public function deleteRow($database, $table, $id)
     {
-        DB::table($database . '.' . $table)->where('id', $id)->delete();
+        $this->dbService->deleteRow($database, $table, $id);
         return redirect()->back()->with('successMessage', 'Berhasil menghapus data');
     }
 
     public function phpFpm($version, $action)
     {
-        if (!in_array($action, ['start', 'stop', 'restart', 'reload', 'status'])) {
-            abort(404);
-        }
-        $command = "service php" . $version . "-fpm " . $action;
+        $command = $this->commandService->phpFpm($version, $action);
         ShellJob::dispatch($command);
         return redirect()->back()->with('successMessage', 'Berhasil menjalankan command  ' . $command);
     }
 
     public function supervisor($action)
     {
-        if (!in_array($action, ['start', 'stop', 'restart', 'reload', 'status'])) {
-            abort(404);
-        }
-        $command = "service supervisor " . $action;
+        $command = $this->commandService->supervisor($action);
         ShellJob::dispatch($command);
         return redirect()->back()->with('successMessage', 'Berhasil menjalankan command  ' . $command);
     }
