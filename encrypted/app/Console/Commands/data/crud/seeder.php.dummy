@@ -1,0 +1,36 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\MODELNAME;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
+
+class MODELNAMESeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        $data  = [];
+        $faker = \Faker\Factory::create('id_ID');
+        $now   = date('Y-m-d H:i:s');
+
+        MODELNAME::truncate();
+
+        foreach (range(1, 20) as $i) {
+            array_push($data, [
+                SEEDERCOLUMNS'created_at' => $now,
+                'updated_at' => $now,
+            ]);
+        }
+
+        $chunkeds = collect($data)->chunk(20);
+        foreach ($chunkeds as $chunkData) {
+            MODELNAME::insert($chunkData->toArray());
+        }
+    }
+}

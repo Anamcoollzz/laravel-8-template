@@ -15,6 +15,10 @@ use App\Http\Controllers\YoutubeController;
 use App\Http\Middleware\FileManagerPermission;
 use Illuminate\Support\Facades\Route;
 
+Route::get('phpinfo', function(){
+  phpinfo();
+});
+
 # DASHBOARD
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 

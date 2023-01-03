@@ -1,0 +1,16 @@
+<table>
+  <thead>
+    <tr>
+      <th>{{ __('#') }}</th>
+TH
+    </tr>
+  </thead>
+  <tbody>
+    @foreach ($data as $item)
+      <tr>
+        <td>{{ $loop->iteration }}</td>
+TD
+      </tr>
+    @endforeach
+  </tbody>
+</table>

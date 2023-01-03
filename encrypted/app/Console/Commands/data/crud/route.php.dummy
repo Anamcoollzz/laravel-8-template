@@ -1,0 +1,24 @@
+<?php
+
+use App\Http\Middleware\EnsureAppKey;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\CONTROLLERNAME as ApiController;
+use App\Http\Controllers\CONTROLLERNAME as WebController;
+use App\Http\Middleware\ViewShare;
+
+# API
+Route::prefix('api/v1')->as('api.')->middleware(['api', EnsureAppKey::class, 'auth:api'])->group(function () {
+    Route::apiResource('ROUTENAME', ApiController::class);
+});
+
+# WEB
+Route::middleware(['web', ViewShare::class, 'auth'])->group(function () {
+    Route::get('ROUTENAME/print', [WebController::class, 'exportPrint'])->name('ROUTENAME.print');
+    Route::get('ROUTENAME/pdf', [WebController::class, 'pdf'])->name('ROUTENAME.pdf');
+    Route::get('ROUTENAME/csv', [WebController::class, 'csv'])->name('ROUTENAME.csv');
+    Route::get('ROUTENAME/json', [WebController::class, 'json'])->name('ROUTENAME.json');
+    Route::get('ROUTENAME/excel', [WebController::class, 'excel'])->name('ROUTENAME.excel');
+    Route::get('ROUTENAME/import-excel-example', [WebController::class, 'importExcelExample'])->name('ROUTENAME.import-excel-example');
+    Route::post('ROUTENAME/import-excel', [WebController::class, 'importExcel'])->name('ROUTENAME.import-excel');
+    Route::resource('ROUTENAME', WebController::class);
+});

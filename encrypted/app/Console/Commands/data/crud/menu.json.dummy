@@ -1,0 +1,12 @@
+{
+    "group_name": "Navigasi",
+    "menus": [
+        {
+            "menu_name": "TITLE",
+            "route_name": "ROUTENAME.index",
+            "icon": "ICON",
+            "permission": "PERMISSION",
+            "is_active_if_url_includes": "ROUTENAME*"
+        }
+    ]
+}

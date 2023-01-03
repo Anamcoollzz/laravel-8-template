@@ -1,0 +1,215 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\REQUESTNAME;
+use App\Models\MODELNAME;
+use App\Repositories\REPOSITORYNAME;
+use App\Services\FileService;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use App\Helpers\Helper;
+use Illuminate\Http\Response;
+use Barryvdh\DomPDF\Facade as PDF;
+
+class CONTROLLERNAME extends Controller
+{
+    /**
+     * VARREPOSITORYNAME
+     *
+     * @var REPOSITORYNAME
+     */
+    private REPOSITORYNAME $VARREPOSITORYNAME;
+
+    /**
+     * fileService
+     *
+     * @var FileService
+     */
+    private FileService $fileService;
+
+    /**
+     * constructor method
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->VARREPOSITORYNAME = new REPOSITORYNAME;
+        $this->fileService       = new FileService;
+        // $this->middleware('can:TITLE');
+        // $this->middleware('can:TITLE Tambah')->only(['create', 'store']);
+        // $this->middleware('can:TITLE Ubah')->only(['edit', 'update']);
+        // $this->middleware('can:TITLE Hapus')->only(['destroy']);
+        // $this->middleware('can:TITLE Impor Excel')->only(['importExcelExample', 'importExcel']);
+    }
+
+    /**
+     * showing data page
+     *
+     * @return Response
+     */
+    public function index()
+    {
+        return view('stisla.FOLDERVIEW.index', [
+            'data' => $this->VARREPOSITORYNAME->getLatest(),
+        ]);
+    }
+
+    /**
+     * show add new data page
+     *
+     * @return Response
+     */
+    public function create()
+    {
+        return view('stisla.FOLDERVIEW.form', [
+
+        ]);
+    }
+
+    /**
+     * save new data to db
+     *
+     * @param REQUESTNAME $request
+     * @return Response
+     */
+    public function store(REQUESTNAME $request)
+    {
+        $this->VARREPOSITORYNAME->create(
+            array_merge(
+                [
+
+                ],
+                $request->only([
+                    COLUMNS
+                ])
+            )
+        );
+        return redirect()->back()->with('successMessage', __('Berhasil menambah data'));
+    }
+
+    /**
+     * showing edit page
+     *
+     * @param MODELNAME $VARMODELNAME
+     * @return Response
+     */
+    public function edit(MODELNAME $VARMODELNAME)
+    {
+        return view('stisla.FOLDERVIEW.form', [
+            'd' => $VARMODELNAME,
+        ]);
+    }
+
+    /**
+     * update data to db
+     *
+     * @param REQUESTNAME $request
+     * @param MODELNAME $VARMODELNAME
+     * @return Response
+     */
+    public function update(REQUESTNAME $request, MODELNAME $VARMODELNAME)
+    {
+        $this->VARREPOSITORYNAME->update(
+            array_merge(
+                [
+
+                ],
+                $request->only([
+                    COLUMNS
+                ])
+            ),
+            $VARMODELNAME->id
+        );
+        return redirect()->back()->with('successMessage', __('Berhasil memperbarui data'));
+    }
+
+    /**
+     * delete from db
+     *
+     * @param MODELNAME $VARMODELNAME
+     * @return Response
+     */
+    public function destroy(MODELNAME $VARMODELNAME)
+    {
+        $this->VARREPOSITORYNAME->delete($VARMODELNAME->id);
+        return redirect()->back()->with('successMessage', __('Berhasil menghapus data'));
+    }
+
+    /**
+     * download import example
+     *
+     * @return BinaryFileResponse
+     */
+    public function importExcelExample(): BinaryFileResponse
+    {
+        return Excel::download(new \App\Exports\MODELNAMEExport(
+            $this->VARREPOSITORYNAME->getLatest()
+        ), 'FOLDERVIEW_excel_import_example.xlsx');
+    }
+
+    /**
+     * import excel file to db
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return Response
+     */
+    public function importExcel(\Illuminate\Http\Request $request)
+    {
+        $request->validate([
+            'import_file' => 'required|file|mimetypes:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        ]);
+        Excel::import(new \App\Imports\MODELNAMEImport, $request->file('import_file'));
+        return Helper::redirectSuccess(route('FOLDERVIEWs.index'), __('Impor berhasil dilakukan'));
+    }
+
+    /**
+     * download export data as json
+     *
+     * @return Response
+     */
+    public function json()
+    {
+        $data = $this->VARREPOSITORYNAME->getLatest();
+        return $this->fileService->downloadJson($data, 'FOLDERVIEWs.json');
+    }
+
+    /**
+     * download export data as xlsx
+     *
+     * @return Response
+     */
+    public function excel()
+    {
+        $data = $this->VARREPOSITORYNAME->getLatest();
+        return (new MODELNAMEExport($data))->download('FOLDERVIEWs.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+    }
+
+    /**
+     * download export data as csv
+     *
+     * @return Response
+     */
+    public function csv()
+    {
+        $data = $this->VARREPOSITORYNAME->getLatest();
+        return (new MODELNAMEExport($data))->download('FOLDERVIEWs.csv', \Maatwebsite\Excel\Excel::CSV);
+    }
+
+    /**
+     * download export data as pdf
+     *
+     * @return Response
+     */
+    public function pdf()
+    {
+        $data = $this->VARREPOSITORYNAME->getLatest();
+        return PDF::setPaper('Letter', 'landscape')
+            ->loadView('stisla.FOLDERVIEW.export-pdf', [
+                'data'     => $data,
+                'isExport' => true
+            ])
+            ->download('FOLDERVIEWs.pdf');
+    }
+}

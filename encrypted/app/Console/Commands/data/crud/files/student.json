@@ -1,0 +1,184 @@
+{
+    "title": "Student Haha",
+    "icon": "fa fa-users",
+    "model": "StudentHaha",
+    "columns": [
+        {
+            "type": "ai"
+        },
+        {
+            "type": "string",
+            "length": 50,
+            "label": "Full Name",
+            "name": "name",
+            "validations": {
+                "store": ["required"],
+                "update": ["required"]
+            },
+            "form": {
+                "type": "text",
+                "required": 2
+            }
+        },
+        {
+            "type": "date",
+            "name": "birth_date",
+            "validations": {
+                "store": ["required", "date_format:Y-m-d"],
+                "update": ["required", "date_format:Y-m-d"]
+            },
+            "form": {
+                "type": "date",
+                "required": 2
+            }
+        },
+        {
+            "type": "string",
+            "name": "select2",
+            "validations": {
+                "store": ["required"],
+                "update": ["required"]
+            },
+            "form": {
+                "type": "select2",
+                "required": 2,
+                "options": ["anam", "devi"],
+                "multiple": true
+            }
+        },
+        {
+            "type": "string",
+            "name": "select",
+            "validations": {
+                "store": ["required"],
+                "update": ["required"]
+            },
+            "form": {
+                "type": "select",
+                "required": 2,
+                "options": ["anam", "devi"]
+            }
+        },
+        {
+            "type": "string",
+            "name": "colorpicker",
+            "validations": {
+                "store": ["required"],
+                "update": ["required"]
+            },
+            "form": {
+                "type": "colorpicker",
+                "required": 2
+            }
+        },
+        {
+            "type": "double",
+            "name": "number",
+            "validations": {
+                "store": ["required"],
+                "update": ["required"]
+            },
+            "form": {
+                "type": "number",
+                "required": 2
+            }
+        },
+        {
+            "type": "string",
+            "name": "image",
+            "validations": {
+                "store": ["required"],
+                "update": ["required"]
+            },
+            "form": {
+                "type": "image",
+                "required": 2
+            }
+        },
+        {
+            "type": "string",
+            "name": "file",
+            "validations": {
+                "store": ["required"],
+                "update": ["required"]
+            },
+            "form": {
+                "type": "file",
+                "required": 2
+            }
+        },
+        {
+            "type": "string",
+            "name": "password",
+            "validations": {
+                "store": ["required"],
+                "update": ["required"]
+            },
+            "form": {
+                "type": "password",
+                "required": 2
+            }
+        },
+        {
+            "type": "string",
+            "name": "email",
+            "validations": {
+                "store": ["required"],
+                "update": ["required"]
+            },
+            "form": {
+                "type": "email",
+                "required": 2
+            }
+        },
+        {
+            "type": "string",
+            "name": "time",
+            "validations": {
+                "store": ["required"],
+                "update": ["required"]
+            },
+            "form": {
+                "type": "time",
+                "required": 2
+            }
+        },
+        {
+            "type": "text",
+            "name": "address",
+            "validations": {
+                "store": ["required"],
+                "update": ["required"]
+            },
+            "form": {
+                "type": "textarea",
+                "required": 2
+            }
+        },
+        {
+            "type": "tinyInteger",
+            "name": "gender",
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Laki-laki"
+                },
+                {
+                    "value": 1,
+                    "label": "Perempuan"
+                }
+            ],
+            "validations": {
+                "store": ["required"],
+                "update": ["required"]
+            },
+            "form": {
+                "type": "radio",
+                "required": 2
+            }
+        },
+        {
+            "type": "timestamps"
+        }
+    ]
+}

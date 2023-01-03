@@ -1,0 +1,346 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Exports\EXPORTCLASSNAME;
+use App\Http\Requests\REQUESTNAME;
+use App\Imports\IMPORTCLASSNAME;
+use App\Models\MODELNAME;
+use App\Repositories\REPOSITORYNAME;
+use App\Repositories\NotificationRepository;
+use App\Repositories\UserRepository;
+use App\Services\EmailService;
+use App\Services\FileService;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Barryvdh\DomPDF\Facade as PDF;
+
+class CONTROLLERNAME extends Controller
+{
+    /**
+     * VARREPOSITORYNAME
+     *
+     * @var REPOSITORYNAME
+     */
+    private REPOSITORYNAME $VARREPOSITORYNAME;
+
+    /**
+     * NotificationRepository
+     *
+     * @var NotificationRepository
+     */
+    private NotificationRepository $NotificationRepository;
+
+    /**
+     * UserRepository
+     *
+     * @var UserRepository
+     */
+    private UserRepository $UserRepository;
+
+    /**
+     * file service
+     *
+     * @var FileService
+     */
+    private FileService $fileService;
+
+    /**
+     * email service
+     *
+     * @var FileService
+     */
+    private EmailService $emailService;
+    
+    /**
+     * exportable
+     *
+     * @var bool
+     */
+    private bool $exportable = false;
+
+    /**
+     * importable
+     *
+     * @var bool
+     */
+    private bool $importable = false;
+
+    /**
+     * constructor method
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->VARREPOSITORYNAME      = new REPOSITORYNAME;
+        $this->fileService            = new FileService;
+        $this->emailService           = new EmailService;
+        $this->NotificationRepository = new NotificationRepository;
+        $this->UserRepository         = new UserRepository;
+
+        $this->middleware('can:TITLE');
+        $this->middleware('can:TITLE Tambah')->only(['create', 'store']);
+        $this->middleware('can:TITLE Ubah')->only(['edit', 'update']);
+        $this->middleware('can:TITLE Hapus')->only(['destroy']);
+        $this->middleware('can:TITLE Ekspor')->only(['json', 'excel', 'csv', 'pdf']);
+        $this->middleware('can:TITLE Impor Excel')->only(['importExcel', 'importExcelExample']);
+    }
+
+    /**
+     * showing data page
+     *
+     * @return Response
+     */
+    public function index()
+    {
+        $user = auth()->user();
+        return view('stisla.FOLDERVIEW.index', [
+            'data'             => $this->VARREPOSITORYNAME->getLatest(),
+            'canCreate'        => $user->can('TITLE Tambah'),
+            'canUpdate'        => $user->can('TITLE Ubah'),
+            'canDelete'        => $user->can('TITLE Hapus'),
+            'canImportExcel'   => $user->can('Order Impor Excel') && $this->importable,
+            'canExport'        => $user->can('Order Ekspor') && $this->exportable,
+            'title'            => __('TITLE'),
+            'routeCreate'      => route('ROUTENAME.create'),
+            'routePdf'         => route('ROUTENAME.pdf'),
+            'routePrint'       => route('ROUTENAME.print'),
+            'routeExcel'       => route('ROUTENAME.excel'),
+            'routeCsv'         => route('ROUTENAME.csv'),
+            'routeJson'        => route('ROUTENAME.json'),
+            'routeImportExcel' => route('ROUTENAME.import-excel'),
+            'excelExampleLink' => route('ROUTENAME.import-excel-example'),
+        ]);
+    }
+
+    /**
+     * showing add new data form page
+     *
+     * @return Response
+     */
+    public function create()
+    {
+        return view('stisla.FOLDERVIEW.form', [
+            'title'         => __('TITLE'),
+            'fullTitle'     => __('Tambah TITLE'),
+            'routeIndex'    => route('ROUTENAME.index'),
+            'action'        => route('ROUTENAME.store')
+        ]);
+    }
+
+    /**
+     * save new data to db
+     *
+     * @param REQUESTNAME $request
+     * @return Response
+     */
+    public function store(REQUESTNAME $request)
+    {
+        $data = $request->only([
+COLUMNS
+        ]);
+
+        // gunakan jika ada file
+        // if ($request->hasFile('file')) {
+        //     $data['file'] = $this->fileService->methodName($request->file('file'));
+        // }
+
+        $result = $this->VARREPOSITORYNAME->create($data);
+
+        // use this if you want to create notification data
+        // $title = 'Notify Title';
+        // $content = 'lorem ipsum dolor sit amet';
+        // $userId = 2;
+        // $notificationType = 'transaksi masuk';
+        // $icon = 'bell'; // font awesome
+        // $bgColor = 'primary'; // primary, danger, success, warning
+        // $this->NotificationRepository->createNotif($title,  $content, $userId,  $notificationType, $icon, $bgColor);
+
+        // gunakan jika mau kirim email
+        // $this->emailService->methodName($result);
+
+        logCreate("TITLE", $result);
+
+        $successMessage = successMessageCreate("TITLE");
+        return redirect()->back()->with('successMessage', $successMessage);
+    }
+
+    /**
+     * showing edit page
+     *
+     * @param MODELNAME $VARMODELNAME
+     * @return Response
+     */
+    public function edit(MODELNAME $VARMODELNAME)
+    {
+        return view('stisla.FOLDERVIEW.form', [
+            'd'             => $VARMODELNAME,
+            'title'         => __('TITLE'),
+            'fullTitle'     => __('Ubah TITLE'),
+            'routeIndex'    => route('ROUTENAME.index'),
+            'action'        => route('ROUTENAME.update', [$VARMODELNAME->id])
+        ]);
+    }
+
+    /**
+     * update data to db
+     *
+     * @param REQUESTNAME $request
+     * @param MODELNAME $VARMODELNAME
+     * @return Response
+     */
+    public function update(REQUESTNAME $request, MODELNAME $VARMODELNAME)
+    {
+        $data = $request->only([
+COLUMNS
+        ]);
+
+        // gunakan jika ada file
+        // if ($request->hasFile('file')) {
+        //     $data['file'] = $this->fileService->methodName($request->file('file'));
+        // }
+
+        $newData = $this->VARREPOSITORYNAME->update($data, $VARMODELNAME->id);
+
+        // use this if you want to create notification data
+        // $title = 'Notify Title';
+        // $content = 'lorem ipsum dolor sit amet';
+        // $userId = 2;
+        // $notificationType = 'transaksi masuk';
+        // $icon = 'bell'; // font awesome
+        // $bgColor = 'primary'; // primary, danger, success, warning
+        // $this->NotificationRepository->createNotif($title,  $content, $userId,  $notificationType, $icon, $bgColor);
+
+        // gunakan jika mau kirim email
+        // $this->emailService->methodName($newData);
+
+        logUpdate("TITLE", $VARMODELNAME, $newData);
+
+        $successMessage = successMessageUpdate("TITLE");
+        return redirect()->back()->with('successMessage', $successMessage);
+    }
+
+    /**
+     * delete user from db
+     *
+     * @param MODELNAME $VARMODELNAME
+     * @return Response
+     */
+    public function destroy(MODELNAME $VARMODELNAME)
+    {
+        // delete file from storage if exists
+        // $this->fileService->methodName($VARMODELNAME);
+
+        // use this if you want to create notification data
+        // $title = 'Notify Title';
+        // $content = 'lorem ipsum dolor sit amet';
+        // $userId = 2;
+        // $notificationType = 'transaksi masuk';
+        // $icon = 'bell'; // font awesome
+        // $bgColor = 'primary'; // primary, danger, success, warning
+        // $this->NotificationRepository->createNotif($title,  $content, $userId,  $notificationType, $icon, $bgColor);
+
+        // gunakan jika mau kirim email
+        // $this->emailService->methodName($VARMODELNAME);
+
+        $this->VARREPOSITORYNAME->delete($VARMODELNAME->id);
+        logDelete("TITLE", $VARMODELNAME);
+
+        $successMessage = successMessageDelete("TITLE");
+        return redirect()->back()->with('successMessage', $successMessage);
+    }
+
+    /**
+     * download import example
+     *
+     * @return BinaryFileResponse
+     */
+    public function importExcelExample(): BinaryFileResponse
+    {
+        // bisa gunakan file excel langsung sebagai contoh
+        // $filepath = public_path('example.xlsx');
+        // return response()->download($filepath);
+
+        $data = $this->VARREPOSITORYNAME->getLatest();
+        return Excel::download(new EXPORTCLASSNAME($data), 'ROUTENAME.xlsx');
+    }
+
+    /**
+     * import excel file to db
+     *
+     * @param \App\Http\Requests\ImportExcelRequest $request
+     * @return Response
+     */
+    public function importExcel(\App\Http\Requests\ImportExcelRequest $request)
+    {
+        Excel::import(new IMPORTCLASSNAME, $request->file('import_file'));
+        $successMessage = successMessageImportExcel("TITLE");
+        return redirect()->back()->with('successMessage', $successMessage);
+    }
+
+    /**
+     * download export data as json
+     *
+     * @return Response
+     */
+    public function json()
+    {
+        $data = $this->VARREPOSITORYNAME->getLatest();
+        return $this->fileService->downloadJson($data, 'ROUTENAME.json');
+    }
+
+    /**
+     * download export data as xlsx
+     *
+     * @return Response
+     */
+    public function excel()
+    {
+        $data = $this->VARREPOSITORYNAME->getLatest();
+        return (new EXPORTCLASSNAME($data))->download('ROUTENAME.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+    }
+
+    /**
+     * download export data as csv
+     *
+     * @return Response
+     */
+    public function csv()
+    {
+        $data = $this->VARREPOSITORYNAME->getLatest();
+        return (new EXPORTCLASSNAME($data))->download('ROUTENAME.csv', \Maatwebsite\Excel\Excel::CSV);
+    }
+
+    /**
+     * download export data as pdf
+     *
+     * @return Response
+     */
+    public function pdf()
+    {
+        $data = $this->VARREPOSITORYNAME->getLatest();
+        return PDF::setPaper('Letter', 'landscape')
+            ->loadView('stisla.FOLDERVIEW.export-pdf', [
+                'data'    => $data,
+                'isPrint' => false
+            ])
+            ->download('ROUTENAME.pdf');
+    }
+
+    /**
+     * export data to print html
+     *
+     * @return Response
+     */
+    public function exportPrint()
+    {
+        $data = $this->VARREPOSITORYNAME->getLatest();
+        return view('stisla.FOLDERVIEW.export-pdf', [
+            'data'    => $data,
+            'isPrint' => true
+        ]);
+    }
+}
