@@ -49,6 +49,7 @@
               <thead>
                 <tr>
                   <th class="text-center">#</th>
+                  <th class="text-center">{{ __('Name') }}</th>
                   <th class="text-center">{{ __('Path') }}</th>
                   <th class="text-center">{{ __('Type') }}</th>
                   <th class="text-center">{{ __('Aksi') }}</th>
@@ -66,6 +67,11 @@
                         ..
                       </a>
                     </td>
+                    <td>
+                      <a href="?folder={{ encrypt($parentPath) }}">
+                        ..
+                      </a>
+                    </td>
                     <td>Dir</td>
                     <td></td>
                   </tr>
@@ -73,6 +79,11 @@
                 @foreach ($foldersWww as $item)
                   <tr>
                     <td>{{ $i++ }}</td>
+                    <td>
+                      <a href="?folder={{ encrypt($item) }}">
+                        {{ basename($item) }}
+                      </a>
+                    </td>
                     <td>
                       <a href="?folder={{ encrypt($item) }}">
                         {{ $item }}
@@ -87,6 +98,11 @@
                     <td>{{ $i++ }}</td>
                     <td>
                       <a target="_blank" href="?download={{ encrypt($item->getPathname()) }}">
+                        {{ basename($item->getPathname()) }}
+                      </a>
+                    </td>
+                    <td>
+                      <a target="_blank" href="?download={{ encrypt($item->getPathname()) }}">
                         {{ $item->getPathname() }}
                       </a>
                     </td>
@@ -98,6 +114,14 @@
                           'icon' => 'fa fa-copy',
                           'tooltip' => 'Duplikasi',
                       ])
+                      @if (basename($item->getPathname()) === '.env.example' && $isEnvExists === false)
+                        @include('stisla.includes.forms.buttons.btn-success', [
+                            'link' => route('ubuntu.duplicate', [encrypt($item->getPathname()), 'as' => '.env']),
+                            'icon' => 'fa fa-copy',
+                            'tooltip' => 'Duplikasi sebagi .env',
+                            'size' => 'sm',
+                        ])
+                      @endif
                       @include('stisla.includes.forms.buttons.btn-delete', ['link' => route('ubuntu.destroy', [encrypt($item->getPathname())])])
                     </td>
                   </tr>

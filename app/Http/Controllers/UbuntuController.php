@@ -43,8 +43,8 @@ class UbuntuController extends Controller
             $files      = File::files('/etc/nginx/sites-available');
         }
 
-        // $path       = '/Users/anamkun/Documents/PROJEK/ME';
-        $path = '/var/www';
+        $path       = '/Users/anamkun/Documents/PROJEK/ME';
+        // $path = '/var/www';
         if ($request->query('folder')) {
             $path = decrypt($request->query('folder'));
         }
@@ -54,12 +54,18 @@ class UbuntuController extends Controller
 
         $supervisors = $this->fileService->getSupervisor();
 
-        $filesWww = [];
+        $isEnvExists = false;
         $foldersWww = [];
         if (File::exists($path)) {
             $filesWww   = File::files($path, true);
+            foreach ($filesWww as $f) {
+                if ($f->getFilename() == '.env') {
+                    $isEnvExists = true;
+                }
+            }
             $foldersWww = File::directories($path);
         }
+
         $isGit = File::exists($path . '/.git');
         $isLaravel = File::exists($path . '/composer.json');
 
@@ -113,6 +119,7 @@ class UbuntuController extends Controller
             'phps'             => $phps,
             'supervisors'      => $supervisors,
             'supervisorStatus' => $supervisorStatus,
+            'isEnvExists'      => $isEnvExists,
         ]);
     }
 
@@ -174,9 +181,14 @@ class UbuntuController extends Controller
     {
         $pathnameD = decrypt($pathname);
         $content = file_get_contents($pathnameD);
-        EditFileJob::dispatch($pathnameD . '_copy', $content);
-
-        return redirect()->back()->with('successMessage', 'Berhasil menduplikasi file');
+        if (request('as')) {
+            $folder = str_replace(basename($pathnameD), '', $pathnameD);
+            EditFileJob::dispatch($folder . request('as'), $content);
+            return redirect()->back()->with('successMessage', 'Berhasil menduplikasi file ke .env');
+        } else {
+            EditFileJob::dispatch($pathnameD . '_copy', $content);
+            return redirect()->back()->with('successMessage', 'Berhasil menduplikasi file');
+        }
     }
 
     public function destroy($pathname)
