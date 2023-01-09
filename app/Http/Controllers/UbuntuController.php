@@ -43,8 +43,8 @@ class UbuntuController extends Controller
             $files      = File::files('/etc/nginx/sites-available');
         }
 
-        $path       = '/Users/anamkun/Documents/PROJEK/ME';
-        // $path = '/var/www';
+        // $path       = '/Users/anamkun/Documents/PROJEK/ME';
+        $path = '/var/www';
         if ($request->query('folder')) {
             $path = decrypt($request->query('folder'));
         }
@@ -56,6 +56,7 @@ class UbuntuController extends Controller
 
         $isEnvExists = false;
         $foldersWww = [];
+        $filesWww = [];
         if (File::exists($path)) {
             $filesWww   = File::files($path, true);
             foreach ($filesWww as $f) {
