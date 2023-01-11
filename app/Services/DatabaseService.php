@@ -233,4 +233,9 @@ class DatabaseService
         $rows = collect(DB::select($query));
         return ['count' => count($rows), 'rows' => $rows];
     }
+
+    public function getPaginateMySql($database, $table, $perPage = 20)
+    {
+        return DB::table($database . '.' . $table)->paginate($perPage);
+    }
 }

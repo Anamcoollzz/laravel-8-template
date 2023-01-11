@@ -431,6 +431,12 @@
                             'tooltip' => 'Download JSON',
                             'size' => 'sm',
                         ])
+                        @include('stisla.includes.forms.buttons.btn-danger', [
+                            'link' => route('ubuntu.index', ['database' => request('database'), 'table' => $item->table, 'action' => 'json-paginate']),
+                            'icon' => 'fa fa-code',
+                            'tooltip' => 'Paginate JSON',
+                            'size' => 'sm',
+                        ])
                       </td>
                     </tr>
                   @endforeach

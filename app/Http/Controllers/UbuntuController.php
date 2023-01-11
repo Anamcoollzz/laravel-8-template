@@ -99,6 +99,9 @@ class UbuntuController extends Controller
             $data = json_encode($data, JSON_PRETTY_PRINT);
             Storage::put('public/' . $database . '-' . $table . '.json', $data);
             return response()->download(storage_path('app/public/' . $database . '-' . $table . '.json'))->deleteFileAfterSend();
+        } else if ($database && $table && $action == 'json-paginate') {
+            $data = $this->dbService->getPaginateMySql($database, $table, request('perPage', 20));
+            return response()->json($data);
         } else if ($database && $table) {
             $result    = $this->dbService->getAllRowMySql($database, $table);
             $rows      = $result['rows'];
