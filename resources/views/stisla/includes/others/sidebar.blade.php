@@ -30,7 +30,11 @@
             @if ($_menu_condition)
               <li @if (Request::is($_menu->is_active_if_url_includes)) class="active" @endif>
                 <a class="nav-link" href="{{ $_menu->fix_url }}" @if ($_menu->is_blank) target="_blank" @endif>
-                  <i class="fas fa-{{ $_menu->icon }}"></i>
+                  @if ($_menu->icon === 'ubuntu')
+                    <i class="fab fa-{{ $_menu->icon }}"></i>
+                  @else
+                    <i class="fas fa-{{ $_menu->icon }}"></i>
+                  @endif
                   <span>{{ __($_menu->menu_name) }}</span>
                 </a>
               </li>
