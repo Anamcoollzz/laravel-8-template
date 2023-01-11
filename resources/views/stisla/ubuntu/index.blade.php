@@ -139,12 +139,15 @@
         <div class="card-header">
           <h4><i class="fa fa-folder"></i> {{ __('Supervisor') }}</h4>
           <div class="card-header-action">
-            @include('stisla.includes.forms.buttons.btn-primary', ['link' => route('ubuntu.supervisor', ['action' => 'start']), 'label' => 'Start Supervisor'])
-            @include('stisla.includes.forms.buttons.btn-primary', ['link' => route('ubuntu.supervisor', ['action' => 'stop']), 'label' => 'Stop Supervisor'])
-            @include('stisla.includes.forms.buttons.btn-primary', [
-                'link' => route('ubuntu.supervisor', ['action' => 'restart']),
-                'label' => 'Restart Supervisor',
-            ])
+            @if (str_contains($supervisorStatus, 'running'))
+              @include('stisla.includes.forms.buttons.btn-primary', ['link' => route('ubuntu.supervisor', ['action' => 'stop']), 'label' => 'Stop Supervisor'])
+              @include('stisla.includes.forms.buttons.btn-primary', [
+                  'link' => route('ubuntu.supervisor', ['action' => 'restart']),
+                  'label' => 'Restart Supervisor',
+              ])
+            @else
+              @include('stisla.includes.forms.buttons.btn-primary', ['link' => route('ubuntu.supervisor', ['action' => 'start']), 'label' => 'Start Supervisor'])
+            @endif
           </div>
         </div>
         <div class="card-body">
@@ -195,9 +198,15 @@
           <div class="card-header">
             <h4><i class="fa-brands fa-php"></i> {{ __($php['path']) }}</h4>
             <div class="card-header-action">
-              @include('stisla.includes.forms.buttons.btn-primary', ['link' => route('ubuntu.php-fpm', ['version' => $php['version'], 'action' => 'start']), 'label' => 'Start FPM'])
-              @include('stisla.includes.forms.buttons.btn-primary', ['link' => route('ubuntu.php-fpm', ['version' => $php['version'], 'action' => 'stop']), 'label' => 'Stop FPM'])
-              @include('stisla.includes.forms.buttons.btn-primary', ['link' => route('ubuntu.php-fpm', ['version' => $php['version'], 'action' => 'restart']), 'label' => 'Restart FPM'])
+              @if (str_contains($php['status_fpm'], 'running'))
+                @include('stisla.includes.forms.buttons.btn-primary', ['link' => route('ubuntu.php-fpm', ['version' => $php['version'], 'action' => 'stop']), 'label' => 'Stop FPM'])
+                @include('stisla.includes.forms.buttons.btn-primary', [
+                    'link' => route('ubuntu.php-fpm', ['version' => $php['version'], 'action' => 'restart']),
+                    'label' => 'Restart FPM',
+                ])
+              @else
+                @include('stisla.includes.forms.buttons.btn-primary', ['link' => route('ubuntu.php-fpm', ['version' => $php['version'], 'action' => 'start']), 'label' => 'Start FPM'])
+              @endif
             </div>
           </div>
           <div class="card-body">
@@ -326,7 +335,7 @@
         <div class="card">
           <div class="card-header">
             <h4><i class="fa fa-database"></i> {{ __('MySql Database') }} > {{ request('database') }} > {{ request('table') }}</h4>
-
+            @include('stisla.ubuntu.mysql-action')
           </div>
           <div class="card-body">
             <div class="table-responsive">
@@ -381,7 +390,7 @@
         <div class="card">
           <div class="card-header">
             <h4><i class="fa fa-database"></i> {{ __('MySql Database') }} > {{ request('database') }}</h4>
-
+            @include('stisla.ubuntu.mysql-action')
           </div>
           <div class="card-body">
             <div class="table-responsive">
@@ -436,6 +445,7 @@
         <div class="card">
           <div class="card-header">
             <h4><i class="fa fa-database"></i> {{ __('MySql Database') }}</h4>
+            @include('stisla.ubuntu.mysql-action')
           </div>
           <div class="card-body">
 

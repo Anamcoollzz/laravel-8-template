@@ -105,8 +105,9 @@ class UbuntuController extends Controller
         }
 
 
-        $nginxStatus = shell_exec('service nginx status');
+        $nginxStatus      = shell_exec('service nginx status');
         $supervisorStatus = shell_exec('service supervisor status');
+        $mysqlStatus      = shell_exec('service mysql status');
 
         return view('stisla.ubuntu.index', [
             'files'            => $files,
@@ -126,6 +127,7 @@ class UbuntuController extends Controller
             'supervisorStatus' => $supervisorStatus,
             'isEnvExists'      => $isEnvExists,
             'primary'          => $primary,
+            'mysqlStatus'      => $mysqlStatus,
         ]);
     }
 
@@ -288,6 +290,13 @@ class UbuntuController extends Controller
     public function phpFpm($version, $action)
     {
         $command = $this->commandService->phpFpm($version, $action);
+        ShellJob::dispatch($command);
+        return redirect()->back()->with('successMessage', 'Berhasil menjalankan command  ' . $command);
+    }
+
+    public function mysql($version, $action)
+    {
+        $command = $this->commandService->mysql($version, $action);
         ShellJob::dispatch($command);
         return redirect()->back()->with('successMessage', 'Berhasil menjalankan command  ' . $command);
     }

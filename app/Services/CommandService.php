@@ -44,6 +44,15 @@ class CommandService
         return $command;
     }
 
+    public function mysql($action)
+    {
+        if (!in_array($action, ['start', 'stop', 'restart', 'reload', 'status'])) {
+            abort(404);
+        }
+        $command = "service mysql " . $action;
+        return $command;
+    }
+
     public function nginx($action)
     {
         if (!in_array($action, ['start', 'stop', 'restart', 'reload', 'status'])) {
