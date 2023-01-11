@@ -338,6 +338,7 @@
             @include('stisla.ubuntu.mysql-action')
           </div>
           <div class="card-body">
+            <pre>{{ $mysqlStatus }}</pre>
             <div class="table-responsive">
 
               <table class="table table-striped table-hovered datatable">
@@ -393,6 +394,7 @@
             @include('stisla.ubuntu.mysql-action')
           </div>
           <div class="card-body">
+            <pre>{{ $mysqlStatus }}</pre>
             <div class="table-responsive">
 
               <table class="table table-striped table-hovered datatable">
@@ -448,7 +450,7 @@
             @include('stisla.ubuntu.mysql-action')
           </div>
           <div class="card-body">
-
+            <pre>{{ $mysqlStatus }}</pre>
             <form action="{{ route('ubuntu.create-db') }}" method="POST">
               @csrf
               <div class="row">
