@@ -63,6 +63,11 @@ class CommandService
         return 'certbot --nginx -d ' . $domain;
     }
 
+    public function deleteSSL($domain)
+    {
+        return 'certbot delete --cert-name ' . $domain;
+    }
+
     public function sslApache($domain)
     {
         return 'certbot --apache -d ' . $domain;

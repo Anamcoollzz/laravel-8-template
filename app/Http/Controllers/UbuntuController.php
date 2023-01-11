@@ -221,18 +221,15 @@ class UbuntuController extends Controller
     public function toggleSSL($pathname, $nextStatus)
     {
         $pathnameD = decrypt($pathname);
+        $content   = file_get_contents($pathnameD);
+        $domain    = explode('server_name', $content)[1];
+        $domain    = trim(explode(';', $domain)[0]);
         if ($nextStatus === 'true') {
-            $content = file_get_contents($pathnameD);
-            $domain =  explode('server_name', $content)[1];
-            $domain = trim(explode(';', $domain)[0]);
-            return $domain;
             $command = $this->commandService->sslNginx($domain);
-            return shell_exec($command);
-
             ShellJob::dispatch($command);
             return redirect()->back()->with('successMessage', 'Berhasil menjalankan command ' . $command);
         } else if ($nextStatus === 'false') {
-            $command = $this->commandService->disableNginxConf($pathnameD);
+            $command = $this->commandService->deleteSSL($domain);
             ShellJob::dispatch($command);
             return redirect()->back()->with('successMessage', 'Berhasil menjalankan command ' . $command);
         }
