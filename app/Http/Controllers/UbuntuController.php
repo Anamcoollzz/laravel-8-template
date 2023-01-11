@@ -222,7 +222,7 @@ class UbuntuController extends Controller
     {
         $pathnameD = decrypt($pathname);
         if ($nextStatus === 'true') {
-            $content = file_get_contents($pathname);
+            $content = file_get_contents($pathnameD);
             $domain =  explode('server_name', $content)[1];
             $domain = trim(explode(';', $domain)[0]);
             $command = $this->commandService->sslNginx($domain);
