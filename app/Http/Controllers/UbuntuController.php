@@ -10,6 +10,7 @@ use App\Services\FileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class UbuntuController extends Controller
 {
@@ -93,6 +94,9 @@ class UbuntuController extends Controller
         $primary = 'id';
         if ($database && $table && $action == 'json') {
             return $this->dbService->getAllRowMySqlAsJson($database, $table);
+        } else if ($database && $table && $action == 'json-download') {
+            Storage::put('public/' . $database . '-' . $table . '.json', $this->dbService->getAllRowMySqlAsJson($database, $table));
+            return response()->download(storage_path('app/public/' . $database . '-' . $table . '.json'))->deleteFileAfterSend();
         } else if ($database && $table) {
             $result    = $this->dbService->getAllRowMySql($database, $table);
             $rows      = $result['rows'];

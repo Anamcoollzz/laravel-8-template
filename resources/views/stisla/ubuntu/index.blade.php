@@ -425,6 +425,12 @@
                             'icon' => 'fa fa-code',
                             'tooltip' => 'Lihat JSON',
                         ])
+                        @include('stisla.includes.forms.buttons.btn-success', [
+                            'link' => route('ubuntu.index', ['database' => request('database'), 'table' => $item->table, 'action' => 'json-download']),
+                            'icon' => 'fa fa-code',
+                            'tooltip' => 'Download JSON',
+                            'size' => 'sm',
+                        ])
                       </td>
                     </tr>
                   @endforeach
