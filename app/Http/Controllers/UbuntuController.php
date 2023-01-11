@@ -87,9 +87,9 @@ class UbuntuController extends Controller
         $tables    = [];
         $structure = [];
         $rows      = [];
-        $database  = $request->query('database');
-        $table     = $request->query('table');
-        $action    = $request->query('action');
+        $database  = request('database');
+        $table     = request('table');
+        $action    = request('action');
 
         $primary = 'id';
         if ($database && $table && $action == 'json') {
