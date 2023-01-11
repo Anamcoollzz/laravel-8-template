@@ -225,6 +225,7 @@ class UbuntuController extends Controller
             $content = file_get_contents($pathnameD);
             $domain =  explode('server_name', $content)[1];
             $domain = trim(explode(';', $domain)[0]);
+            return $domain;
             $command = $this->commandService->sslNginx($domain);
             return shell_exec($command);
 
