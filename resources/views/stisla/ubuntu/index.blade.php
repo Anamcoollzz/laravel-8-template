@@ -370,6 +370,7 @@
                                 'id' => $item->{$primary},
                                 'primary' => $primary,
                                 'json' => 'true',
+                                'icon' => 'fa fa-code',
                             ]),
                             'tooltip' => 'Lihat Json',
                         ])

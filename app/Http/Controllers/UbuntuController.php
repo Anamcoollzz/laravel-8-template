@@ -162,6 +162,10 @@ class UbuntuController extends Controller
 
         if (!$d) abort(404);
 
+        if (request('json') === 'true') {
+            return response()->json($d);
+        }
+
         $d = json_decode(json_encode($d), true);
 
         return view('stisla.ubuntu.form-row', [
