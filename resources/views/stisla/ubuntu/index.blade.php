@@ -242,9 +242,12 @@
         <div class="card-header">
           <h4><i class="fa fa-server"></i> {{ __('Nginx Sites Available') }}</h4>
           <div class="card-header-action">
-            @include('stisla.includes.forms.buttons.btn-primary', ['link' => route('ubuntu.nginx', ['nginx' => 'start']), 'label' => 'Start Nginx'])
-            @include('stisla.includes.forms.buttons.btn-primary', ['link' => route('ubuntu.nginx', ['nginx' => 'stop']), 'label' => 'Stop Nginx'])
-            @include('stisla.includes.forms.buttons.btn-primary', ['link' => route('ubuntu.nginx', ['nginx' => 'restart']), 'label' => 'Restart Nginx'])
+            @if (str_contains($nginxStatus, 'running'))
+              @include('stisla.includes.forms.buttons.btn-primary', ['link' => route('ubuntu.nginx', ['nginx' => 'stop']), 'label' => 'Stop Nginx'])
+              @include('stisla.includes.forms.buttons.btn-primary', ['link' => route('ubuntu.nginx', ['nginx' => 'restart']), 'label' => 'Restart Nginx'])
+            @else
+              @include('stisla.includes.forms.buttons.btn-primary', ['link' => route('ubuntu.nginx', ['nginx' => 'start']), 'label' => 'Start Nginx'])
+            @endif
           </div>
         </div>
         <div class="card-body">
