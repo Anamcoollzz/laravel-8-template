@@ -370,8 +370,8 @@
                                 'id' => $item->{$primary},
                                 'primary' => $primary,
                                 'json' => 'true',
-                                'icon' => 'fa fa-code',
                             ]),
+                            'icon' => 'fa fa-code',
                             'tooltip' => 'Lihat Json',
                         ])
                         @include('stisla.includes.forms.buttons.btn-delete', [
