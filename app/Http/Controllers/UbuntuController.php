@@ -20,6 +20,7 @@ class UbuntuController extends Controller
 
     public function __construct()
     {
+        $this->middleware('can:Ubuntu');
         $this->commandService = new CommandService();
         $this->dbService = new DatabaseService();
         $this->fileService = new FileService();

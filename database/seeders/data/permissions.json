@@ -101,6 +101,12 @@
     },
 
     {
+        "name": "Ubuntu",
+        "roles": ["superadmin", "akuntesting"],
+        "group": "Ubuntu"
+    },
+
+    {
         "name": "Backup Database",
         "roles": ["superadmin", "akuntesting"],
         "group": "Backup Database"
