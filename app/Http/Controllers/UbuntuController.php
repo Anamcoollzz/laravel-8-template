@@ -95,7 +95,9 @@ class UbuntuController extends Controller
         if ($database && $table && $action == 'json') {
             return $this->dbService->getAllRowMySqlAsJson($database, $table);
         } else if ($database && $table && $action == 'json-download') {
-            Storage::put('public/' . $database . '-' . $table . '.json', $this->dbService->getAllRowMySqlAsJson($database, $table));
+            $data = $this->dbService->getAllRowMySqlAsJson($database, $table);
+            $data = json_encode($data, JSON_PRETTY_PRINT);
+            Storage::put('public/' . $database . '-' . $table . '.json', $data);
             return response()->download(storage_path('app/public/' . $database . '-' . $table . '.json'))->deleteFileAfterSend();
         } else if ($database && $table) {
             $result    = $this->dbService->getAllRowMySql($database, $table);
