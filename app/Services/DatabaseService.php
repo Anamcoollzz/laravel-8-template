@@ -200,11 +200,26 @@ class DatabaseService
         return $tables;
     }
 
+    public function getPrimaryColumn($database, $table)
+    {
+        $query = "SELECT k.column_name
+                    FROM information_schema.table_constraints t
+                    JOIN information_schema.key_column_usage k
+                    USING(constraint_name,table_schema,table_name)
+                    WHERE t.constraint_type='PRIMARY KEY'
+                    AND t.table_schema= ?
+                    AND t.table_name=?;";
+        $primary = collect(DB::select($query, [$database, $table]));
+        $primary = $primary->pluck('column_name')->toArray()[0] ?? 'id';
+        return $primary;
+    }
+
     public function getAllRowMySql($database, $table)
     {
+        $primary = $this->getPrimaryColumn($database, $table);
         $query = 'SELECT COLUMN_NAME AS `column`, DATA_TYPE AS `type`, CHARACTER_MAXIMUM_LENGTH AS `length`, IS_NULLABLE AS `nullable`, COLUMN_DEFAULT AS `default`, COLUMN_COMMENT AS `comment` FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?;';
         $structure = collect(DB::select($query, [$database, $table]));
-        $query = 'SELECT * FROM ' . $database . '.' . $table . ' ORDER BY id desc;';
+        $query = 'SELECT * FROM ' . $database . '.' . $table . ' ORDER BY `' . $primary . '` desc;';
         $rows = collect(DB::select($query));
         return [
             'structure' => $structure,

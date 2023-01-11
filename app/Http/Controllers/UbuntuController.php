@@ -90,12 +90,14 @@ class UbuntuController extends Controller
         $table     = $request->query('table');
         $action    = $request->query('action');
 
+        $primary = 'id';
         if ($database && $table && $action == 'json') {
             return $this->dbService->getAllRowMySqlAsJson($database, $table);
         } else if ($database && $table) {
             $result    = $this->dbService->getAllRowMySql($database, $table);
             $rows      = $result['rows'];
             $structure = $result['structure'];
+            $primary   = $this->dbService->getPrimaryColumn($database, $table);
         } else if ($database) {
             $tables = $this->dbService->getAllTableMySql($database);
         } else {
@@ -123,6 +125,7 @@ class UbuntuController extends Controller
             'supervisors'      => $supervisors,
             'supervisorStatus' => $supervisorStatus,
             'isEnvExists'      => $isEnvExists,
+            'primary'          => $primary,
         ]);
     }
 
@@ -143,7 +146,8 @@ class UbuntuController extends Controller
 
     public function editRow($database, $table, $id)
     {
-        $d = DB::table($database . '.' . $table)->where('id', $id)->first();
+        $primary = request("primary");
+        $d = DB::table($database . '.' . $table)->where($primary, $id)->first();
 
         if (!$d) abort(404);
 
@@ -153,7 +157,7 @@ class UbuntuController extends Controller
             'title'      => __('MySQL Database'),
             'fullTitle'  => __('MySQL Database'),
             'routeIndex' => route('ubuntu.index'),
-            'action'     => route('ubuntu.update-row', [$database, $table, $id]),
+            'action'     => route('ubuntu.update-row', [$database, $table, $id, 'primary' => $primary]),
             'd'          => $d,
             'keys'       => array_keys($d),
         ]);
@@ -161,8 +165,9 @@ class UbuntuController extends Controller
 
     public function updateRow($database, $table, $id, Request $request)
     {
-        $data = ($request->except('_token', '_method'));
-        DB::table($database . '.' . $table)->where('id', $id)->update($data);
+        $primary = request("primary");
+        $data = $request->except('_token', '_method', 'primary');
+        DB::table($database . '.' . $table)->where($primary, $id)->update($data);
         return redirect()->back()->with('successMessage', 'Berhasil memperbarui data');
     }
 

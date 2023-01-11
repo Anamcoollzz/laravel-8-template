@@ -348,10 +348,11 @@
                       @endforeach
                       <td>
                         @include('stisla.includes.forms.buttons.btn-edit', [
-                            'link' => route('ubuntu.edit-row', ['database' => request('database'), 'table' => request('table'), 'id' => $item->id]),
+                            'link' => route('ubuntu.edit-row', ['database' => request('database'), 'table' => request('table'), 'id' => $item->{$primary}, 'primary' => $primary]),
                         ])
                         @include('stisla.includes.forms.buttons.btn-delete', [
-                            'link' => route('ubuntu.delete-row', ['database' => request('database'), 'table' => request('table'), 'id' => $item->id]),
+                            'link' => route('ubuntu.delete-row', ['database' => request('database'), 'table' => request('table'), 'id' => $item->{$primary}]),
+                            'primary' => $primary,
                         ])
                       </td>
                     </tr>

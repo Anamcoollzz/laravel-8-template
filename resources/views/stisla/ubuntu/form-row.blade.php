@@ -8,7 +8,14 @@
   <div class="section-header">
     <h1>{{ $title }}</h1>
     @include('stisla.includes.breadcrumbs.breadcrumb', [
-        'breadcrumbs' => [['label' => __('Dashboard'), 'link' => route('dashboard.index')], ['label' => 'Ubuntu', 'link' => $routeIndex], ['label' => $fullTitle]],
+        'breadcrumbs' => [
+            ['label' => __('Dashboard'), 'link' => route('dashboard.index')],
+            ['label' => 'Ubuntu', 'link' => $routeIndex],
+            ['label' => $fullTitle, 'link' => $routeIndex],
+            ['label' => request('database'), 'link' => route('ubuntu.index', ['database' => request('database')])],
+            ['label' => request('table'), 'link' => route('ubuntu.index', ['database' => request('database'), 'table' => request('table')])],
+            ['label' => 'Ubah'],
+        ],
     ])
   </div>
 
