@@ -78,6 +78,7 @@ class UbuntuController extends Controller
             $domain =  explode('server_name', $content)[1];
             $domain = trim(explode(';', $domain)[0]);
             $files[$i]->domain = $domain ?? null;
+            $files[$i]->is_ssl = str_contains($content, 'ssl_certificate');
             $i++;
         }
 
@@ -207,6 +208,26 @@ class UbuntuController extends Controller
         $pathnameD = decrypt($pathname);
         if ($nextStatus === 'true') {
             $command = $this->commandService->enableNginxConf($pathnameD);
+            ShellJob::dispatch($command);
+            return redirect()->back()->with('successMessage', 'Berhasil menjalankan command ' . $command);
+        } else if ($nextStatus === 'false') {
+            $command = $this->commandService->disableNginxConf($pathnameD);
+            ShellJob::dispatch($command);
+            return redirect()->back()->with('successMessage', 'Berhasil menjalankan command ' . $command);
+        }
+        abort(404);
+    }
+
+    public function toggleSSL($pathname, $nextStatus)
+    {
+        $pathnameD = decrypt($pathname);
+        if ($nextStatus === 'true') {
+            $content = file_get_contents($pathname);
+            $domain =  explode('server_name', $content)[1];
+            $domain = trim(explode(';', $domain)[0]);
+            $command = $this->commandService->sslNginx($domain);
+            return shell_exec($command);
+
             ShellJob::dispatch($command);
             return redirect()->back()->with('successMessage', 'Berhasil menjalankan command ' . $command);
         } else if ($nextStatus === 'false') {

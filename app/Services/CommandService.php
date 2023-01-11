@@ -58,6 +58,16 @@ class CommandService
         return 'ln -s ' . $path . ' /etc/nginx/sites-enabled/';
     }
 
+    public function sslNginx($domain)
+    {
+        return 'certbot --nginx -d ' . $domain;
+    }
+
+    public function sslApache($domain)
+    {
+        return 'certbot --apache -d ' . $domain;
+    }
+
     public function disableNginxConf($path)
     {
         $paths = explode('/', $path);

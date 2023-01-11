@@ -258,6 +258,7 @@
                   <th class="text-center">{{ __('Filename') }}</th>
                   <th class="text-center">{{ __('Domain') }}</th>
                   <th class="text-center">{{ __('Enabled') }}</th>
+                  <th class="text-center">{{ __('SSL') }}</th>
                   <th class="text-center">{{ __('Aksi') }}</th>
                 </tr>
               </thead>
@@ -276,6 +277,13 @@
                         <a href="{{ route('ubuntu.toggle-enabled', [encrypt($item->getPathname()), 'false']) }}" class="btn btn-sm btn-success">true</a>
                       @else
                         <a href="{{ route('ubuntu.toggle-enabled', [encrypt($item->getPathname()), 'true']) }}" class="btn btn-sm btn-danger">false</a>
+                      @endif
+                    </td>
+                    <td>
+                      @if ($item->is_ssl)
+                        <a href="{{ route('ubuntu.toggle-ssl', [encrypt($item->getPathname()), 'false']) }}" class="btn btn-sm btn-success">true</a>
+                      @else
+                        <a href="{{ route('ubuntu.toggle-ssl', [encrypt($item->getPathname()), 'true']) }}" class="btn btn-sm btn-danger">false</a>
                       @endif
                     </td>
                     <td>
