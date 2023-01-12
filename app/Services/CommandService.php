@@ -35,8 +35,8 @@ class CommandService
     public function laravelMigrateRefresh($pathnameD)
     {
         $commands = [];
-        $commands[] = 'cd ' . $pathnameD;
-        $commands[] = 'php artisan migrate:refresh';
+        // $commands[] = 'cd ' . $pathnameD;
+        $commands[] = 'php ' . $pathnameD . '/artisan migrate:refresh';
 
         $command = implode(' && ', $commands);
 
