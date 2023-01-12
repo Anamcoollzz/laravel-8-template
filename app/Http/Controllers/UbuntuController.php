@@ -352,4 +352,12 @@ class UbuntuController extends Controller
         ShellJob::dispatch($command);
         return redirect()->back()->with('successMessage', 'Berhasil menjalankan artisan command  ' . $command);
     }
+
+    public function laravelMigrateRefresh()
+    {
+        $pathnameD = decrypt(request('folder'));
+        $command = $this->commandService->laravelMigrateRefresh($pathnameD);
+        ShellJob::dispatch($command);
+        return redirect()->back()->with('successMessage', 'Berhasil menjalankan artisan command  ' . $command);
+    }
 }

@@ -51,6 +51,7 @@
                   <br>
                   <h6>Migrations</h6>
                   <a href="{{ route('ubuntu.laravelMigrate', ['folder' => encrypt($path)]) }}" class="btn btn-primary btn-sm">Migrate</a>
+                  <a href="{{ route('ubuntu.laravelMigrateRefresh', ['folder' => encrypt($path)]) }}" class="btn btn-primary btn-sm">Migrate Refresh</a>
                   <br>
                   <br>
                 @endif

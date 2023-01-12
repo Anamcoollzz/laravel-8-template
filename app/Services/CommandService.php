@@ -32,6 +32,17 @@ class CommandService
         return $command;
     }
 
+    public function laravelMigrateRefresh($pathnameD)
+    {
+        $commands = [];
+        $commands[] = 'cd ' . $pathnameD;
+        $commands[] = 'php artisan migrate:refresh';
+
+        $command = implode(' && ', $commands);
+
+        return $command;
+    }
+
     public function laravelDbSeed($pathnameD, $class)
     {
         $commands = [];
