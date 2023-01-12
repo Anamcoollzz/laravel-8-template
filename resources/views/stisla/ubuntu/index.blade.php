@@ -39,6 +39,21 @@
                 <br>
                 <br>
                 <br>
+                @if ($isLaravel)
+                  <h5>Laravel Projek</h5>
+                  <br>
+                  <h6>Seeders</h6>
+                  <a href="{{ route('ubuntu.laravelSeeder', ['seeder' => 'all', 'folder' => encrypt($path)]) }}" class="btn btn-primary mb-3 btn-sm">Seed All</a>
+                  @foreach ($seeders as $seed)
+                    <a href="{{ route('ubuntu.laravelSeeder', ['seeder' => $seed, 'folder' => encrypt($path)]) }}" class="btn btn-primary mb-3 btn-sm">{{ $seed }}</a>
+                  @endforeach
+                  <br>
+                  <br>
+                  <h6>Migrations</h6>
+                  <a href="{{ route('ubuntu.laravelMigrate', ['folder' => encrypt($path)]) }}" class="btn btn-primary btn-sm">Migrate</a>
+                  <br>
+                  <br>
+                @endif
               </div>
             </div>
           </form>

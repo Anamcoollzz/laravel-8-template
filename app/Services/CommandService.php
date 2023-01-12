@@ -21,6 +21,32 @@ class CommandService
         return $command;
     }
 
+    public function laravelMigrate($pathnameD)
+    {
+        $commands = [];
+        $commands[] = 'cd ' . $pathnameD;
+        $commands[] = 'php artisan migrate';
+
+        $command = implode(' && ', $commands);
+
+        return $command;
+    }
+
+    public function laravelDbSeed($pathnameD, $class)
+    {
+        $commands = [];
+        $commands[] = 'cd ' . $pathnameD;
+        if ($class === 'all') {
+            $commands[] = 'php artisan db:seed';
+        } else {
+            $commands[] = 'php artisan db:seed --class=' . $class;
+        }
+
+        $command = implode(' && ', $commands);
+
+        return $command;
+    }
+
     public function supervisor($action)
     {
         if (!in_array($action, ['start', 'stop', 'restart', 'reload', 'status', 'update', 'reread'])) {

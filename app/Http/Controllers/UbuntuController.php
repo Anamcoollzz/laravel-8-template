@@ -23,8 +23,8 @@ class UbuntuController extends Controller
     {
         $this->middleware('can:Ubuntu');
         $this->commandService = new CommandService();
-        $this->dbService = new DatabaseService();
-        $this->fileService = new FileService();
+        $this->dbService      = new DatabaseService();
+        $this->fileService    = new FileService();
     }
 
     public function index(Request $request)
@@ -46,6 +46,7 @@ class UbuntuController extends Controller
         }
 
         // $path       = '/Users/anamkun/Documents/PROJEK/ME';
+        // $path = '/Users/anamkun/Documents/PROJEK/ME/laravel-8-template';
         $path = '/var/www';
         if ($request->query('folder')) {
             $path = decrypt($request->query('folder'));
@@ -59,6 +60,7 @@ class UbuntuController extends Controller
         $isEnvExists = false;
         $foldersWww = [];
         $filesWww = [];
+        $isLaravel = false;
         if (File::exists($path)) {
             $filesWww   = File::files($path, true);
             foreach ($filesWww as $f) {
@@ -69,8 +71,21 @@ class UbuntuController extends Controller
             $foldersWww = File::directories($path);
         }
 
+        foreach ($foldersWww as $folder) {
+            if (basename($folder) === 'routes') {
+                $isLaravel = true;
+            }
+        }
+
+        $seeders = [];
+        if ($isLaravel) {
+            $seederFiles   = File::files($path . '/database/seeders', true);
+            foreach ($seederFiles as $seed) {
+                $seeders[] = str_replace('.php', '', $seed->getFilename());
+            }
+        }
+
         $isGit = File::exists($path . '/.git');
-        $isLaravel = File::exists($path . '/composer.json');
 
         $i = 0;
         foreach ($files as $file) {
@@ -137,6 +152,7 @@ class UbuntuController extends Controller
             'isEnvExists'      => $isEnvExists,
             'primary'          => $primary,
             'mysqlStatus'      => $mysqlStatus,
+            'seeders'          => $seeders,
         ]);
     }
 
@@ -319,5 +335,21 @@ class UbuntuController extends Controller
         $command = $this->commandService->supervisor($action);
         ShellJob::dispatch($command);
         return redirect()->back()->with('successMessage', 'Berhasil menjalankan command  ' . $command);
+    }
+
+    public function laravelSeeder($class)
+    {
+        $pathnameD = decrypt(request('folder'));
+        $command = $this->commandService->laravelDbSeed($pathnameD, $class);
+        ShellJob::dispatch($command);
+        return redirect()->back()->with('successMessage', 'Berhasil menjalankan command  ' . $command);
+    }
+
+    public function laravelMigrate()
+    {
+        $pathnameD = decrypt(request('folder'));
+        $command = $this->commandService->laravelMigrate($pathnameD);
+        ShellJob::dispatch($command);
+        return redirect()->back()->with('successMessage', 'Berhasil menjalankan artisan command  ' . $command);
     }
 }
