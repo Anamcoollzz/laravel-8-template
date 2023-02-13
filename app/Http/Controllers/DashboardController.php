@@ -46,27 +46,30 @@ class DashboardController extends Controller
         $widgets = [];
         $user = auth()->user();
         if ($user->hasRole('superadmin')) {
-            $widgets[] = (object)[
-                'title' => 'Pengguna',
-                'count' => User::count(),
-                'bg'    => 'primary',
-                'icon'  => 'users',
-                'route' => route('user-management.users.index'),
-            ];
-            $widgets[] = (object)[
-                'title' => 'Role',
-                'count' => Role::count(),
-                'bg'    => 'danger',
-                'icon'  => 'lock',
-                'route' => route('user-management.roles.index')
-            ];
-            $widgets[] = (object)[
-                'title' => 'Log Aktivitas',
-                'count' => ActivityLog::count(),
-                'bg'    => 'success',
-                'icon'  => 'clock-rotate-left',
-                'route' => route('activity-logs.index')
-            ];
+            if ($user->can('Pengguna'))
+                $widgets[] = (object)[
+                    'title' => 'Pengguna',
+                    'count' => User::count(),
+                    'bg'    => 'primary',
+                    'icon'  => 'users',
+                    'route' => route('user-management.users.index'),
+                ];
+            if ($user->can('Role'))
+                $widgets[] = (object)[
+                    'title' => 'Role',
+                    'count' => Role::count(),
+                    'bg'    => 'danger',
+                    'icon'  => 'lock',
+                    'route' => route('user-management.roles.index')
+                ];
+            if ($user->can('Log Aktivitas'))
+                $widgets[] = (object)[
+                    'title' => 'Log Aktivitas',
+                    'count' => ActivityLog::count(),
+                    'bg'    => 'success',
+                    'icon'  => 'clock-rotate-left',
+                    'route' => route('activity-logs.index')
+                ];
         }
 
         if ($user->can('Notifikasi')) {
@@ -94,6 +97,7 @@ class DashboardController extends Controller
         return view('stisla.dashboard.index', [
             'widgets' => $widgets,
             'logs'    => $logs,
+            'user'    => $user,
         ]);
     }
 
