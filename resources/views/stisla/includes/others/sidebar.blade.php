@@ -45,22 +45,35 @@
                       return Request::is($item);
                   })
                   ->count();
+              $_menu_condition = $_menu->childs
+                  ->pluck('permission')
+                  ->filter(function ($item) use ($_user) {
+                      return $_user->can($item);
+                  })
+                  ->count();
             @endphp
-            <li class="nav-item dropdown @if ($_is_active) active @endif">
-              <a href="#" class="nav-link has-dropdown">
-                <i class="fas fa-users"></i>
-                <span>{{ __($_menu->menu_name) }}</span>
-              </a>
-              <ul class="dropdown-menu">
-                @foreach ($_menu->childs as $_child_menu)
-                  <li @if (Request::is($_child_menu->is_active_if_url_includes)) class="active" @endif>
-                    <a class="nav-link" href="{{ $_child_menu->fix_url }}" @if ($_child_menu->is_blank) target="_blank" @endif>
-                      {{ __($_child_menu->menu_name) }}
-                    </a>
-                  </li>
-                @endforeach
-              </ul>
-            </li>
+            @if ($_menu_condition)
+              <li class="nav-item dropdown @if ($_is_active) active @endif">
+                <a href="#" class="nav-link has-dropdown">
+                  <i class="fas fa-users"></i>
+                  <span>{{ __($_menu->menu_name) }}</span>
+                </a>
+                <ul class="dropdown-menu">
+                  @foreach ($_menu->childs as $_child_menu)
+                    @php
+                      $_sub_menu_condition = $_child_menu->permission === null || $_user->can($_child_menu->permission);
+                    @endphp
+                    @if ($_sub_menu_condition)
+                      <li @if (Request::is($_child_menu->is_active_if_url_includes)) class="active" @endif>
+                        <a class="nav-link" href="{{ $_child_menu->fix_url }}" @if ($_child_menu->is_blank) target="_blank" @endif>
+                          {{ __($_child_menu->menu_name) }}
+                        </a>
+                      </li>
+                    @endif
+                  @endforeach
+                </ul>
+              </li>
+            @endif
           @endif
         @endforeach
       @endforeach
