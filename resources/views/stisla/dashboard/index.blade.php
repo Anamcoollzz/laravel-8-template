@@ -15,7 +15,7 @@
           <h2>{{ __('Selamat Datang') }}, {{ Auth::user()->name ?? 'Your Name' }}</h2>
           <p class="lead">{{ $_app_description }}</p>
 
-          @if (auth()->check())
+          @if (auth()->user()->can('Profil'))
             <div class="mt-4">
               <a href="{{ route('profile.index') }}" class="btn btn-outline-white btn-lg btn-icon icon-left">
                 <i class="far fa-user"></i> {{ __('Lihat Profil') }}
@@ -44,59 +44,62 @@
         </div>
       </div>
     @endforeach
-    <div class="col-12">
-      <div class="card">
-        <div class="card-header">
-          <h4><i class="fa fa-clock-rotate-left"></i> {{ __('Log Aktivitas Terbaru') }}</h4>
 
-        </div>
-        <div class="card-body">
-          <div class="table-responsive">
+    @if ($user->can('Log Aktivitas'))
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h4><i class="fa fa-clock-rotate-left"></i> {{ __('Log Aktivitas Terbaru') }}</h4>
 
-            <table class="table table-striped table-hovered" id="datatable">
-              <thead>
-                <tr>
-                  <th class="text-center">#</th>
-                  <th class="text-center">{{ __('Judul') }}</th>
-                  <th class="text-center">{{ __('Jenis') }}</th>
-                  <th class="text-center">{{ __('Request Data') }}</th>
-                  <th class="text-center">{{ __('Before') }}</th>
-                  <th class="text-center">{{ __('After') }}</th>
-                  <th class="text-center">{{ __('IP') }}</th>
-                  <th class="text-center">{{ __('User Agent') }}</th>
-                  <th class="text-center">{{ __('Pengguna') }}</th>
-                  <th class="text-center">{{ __('Role') }}</th>
-                  <th class="text-center">{{ __('Created At') }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                @foreach ($logs as $item)
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+
+              <table class="table table-striped table-hovered" id="datatable">
+                <thead>
                   <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $item->title }}</td>
-                    <td>{{ $item->activity_type }}</td>
-                    <td>
-                      <textarea>{{ $item->request_data }}</textarea>
-                    </td>
-                    <td>
-                      <textarea>{{ $item->before }}</textarea>
-                    </td>
-                    <td>
-                      <textarea>{{ $item->after }}</textarea>
-                    </td>
-                    <td>{{ $item->ip }}</td>
-                    <td>{{ $item->user_agent }}</td>
-                    <td>{{ $item->user->name }}</td>
-                    <td>{{ $item->role->name ?? '-' }}</td>
-                    <td>{{ $item->created_at }}</td>
+                    <th class="text-center">#</th>
+                    <th class="text-center">{{ __('Judul') }}</th>
+                    <th class="text-center">{{ __('Jenis') }}</th>
+                    <th class="text-center">{{ __('Request Data') }}</th>
+                    <th class="text-center">{{ __('Before') }}</th>
+                    <th class="text-center">{{ __('After') }}</th>
+                    <th class="text-center">{{ __('IP') }}</th>
+                    <th class="text-center">{{ __('User Agent') }}</th>
+                    <th class="text-center">{{ __('Pengguna') }}</th>
+                    <th class="text-center">{{ __('Role') }}</th>
+                    <th class="text-center">{{ __('Created At') }}</th>
                   </tr>
-                @endforeach
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  @foreach ($logs as $item)
+                    <tr>
+                      <td>{{ $loop->iteration }}</td>
+                      <td>{{ $item->title }}</td>
+                      <td>{{ $item->activity_type }}</td>
+                      <td>
+                        <textarea>{{ $item->request_data }}</textarea>
+                      </td>
+                      <td>
+                        <textarea>{{ $item->before }}</textarea>
+                      </td>
+                      <td>
+                        <textarea>{{ $item->after }}</textarea>
+                      </td>
+                      <td>{{ $item->ip }}</td>
+                      <td>{{ $item->user_agent }}</td>
+                      <td>{{ $item->user->name }}</td>
+                      <td>{{ $item->role->name ?? '-' }}</td>
+                      <td>{{ $item->created_at }}</td>
+                    </tr>
+                  @endforeach
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    @endif
 
 
   </div>

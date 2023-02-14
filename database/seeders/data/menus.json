@@ -74,14 +74,14 @@
                         "menu_name": "Pengguna",
                         "route_name": "user-management.users.index",
                         "icon": null,
-                        "permission": null,
+                        "permission": "Pengguna",
                         "is_active_if_url_includes": "user-management/users*"
                     },
                     {
                         "menu_name": "Role",
                         "route_name": "user-management.roles.index",
                         "icon": null,
-                        "permission": null,
+                        "permission": "Role",
                         "is_active_if_url_includes": "user-management/roles*"
                     }
                 ]
