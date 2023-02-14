@@ -41,6 +41,13 @@ class CrudExampleController extends Controller
     private EmailService $emailService;
 
     /**
+     * icon of module
+     *
+     * @var String
+     */
+    private String $icon = 'fa fa-atom';
+
+    /**
      * constructor method
      *
      * @return void
@@ -68,13 +75,21 @@ class CrudExampleController extends Controller
     {
         $user = auth()->user();
         return view('stisla.crud-example.index', [
-            'data'           => $this->crudExampleRepository->getLatest(),
-            'canCreate'      => $user->can('Contoh CRUD Tambah'),
-            'canUpdate'      => $user->can('Contoh CRUD Ubah'),
-            'canDelete'      => $user->can('Contoh CRUD Hapus'),
-            'canImportExcel' => $user->can('Contoh CRUD Impor Excel'),
-            'canExport'      => $user->can('Contoh CRUD Ekspor'),
-            'title'          => __('Contoh CRUD')
+            'data'                => $this->crudExampleRepository->getLatest(),
+            'canCreate'           => $user->can('Contoh CRUD Tambah'),
+            'canUpdate'           => $user->can('Contoh CRUD Ubah'),
+            'canDelete'           => $user->can('Contoh CRUD Hapus'),
+            'canImportExcel'      => $user->can('Contoh CRUD Impor Excel'),
+            'canExport'           => $user->can('Contoh CRUD Ekspor'),
+            'title'               => __('Contoh CRUD'),
+            'module_icon'         => $this->icon,
+            'route_create'        => route('crud-examples.create'),
+            'route_import_excel'  => route('crud-examples.import-excel'),
+            'route_example_excel' => route('crud-examples.import-excel-example'),
+            'route_pdf'           => route('crud-examples.pdf'),
+            'route_excel'         => route('crud-examples.excel'),
+            'route_csv'           => route('crud-examples.csv'),
+            'route_json'          => route('crud-examples.json'),
         ]);
     }
 
@@ -85,12 +100,27 @@ class CrudExampleController extends Controller
      */
     public function create()
     {
+        $title      = __('Contoh CRUD');
+        $routeIndex = route('crud-examples.index');
+        $fullTitle  = __('Tambah Contoh CRUD');
         return view('stisla.crud-example.form', [
             'selectOptions' => ['option 1' => 'option 1', 'option 2' => 'option 2', 'option 3' => 'option 3',],
-            'title'         => __('Contoh CRUD'),
-            'fullTitle'     => __('Tambah Contoh CRUD'),
-            'routeIndex'    => route('crud-examples.index'),
-            'action'        => route('crud-examples.store')
+            'title'         => $title,
+            'fullTitle'     => $fullTitle,
+            'routeIndex'    => $routeIndex,
+            'action'        => route('crud-examples.store'),
+            'module_icon'   => $this->icon,
+            'breadcrumbs'   => [
+                [
+                    'label' => __('Dashboard'),
+                    'link'  => route('dashboard.index')
+                ], [
+                    'label' => $title,
+                    'link'  => $routeIndex
+                ], [
+                    'label' => 'Tambah'
+                ]
+            ]
         ]);
     }
 
@@ -113,7 +143,9 @@ class CrudExampleController extends Controller
             "time",
             "color",
             'select2',
-            'select2_multiple'
+            'select2_multiple',
+            'summernote',
+            'summernote_simple',
         ]);
         if ($request->hasFile('file')) {
             $data['file'] = $this->fileService->uploadCrudExampleFile($request->file('file'));
@@ -132,13 +164,27 @@ class CrudExampleController extends Controller
      */
     public function edit(CrudExample $crudExample)
     {
+        $title      = __('Contoh CRUD');
+        $routeIndex = route('crud-examples.index');
         return view('stisla.crud-example.form', [
             'selectOptions' => ['option 1' => 'option 1', 'option 2' => 'option 2', 'option 3' => 'option 3',],
             'd'             => $crudExample,
-            'title'         => __('Contoh CRUD'),
+            'title'         => $title,
             'fullTitle'     => __('Ubah Contoh CRUD'),
-            'routeIndex'    => route('crud-examples.index'),
-            'action'        => route('crud-examples.update', [$crudExample->id])
+            'routeIndex'    => $routeIndex,
+            'action'        => route('crud-examples.update', [$crudExample->id]),
+            'module_icon'   => $this->icon,
+            'breadcrumbs'   => [
+                [
+                    'label' => __('Dashboard'),
+                    'link'  => route('dashboard.index')
+                ], [
+                    'label' => $title,
+                    'link'  => $routeIndex
+                ], [
+                    'label' => 'Ubah'
+                ]
+            ]
         ]);
     }
 
@@ -162,7 +208,9 @@ class CrudExampleController extends Controller
             "time",
             "color",
             'select2',
-            'select2_multiple'
+            'select2_multiple',
+            'summernote',
+            'summernote_simple',
         ]);
         if ($request->hasFile('file')) {
             $data['file'] = $this->fileService->uploadCrudExampleFile($request->file('file'));

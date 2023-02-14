@@ -8,7 +8,7 @@
   <div class="section-header">
     <h1>{{ $title }}</h1>
     @include('stisla.includes.breadcrumbs.breadcrumb', [
-        'breadcrumbs' => [['label' => __('Dashboard'), 'link' => route('dashboard.index')], ['label' => $title, 'link' => $routeIndex], ['label' => $fullTitle]],
+        'breadcrumbs' => $breadcrumbs,
     ])
   </div>
 
@@ -20,7 +20,7 @@
       <div class="col-12">
         <div class="card">
           <div class="card-header">
-            <h4><i class="fa fa-users"></i> {{ $fullTitle }}</h4>
+            <h4><i class="{{ $module_icon }}"></i> {{ $fullTitle }}</h4>
             <div class="card-header-action">
               @include('stisla.includes.forms.buttons.btn-view', ['link' => route('crud-examples.index')])
             </div>
@@ -98,6 +98,23 @@
                 </div>
                 <div class="col-md-6">
                   @include('stisla.includes.forms.inputs.input-colorpicker', ['required' => true, 'name' => 'color', 'label' => 'Color'])
+                </div>
+                <div class="col-md-12">
+                  @include('stisla.includes.forms.editors.summernote', [
+                      'required' => true,
+                      'name' => 'summernote_simple',
+                      'label' => 'Summernote Simple',
+                      'simple' => true,
+                      'id' => 'summernote_simple',
+                  ])
+                </div>
+                <div class="col-md-12">
+                  @include('stisla.includes.forms.editors.summernote', [
+                      'required' => true,
+                      'name' => 'summernote',
+                      'label' => 'Summernote',
+                      'id' => 'summernote',
+                  ])
                 </div>
                 <div class="col-md-12">
                   <br>

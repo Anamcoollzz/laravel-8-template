@@ -27,6 +27,8 @@ class CreateCrudExamplesTable extends Migration
             $table->date('date');
             $table->time('time');
             $table->string('color', 10);
+            $table->text('summernote_simple');
+            $table->longText('summernote');
             $table->timestamps();
         });
     }

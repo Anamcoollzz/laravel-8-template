@@ -31,6 +31,8 @@ class CrudExampleSeeder extends Seeder
                 'date'             => $faker->date('Y-m-d'),
                 'time'             => $faker->date('H:i:s'),
                 'color'            => $faker->hexColor,
+                'summernote_simple' => $faker->text(100),
+                'summernote'       => $faker->text(100),
                 'created_at'       => now(),
                 'updated_at'       => now(),
             ]);

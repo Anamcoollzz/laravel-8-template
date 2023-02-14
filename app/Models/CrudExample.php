@@ -27,6 +27,8 @@ class CrudExample extends Model
         'date',
         'time',
         'color',
+        'summernote_simple',
+        'summernote',
     ];
 
     /**

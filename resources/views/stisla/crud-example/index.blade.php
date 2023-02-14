@@ -16,12 +16,12 @@
           @if ($canExport)
             <div class="card">
               <div class="card-header">
-                <h4><i class="fa fa-atom"></i> {!! __('Aksi Ekspor <small>(Server Side)</small>') !!}</h4>
+                <h4><i class="{{ $module_icon }}"></i> {!! __('Aksi Ekspor <small>(Server Side)</small>') !!}</h4>
                 <div class="card-header-action">
-                  @include('stisla.includes.forms.buttons.btn-pdf-download', ['link' => route('crud-examples.pdf')])
-                  @include('stisla.includes.forms.buttons.btn-excel-download', ['link' => route('crud-examples.excel')])
-                  @include('stisla.includes.forms.buttons.btn-csv-download', ['link' => route('crud-examples.csv')])
-                  @include('stisla.includes.forms.buttons.btn-json-download', ['link' => route('crud-examples.json')])
+                  @include('stisla.includes.forms.buttons.btn-pdf-download', ['link' => $route_pdf])
+                  @include('stisla.includes.forms.buttons.btn-excel-download', ['link' => $route_excel])
+                  @include('stisla.includes.forms.buttons.btn-csv-download', ['link' => $route_csv])
+                  @include('stisla.includes.forms.buttons.btn-json-download', ['link' => $route_json])
                 </div>
               </div>
             </div>
@@ -29,14 +29,14 @@
 
           <div class="card">
             <div class="card-header">
-              <h4><i class="fa fa-atom"></i> Data {{ $title }}</h4>
+              <h4><i class="{{ $module_icon }}"></i> Data {{ $title }}</h4>
 
               <div class="card-header-action">
                 @if ($canImportExcel)
                   @include('stisla.includes.forms.buttons.btn-import-excel')
                 @endif
                 @if ($canCreate)
-                  @include('stisla.includes.forms.buttons.btn-add', ['link' => route('crud-examples.create')])
+                  @include('stisla.includes.forms.buttons.btn-add', ['link' => $route_create])
                 @endif
               </div>
             </div>
@@ -110,7 +110,7 @@
             </div>
           </div>
         @else
-          @include('stisla.includes.others.empty-state', ['title' => 'Data ' . $title, 'icon' => 'fa fa-atom', 'link' => route('crud-examples.create')])
+          @include('stisla.includes.others.empty-state', ['title' => 'Data ' . $title, 'icon' => $module_icon, 'link' => $route_create])
         @endif
       </div>
 
@@ -126,16 +126,14 @@
 @endpush
 
 @push('scripts')
-  <script>
-
-  </script>
+  <script></script>
 @endpush
 
 @push('modals')
   @if ($canImportExcel)
     @include('stisla.includes.modals.modal-import-excel', [
-        'formAction' => route('crud-examples.import-excel'),
-        'downloadLink' => route('crud-examples.import-excel-example'),
+        'formAction' => $route_import_excel,
+        'downloadLink' => $route_example_excel,
     ])
   @endif
 @endpush

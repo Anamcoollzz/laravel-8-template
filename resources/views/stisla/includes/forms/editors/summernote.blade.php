@@ -1,13 +1,12 @@
-<div>
-  <label @isset($id) for="{{ $id }}" @endisset>
-    {{ $label }}
-    @if ($required ?? false) <span class="text-danger">*</span> @endif
+<div class="form-group">
+  <label for="{{ $id }}">{{ $label ?? 'Summernote Simple' }}
+    @if ($required ?? false)
+      <span class="text-danger">*</span>
+    @endif
   </label>
-  <textarea class="summernote" @if ($required ?? false) required @endif
-    name="{{ $name ?? $id }}" @isset($id) id="{{ $id }}"
-    @endisset>{{ old($name ?? $id, $d->$name ?? ($d->$id ?? '')) }}</textarea>
+  <textarea class="{{ $simple ?? false ? 'summernote-simple' : 'summernote' }}" name="{{ $name ?? $id }}" id="{{ $id }}">{{ $value ?? ($d[$name ?? $id] ?? old($name ?? $id)) }}</textarea>
   @if ($errors->has($name ?? $id))
-    <span class="text-danger">{{ $errors->first($name ?? $id) }}</span>
+    <div class="text-danger" style="margin-top: -30px;">{{ $errors->first($name ?? $id) }}</div>
   @endif
 </div>
 
@@ -15,14 +14,35 @@
   @php
     define('SUMMERNOTE', true);
   @endphp
+
+  @push('js')
+    <script src="{{ asset('plugins/summernote/dist/summernote-bs4.js') }}"></script>
+  @endpush
+
+  @push('css')
+    <link rel="stylesheet" href="{{ asset('plugins/summernote/dist/summernote-bs4.min.css') }}">
+  @endpush
+
   @push('scripts')
     <script>
       $(function() {
-        $('.summernote').summernote({
-          height: 300
-        });
-      })
+        if (jQuery().summernote) {
+          $(".summernote").summernote({
+            dialogsInBody: true,
+            minHeight: 250,
+          });
+          $(".summernote-simple").summernote({
+            dialogsInBody: true,
+            minHeight: 150,
+            toolbar: [
+              ['style', ['bold', 'italic', 'underline', 'clear']],
+              ['font', ['strikethrough']],
+              ['para', ['paragraph']]
+            ]
+          });
+        }
 
+      })
     </script>
   @endpush
 @endif
