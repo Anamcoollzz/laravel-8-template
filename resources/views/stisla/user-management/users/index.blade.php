@@ -56,7 +56,11 @@
                       <td>{{ $item->phone_number }}</td>
                       <td>{{ $item->birth_date }}</td>
                       <td>{{ $item->address }}</td>
-                      <td>{{ $item->email }}</td>
+                      <td>
+                        <a href="mailto:{{ $item->email }}" target="_blank">
+                          {{ $item->email }}
+                        </a>
+                      </td>
                       @if ($roleCount > 1)
                         <td>
                           @foreach ($item->roles as $role)
