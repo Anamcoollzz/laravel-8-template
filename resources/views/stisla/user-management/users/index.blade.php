@@ -38,7 +38,9 @@
                     <th>{{ __('Tanggal Lahir') }}</th>
                     <th>{{ __('Alamat') }}</th>
                     <th>{{ __('Email') }}</th>
-                    <th>{{ __('Role') }}</th>
+                    @if ($roleCount > 1)
+                      <th>{{ __('Role') }}</th>
+                    @endif
                     <th>{{ __('Terakhir Masuk') }}</th>
                     @if ($_is_login_must_verified)
                       <th>{{ __('Waktu Verifikasi') }}</th>
@@ -55,15 +57,17 @@
                       <td>{{ $item->birth_date }}</td>
                       <td>{{ $item->address }}</td>
                       <td>{{ $item->email }}</td>
-                      <td>
-                        @foreach ($item->roles as $role)
-                          @if (Auth::user()->can('Role Ubah'))
-                            <a href="{{ route('user-management.roles.edit', $role->id) }}">{{ $role->name }}</a>
-                          @else
-                            {{ $role->name }}
-                          @endif
-                        @endforeach
-                      </td>
+                      @if ($roleCount > 1)
+                        <td>
+                          @foreach ($item->roles as $role)
+                            @if (Auth::user()->can('Role Ubah'))
+                              <a href="{{ route('user-management.roles.edit', $role->id) }}">{{ $role->name }}</a>
+                            @else
+                              {{ $role->name }}
+                            @endif
+                          @endforeach
+                        </td>
+                      @endif
                       <td>{{ $item->last_login ?? '-' }}</td>
                       @if ($_is_login_must_verified)
                         <td>{{ $item->email_verified_at ?? '-' }}</td>

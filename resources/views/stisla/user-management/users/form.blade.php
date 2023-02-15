@@ -74,9 +74,13 @@
                       'icon' => 'fas fa-map-marker-alt',
                   ])
                 </div>
-                <div class="col-md-6">
-                  @include('stisla.includes.forms.selects.select', ['id' => 'role', 'name' => 'role', 'options' => $roleOptions, 'label' => 'Role', 'required' => true])
-                </div>
+                @if (count($roleOptions) > 1)
+                  <div class="col-md-6">
+                    @include('stisla.includes.forms.selects.select', ['id' => 'role', 'name' => 'role', 'options' => $roleOptions, 'label' => 'Role', 'required' => true])
+                  </div>
+                @elseif(count($roleOptions) == 1)
+                  <input type="hidden" name="role" value="{{ collect($roleOptions)->first() }}">
+                @endif
                 <div class="col-md-6">
                   @include('stisla.includes.forms.inputs.input-email')
                 </div>

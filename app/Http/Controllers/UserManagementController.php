@@ -39,6 +39,7 @@ class UserManagementController extends Controller
     public function index()
     {
         $user = auth()->user();
+        $roleOptions = $this->userRepository->getRoles()->pluck('name', 'id')->toArray();
         return view('stisla.user-management.users.index', [
             'data'           => $this->userRepository->getUsers(),
             'canImportExcel' => $user->can('Pengguna Impor Excel'),
@@ -46,6 +47,7 @@ class UserManagementController extends Controller
             'canUpdate'      => $user->can('Pengguna Ubah'),
             'canDelete'      => $user->can('Pengguna Hapus'),
             'canForceLogin'  => $user->can('Pengguna Force Login'),
+            'roleCount'      => count($roleOptions),
         ]);
     }
 
