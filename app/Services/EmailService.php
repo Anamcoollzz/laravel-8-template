@@ -139,13 +139,13 @@ class EmailService
     /**
      * send mailtrap test
      *
-     * @param string $mail_from_address
-     * @param string $mail_from_name
      * @param string $to
      * @param Mailable $mailable
+     * @param string $mail_from_address
+     * @param string $mail_from_name
      * @return void
      */
-    public function sendMailTrapTest(string $mail_from_address, string $mail_from_name, string $to, Mailable $mailable)
+    public function sendMailTrapTest(string $to, Mailable $mailable, string $mail_from_address = 'anam@anam.anam', string $mail_from_name = 'Hairul Anam')
     {
         config(['mail.from.address' => $mail_from_address]);
         config(['mail.from.name' => $mail_from_name]);
