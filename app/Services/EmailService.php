@@ -135,4 +135,31 @@ class EmailService
     {
         $this->sendDirect($to, new TestingMail($text));
     }
+
+    /**
+     * send mailtrap test
+     *
+     * @param string $mail_from_address
+     * @param string $mail_from_name
+     * @param string $to
+     * @param Mailable $mailable
+     * @return void
+     */
+    public function sendMailTrapTest(string $mail_from_address, string $mail_from_name, string $to, Mailable $mailable)
+    {
+        config(['mail.from.address' => $mail_from_address]);
+        config(['mail.from.name' => $mail_from_name]);
+        config(['mail.default' => 'smtp']);
+        config(['mail.mailers.smtp' => [
+            'transport'  => 'smtp',
+            'host'       => 'sandbox.smtp.mailtrap.io',
+            'port'       => 2525,
+            'encryption' => 'tls',
+            'username'   => 'b1cb77a738c140',
+            'password'   => 'be3a601e17cd16',
+            'timeout'    => null,
+            'auth_mode'  => null,
+        ]]);
+        Mail::to($to)->send($mailable);
+    }
 }
