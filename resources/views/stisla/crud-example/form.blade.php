@@ -61,7 +61,7 @@
                 <div class="col-md-6">
                   @include('stisla.includes.forms.selects.select2', [
                       'id' => 'select2_multiple',
-                      'name' => 'select2_multiple[]',
+                      'name' => 'select2_multiple',
                       'options' => $selectOptions,
                       'label' => 'Select2 Multiple',
                       'required' => true,

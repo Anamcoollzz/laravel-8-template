@@ -74,8 +74,9 @@ class CrudExampleController extends Controller
     public function index()
     {
         $user = auth()->user();
+        $data = $this->crudExampleRepository->getLatest();
         return view('stisla.crud-example.index', [
-            'data'                => $this->crudExampleRepository->getLatest(),
+            'data'                => $data,
             'canCreate'           => $user->can('Contoh CRUD Tambah'),
             'canUpdate'           => $user->can('Contoh CRUD Ubah'),
             'canDelete'           => $user->can('Contoh CRUD Hapus'),
@@ -114,10 +115,12 @@ class CrudExampleController extends Controller
                 [
                     'label' => __('Dashboard'),
                     'link'  => route('dashboard.index')
-                ], [
+                ],
+                [
                     'label' => $title,
                     'link'  => $routeIndex
-                ], [
+                ],
+                [
                     'label' => 'Tambah'
                 ]
             ]
@@ -178,10 +181,12 @@ class CrudExampleController extends Controller
                 [
                     'label' => __('Dashboard'),
                     'link'  => route('dashboard.index')
-                ], [
+                ],
+                [
                     'label' => $title,
                     'link'  => $routeIndex
-                ], [
+                ],
+                [
                     'label' => 'Ubah'
                 ]
             ]
