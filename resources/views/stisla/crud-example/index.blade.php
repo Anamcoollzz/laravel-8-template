@@ -59,6 +59,7 @@
                       <th>{{ __('Date') }}</th>
                       <th>{{ __('Time') }}</th>
                       <th>{{ __('Color') }}</th>
+                      <th>{{ __('Created At') }}</th>
                       @if ($canUpdate || $canDelete)
                         <th>{{ __('Aksi') }}</th>
                       @endif
@@ -91,6 +92,7 @@
                           <div class="p-2 rounded" style="background-color: {{ $item->color }};">{{ $item->color }}
                           </div>
                         </td>
+                        <td>{{ $item->created_at }}</td>
                         @if ($canUpdate || $canDelete)
                           <td>
                             @if ($canUpdate)
