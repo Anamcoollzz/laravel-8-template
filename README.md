@@ -10,6 +10,7 @@ Beberapa fitur atau komponen yang ada
 ## Fitur dan komponen
 
 -   Login social media (github, facebook, google, dan twitter) menggunakan library [socialite](https://laravel.com/docs/8.x/socialite)
+-   Google captcha
 -   Dashboard (widget, log aktivitas terbaru)
 -   Profil
     -   Perbarui profil
@@ -32,6 +33,7 @@ Beberapa fitur atau komponen yang ada
     -   SSO Login dan Register
     -   Lainnya
 -   CRUD Generator (menu nya tersembunyi akses via url saja)
+-   Server side export file
 -   Service dan repository pattern
 
 ## How to install and run
@@ -39,6 +41,7 @@ Beberapa fitur atau komponen yang ada
 -   `composer install`
 -   setup your DB in `.env`
 -   `php artisan migrate --seed`
+-   [optional] setup google captcha, google login, facebook login, github login, twitter login in `.env`
 
 ## Libraries
 
@@ -48,6 +51,8 @@ Beberapa fitur atau komponen yang ada
 -   https://unisharp.github.io/laravel-filemanager/
 -   https://laravel-excel.com/
 -   https://github.com/barryvdh/laravel-dompdf
+-   https://datatables.net/
+-   https://packagist.org/packages/buzz/laravel-google-captcha
 
 Terima kasih, bisa distar ataupun difork ya guys. Kalau ada request module atau apapun itu, bisa tulis di issue.
 Rencana nanti bakal kuupdate ke versi laravel terbaru 9 bahkan 10
