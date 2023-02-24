@@ -34,6 +34,12 @@ Beberapa fitur atau komponen yang ada
 -   CRUD Generator (menu nya tersembunyi akses via url saja)
 -   Service dan repository pattern
 
+## How to install and run
+
+-   `composer install`
+-   setup your DB in `.env`
+-   `php artisan migrate --seed`
+
 ## Libraries
 
 -   https://demo.getstisla.com/
