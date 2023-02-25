@@ -154,7 +154,7 @@ class CrudExampleController extends Controller
         $result = $this->crudExampleRepository->create($data);
         logCreate("Contoh CRUD", $result);
         $successMessage = successMessageCreate("Contoh CRUD");
-        return redirect()->back()->with('successMessage', $successMessage);
+        return back()->with('successMessage', $successMessage);
     }
 
     /**
@@ -221,7 +221,7 @@ class CrudExampleController extends Controller
         $newData = $this->crudExampleRepository->update($data, $crudExample->id);
         logUpdate("Contoh CRUD", $crudExample, $newData);
         $successMessage = successMessageUpdate("Contoh CRUD");
-        return redirect()->back()->with('successMessage', $successMessage);
+        return back()->with('successMessage', $successMessage);
     }
 
     /**
@@ -236,7 +236,7 @@ class CrudExampleController extends Controller
         $this->crudExampleRepository->delete($crudExample->id);
         logDelete("Contoh CRUD", $crudExample);
         $successMessage = successMessageDelete("Contoh CRUD");
-        return redirect()->back()->with('successMessage', $successMessage);
+        return back()->with('successMessage', $successMessage);
     }
 
     /**
@@ -265,7 +265,7 @@ class CrudExampleController extends Controller
     {
         Excel::import(new CrudExampleImport, $request->file('import_file'));
         $successMessage = successMessageImportExcel("Contoh CRUD");
-        return redirect()->back()->with('successMessage', $successMessage);
+        return back()->with('successMessage', $successMessage);
     }
 
     /**
