@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class FileService
 {
@@ -198,5 +201,61 @@ class FileService
         Storage::put($path, $json);
         $path = storage_path('app/' . $path);
         return response()->download($path)->deleteFileAfterSend(true);
+    }
+
+    /**
+     * download collection as excel file
+     *
+     * @param \Maatwebsite\Excel\Concerns\FromCollection $excelInstance
+     * @param string $filename
+     * @param string|null $extension
+     * @return BinaryFileResponse
+     */
+    public function downloadExcel($excelInstance, $filename, $extension = null)
+    {
+        if ($extension === null) {
+            $extension = \Maatwebsite\Excel\Excel::XLSX;
+        }
+        return Excel::download($excelInstance, $filename, $extension);
+    }
+
+    /**
+     * download collection as pdf file
+     *
+     * @param string $view
+     * @param array $data
+     * @param string $filename
+     * @param string $orientation
+     * @return Response
+     */
+    public function downloadPdfLetter(string $view, array $data, string $filename, string $orientation = 'landscape')
+    {
+        return PDF::setPaper('Letter', $orientation)->loadView($view, $data)->download($filename);
+    }
+
+    /**
+     * download collection as pdf file (legal size)
+     *
+     * @param string $view
+     * @param array $data
+     * @param string $filename
+     * @param string $orientation
+     * @return Response
+     */
+    public function downloadPdfLegal(string $view, array $data, string $filename, string $orientation = 'landscape')
+    {
+        return PDF::setPaper('Legal', $orientation)->loadView($view, $data)->download($filename);
+    }
+
+    /**
+     * import excel from file
+     *
+     * @param mixed $excelInstance
+     * @param \Illuminate\Http\UploadedFile|\Illuminate\Http\UploadedFile[]|array|null $uploadedFile
+     * @return void
+     */
+    public function importExcel($excelInstance, $uploadedFile)
+    {
+        return Excel::import($excelInstance, $uploadedFile);
     }
 }

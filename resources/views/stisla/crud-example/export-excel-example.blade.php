@@ -16,6 +16,8 @@
       <th>{{ __('Date') }}</th>
       <th>{{ __('Time') }}</th>
       <th>{{ __('Color') }}</th>
+      <th>{{ __('Summernote Simple') }}</th>
+      <th>{{ __('Summernote') }}</th>
       @if ($isExport === false)
         <th>{{ __('Aksi') }}</th>
       @endif
@@ -50,12 +52,12 @@
           <div class="p-2 rounded" style="background-color: {{ $item->color }};">{{ $item->color }}
           </div>
         </td>
+        <td>{{ $item->summernote_simple }}</td>
+        <td>{{ $item->summernote }}</td>
         @if ($isExport === false)
           <td>
-            @include('stisla.includes.forms.buttons.btn-edit', ['link'=>route('crud-examples.edit',
-            [$item->id])])
-            @include('stisla.includes.forms.buttons.btn-delete', ['link'=>route('crud-examples.destroy',
-            [$item->id])])
+            @include('stisla.includes.forms.buttons.btn-edit', ['link' => route('crud-examples.edit', [$item->id])])
+            @include('stisla.includes.forms.buttons.btn-delete', ['link' => route('crud-examples.destroy', [$item->id])])
           </td>
         @endif
       </tr>
