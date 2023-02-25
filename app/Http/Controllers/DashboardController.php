@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Repositories\ActivityLogRepository;
 use App\Repositories\SettingRepository;
 use App\Services\DatabaseService;
-use Illuminate\Http\Request;
+use App\Services\FileService;
 use Illuminate\Http\Response;
 use Spatie\Permission\Models\Role;
 
@@ -23,6 +23,13 @@ class DashboardController extends Controller
     private ActivityLogRepository $activityLogRepository;
 
     /**
+     * fileService
+     *
+     * @var FileService
+     */
+    private FileService $fileService;
+
+    /**
      * constructor method
      *
      * @return void
@@ -30,8 +37,7 @@ class DashboardController extends Controller
     public function __construct()
     {
         $this->activityLogRepository = new ActivityLogRepository;
-        // $this->userRepository        = new UserRepository;
-        // $this->fileService           = new FileService;
+        $this->fileService           = new FileService;
 
         // $this->middleware('can:Log Aktivitas');
     }
@@ -45,32 +51,31 @@ class DashboardController extends Controller
     {
         $widgets = [];
         $user = auth()->user();
-        if ($user->hasRole('superadmin')) {
-            if ($user->can('Pengguna'))
-                $widgets[] = (object)[
-                    'title' => 'Pengguna',
-                    'count' => User::count(),
-                    'bg'    => 'primary',
-                    'icon'  => 'users',
-                    'route' => route('user-management.users.index'),
-                ];
-            if ($user->can('Role'))
-                $widgets[] = (object)[
-                    'title' => 'Role',
-                    'count' => Role::count(),
-                    'bg'    => 'danger',
-                    'icon'  => 'lock',
-                    'route' => route('user-management.roles.index')
-                ];
-            if ($user->can('Log Aktivitas'))
-                $widgets[] = (object)[
-                    'title' => 'Log Aktivitas',
-                    'count' => ActivityLog::count(),
-                    'bg'    => 'success',
-                    'icon'  => 'clock-rotate-left',
-                    'route' => route('activity-logs.index')
-                ];
-        }
+
+        if ($user->can('Pengguna'))
+            $widgets[] = (object)[
+                'title' => 'Pengguna',
+                'count' => User::count(),
+                'bg'    => 'primary',
+                'icon'  => 'users',
+                'route' => route('user-management.users.index'),
+            ];
+        if ($user->can('Role'))
+            $widgets[] = (object)[
+                'title' => 'Role',
+                'count' => Role::count(),
+                'bg'    => 'danger',
+                'icon'  => 'lock',
+                'route' => route('user-management.roles.index')
+            ];
+        if ($user->can('Log Aktivitas'))
+            $widgets[] = (object)[
+                'title' => 'Log Aktivitas',
+                'count' => ActivityLog::count(),
+                'bg'    => 'success',
+                'icon'  => 'clock-rotate-left',
+                'route' => route('activity-logs.index')
+            ];
 
         if ($user->can('Notifikasi')) {
             $widgets[] = (object)[
