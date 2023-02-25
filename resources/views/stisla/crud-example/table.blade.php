@@ -33,7 +33,7 @@
       @endif
       <th>{{ __('Created At') }}</th>
       <th>{{ __('Updated At') }}</th>
-      @if ($isExport === false && ($canUpdate || $canDelete))
+      @if ($isExport === false && ($canUpdate || $canDelete || $canDetail))
         <th>{{ __('Aksi') }}</th>
       @endif
     </tr>
@@ -110,13 +110,16 @@
         <td>{{ $item->updated_at }}</td>
 
         @if ($isExport === false)
-          @if ($canUpdate || $canDelete)
+          @if ($canUpdate || $canDelete || $canDetail)
             <td>
               @if ($canUpdate)
                 @include('stisla.includes.forms.buttons.btn-edit', ['link' => route('crud-examples.edit', [$item->id])])
               @endif
               @if ($canDelete)
                 @include('stisla.includes.forms.buttons.btn-delete', ['link' => route('crud-examples.destroy', [$item->id])])
+              @endif
+              @if ($canDetail)
+                @include('stisla.includes.forms.buttons.btn-detail', ['link' => route('crud-examples.show', [$item->id])])
               @endif
             </td>
           @endif

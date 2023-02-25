@@ -45,7 +45,9 @@
                     @if ($_is_login_must_verified)
                       <th>{{ __('Waktu Verifikasi') }}</th>
                     @endif
-                    <th>{{ __('Aksi') }}</th>
+                    @if ($canUpdate || $canDelete || ($canForceLogin && $item->id != auth()->id()))
+                      <th>{{ __('Aksi') }}</th>
+                    @endif
                   </tr>
                 </thead>
                 <tbody>
@@ -64,10 +66,10 @@
                       @if ($roleCount > 1)
                         <td>
                           @foreach ($item->roles as $role)
-                            @if (Auth::user()->can('Role Ubah'))
-                              <a href="{{ route('user-management.roles.edit', $role->id) }}">{{ $role->name }}</a>
+                            @if (auth()->user()->can('Role Ubah'))
+                              <a class="badge badge-primary mb-1" href="{{ route('user-management.roles.edit', $role->id) }}">{{ $role->name }}</a>
                             @else
-                              {{ $role->name }}
+                              <span class="badge badge-primary mb-1">{{ $role->name }}</span>
                             @endif
                           @endforeach
                         </td>
@@ -76,22 +78,27 @@
                       @if ($_is_login_must_verified)
                         <td>{{ $item->email_verified_at ?? '-' }}</td>
                       @endif
-                      <td style="width: 150px;">
-                        @if ($canUpdate)
-                          @include('stisla.includes.forms.buttons.btn-edit', ['link' => route('user-management.users.edit', [$item->id])])
-                        @endif
-                        @if ($canDelete)
-                          @include('stisla.includes.forms.buttons.btn-delete', ['link' => route('user-management.users.destroy', [$item->id])])
-                        @endif
-                        @if ($canForceLogin && $item->id != Auth::user()->id)
-                          @include('stisla.includes.forms.buttons.btn-success', [
-                              'link' => route('user-management.users.force-login', [$item->id]),
-                              'icon' => 'fa fa-door-open',
-                              'title' => 'Force Login',
-                              'size' => 'sm',
-                          ])
-                        @endif
-                      </td>
+                      @if ($canUpdate || $canDelete || ($canForceLogin && $item->id != auth()->id()))
+                        <td style="width: 150px;">
+                          @if ($canUpdate)
+                            @include('stisla.includes.forms.buttons.btn-edit', ['link' => route('user-management.users.edit', [$item->id])])
+                          @endif
+                          @if ($canDelete)
+                            @include('stisla.includes.forms.buttons.btn-delete', ['link' => route('user-management.users.destroy', [$item->id])])
+                          @endif
+                          @if ($canDelete)
+                            @include('stisla.includes.forms.buttons.btn-detail', ['link' => route('user-management.users.show', [$item->id])])
+                          @endif
+                          @if ($canForceLogin && $item->id != auth()->id())
+                            @include('stisla.includes.forms.buttons.btn-success', [
+                                'link' => route('user-management.users.force-login', [$item->id]),
+                                'icon' => 'fa fa-door-open',
+                                'title' => 'Force Login',
+                                'size' => 'sm',
+                            ])
+                          @endif
+                        </td>
+                      @endif
                     </tr>
                   @endforeach
                 </tbody>

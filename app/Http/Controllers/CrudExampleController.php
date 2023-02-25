@@ -57,6 +57,7 @@ class CrudExampleController extends Controller
         $this->middleware('can:Contoh CRUD');
         $this->middleware('can:Contoh CRUD Tambah')->only(['create', 'store']);
         $this->middleware('can:Contoh CRUD Ubah')->only(['edit', 'update']);
+        $this->middleware('can:Contoh CRUD Detail')->only(['show']);
         $this->middleware('can:Contoh CRUD Hapus')->only(['destroy']);
         $this->middleware('can:Contoh CRUD Ekspor')->only(['json', 'excel', 'csv', 'pdf']);
         $this->middleware('can:Contoh CRUD Impor Excel')->only(['importExcel', 'importExcelExample']);
@@ -75,6 +76,7 @@ class CrudExampleController extends Controller
             'data'              => $data,
             'canCreate'         => $user->can('Contoh CRUD Tambah'),
             'canUpdate'         => $user->can('Contoh CRUD Ubah'),
+            'canDetail'         => $user->can('Contoh CRUD Detail'),
             'canDelete'         => $user->can('Contoh CRUD Hapus'),
             'canImportExcel'    => $user->can('Contoh CRUD Impor Excel'),
             'canExport'         => $user->can('Contoh CRUD Ekspor'),
@@ -109,6 +111,7 @@ class CrudExampleController extends Controller
             'routeIndex'      => $routeIndex,
             'action'          => route('crud-examples.store'),
             'moduleIcon'      => $this->icon,
+            'isDetail'        => false,
             'breadcrumbs'     => [
                 [
                     'label' => __('Dashboard'),
@@ -162,6 +165,45 @@ class CrudExampleController extends Controller
     }
 
     /**
+     * get detail data
+     *
+     * @param CrudExample $crudExample
+     * @param bool $isDetail
+     * @return array
+     */
+    private function getDetail(CrudExample $crudExample, bool $isDetail = false)
+    {
+        $title       = __('Contoh CRUD');
+        $routeIndex  = route('crud-examples.index');
+        $breadcrumbs = [
+            [
+                'label' => __('Dashboard'),
+                'link'  => route('dashboard.index')
+            ],
+            [
+                'label' => $title,
+                'link'  => $routeIndex
+            ],
+            [
+                'label' => $isDetail ? 'Detail' : 'Ubah'
+            ]
+        ];
+        return [
+            'selectOptions'   => get_options(10),
+            'radioOptions'    => get_options(4),
+            'checkboxOptions' => get_options(5),
+            'd'               => $crudExample,
+            'title'           => $title,
+            'fullTitle'       => $isDetail ? __('Detail Contoh CRUD') : __('Ubah Contoh CRUD'),
+            'routeIndex'      => $routeIndex,
+            'action'          => route('crud-examples.update', [$crudExample->id]),
+            'moduleIcon'      => $this->icon,
+            'isDetail'        => $isDetail,
+            'breadcrumbs'     => $breadcrumbs,
+        ];
+    }
+
+    /**
      * showing edit crud example page
      *
      * @param CrudExample $crudExample
@@ -169,32 +211,8 @@ class CrudExampleController extends Controller
      */
     public function edit(CrudExample $crudExample)
     {
-        $title      = __('Contoh CRUD');
-        $routeIndex = route('crud-examples.index');
-        return view('stisla.crud-example.form', [
-            'selectOptions'   => get_options(10),
-            'radioOptions'    => get_options(4),
-            'checkboxOptions' => get_options(5),
-            'd'               => $crudExample,
-            'title'           => $title,
-            'fullTitle'       => __('Ubah Contoh CRUD'),
-            'routeIndex'      => $routeIndex,
-            'action'          => route('crud-examples.update', [$crudExample->id]),
-            'moduleIcon'      => $this->icon,
-            'breadcrumbs'     => [
-                [
-                    'label' => __('Dashboard'),
-                    'link'  => route('dashboard.index')
-                ],
-                [
-                    'label' => $title,
-                    'link'  => $routeIndex
-                ],
-                [
-                    'label' => 'Ubah'
-                ]
-            ]
-        ]);
+        $data = $this->getDetail($crudExample);
+        return view('stisla.crud-example.form', $data);
     }
 
     /**
@@ -232,6 +250,12 @@ class CrudExampleController extends Controller
         logUpdate("Contoh CRUD", $crudExample, $newData);
         $successMessage = successMessageUpdate("Contoh CRUD");
         return back()->with('successMessage', $successMessage);
+    }
+
+    public function show(CrudExample $crudExample)
+    {
+        $data = $this->getDetail($crudExample, true);
+        return view('stisla.crud-example.form', $data);
     }
 
     /**

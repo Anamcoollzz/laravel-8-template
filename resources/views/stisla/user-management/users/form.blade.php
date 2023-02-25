@@ -1,7 +1,7 @@
 @extends('stisla.layouts.app')
 
 @section('title')
-  {{ $action = isset($d) ? __('Ubah') : __('Tambah') }} {{ $title = 'Data Pengguna' }}
+  {{ $action }} {{ $title = 'Data Pengguna' }}
 @endsection
 
 @section('content')
@@ -33,7 +33,7 @@
             @endcan
           </div>
           <div class="card-body">
-            <form action="{{ isset($d) ? route('user-management.users.update', [$d->id]) : route('user-management.users.store') }}" method="POST">
+            <form action="{{ isset($d) ? route('user-management.users.update', [$d->id]) : route('user-management.users.store') }}" method="POST" id="formAction">
 
               @isset($d)
                 @method('PUT')
@@ -101,7 +101,7 @@
                       'value' => isset($d) ? '' : null,
                   ])
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-12" id="formAreaButton">
                   <br>
                   @include('stisla.includes.forms.buttons.btn-save')
                   @include('stisla.includes.forms.buttons.btn-reset')
@@ -115,3 +115,7 @@
     </div>
   </div>
 @endsection
+
+@push('scripts')
+  @include('stisla.includes.scripts.disable-form')
+@endpush

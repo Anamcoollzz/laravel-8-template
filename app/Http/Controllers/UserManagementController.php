@@ -61,6 +61,8 @@ class UserManagementController extends Controller
         $roleOptions = $this->userRepository->getRoles()->pluck('name', 'id')->toArray();
         return view('stisla.user-management.users.form', [
             'roleOptions' => $roleOptions,
+            'isDetail'    => false,
+            'action'      => __("Tambah"),
         ]);
     }
 
@@ -108,6 +110,8 @@ class UserManagementController extends Controller
         return view('stisla.user-management.users.form', [
             'roleOptions' => $roleOptions,
             'd'           => $user,
+            'isDetail'    => false,
+            'action'      => __("Ubah"),
         ]);
     }
 
@@ -135,6 +139,27 @@ class UserManagementController extends Controller
         logUpdate('Pengguna', $user, $userNew);
         $successMessage = successMessageUpdate('Pengguna');
         return redirect()->back()->with('successMessage', $successMessage);
+    }
+
+    /**
+     * showing detail user page
+     *
+     * @param User $user
+     * @return Response
+     */
+    public function show(User $user)
+    {
+        $roleOptions = $this->userRepository->getRoles()->pluck('name', 'id')->toArray();
+        if ($user->roles->count() > 1)
+            $user->role = $user->roles->pluck('id')->toArray();
+        else
+            $user->role = $user->roles->first()->id ?? null;
+        return view('stisla.user-management.users.form', [
+            'roleOptions' => $roleOptions,
+            'd'           => $user,
+            'isDetail'    => true,
+            'action'      => __("Detail"),
+        ]);
     }
 
     /**

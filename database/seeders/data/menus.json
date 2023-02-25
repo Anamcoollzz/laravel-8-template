@@ -13,7 +13,7 @@
                 "menu_name": "Contoh CRUD",
                 "route_name": "crud-examples.index",
                 "icon": "atom",
-                "permission": null,
+                "permission": "Contoh CRUD",
                 "is_active_if_url_includes": "crud-examples*",
                 "is_mockup": true
             },

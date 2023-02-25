@@ -26,7 +26,7 @@
             </div>
           </div>
           <div class="card-body">
-            <form action="{{ $action }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ $action }}" method="POST" enctype="multipart/form-data" id="formAction">
 
               @isset($d)
                 @method('PUT')
@@ -148,7 +148,7 @@
                       'id' => 'summernote',
                   ])
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-12" id="formAreaButton">
                   <br>
                   @include('stisla.includes.forms.buttons.btn-save')
                   @include('stisla.includes.forms.buttons.btn-reset')
@@ -167,4 +167,8 @@
 @endpush
 
 @push('js')
+@endpush
+
+@push('scripts')
+  @include('stisla.includes.scripts.disable-form')
 @endpush

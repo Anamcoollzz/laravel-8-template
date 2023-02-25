@@ -1,12 +1,12 @@
 [
     {
         "name": "Profil",
-        "roles": ["superadmin", "admin"],
+        "roles": ["superadmin", "admin", "user"],
         "group": "Profil"
     },
     {
         "name": "Profil Ubah",
-        "roles": ["superadmin", "admin"],
+        "roles": ["superadmin", "admin", "user"],
         "group": "Profil"
     },
 
@@ -23,27 +23,32 @@
 
     {
         "name": "Role",
-        "roles": ["superadmin", "admin"],
+        "roles": ["superadmin"],
         "group": "Role"
     },
     {
         "name": "Role Tambah",
-        "roles": ["superadmin", "admin"],
+        "roles": ["superadmin"],
         "group": "Role"
     },
     {
         "name": "Role Impor Excel",
-        "roles": ["superadmin", "admin"],
+        "roles": ["superadmin"],
         "group": "Role"
     },
     {
         "name": "Role Ubah",
-        "roles": ["superadmin", "admin"],
+        "roles": ["superadmin"],
+        "group": "Role"
+    },
+    {
+        "name": "Role Detail",
+        "roles": ["superadmin"],
         "group": "Role"
     },
     {
         "name": "Role Hapus",
-        "roles": ["superadmin", "admin"],
+        "roles": ["superadmin"],
         "group": "Role"
     },
     {
@@ -54,37 +59,42 @@
 
     {
         "name": "Pengguna",
-        "roles": ["superadmin", "admin"],
+        "roles": ["superadmin"],
         "group": "Pengguna"
     },
     {
         "name": "Pengguna Tambah",
-        "roles": ["superadmin", "admin"],
+        "roles": ["superadmin"],
         "group": "Pengguna"
     },
     {
         "name": "Pengguna Impor Excel",
-        "roles": ["superadmin", "admin"],
+        "roles": ["superadmin"],
         "group": "Pengguna"
     },
     {
         "name": "Pengguna Ubah",
-        "roles": ["superadmin", "admin"],
+        "roles": ["superadmin"],
+        "group": "Pengguna"
+    },
+    {
+        "name": "Pengguna Detail",
+        "roles": ["superadmin"],
         "group": "Pengguna"
     },
     {
         "name": "Pengguna Hapus",
-        "roles": ["superadmin", "admin"],
+        "roles": ["superadmin"],
         "group": "Pengguna"
     },
     {
         "name": "Pengguna Ekspor",
-        "roles": ["superadmin", "admin"],
+        "roles": ["superadmin"],
         "group": "Pengguna"
     },
     {
         "name": "Pengguna Force Login",
-        "roles": ["superadmin", "admin"],
+        "roles": ["superadmin"],
         "group": "Pengguna"
     },
 
@@ -102,13 +112,13 @@
 
     {
         "name": "Backup Database",
-        "roles": ["superadmin", "admin"],
+        "roles": ["superadmin"],
         "group": "Backup Database"
     },
 
     {
         "name": "Log Viewer",
-        "roles": ["superadmin", "admin"],
+        "roles": ["superadmin"],
         "group": "Log Viewer"
     },
 
@@ -120,32 +130,37 @@
 
     {
         "name": "Contoh CRUD",
-        "roles": ["superadmin", "admin"],
+        "roles": ["superadmin", "admin", "user"],
         "group": "Contoh CRUD"
     },
     {
         "name": "Contoh CRUD Tambah",
-        "roles": ["superadmin", "admin"],
+        "roles": ["superadmin", "admin", "user"],
         "group": "Contoh CRUD"
     },
     {
         "name": "Contoh CRUD Impor Excel",
-        "roles": ["superadmin", "admin"],
+        "roles": ["superadmin", "admin", "user"],
         "group": "Contoh CRUD"
     },
     {
         "name": "Contoh CRUD Ubah",
-        "roles": ["superadmin", "admin"],
+        "roles": ["superadmin", "admin", "user"],
+        "group": "Contoh CRUD"
+    },
+    {
+        "name": "Contoh CRUD Detail",
+        "roles": ["superadmin", "admin", "user"],
         "group": "Contoh CRUD"
     },
     {
         "name": "Contoh CRUD Hapus",
-        "roles": ["superadmin", "admin"],
+        "roles": ["superadmin", "admin", "user"],
         "group": "Contoh CRUD"
     },
     {
         "name": "Contoh CRUD Ekspor",
-        "roles": ["superadmin", "admin"],
+        "roles": ["superadmin", "admin", "user"],
         "group": "Contoh CRUD"
     }
 ]
