@@ -76,21 +76,21 @@ class CrudExampleController extends Controller
         $user = auth()->user();
         $data = $this->crudExampleRepository->getLatest();
         return view('stisla.crud-example.index', [
-            'data'                => $data,
-            'canCreate'           => $user->can('Contoh CRUD Tambah'),
-            'canUpdate'           => $user->can('Contoh CRUD Ubah'),
-            'canDelete'           => $user->can('Contoh CRUD Hapus'),
-            'canImportExcel'      => $user->can('Contoh CRUD Impor Excel'),
-            'canExport'           => $user->can('Contoh CRUD Ekspor'),
-            'title'               => __('Contoh CRUD'),
-            'module_icon'         => $this->icon,
-            'route_create'        => route('crud-examples.create'),
-            'route_import_excel'  => route('crud-examples.import-excel'),
-            'route_example_excel' => route('crud-examples.import-excel-example'),
-            'route_pdf'           => route('crud-examples.pdf'),
-            'route_excel'         => route('crud-examples.excel'),
-            'route_csv'           => route('crud-examples.csv'),
-            'route_json'          => route('crud-examples.json'),
+            'data'              => $data,
+            'canCreate'         => $user->can('Contoh CRUD Tambah'),
+            'canUpdate'         => $user->can('Contoh CRUD Ubah'),
+            'canDelete'         => $user->can('Contoh CRUD Hapus'),
+            'canImportExcel'    => $user->can('Contoh CRUD Impor Excel'),
+            'canExport'         => $user->can('Contoh CRUD Ekspor'),
+            'title'             => __('Contoh CRUD'),
+            'moduleIcon'        => $this->icon,
+            'route_create'      => route('crud-examples.create'),
+            'routeImportExcel'  => route('crud-examples.import-excel'),
+            'routeExampleExcel' => route('crud-examples.import-excel-example'),
+            'routePdf'          => route('crud-examples.pdf'),
+            'routeExcel'        => route('crud-examples.excel'),
+            'routeCsv'          => route('crud-examples.csv'),
+            'routeJson'         => route('crud-examples.json'),
         ]);
     }
 
@@ -110,7 +110,7 @@ class CrudExampleController extends Controller
             'fullTitle'     => $fullTitle,
             'routeIndex'    => $routeIndex,
             'action'        => route('crud-examples.store'),
-            'module_icon'   => $this->icon,
+            'moduleIcon'    => $this->icon,
             'breadcrumbs'   => [
                 [
                     'label' => __('Dashboard'),
@@ -176,7 +176,7 @@ class CrudExampleController extends Controller
             'fullTitle'     => __('Ubah Contoh CRUD'),
             'routeIndex'    => $routeIndex,
             'action'        => route('crud-examples.update', [$crudExample->id]),
-            'module_icon'   => $this->icon,
+            'moduleIcon'    => $this->icon,
             'breadcrumbs'   => [
                 [
                     'label' => __('Dashboard'),

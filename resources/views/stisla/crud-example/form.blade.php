@@ -20,7 +20,7 @@
       <div class="col-12">
         <div class="card">
           <div class="card-header">
-            <h4><i class="{{ $module_icon }}"></i> {{ $fullTitle }}</h4>
+            <h4><i class="{{ $moduleIcon }}"></i> {{ $fullTitle }}</h4>
             <div class="card-header-action">
               @include('stisla.includes.forms.buttons.btn-view', ['link' => route('crud-examples.index')])
             </div>
