@@ -30,7 +30,7 @@ class FileService
             $httpsUrl = cloudinary()->upload($file->getRealPath())->getSecurePath();
             return $httpsUrl;
         }
-        $filename = date('YmdHis') . Str::random(20) . '.' . $file->getClientOriginalExtension();
+        $filename = date('YmdHis_') . Str::random(20) . '.' . $file->getClientOriginalExtension();
         $file->storeAs('public/' . $folderName, $filename);
         return asset('storage/' . $folderName . '/' . $filename);
     }
