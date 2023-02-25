@@ -1,36 +1,37 @@
 <table class="table table-striped" id="datatable">
   <thead>
     <tr>
-      @if ($isExport === false)
-        <th class="text-center">#</th>
-      @endif
+      <th>{{ __('No') }}</th>
       <th>{{ __('Text') }}</th>
       <th>{{ __('Number') }}</th>
+      <th>{{ __('Currency') }}</th>
+      <th>{{ __('Currency IDR') }}</th>
       <th>{{ __('Select') }}</th>
       <th>{{ __('Select2') }}</th>
       <th>{{ __('Select2 Multiple') }}</th>
       <th>{{ __('Textarea') }}</th>
       <th>{{ __('Radio') }}</th>
       <th>{{ __('Checkbox') }}</th>
+      <th>{{ __('Checkbox 2') }}</th>
+      <th>{{ __('Tags') }}</th>
       <th>{{ __('File') }}</th>
       <th>{{ __('Date') }}</th>
       <th>{{ __('Time') }}</th>
       <th>{{ __('Color') }}</th>
       <th>{{ __('Summernote Simple') }}</th>
       <th>{{ __('Summernote') }}</th>
-      @if ($isExport === false)
-        <th>{{ __('Aksi') }}</th>
-      @endif
+      <th>{{ __('Created At') }}</th>
+      <th>{{ __('Updated At') }}</th>
     </tr>
   </thead>
   <tbody>
     @foreach ($data as $item)
       <tr>
-        @if ($isExport === false)
-          <td>{{ $loop->iteration }}</td>
-        @endif
+        <td>{{ $loop->iteration }}</td>
         <td>{{ $item->text }}</td>
         <td>{{ $item->number }}</td>
+        <td>{{ dollar($item->currency) }}</td>
+        <td>{{ rp($item->currency_idr) }}</td>
         <td>{{ $item->select }}</td>
         <td>{{ $item->select2 }}</td>
         <td>
@@ -39,11 +40,15 @@
         <td>{{ $item->textarea }}</td>
         <td>{{ $item->radio }}</td>
         <td>{{ is_array($item->checkbox) ? implode(', ', $item->checkbox) : $item->checkbox }}</td>
+        <td>{{ is_array($item->checkbox2) ? implode(', ', $item->checkbox2) : $item->checkbox2 }}</td>
+        <td>{{ $item->tags }}</td>
         <td>
           @if (Str::contains($item->file, 'http'))
-            <a href="{{ $item->file }}" target="_blank">Lihat</a>
+            {{ $item->file }}
+          @elseif($item->file)
+            {{ Storage::url('crud-examples/' . $item->file) }}
           @else
-            <a href="{{ Storage::url('crud-examples/' . $item->file) }}" target="_blank">Lihat</a>
+            -
           @endif
         </td>
         <td>{{ $item->date }}</td>
@@ -54,12 +59,8 @@
         </td>
         <td>{{ $item->summernote_simple }}</td>
         <td>{{ $item->summernote }}</td>
-        @if ($isExport === false)
-          <td>
-            @include('stisla.includes.forms.buttons.btn-edit', ['link' => route('crud-examples.edit', [$item->id])])
-            @include('stisla.includes.forms.buttons.btn-delete', ['link' => route('crud-examples.destroy', [$item->id])])
-          </td>
-        @endif
+        <td>{{ $item->created_at }}</td>
+        <td>{{ $item->updated_at }}</td>
       </tr>
     @endforeach
   </tbody>

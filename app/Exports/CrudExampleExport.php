@@ -2,14 +2,13 @@
 
 namespace App\Exports;
 
-use App\Models\CrudExample;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Collection;
-use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class CrudExampleExport implements FromView
+class CrudExampleExport implements FromView, ShouldAutoSize
 {
     use Exportable;
 

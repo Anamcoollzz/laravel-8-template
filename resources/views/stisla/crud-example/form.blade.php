@@ -41,6 +41,25 @@
                   @include('stisla.includes.forms.inputs.input', ['required' => true, 'name' => 'number', 'type' => 'number', 'label' => 'Number'])
                 </div>
                 <div class="col-md-6">
+                  @include('stisla.includes.forms.inputs.input-currency', [
+                      'required' => true,
+                      'name' => 'currency',
+                      'label' => 'Currency',
+                      'id' => 'currency',
+                      'currency_type' => 'default',
+                  ])
+                </div>
+                <div class="col-md-6">
+                  @include('stisla.includes.forms.inputs.input-currency', [
+                      'required' => true,
+                      'name' => 'currency_idr',
+                      'label' => 'Currency IDR',
+                      'id' => 'currency_idr',
+                      'currency_type' => 'rupiah',
+                      'iconText' => 'IDR',
+                  ])
+                </div>
+                <div class="col-md-6">
                   @include('stisla.includes.forms.selects.select', [
                       'id' => 'select',
                       'name' => 'select',
@@ -69,7 +88,7 @@
                   ])
                 </div>
                 <div class="col-md-6">
-                  @include('stisla.includes.forms.editors.textarea', ['required' => true, 'id' => 'textarea', 'label' => 'Textarea'])
+                  @include('stisla.includes.forms.inputs.input-tags', ['required' => true, 'name' => 'tags', 'label' => 'Tags'])
                 </div>
                 <div class="col-md-6">
                   @include('stisla.includes.forms.inputs.input-radio-toggle', [
@@ -79,11 +98,20 @@
                       'options' => $radioOptions,
                   ])
                 </div>
+
                 <div class="col-md-6">
                   @include('stisla.includes.forms.inputs.input-checkbox-custom', [
                       'required' => true,
                       'id' => 'checkbox',
                       'label' => 'Checkbox',
+                      'options' => $checkboxOptions,
+                  ])
+                </div>
+                <div class="col-md-6">
+                  @include('stisla.includes.forms.inputs.input-checkbox', [
+                      'required' => true,
+                      'id' => 'checkbox2',
+                      'label' => 'Checkbox 2',
                       'options' => $checkboxOptions,
                   ])
                 </div>
@@ -98,6 +126,10 @@
                 </div>
                 <div class="col-md-6">
                   @include('stisla.includes.forms.inputs.input-colorpicker', ['required' => true, 'name' => 'color', 'label' => 'Color'])
+                </div>
+
+                <div class="col-md-12">
+                  @include('stisla.includes.forms.editors.textarea', ['required' => true, 'id' => 'textarea', 'label' => 'Textarea'])
                 </div>
                 <div class="col-md-12">
                   @include('stisla.includes.forms.editors.summernote', [
@@ -130,3 +162,9 @@
     </div>
   </div>
 @endsection
+
+@push('css')
+@endpush
+
+@push('js')
+@endpush

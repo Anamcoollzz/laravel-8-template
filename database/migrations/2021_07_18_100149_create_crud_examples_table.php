@@ -17,12 +17,16 @@ class CreateCrudExamplesTable extends Migration
             $table->id();
             $table->string('text');
             $table->double('number');
+            $table->double('currency');
+            $table->double('currency_idr');
             $table->string('select');
             $table->string('select2');
             $table->text('select2_multiple');
             $table->text('textarea');
             $table->string('radio');
-            $table->text('checkbox');
+            $table->string('checkbox');
+            $table->string('checkbox2');
+            $table->text('tags');
             $table->text('file');
             $table->date('date');
             $table->time('time');

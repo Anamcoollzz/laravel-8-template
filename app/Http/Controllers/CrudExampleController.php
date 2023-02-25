@@ -141,7 +141,9 @@ class CrudExampleController extends Controller
             "radio",
             "date",
             'checkbox',
+            'checkbox2',
             "time",
+            'tags',
             "color",
             'select2',
             'select2_multiple',
@@ -151,6 +153,8 @@ class CrudExampleController extends Controller
         if ($request->hasFile('file')) {
             $data['file'] = $this->fileService->uploadCrudExampleFile($request->file('file'));
         }
+        $data['currency'] = str_replace(',', '', $request->currency);
+        $data['currency_idr'] = str_replace('.', '', $request->currency_idr);
         $result = $this->crudExampleRepository->create($data);
         logCreate("Contoh CRUD", $result);
         $successMessage = successMessageCreate("Contoh CRUD");
@@ -210,6 +214,8 @@ class CrudExampleController extends Controller
             "radio",
             "date",
             'checkbox',
+            'checkbox2',
+            'tags',
             "time",
             "color",
             'select2',
@@ -220,6 +226,8 @@ class CrudExampleController extends Controller
         if ($request->hasFile('file')) {
             $data['file'] = $this->fileService->uploadCrudExampleFile($request->file('file'));
         }
+        $data['currency'] = str_replace(',', '', $request->currency);
+        $data['currency_idr'] = str_replace('.', '', $request->currency_idr);
         $newData = $this->crudExampleRepository->update($data, $crudExample->id);
         logUpdate("Contoh CRUD", $crudExample, $newData);
         $successMessage = successMessageUpdate("Contoh CRUD");

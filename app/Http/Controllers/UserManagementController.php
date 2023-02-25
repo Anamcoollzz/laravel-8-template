@@ -104,7 +104,7 @@ class UserManagementController extends Controller
         if ($user->roles->count() > 1)
             $user->role = $user->roles->pluck('id')->toArray();
         else
-            $user->role = $user->roles->first()->id;
+            $user->role = $user->roles->first()->id ?? null;
         return view('stisla.user-management.users.form', [
             'roleOptions' => $roleOptions,
             'd'           => $user,

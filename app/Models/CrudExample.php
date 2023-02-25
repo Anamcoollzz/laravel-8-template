@@ -17,12 +17,16 @@ class CrudExample extends Model
     protected $fillable = [
         'text',
         'number',
+        'currency',
+        'currency_idr',
         'select',
         'select2',
         'select2_multiple',
         'textarea',
         'radio',
         'checkbox',
+        'checkbox2',
+        'tags',
         'file',
         'date',
         'time',
@@ -38,6 +42,7 @@ class CrudExample extends Model
      */
     protected $casts = [
         'checkbox'         => 'array',
+        'checkbox2'         => 'array',
         'select2_multiple' => 'array',
     ];
 }

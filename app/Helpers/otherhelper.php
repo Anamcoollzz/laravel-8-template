@@ -45,3 +45,4 @@ include 'MessageHelper.php';
 include 'FileHelper.php';
 include 'DateTimeHelper.php';
 include 'ArrayHelper.php';
+include 'NumberHelper.php';
