@@ -81,9 +81,11 @@
                         <td>{{ is_array($item->checkbox) ? implode(', ', $item->checkbox) : $item->checkbox }}</td>
                         <td>
                           @if (Str::contains($item->file, 'http'))
-                            <a href="{{ $item->file }}" target="_blank">Lihat</a>
+                            <a class="btn btn-primary btn-sm" href="{{ $item->file }}" target="_blank">Lihat</a>
+                          @elseif($item->file)
+                            <a class="btn btn-primary btn-sm" href="{{ Storage::url('crud-examples/' . $item->file) }}" target="_blank">Lihat</a>
                           @else
-                            <a href="{{ Storage::url('crud-examples/' . $item->file) }}" target="_blank">Lihat</a>
+                            -
                           @endif
                         </td>
                         <td>{{ $item->date }}</td>
