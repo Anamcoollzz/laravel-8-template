@@ -323,6 +323,8 @@ class CrudExampleController extends Controller
             'data'     => $this->crudExampleRepository->getLatest(),
             'isExport' => true
         ];
-        return $this->fileService->downloadPdfLegal('stisla.crud-example.export-pdf', $data, 'crud_examples.pdf');
+        // return $this->fileService->downloadPdfLetter('stisla.crud-example.export-pdf', $data, 'crud_examples.pdf');
+        // return $this->fileService->downloadPdfLegal('stisla.crud-example.export-pdf', $data, 'crud_examples.pdf');
+        return $this->fileService->downloadPdfA2('stisla.crud-example.export-pdf', $data, 'crud_examples.pdf');
     }
 }

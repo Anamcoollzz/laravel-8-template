@@ -12,7 +12,7 @@
 
 <body>
   <h1>Data Contoh CRUD</h1>
-  @include('stisla.crud-example.export-excel-example')
+  @include('stisla.crud-example.table')
 </body>
 
 </html>

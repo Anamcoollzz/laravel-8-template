@@ -248,6 +248,20 @@ class FileService
     }
 
     /**
+     * download collection as pdf file (A2 size)
+     *
+     * @param string $view
+     * @param array $data
+     * @param string $filename
+     * @param string $orientation
+     * @return Response
+     */
+    public function downloadPdfA2(string $view, array $data, string $filename, string $orientation = 'landscape')
+    {
+        return PDF::setPaper('A2', $orientation)->loadView($view, $data)->download($filename);
+    }
+
+    /**
      * import excel from file
      *
      * @param mixed $excelInstance

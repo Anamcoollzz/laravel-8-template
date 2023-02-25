@@ -37,7 +37,7 @@ class CrudExampleExport implements FromView, ShouldAutoSize
      */
     public function view(): View
     {
-        return view('stisla.crud-example.export-excel-example', [
+        return view('stisla.crud-example.table', [
             'data'     => $this->data,
             'isExport' => true
         ]);
