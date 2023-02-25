@@ -20,7 +20,7 @@ use Barryvdh\DomPDF\Facade as PDF;
 class CrudExampleController extends Controller
 {
     /**
-     * crudExampleRepository
+     * crud example repository
      *
      * @var CrudExampleRepository
      */
@@ -67,7 +67,7 @@ class CrudExampleController extends Controller
     }
 
     /**
-     * showing user management page
+     * showing crud example page
      *
      * @return Response
      */
@@ -95,7 +95,7 @@ class CrudExampleController extends Controller
     }
 
     /**
-     * showing add new user page
+     * showing add new crud example page
      *
      * @return Response
      */
@@ -128,7 +128,7 @@ class CrudExampleController extends Controller
     }
 
     /**
-     * save new user to db
+     * save new crud example to db
      *
      * @param CrudExampleRequest $request
      * @return Response
@@ -160,7 +160,7 @@ class CrudExampleController extends Controller
     }
 
     /**
-     * showing edit page
+     * showing edit crud example page
      *
      * @param CrudExample $crudExample
      * @return Response
@@ -227,7 +227,7 @@ class CrudExampleController extends Controller
     }
 
     /**
-     * delete user from db
+     * delete crud example from db
      *
      * @param CrudExample $crudExample
      * @return Response
