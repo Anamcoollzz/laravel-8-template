@@ -431,7 +431,7 @@ class AuthController extends Controller
                         'twitter_id'           => $user->getId(),
                     ];
                     $userModel = $this->userRepository->create($data);
-                    $userModel->syncRoles(['akuntesting']);
+                    $userModel->syncRoles(['admin']);
 
                     $successMsg = __('Berhasil mendaftar dan masuk ke dalam sistem');
                 }

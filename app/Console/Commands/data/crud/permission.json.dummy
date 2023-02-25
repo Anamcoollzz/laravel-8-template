@@ -3,7 +3,7 @@
         "name": "MODULENAME",
         "roles": [
             "superadmin",
-            "akuntesting"
+            "admin"
         ],
         "group": "MODULENAME"
     },
@@ -11,7 +11,7 @@
         "name": "MODULENAME Tambah",
         "roles": [
             "superadmin",
-            "akuntesting"
+            "admin"
         ],
         "group": "MODULENAME"
     },
@@ -19,7 +19,7 @@
         "name": "MODULENAME Impor Excel",
         "roles": [
             "superadmin",
-            "akuntesting"
+            "admin"
         ],
         "group": "MODULENAME"
     },
@@ -27,7 +27,7 @@
         "name": "MODULENAME Ubah",
         "roles": [
             "superadmin",
-            "akuntesting"
+            "admin"
         ],
         "group": "MODULENAME"
     },
@@ -35,7 +35,7 @@
         "name": "MODULENAME Hapus",
         "roles": [
             "superadmin",
-            "akuntesting"
+            "admin"
         ],
         "group": "MODULENAME"
     },
@@ -43,7 +43,7 @@
         "name": "MODULENAME Ekspor",
         "roles": [
             "superadmin",
-            "akuntesting"
+            "admin"
         ],
         "group": "MODULENAME"
     }

@@ -16,7 +16,14 @@ Beberapa fitur atau komponen yang ada
 -   Log Aktivitas
 -   User dan role
     -   Manjemen Role dan permission menggunakan [spatie](https://spatie.be/docs/laravel-permission/v5/introduction)
+        -   CRUD
+        -   Export
+        -   Import
     -   Manajemen user
+        -   CRUD
+        -   Export
+        -   Import
+        -   Force Login
 -   Notifikasi
 -   Log Viewer
 -   Manajemen file menggunakan [Unisharp](https://unisharp.github.io/laravel-filemanager/)

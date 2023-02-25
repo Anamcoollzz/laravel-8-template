@@ -101,8 +101,10 @@ class UserManagementController extends Controller
     public function edit(User $user)
     {
         $roleOptions = $this->userRepository->getRoles()->pluck('name', 'id')->toArray();
-        if ($user->roles->count() > 0)
-            $user->role = $user->roles[0]->id;
+        if ($user->roles->count() > 1)
+            $user->role = $user->roles->pluck('id')->toArray();
+        else
+            $user->role = $user->roles->first()->id;
         return view('stisla.user-management.users.form', [
             'roleOptions' => $roleOptions,
             'd'           => $user,

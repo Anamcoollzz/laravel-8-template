@@ -14,7 +14,7 @@
       <div class="breadcrumb-item active">
         <a href="{{ route('user-management.roles.index') }}">{{ __('Role') }}</a>
       </div>
-      <div class="breadcrumb-item">{{ $fullTitle }}</div>
+      <div class="breadcrumb-item">{{ $actionType === UPDATE ? __('Ubah') . ' ' : __('Tambah') . ' ' }}</div>
     </div>
   </div>
 
