@@ -76,7 +76,7 @@
                       'required' => true,
                       'id' => 'radio',
                       'label' => 'Radio',
-                      'options' => $selectOptions,
+                      'options' => $radioOptions,
                   ])
                 </div>
                 <div class="col-md-6">
@@ -84,7 +84,7 @@
                       'required' => true,
                       'id' => 'checkbox',
                       'label' => 'Checkbox',
-                      'options' => $selectOptions,
+                      'options' => $checkboxOptions,
                   ])
                 </div>
                 <div class="col-md-6">

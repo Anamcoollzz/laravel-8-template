@@ -101,13 +101,15 @@ class CrudExampleController extends Controller
         $routeIndex = route('crud-examples.index');
         $fullTitle  = __('Tambah Contoh CRUD');
         return view('stisla.crud-example.form', [
-            'selectOptions' => ['option 1' => 'option 1', 'option 2' => 'option 2', 'option 3' => 'option 3',],
-            'title'         => $title,
-            'fullTitle'     => $fullTitle,
-            'routeIndex'    => $routeIndex,
-            'action'        => route('crud-examples.store'),
-            'moduleIcon'    => $this->icon,
-            'breadcrumbs'   => [
+            'selectOptions'   => get_options(10),
+            'radioOptions'    => get_options(4),
+            'checkboxOptions' => get_options(5),
+            'title'           => $title,
+            'fullTitle'       => $fullTitle,
+            'routeIndex'      => $routeIndex,
+            'action'          => route('crud-examples.store'),
+            'moduleIcon'      => $this->icon,
+            'breadcrumbs'     => [
                 [
                     'label' => __('Dashboard'),
                     'link'  => route('dashboard.index')
@@ -166,14 +168,16 @@ class CrudExampleController extends Controller
         $title      = __('Contoh CRUD');
         $routeIndex = route('crud-examples.index');
         return view('stisla.crud-example.form', [
-            'selectOptions' => ['option 1' => 'option 1', 'option 2' => 'option 2', 'option 3' => 'option 3',],
-            'd'             => $crudExample,
-            'title'         => $title,
-            'fullTitle'     => __('Ubah Contoh CRUD'),
-            'routeIndex'    => $routeIndex,
-            'action'        => route('crud-examples.update', [$crudExample->id]),
-            'moduleIcon'    => $this->icon,
-            'breadcrumbs'   => [
+            'selectOptions'   => get_options(10),
+            'radioOptions'    => get_options(4),
+            'checkboxOptions' => get_options(5),
+            'd'               => $crudExample,
+            'title'           => $title,
+            'fullTitle'       => __('Ubah Contoh CRUD'),
+            'routeIndex'      => $routeIndex,
+            'action'          => route('crud-examples.update', [$crudExample->id]),
+            'moduleIcon'      => $this->icon,
+            'breadcrumbs'     => [
                 [
                     'label' => __('Dashboard'),
                     'link'  => route('dashboard.index')

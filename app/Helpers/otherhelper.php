@@ -44,3 +44,4 @@ include 'ResponseHelper.php';
 include 'MessageHelper.php';
 include 'FileHelper.php';
 include 'DateTimeHelper.php';
+include 'ArrayHelper.php';

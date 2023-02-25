@@ -18,7 +18,8 @@ class CrudExampleSeeder extends Seeder
     {
         $data = [];
         $faker = \Faker\Factory::create('id_ID');
-        $options = ['option 1', 'option 2', 'option 3'];
+        $options = array_values(get_options());
+        $radioOptions = array_values(get_options(4));
         foreach (range(1, 100) as $i) {
             $selectMultiple = [];
             foreach (range(1, Arr::random(range(1, 3))) as $j) {
@@ -31,11 +32,11 @@ class CrudExampleSeeder extends Seeder
             array_push($data, [
                 'text'              => Str::random(10),
                 'number'            => $faker->numberBetween(1, 1000),
-                'select'            => Str::random(10),
-                'select2'           => Str::random(10),
+                'select'            => Arr::random($options),
+                'select2'           => Arr::random($options),
                 'select2_multiple'  => json_encode($selectMultiple),
                 'textarea'          => $faker->text(100),
-                'radio'             => Arr::random($options),
+                'radio'             => Arr::random($radioOptions),
                 'checkbox'          => json_encode($checkbox),
                 'file'              => $faker->imageUrl,
                 'date'              => $faker->date('Y-m-d'),
