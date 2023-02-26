@@ -18,6 +18,14 @@
                 "is_mockup": true
             },
             {
+                "menu_name": "Contoh CRUD Yajra",
+                "route_name": "yajra-crud-examples.index",
+                "icon": "atom",
+                "permission": "Contoh CRUD Yajra",
+                "is_active_if_url_includes": "yajra-crud-examples*",
+                "is_mockup": true
+            },
+            {
                 "menu_name": "Menu",
                 "route_name": null,
                 "icon": "bars",

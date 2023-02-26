@@ -234,5 +234,10 @@
         "name": "Contoh CRUD Ekspor",
         "roles": ["superadmin", "admin", "user"],
         "group": "Contoh CRUD"
+    },
+    {
+        "name": "Contoh CRUD Yajra",
+        "roles": ["superadmin", "admin", "user"],
+        "group": "Contoh CRUD"
     }
 ]

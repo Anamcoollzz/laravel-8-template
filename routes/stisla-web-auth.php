@@ -89,6 +89,8 @@ Route::get('youtube-viewer', [YoutubeController::class, 'viewer'])->name('youtub
 Route::get('youtube-viewer-per-video', [YoutubeController::class, 'viewerPerVideo'])->name('youtube.viewer-per-video');
 
 # CONTOH CRUD
+Route::get('yajra-crud-examples', [CrudExampleController::class, 'index'])->name('yajra-crud-examples.index');
+Route::get('yajra-crud-examples/ajax', [CrudExampleController::class, 'yajraAjax'])->name('yajra-crud-examples.ajax');
 Route::get('crud-examples/pdf', [CrudExampleController::class, 'pdf'])->name('crud-examples.pdf');
 Route::get('crud-examples/csv', [CrudExampleController::class, 'csv'])->name('crud-examples.csv');
 Route::get('crud-examples/excel', [CrudExampleController::class, 'excel'])->name('crud-examples.excel');

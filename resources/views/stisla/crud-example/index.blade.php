@@ -1,4 +1,4 @@
-@extends($data->count() > 0 ? 'stisla.layouts.app-table' : 'stisla.layouts.app')
+@extends($data->count() > 0 || $isYajra ? 'stisla.layouts.app-table' : 'stisla.layouts.app')
 
 @section('title')
   {{ $title }}
@@ -12,7 +12,7 @@
     <p class="section-lead">{{ __('Menampilkan halaman ' . $title) }}.</p>
     <div class="row">
       <div class="col-12">
-        @if ($data->count() > 0)
+        @if ($data->count() > 0 || $isYajra)
           @if ($canExport)
             <div class="card">
               <div class="card-header">
@@ -64,7 +64,103 @@
 @endpush
 
 @push('scripts')
-  <script></script>
+  @if ($isYajra)
+    <script>
+      $(function() {
+        var table = $('.yajra-datatable').DataTable({
+          processing: true,
+          serverSide: true,
+          ajax: "{{ route('yajra-crud-examples.ajax') }}",
+          columns: [{
+              data: 'DT_RowIndex',
+              name: 'DT_RowIndex',
+              searchable: false,
+              orderable: false
+            },
+            {
+              data: 'text',
+              name: 'text'
+            },
+            {
+              data: 'number',
+              name: 'number'
+            },
+            {
+              data: 'currency',
+              name: 'currency'
+            },
+            {
+              data: 'currency_idr',
+              name: 'currency_idr'
+            },
+            {
+              data: 'select',
+              name: 'select'
+            },
+            {
+              data: 'select2',
+              name: 'select2'
+            },
+            {
+              data: 'select2_multiple',
+              name: 'select2_multiple'
+            },
+            {
+              data: 'textarea',
+              name: 'textarea'
+            },
+            {
+              data: 'radio',
+              name: 'radio'
+            },
+            {
+              data: 'checkbox',
+              name: 'checkbox'
+            },
+            {
+              data: 'checkbox2',
+              name: 'checkbox2'
+            },
+            {
+              data: 'tags',
+              name: 'tags'
+            },
+            {
+              data: 'file',
+              name: 'file'
+            },
+            {
+              data: 'date',
+              name: 'date'
+            },
+            {
+              data: 'time',
+              name: 'time'
+            },
+            {
+              data: 'color',
+              name: 'color'
+            },
+            {
+              data: 'created_at',
+              name: 'created_at'
+            },
+            {
+              data: 'updated_at',
+              name: 'updated_at'
+            },
+            {
+              data: 'action',
+              name: 'action',
+              orderable: true,
+              searchable: true
+            },
+          ]
+        });
+
+      });
+    </script>
+  @endif
 @endpush
 
 @push('modals')

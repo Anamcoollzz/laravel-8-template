@@ -3,7 +3,8 @@
   //   dd($isExport);
 @endphp
 
-<table class="table table-striped" id="datatable" @if ($isExport === false && $canExport) data-export="true" data-title="{{ __('Contoh CRUD') }}" @endif>
+<table class="table table-striped yajra-datatable" @if ($isYajra === false) id="datatable" @endif
+  @if ($isExport === false && $canExport) data-export="true" data-title="{{ __('Contoh CRUD') }}" @endif>
   <thead>
     <tr>
       @if ($isExport)
@@ -39,92 +40,67 @@
     </tr>
   </thead>
   <tbody>
-    @foreach ($data as $item)
-      <tr>
-        <td>{{ $loop->iteration }}</td>
-        <td>{{ $item->text }}</td>
-        <td>{{ $item->number }}</td>
-        <td>{{ dollar($item->currency) }}</td>
-        <td>{{ rp($item->currency_idr) }}</td>
-        <td>{{ $item->select }}</td>
-        <td>{{ $item->select2 }}</td>
-        <td>
-          {{ is_array($item->select2_multiple) ? implode(', ', $item->select2_multiple) : $item->select2_multiple }}
-        </td>
-        <td>{{ $item->textarea }}</td>
-        <td>{{ $item->radio }}</td>
-        <td>{{ is_array($item->checkbox) ? implode(', ', $item->checkbox) : $item->checkbox }}</td>
-        <td>{{ is_array($item->checkbox2) ? implode(', ', $item->checkbox2) : $item->checkbox2 }}</td>
-
-        @if ($isExport === false)
+    @if ($isYajra === false)
+      @foreach ($data as $item)
+        <tr>
+          <td>{{ $loop->iteration }}</td>
+          <td>{{ $item->text }}</td>
+          <td>{{ $item->number }}</td>
+          <td>{{ dollar($item->currency) }}</td>
+          <td>{{ rp($item->currency_idr) }}</td>
+          <td>{{ $item->select }}</td>
+          <td>{{ $item->select2 }}</td>
           <td>
-            @if (is_array($item->tags))
-              @foreach ($item->tags as $tag)
-                <div class="badge badge-primary mb-1">{{ $tag }}</div>
-              @endforeach
-            @else
-              @foreach (explode(',', $item->tags) as $tag)
-                <div class="badge badge-primary mb-1">{{ $tag }}</div>
-              @endforeach
-            @endif
+            {{ is_array($item->select2_multiple) ? implode(', ', $item->select2_multiple) : $item->select2_multiple }}
           </td>
-        @else
-          <td>{{ implode(', ', explode(',', $item->tags)) }}</td>
-        @endif
+          <td>{{ $item->textarea }}</td>
+          <td>{{ $item->radio }}</td>
+          <td>{{ is_array($item->checkbox) ? implode(', ', $item->checkbox) : $item->checkbox }}</td>
+          <td>{{ is_array($item->checkbox2) ? implode(', ', $item->checkbox2) : $item->checkbox2 }}</td>
 
-        @if ($isExport)
-          <td>
-            @if (Str::contains($item->file, 'http'))
-              <a href="{{ $item->file }}">{{ $item->file }}</a>
-            @elseif($item->file)
-              <a href="{{ $urlLink = Storage::url('crud-examples/' . $item->file) }}">{{ $urlLink }}</a>
-            @else
-              -
-            @endif
-          </td>
-        @else
-          <td>
-            @if (Str::contains($item->file, 'http'))
-              <a class="btn btn-primary btn-sm" href="{{ $item->file }}" target="_blank">Lihat</a>
-            @elseif($item->file)
-              <a class="btn btn-primary btn-sm" href="{{ Storage::url('crud-examples/' . $item->file) }}" target="_blank">Lihat</a>
-            @else
-              -
-            @endif
-          </td>
-        @endif
-
-        <td>{{ $item->date }}</td>
-        <td>{{ $item->time }}</td>
-        <td>
-          <div class="p-2 rounded" style="background-color: {{ $item->color }};">{{ $item->color }}
-          </div>
-        </td>
-
-        @if ($isExport)
-          <td>{{ $item->summernote_simple }}</td>
-          <td>{{ $item->summernote }}</td>
-        @endif
-
-        <td>{{ $item->created_at }}</td>
-        <td>{{ $item->updated_at }}</td>
-
-        @if ($isExport === false)
-          @if ($canUpdate || $canDelete || $canDetail)
+          @if ($isExport === false)
             <td>
-              @if ($canUpdate)
-                @include('stisla.includes.forms.buttons.btn-edit', ['link' => route('crud-examples.edit', [$item->id])])
-              @endif
-              @if ($canDelete)
-                @include('stisla.includes.forms.buttons.btn-delete', ['link' => route('crud-examples.destroy', [$item->id])])
-              @endif
-              @if ($canDetail)
-                @include('stisla.includes.forms.buttons.btn-detail', ['link' => route('crud-examples.show', [$item->id])])
+              @include('stisla.crud-example.tags', ['tags' => $item->tags])
+            </td>
+          @else
+            <td>{{ implode(', ', explode(',', $item->tags)) }}</td>
+          @endif
+
+          @if ($isExport)
+            <td>
+              @if (Str::contains($item->file, 'http'))
+                <a href="{{ $item->file }}">{{ $item->file }}</a>
+              @elseif($item->file)
+                <a href="{{ $urlLink = Storage::url('crud-examples/' . $item->file) }}">{{ $urlLink }}</a>
+              @else
+                -
               @endif
             </td>
+          @else
+            <td>
+              @include('stisla.crud-example.file', ['file' => $item->file])
+            </td>
           @endif
-        @endif
-      </tr>
-    @endforeach
+
+          <td>{{ $item->date }}</td>
+          <td>{{ $item->time }}</td>
+          <td>
+            @include('stisla.crud-example.color', ['color' => $item->color])
+          </td>
+
+          @if ($isExport)
+            <td>{{ $item->summernote_simple }}</td>
+            <td>{{ $item->summernote }}</td>
+          @endif
+
+          <td>{{ $item->created_at }}</td>
+          <td>{{ $item->updated_at }}</td>
+
+          @if ($isExport === false)
+            @include('stisla.crud-example.action')
+          @endif
+        </tr>
+      @endforeach
+    @endif
   </tbody>
 </table>
