@@ -5,6 +5,8 @@ use App\Http\Controllers\BackupDatabaseController;
 use App\Http\Controllers\CrudExampleController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\PermissionGroupController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
@@ -46,6 +48,16 @@ Route::prefix('user-management')->as('user-management.')->group(function () {
     Route::get('roles/import-excel-example', [RoleController::class, 'importExcelExample'])->name('roles.import-excel-example');
     Route::post('roles/import-excel', [RoleController::class, 'importExcel'])->name('roles.import-excel');
     Route::resource('roles', RoleController::class);
+
+    # PERMISSIONS
+    Route::get('permissions/import-excel-example', [PermissionController::class, 'importExcelExample'])->name('permissions.import-excel-example');
+    Route::post('permissions/import-excel', [PermissionController::class, 'importExcel'])->name('permissions.import-excel');
+    Route::resource('permissions', PermissionController::class);
+
+    # GROUP PERMISSIONS
+    Route::get('permission-groups/import-excel-example', [PermissionGroupController::class, 'importExcelExample'])->name('permission-groups.import-excel-example');
+    Route::post('permission-groups/import-excel', [PermissionGroupController::class, 'importExcel'])->name('permission-groups.import-excel');
+    Route::resource('permission-groups', PermissionGroupController::class);
 });
 
 # ACTIVITY LOGS

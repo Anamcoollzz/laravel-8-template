@@ -83,6 +83,20 @@
                         "icon": null,
                         "permission": "Role",
                         "is_active_if_url_includes": "user-management/roles*"
+                    },
+                    {
+                        "menu_name": "Permission",
+                        "route_name": "user-management.permissions.index",
+                        "icon": null,
+                        "permission": "Permission",
+                        "is_active_if_url_includes": "user-management/permissions*"
+                    },
+                    {
+                        "menu_name": "Group Permission",
+                        "route_name": "user-management.permission-groups.index",
+                        "icon": null,
+                        "permission": "Group Permission",
+                        "is_active_if_url_includes": "user-management/permission-groups*"
                     }
                 ]
             },

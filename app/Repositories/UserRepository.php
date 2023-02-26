@@ -150,14 +150,151 @@ class UserRepository extends Repository
     }
 
     /**
+     * find permission
+     *
+     * @param integer $permissionId
+     * @return Permission
+     */
+    public function findPermission(int $permissionId)
+    {
+        return Permission::where('id', $permissionId)->first();
+    }
+
+    /**
+     * find permission group
+     *
+     * @param integer $groupId
+     * @return PermissionGroup
+     */
+    public function findPermissionGroup(int $groupId)
+    {
+        return PermissionGroup::where('id', $groupId)->first();
+    }
+
+    /**
+     * delete permission
+     *
+     * @param integer $permissionId
+     * @return Permission
+     */
+    public function deletePermission(int $permissionId)
+    {
+        return Permission::where('id', $permissionId)->delete();
+    }
+
+    /**
+     * delete permission group by id
+     *
+     * @param integer $groupId
+     * @return Permission
+     */
+    public function deletePermissionGroup(int $groupId)
+    {
+        return PermissionGroup::where('id', $groupId)->delete();
+    }
+
+    /**
+     * update permission data
+     *
+     * @param integer $permissionId
+     * @param array $data
+     * @return Permission
+     */
+    public function updatePermission(int $permissionId, array $data)
+    {
+        Permission::where('id', $permissionId)->update($data);
+        return $this->findPermission($permissionId);
+    }
+
+    /**
+     * update permission group data
+     *
+     * @param integer $groupId
+     * @param array $data
+     * @return PermissionGroup
+     */
+    public function updatePermissionGroup(int $groupId, array $data)
+    {
+        PermissionGroup::where('id', $groupId)->update($data);
+        return $this->findPermissionGroup($groupId);
+    }
+
+    /**
      * get all permission data
      *
      * @return Collection
      */
     public function getPermissions()
     {
-        $permissions = Permission::all();
+        return Permission::all();
+    }
+
+    /**
+     * get all permission join group data
+     *
+     * @return Collection
+     */
+    public function getPermissionJoinGroups()
+    {
+        $permissions = Permission::select(['permissions.*', 'permission_groups.group_name'])
+            ->join('permission_groups', 'permissions.permission_group_id', '=', 'permission_groups.id')->get();
         return $permissions;
+    }
+
+    /**
+     * get all permission join group data latest
+     *
+     * @return Collection
+     */
+    public function getLatestPermissionJoinGroups()
+    {
+        $permissions = Permission::select(['permissions.*', 'permission_groups.group_name'])
+            ->join('permission_groups', 'permissions.permission_group_id', '=', 'permission_groups.id')
+            ->latest()
+            ->get();
+        return $permissions;
+    }
+
+    /**
+     * get permission group data latest
+     *
+     * @return Collection
+     */
+    public function getLatestPermissionGroups()
+    {
+        return PermissionGroup::latest()->get();
+    }
+
+    /**
+     * get permission as option dropdown
+     *
+     * @return array
+     */
+    public function getPermissionGroupOptions()
+    {
+        return PermissionGroup::pluck('group_name', 'id')->toArray();
+    }
+
+    /**
+     * create permission data
+     *
+     * @param array $data
+     * @return Permission
+     */
+    public function createPermission(array $data)
+    {
+        return Permission::create($data);
+    }
+
+    /**
+     * create permission group data
+     *
+     * @param array $data
+     * @return PermissionGroup
+     */
+    public function createPermissionGroup(array $data)
+    {
+        return PermissionGroup::create($data);
     }
 
     /**

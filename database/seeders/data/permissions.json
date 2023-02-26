@@ -58,6 +58,78 @@
     },
 
     {
+        "name": "Permission",
+        "roles": ["superadmin"],
+        "group": "Permission"
+    },
+    {
+        "name": "Permission Tambah",
+        "roles": ["superadmin"],
+        "group": "Permission"
+    },
+    {
+        "name": "Permission Impor Excel",
+        "roles": ["superadmin"],
+        "group": "Permission"
+    },
+    {
+        "name": "Permission Ubah",
+        "roles": ["superadmin"],
+        "group": "Permission"
+    },
+    {
+        "name": "Permission Detail",
+        "roles": ["superadmin"],
+        "group": "Permission"
+    },
+    {
+        "name": "Permission Hapus",
+        "roles": ["superadmin"],
+        "group": "Permission"
+    },
+    {
+        "name": "Permission Ekspor",
+        "roles": ["superadmin", "admin"],
+        "group": "Permission"
+    },
+
+    {
+        "name": "Group Permission",
+        "roles": ["superadmin"],
+        "group": "Group Permission"
+    },
+    {
+        "name": "Group Permission Tambah",
+        "roles": ["superadmin"],
+        "group": "Group Permission"
+    },
+    {
+        "name": "Group Permission Impor Excel",
+        "roles": ["superadmin"],
+        "group": "Group Permission"
+    },
+    {
+        "name": "Group Permission Ubah",
+        "roles": ["superadmin"],
+        "group": "Group Permission"
+    },
+    {
+        "name": "Group Permission Detail",
+        "roles": ["superadmin"],
+        "group": "Group Permission"
+    },
+    {
+        "name": "Group Permission Hapus",
+        "roles": ["superadmin"],
+        "group": "Group Permission"
+    },
+    {
+        "name": "Group Permission Ekspor",
+        "roles": ["superadmin", "admin"],
+        "group": "Group Permission"
+    },
+
+    {
         "name": "Pengguna",
         "roles": ["superadmin"],
         "group": "Pengguna"

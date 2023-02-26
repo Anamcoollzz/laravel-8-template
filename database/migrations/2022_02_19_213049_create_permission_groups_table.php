@@ -15,7 +15,7 @@ class CreatePermissionGroupsTable extends Migration
     {
         Schema::create('permission_groups', function (Blueprint $table) {
             $table->tinyIncrements('id');
-            $table->string('group_name');
+            $table->string('group_name')->unique();
             $table->timestamps();
         });
     }

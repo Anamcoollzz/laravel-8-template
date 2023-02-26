@@ -8,10 +8,10 @@ use App\Http\Requests\ImportExcelRequest;
 use App\Http\Requests\RoleRequest;
 use App\Imports\RoleImport;
 use App\Repositories\UserRepository;
+use App\Services\FileService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Role;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -25,6 +25,13 @@ class RoleController extends Controller
     private UserRepository $userRepository;
 
     /**
+     * file service
+     *
+     * @var FileService
+     */
+    private FileService $fileService;
+
+    /**
      * constructor method
      *
      * @return void
@@ -32,6 +39,8 @@ class RoleController extends Controller
     public function __construct()
     {
         $this->userRepository = new UserRepository;
+        $this->fileService    = new FileService;
+
         $this->middleware('can:Role');
         $this->middleware('can:Role Tambah')->only(['create', 'store']);
         $this->middleware('can:Role Ubah')->only(['edit', 'update']);
@@ -149,7 +158,8 @@ class RoleController extends Controller
      */
     public function importExcelExample(): BinaryFileResponse
     {
-        return Excel::download(new RoleExampleExport($this->userRepository->getRoles()), 'role_import_examples.xlsx');
+        $excel = new RoleExampleExport($this->userRepository->getRoles());
+        return $this->fileService->downloadExcel($excel, 'role_import_examples.xlsx');
     }
 
     /**
@@ -162,7 +172,8 @@ class RoleController extends Controller
     {
         DB::beginTransaction();
         try {
-            Excel::import(new RoleImport, $request->file('import_file'));
+            $this->fileService->importExcel(new RoleImport, $request->file('import_file'));
+            DB::commit();
             return back()->with('successMessage', __('Impor berhasil dilakukan'));
         } catch (Exception $exception) {
             DB::rollBack();
