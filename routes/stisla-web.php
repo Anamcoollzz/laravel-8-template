@@ -30,8 +30,8 @@ Route::get('auth/social-register/{provider}', [AuthController::class, 'socialReg
 Route::get('auth/social/{provider}/callback', [AuthController::class, 'socialCallback'])->name('social-callback');
 
 # CRUD GENERATOR
-Route::get('crud-generator', [CrudController::class, 'index']);
-Route::post('crud-generator', [CrudController::class, 'generateJson']);
+Route::get('crud-generator', [CrudController::class, 'index'])->middleware('auth');
+Route::post('crud-generator', [CrudController::class, 'generateJson'])->middleware('auth');
 
 # YOUTUBE
-Route::get('youtube/view-sync', [YoutubeController::class, 'viewSync'])->name('youtube.view-sync');
+Route::get('youtube/view-sync', [YoutubeController::class, 'viewSync'])->name('youtube.view-sync')->middleware('auth');

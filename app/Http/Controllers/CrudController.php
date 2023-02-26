@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 
 class CrudController extends Controller
 {
+
     /**
      * showing page crud generator
      *
@@ -16,11 +17,16 @@ class CrudController extends Controller
      */
     public function index()
     {
-        return view('stisla.crud-generators.index');
+        if (auth()->user()->hasRole('superadmin'))
+            return view('stisla.crud-generators.index');
+        abort(404);
     }
 
     public function generateJson(Request $request)
     {
+        if (!auth()->user()->hasRole('superadmin')) {
+            abort(404);
+        }
         $columns = [];
         foreach ($request->columns as $column) {
             $storeValidations = $column['form']['validations']['store'];
