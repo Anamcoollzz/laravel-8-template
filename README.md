@@ -17,6 +17,10 @@ Beberapa fitur atau komponen yang ada
     -   Perbarui email
     -   Perbarui password
 -   Contoh Modul CRUD (Create, Read, Update, Delete) dan Import Excel serta Export (PDF, JSON, Excel)
+    -   CRUD
+    -   Export
+    -   Import
+    -   Server side data table
 -   Beberapa contoh menu (tampilan)
 -   Log Aktivitas
 -   User dan role
@@ -29,6 +33,14 @@ Beberapa fitur atau komponen yang ada
         -   Export
         -   Import
         -   Force Login
+    -   Manajemen Group Permission
+        -   CRUD
+        -   Export
+        -   Import
+    -   Manajemen Permission
+        -   CRUD
+        -   Export
+        -   Import
 -   Notifikasi
 -   Log Viewer
 -   Manajemen file menggunakan [Unisharp](https://unisharp.github.io/laravel-filemanager/)
@@ -39,6 +51,9 @@ Beberapa fitur atau komponen yang ada
     -   Email
     -   SSO Login dan Register
     -   Lainnya
+        -   Google captcha
+        -   Setting page
+-   Backup database
 -   CRUD Generator (menu nya tersembunyi akses via url saja)
 -   Server side export file
 -   Service dan repository pattern
