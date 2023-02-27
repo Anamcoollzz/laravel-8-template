@@ -3,7 +3,9 @@
 namespace App\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
+use Yajra\DataTables\Facades\DataTables;
 
 class Repository extends RepositoryAbstract
 {
@@ -218,5 +220,28 @@ class Repository extends RepositoryAbstract
             ->select($columns)
             ->whereIn($column, $data)
             ->get();
+    }
+
+    /**
+     * get query
+     *
+     * @return Model
+     */
+    public function query()
+    {
+        return $this->model->query();
+    }
+
+    /**
+     * get data as datatable
+     *
+     * @return Response
+     */
+    public function getYajraDataTables()
+    {
+        return DataTables::of($this->query())
+            ->addIndexColumn()
+            ->rawColumns([])
+            ->make(true);
     }
 }
