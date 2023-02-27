@@ -12,6 +12,10 @@ Beberapa fitur atau komponen yang ada
     -   Perbarui email
     -   Perbarui password
 -   Contoh Modul CRUD (Create, Read, Update, Delete) dan Import Excel serta Export (PDF, JSON, Excel)
+    -   CRUD
+    -   Export
+    -   Import
+    -   Server side data table
 -   Beberapa contoh menu (tampilan)
 -   Log Aktivitas
 -   User dan role
@@ -24,6 +28,14 @@ Beberapa fitur atau komponen yang ada
         -   Export
         -   Import
         -   Force Login
+    -   Manajemen Group Permission
+        -   CRUD
+        -   Export
+        -   Import
+    -   Manajemen Permission
+        -   CRUD
+        -   Export
+        -   Import
 -   Notifikasi
 -   Log Viewer
 -   Manajemen file menggunakan [Unisharp](https://unisharp.github.io/laravel-filemanager/)
@@ -34,6 +46,8 @@ Beberapa fitur atau komponen yang ada
     -   Email
     -   SSO Login dan Register
     -   Lainnya
+        -   Google captcha
+        -   Setting page
 -   CRUD Generator (menu nya tersembunyi akses via url saja)
 -   Service dan repository pattern
 
@@ -45,6 +59,7 @@ Libraries
 -   https://unisharp.github.io/laravel-filemanager/
 -   https://laravel-excel.com/
 -   https://github.com/barryvdh/laravel-dompdf
+-   https://github.com/thinhbuzz/laravel-google-captcha
 
 Terima kasih, bisa distar ataupun difork ya guys. Kalau ada request module atau apapun itu, bisa tulis di issue.
 Rencana nanti bakal kuupdate ke versi laravel terbaru 9 bahkan 10

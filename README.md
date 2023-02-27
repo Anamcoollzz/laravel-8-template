@@ -75,6 +75,7 @@ Beberapa fitur atau komponen yang ada
 -   https://github.com/barryvdh/laravel-dompdf
 -   https://datatables.net/
 -   https://packagist.org/packages/buzz/laravel-google-captcha
+-   https://github.com/thinhbuzz/laravel-google-captcha
 
 Terima kasih, bisa distar ataupun difork ya guys. Kalau ada request module atau apapun itu, bisa tulis di issue.
 Rencana nanti bakal kuupdate ke versi laravel terbaru 9 bahkan 10
