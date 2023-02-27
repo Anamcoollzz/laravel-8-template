@@ -80,10 +80,14 @@ Beberapa fitur atau komponen yang ada
 Terima kasih, bisa distar ataupun difork ya guys. Kalau ada request module atau apapun itu, bisa tulis di issue.
 Rencana nanti bakal kuupdate ke versi laravel terbaru 9 bahkan 10
 
-Yuk Ramaikan channel youtubeku biar semangat ngonten dan belajar barengnya
+#### Yuk Ramaikan channel youtubeku biar semangat ngonten dan belajar barengnya
+
 [![N|Solid](https://res.cloudinary.com/sistem-informasi/image/upload/c_scale,w_120,z_2.7/v1677481731/youtube-logo-hd-8_x1zdwb.png)](https://www.youtube.com/channel/UCwF-njZKFE30pZwWFtp84fA)
 
-Yang mau intip2 portofolioku bisa klik gambar di bawah
+#### Yang mau intip2 portofolioku bisa klik gambar di bawah
+
 [![N|Solid](https://res.cloudinary.com/sistem-informasi/image/upload/c_thumb,w_100/v1677481520/1664200200147_it7bza.jpg)](https://anamapp.my.id)
+
+atau kunjungi https://anamapp.my.id
 
 https://github.com/Anamcoollzz/laravel-8-template
