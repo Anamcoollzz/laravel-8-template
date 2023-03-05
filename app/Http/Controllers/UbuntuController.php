@@ -8,6 +8,7 @@ use App\Services\CommandService;
 use App\Services\DatabaseService;
 use App\Services\FileService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -15,21 +16,49 @@ use Illuminate\Support\Facades\Storage;
 class UbuntuController extends Controller
 {
 
+    /**
+     * CommandService
+     *
+     * @var CommandService
+     */
     private CommandService $commandService;
+
+    /**
+     * DatabaseService
+     *
+     * @var DatabaseService
+     */
     private DatabaseService $dbService;
+
+    /**
+     * FileService
+     *
+     * @var FileService
+     */
     private FileService $fileService;
 
+    /**
+     * constructor method
+     *
+     * @return void
+     */
     public function __construct()
     {
         $this->middleware('can:Ubuntu');
+
         $this->commandService = new CommandService();
         $this->dbService      = new DatabaseService();
         $this->fileService    = new FileService();
     }
 
+    /**
+     * index method
+     *
+     * @param Request $request
+     * @return Response
+     */
     public function index(Request $request)
     {
-
         if ($request->query('redirect_folder')) {
             $path = $request->query('redirect_folder');
             return redirect()->route('ubuntu.index', ['folder' => encrypt($path)]);
@@ -46,8 +75,8 @@ class UbuntuController extends Controller
         }
 
         // $path       = '/Users/anamkun/Documents/PROJEK/ME';
-        // $path = '/Users/anamkun/Documents/PROJEK/ME/laravel-8-template';
-        $path = '/var/www';
+        $path = '/Users/anamkun/Documents/PROJEK/ME/laravel-8-template';
+        // $path = '/var/www';
         if ($request->query('folder')) {
             $path = decrypt($request->query('folder'));
         }
@@ -156,6 +185,12 @@ class UbuntuController extends Controller
         ]);
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  string  $pathname
+     * @return Response
+     */
     public function edit($pathname)
     {
         $pathnameD = decrypt($pathname);
@@ -171,6 +206,14 @@ class UbuntuController extends Controller
         ]);
     }
 
+    /**
+     * edit row
+     *
+     * @param string $database
+     * @param string $table
+     * @param string|int $id
+     * @return void
+     */
     public function editRow($database, $table, $id)
     {
         $primary = request("primary");
@@ -194,6 +237,15 @@ class UbuntuController extends Controller
         ]);
     }
 
+    /**
+     * update row
+     *
+     * @param string $database
+     * @param string $table
+     * @param string|int $id
+     * @param Request $request
+     * @return Response
+     */
     public function updateRow($database, $table, $id, Request $request)
     {
         $primary = request("primary");
@@ -202,6 +254,13 @@ class UbuntuController extends Controller
         return redirect()->back()->with('successMessage', 'Berhasil memperbarui data');
     }
 
+    /**
+     * update file
+     *
+     * @param string $pathname
+     * @param Request $request
+     * @return Response
+     */
     public function update($pathname, Request $request)
     {
         $pathnameD = decrypt($pathname);
@@ -216,6 +275,12 @@ class UbuntuController extends Controller
         return redirect()->back()->with('successMessage', 'Berhasil memperbarui file');
     }
 
+    /**
+     * duplicate file
+     *
+     * @param string $pathname
+     * @return Response
+     */
     public function duplicate($pathname)
     {
         $pathnameD = decrypt($pathname);
@@ -230,6 +295,12 @@ class UbuntuController extends Controller
         }
     }
 
+    /**
+     * delete file
+     *
+     * @param string $pathname
+     * @return Response
+     */
     public function destroy($pathname)
     {
         $pathnameD = decrypt($pathname);
@@ -239,6 +310,13 @@ class UbuntuController extends Controller
         return redirect()->back()->with('successMessage', 'Berhasil menghapus file');
     }
 
+    /**
+     * toggle enabled
+     *
+     * @param string $pathname
+     * @param string $nextStatus
+     * @return Response
+     */
     public function toggleEnabled($pathname, $nextStatus)
     {
         $pathnameD = decrypt($pathname);
@@ -254,6 +332,13 @@ class UbuntuController extends Controller
         abort(404);
     }
 
+    /**
+     * toggle ssl
+     *
+     * @param string $pathname
+     * @param string $nextStatus
+     * @return Response
+     */
     public function toggleSSL($pathname, $nextStatus)
     {
         $pathnameD = decrypt($pathname);
@@ -272,11 +357,16 @@ class UbuntuController extends Controller
         abort(404);
     }
 
+    /**
+     * git pull
+     *
+     * @param string $pathname
+     * @return Response
+     */
     public function gitPull($pathname)
     {
 
         $pathnameD = decrypt($pathname);
-
 
         $command = 'git config --global --add safe.directory ' . $pathnameD . ' 2>&1';
         $output = shell_exec($command);
@@ -287,6 +377,12 @@ class UbuntuController extends Controller
         return redirect()->back()->with('successMessage', 'Berhasil run command ' . $command);
     }
 
+    /**
+     * set laravel permission
+     *
+     * @param string $pathname
+     * @return Response
+     */
     public function setLaravelPermission($pathname)
     {
         $pathnameD = decrypt($pathname);
@@ -296,18 +392,16 @@ class UbuntuController extends Controller
         return redirect()->back()->with('successMessage', 'Berhasil run command ' . $command);
     }
 
+    /**
+     * create new db
+     *
+     * @return Response
+     */
     public function createDb()
     {
         $schemaName = request('database_name');
         $this->dbService->createMySqlDb($schemaName);
         return redirect()->back()->with('successMessage', 'Berhasil membuat database ' . $schemaName);
-    }
-
-    public function nginx(Request $request)
-    {
-        $command = $this->commandService->nginx($request->nginx);
-        ShellJob::dispatch($command);
-        return redirect()->back()->with('successMessage', 'Berhasil menjalankan command  ' . $command);
     }
 
     public function deleteRow($database, $table, $id)
@@ -359,5 +453,18 @@ class UbuntuController extends Controller
         $command = $this->commandService->laravelMigrateRefresh($pathnameD);
         ShellJob::dispatch($command);
         return redirect()->back()->with('successMessage', 'Berhasil menjalankan artisan command  ' . $command);
+    }
+
+    /**
+     * nginx
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function nginx(Request $request)
+    {
+        $command = $this->commandService->nginx($request->nginx);
+        ShellJob::dispatch($command);
+        return redirect()->back()->with('successMessage', 'Berhasil menjalankan command  ' . $command);
     }
 }
