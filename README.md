@@ -43,6 +43,7 @@ Beberapa fitur atau komponen yang ada
         -   Import
 -   Notifikasi
 -   Log Viewer
+-   Ubuntu
 -   Manajemen file menggunakan [Unisharp](https://unisharp.github.io/laravel-filemanager/)
 -   Pengaturan
     -   Umum
