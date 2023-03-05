@@ -184,7 +184,7 @@
 
     {
         "name": "Ubuntu",
-        "roles": ["superadmin", "akuntesting"],
+        "roles": ["superadmin"],
         "group": "Ubuntu"
     },
 
