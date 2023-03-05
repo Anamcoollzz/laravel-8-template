@@ -55,7 +55,7 @@
             'label' => __('Sudah punya akun'),
             'link' => route('login'),
         ])
-        @include('stisla.includes.forms.buttons.btn-primary', ['icon' => 'fas fa-sign-in-alt', 'label' => __('Daftar')])
+        @include('stisla.includes.forms.buttons.btn-primary', ['icon' => 'fas fa-sign-in-alt', 'label' => __('Daftar'), 'type' => 'submit'])
       </div>
     </form>
 
