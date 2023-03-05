@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -151,5 +152,90 @@ class DatabaseService
     public function deleteMysql($filename)
     {
         return Storage::delete('public/' . $this->folderName . '/' . $filename);
+    }
+
+    /**
+     * delete row
+     *
+     * @param string $db
+     * @param string $table
+     * @param string $id
+     * @return int
+     */
+    public function deleteRow($db, $table, $id)
+    {
+        return DB::table($db . '.' . $table)->where('id', $id)->delete();
+    }
+
+    public function createMySqlDb($db)
+    {
+        $charset    = config("database.connections.mysql.charset", 'utf8mb4');
+        $collation  = config("database.connections.mysql.collation", 'utf8mb4_unicode_ci');
+        $query      = "CREATE DATABASE IF NOT EXISTS $db CHARACTER SET $charset COLLATE $collation;";
+        DB::statement($query);
+    }
+
+    public function getAllDbMySql()
+    {
+        $query = 'SHOW DATABASES';
+        $databases = collect(DB::select($query));
+        $databases = $databases->transform(function ($item) {
+            $item->total_table = DB::select('SELECT COUNT(*) as total_table FROM information_schema.TABLES WHERE table_schema = ?', [$item->Database])[0]->total_table;
+            $query = 'SELECT ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) AS "size_mb" FROM information_schema.TABLES WHERE table_schema = ?';
+            $item->size_mb = DB::select($query, [$item->Database])[0]->size_mb ?? 0;
+            $item->database = $item->Database;
+            return $item;
+        })->sortBy('database')->values();
+        return $databases;
+    }
+
+    public function getAllTableMySql($database)
+    {
+        $query = 'SELECT TABLE_NAME AS `table`, ROUND((DATA_LENGTH + INDEX_LENGTH) / 1024 / 1024, 2) AS `size_mb` FROM information_schema.TABLES WHERE TABLE_SCHEMA = ? ORDER BY (DATA_LENGTH + INDEX_LENGTH) DESC;';
+        $tables = collect(DB::select($query, [$database]));
+        $tables = $tables->transform(function ($item) use ($database) {
+            $item->total_row = DB::select('SELECT COUNT(*) as total_row FROM ' . $database . '.' . $item->table)[0]->total_row;
+            return $item;
+        })->sortByDesc('total_row')->values();
+        return $tables;
+    }
+
+    public function getPrimaryColumn($database, $table)
+    {
+        $query = "SELECT k.column_name
+                    FROM information_schema.table_constraints t
+                    JOIN information_schema.key_column_usage k
+                    USING(constraint_name,table_schema,table_name)
+                    WHERE t.constraint_type='PRIMARY KEY'
+                    AND t.table_schema= ?
+                    AND t.table_name=?;";
+        $primary = collect(DB::select($query, [$database, $table]));
+        $primary = $primary->pluck('column_name')->toArray()[0] ?? 'id';
+        return $primary;
+    }
+
+    public function getAllRowMySql($database, $table)
+    {
+        $primary = $this->getPrimaryColumn($database, $table);
+        $query = 'SELECT COLUMN_NAME AS `column`, DATA_TYPE AS `type`, CHARACTER_MAXIMUM_LENGTH AS `length`, IS_NULLABLE AS `nullable`, COLUMN_DEFAULT AS `default`, COLUMN_COMMENT AS `comment` FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?;';
+        $structure = collect(DB::select($query, [$database, $table]));
+        $query = 'SELECT * FROM ' . $database . '.' . $table . ' ORDER BY `' . $primary . '` desc;';
+        $rows = collect(DB::select($query));
+        return [
+            'structure' => $structure,
+            'rows'      => $rows,
+        ];
+    }
+
+    public function getAllRowMySqlAsJson($database, $table)
+    {
+        $query = 'SELECT * FROM ' . $database . '.' . $table . ';';
+        $rows = collect(DB::select($query));
+        return ['count' => count($rows), 'rows' => $rows];
+    }
+
+    public function getPaginateMySql($database, $table, $perPage = 20)
+    {
+        return DB::table($database . '.' . $table)->paginate($perPage);
     }
 }

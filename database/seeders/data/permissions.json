@@ -183,6 +183,12 @@
     },
 
     {
+        "name": "Ubuntu",
+        "roles": ["superadmin", "akuntesting"],
+        "group": "Ubuntu"
+    },
+
+    {
         "name": "Backup Database",
         "roles": ["superadmin"],
         "group": "Backup Database"

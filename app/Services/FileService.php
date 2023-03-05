@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -271,5 +272,49 @@ class FileService
     public function importExcel($excelInstance, $uploadedFile)
     {
         return Excel::import($excelInstance, $uploadedFile);
+    }
+
+    /**
+     * get all php version
+     *
+     * @param string $folder
+     * @return Collection|array
+     */
+    public function getAllPhp($folder = '/etc/php')
+    {
+        $phps = [];
+        if (File::exists($folder)) {
+            $phps = File::directories($folder);
+            $phps = collect($phps)->map(function ($php) {
+                return [
+                    'version'     => basename($php),
+                    'status_fpm'  => shell_exec('service php' . basename($php) . '-fpm status'),
+                    'path'        => $php,
+                    'directories' => File::directories($php),
+                ];
+            });
+        }
+        return $phps;
+    }
+
+    /**
+     * get all supervisor
+     *
+     * @param string $folder
+     * @return array
+     */
+    public function getSupervisor($folder = '/etc/supervisor')
+    {
+        $supervisors = [];
+        if (File::exists($folder)) {
+            $supervisors[] = collect(File::files($folder))->first()->getPathname();
+            if (File::exists($folder . '/conf.d')) {
+                $confs = File::files($folder . '/conf.d');
+                foreach ($confs as $conf) {
+                    $supervisors[] = $conf->getPathname();
+                }
+            }
+        }
+        return $supervisors;
     }
 }

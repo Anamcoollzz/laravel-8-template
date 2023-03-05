@@ -27,6 +27,7 @@
   <script>
     $(function() {
       //   $('.dt-buttons').hide();
+      $('.datatable').DataTable();
     });
   </script>
 @endpush

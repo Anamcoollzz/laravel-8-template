@@ -1,7 +1,7 @@
 @php
-$icon = $icon ?? 'fa fa-pencil-alt';
+  $icon = $icon ?? 'fa fa-pencil-alt';
 @endphp
-<a class="btn btn-sm btn-primary @if ($icon ?? false) btn-icon icon-left @endif" href="{{ $link }}" data-toggle="tooltip" title="{{ $label ?? __('Ubah') }}">
+<a class="btn btn-sm btn-primary @if ($icon ?? false) btn-icon icon-left @endif" href="{{ $link }}" data-toggle="tooltip" title="{{ $tooltip ?? ($label ?? __('Ubah')) }}">
   @if ($icon ?? false)
     <i class="{{ $icon }}"></i>
   @endif

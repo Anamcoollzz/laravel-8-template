@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Route;
 
 class Menu extends Model
 {
@@ -55,7 +56,7 @@ class Menu extends Model
         if ($this->uri) {
             return url($this->uri);
         }
-        if ($this->route_name) {
+        if ($this->route_name && Route::has($this->route_name)) {
             return route($this->route_name);
         }
         return '#';
