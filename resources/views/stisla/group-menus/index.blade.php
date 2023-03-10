@@ -16,14 +16,12 @@
     <p class="section-lead">{{ __('Menampilkan halaman ' . $title) }}.</p>
     <div class="row">
       <div class="col-12">
+
         <div class="card">
           <div class="card-header">
             <h4><i class="{{ $moduleIcon }}"></i> Data {{ $title }}</h4>
 
             <div class="card-header-action">
-              @if ($canImportExcel)
-                @include('stisla.includes.forms.buttons.btn-import-excel')
-              @endif
               @if ($canCreate)
                 @include('stisla.includes.forms.buttons.btn-add', ['link' => $route_create])
               @endif
@@ -32,11 +30,10 @@
           <div class="card-body">
             @include('stisla.includes.forms.buttons.btn-datatable')
             <div class="table-responsive">
-              @include('stisla.menu-managements.table')
+              @include('stisla.group-menus.table')
             </div>
           </div>
         </div>
-
       </div>
 
     </div>

@@ -4,6 +4,7 @@ use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\BackupDatabaseController;
 use App\Http\Controllers\CrudExampleController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GroupMenuController;
 use App\Http\Controllers\MenuManagementController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PermissionController;
@@ -118,6 +119,7 @@ Route::resource('ubuntu', UbuntuController::class);
 // Route::get('menu-managements/import-excel-example', [MenuManagementController::class, 'importExcelExample'])->name('menu-managements.import-excel-example');
 // Route::post('menu-managements/import-excel', [MenuManagementController::class, 'importExcel'])->name('menu-managements.import-excel');
 Route::resource('menu-managements', MenuManagementController::class);
+Route::resource('group-menus', GroupMenuController::class);
 
 # CONTOH CRUD
 Route::get('yajra-crud-examples', [CrudExampleController::class, 'index'])->name('yajra-crud-examples.index');

@@ -122,7 +122,23 @@
                 "icon": "fas fa-bars",
                 "permission": "Manajemen Menu",
                 "is_blank": false,
-                "is_active_if_url_includes": "menu-managements*"
+                "is_active_if_url_includes": "menu-managements*",
+                "childs": [
+                    {
+                        "menu_name": "Menu",
+                        "route_name": "menu-managements.index",
+                        "icon": null,
+                        "permission": "Manajemen Menu",
+                        "is_active_if_url_includes": "menu-managements*"
+                    },
+                    {
+                        "menu_name": "Grup Menu",
+                        "route_name": "group-menus.index",
+                        "icon": null,
+                        "permission": "Grup Menu",
+                        "is_active_if_url_includes": "group-menus*"
+                    }
+                ]
             },
             {
                 "menu_name": "Notifikasi",

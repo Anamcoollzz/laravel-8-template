@@ -1,3 +1,7 @@
+@php
+  $isYajra = $isYajra ?? false;
+@endphp
+
 @extends($data->count() > 0 || $isYajra ? 'stisla.layouts.app-table' : 'stisla.layouts.app')
 
 @section('title')

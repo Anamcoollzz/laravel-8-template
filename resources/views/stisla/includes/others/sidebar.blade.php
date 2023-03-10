@@ -55,7 +55,7 @@
             @if ($_menu_condition)
               <li class="nav-item dropdown @if ($_is_active) active @endif">
                 <a href="#" class="nav-link has-dropdown">
-                  <i class="fas fa-users"></i>
+                  <i class="{{ $_menu->icon }}"></i>
                   <span>{{ __($_menu->menu_name) }}</span>
                 </a>
                 <ul class="dropdown-menu">

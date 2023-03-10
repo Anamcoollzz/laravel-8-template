@@ -208,28 +208,53 @@
 
     {
         "name": "Manajemen Menu",
-        "roles": ["superadmin", "admin", "user"],
+        "roles": ["superadmin"],
         "group": "Manajemen Menu"
     },
     {
         "name": "Manajemen Menu Tambah",
-        "roles": ["superadmin", "admin", "user"],
+        "roles": ["superadmin"],
         "group": "Manajemen Menu"
     },
     {
         "name": "Manajemen Menu Ubah",
-        "roles": ["superadmin", "admin", "user"],
+        "roles": ["superadmin"],
         "group": "Manajemen Menu"
     },
     {
         "name": "Manajemen Menu Detail",
-        "roles": ["superadmin", "admin", "user"],
+        "roles": ["superadmin"],
         "group": "Manajemen Menu"
     },
     {
         "name": "Manajemen Menu Hapus",
-        "roles": ["superadmin", "admin", "user"],
+        "roles": ["superadmin"],
         "group": "Manajemen Menu"
+    },
+    {
+        "name": "Grup Menu",
+        "roles": ["superadmin"],
+        "group": "Grup Menu"
+    },
+    {
+        "name": "Grup Menu Tambah",
+        "roles": ["superadmin"],
+        "group": "Grup Menu"
+    },
+    {
+        "name": "Grup Menu Ubah",
+        "roles": ["superadmin"],
+        "group": "Grup Menu"
+    },
+    {
+        "name": "Grup Menu Detail",
+        "roles": ["superadmin"],
+        "group": "Grup Menu"
+    },
+    {
+        "name": "Grup Menu Hapus",
+        "roles": ["superadmin"],
+        "group": "Grup Menu"
     },
 
     {

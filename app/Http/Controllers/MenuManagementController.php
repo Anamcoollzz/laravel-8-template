@@ -2,16 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\MenuExport;
 use App\Http\Requests\MenuRequest;
-use App\Http\Requests\ImportExcelRequest;
-use App\Imports\MenuImport;
 use App\Models\Menu;
 use App\Repositories\MenuGroupRepository;
 use App\Repositories\MenuRepository;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Route;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class MenuManagementController extends StislaController
 {
@@ -53,29 +48,13 @@ class MenuManagementController extends StislaController
      */
     public function index()
     {
-        $isYajra = Route::is('yajra-crud-examples.index');
-        if ($isYajra) {
-            $data = collect([]);
-        } else {
-            $data = $this->menuRepository->getFullData();
-        }
+        $data = $this->menuRepository->getFullData();
 
         $defaultData = $this->getDefaultDataIndex(__('Manajemen Menu'), 'Manajemen Menu', 'menu-managements');
 
         return view('stisla.menu-managements.index', array_merge($defaultData, [
-            'data'    => $data,
-            'isYajra' => $isYajra,
+            'data' => $data,
         ]));
-    }
-
-    /**
-     * datatable yajra index
-     *
-     * @return Response
-     */
-    public function yajraAjax()
-    {
-        return $this->menuRepository->getYajraDataTables();
     }
 
     /**
@@ -119,11 +98,6 @@ class MenuManagementController extends StislaController
             'uri',
             'menu_group_id',
         ]);
-        // if ($request->hasFile('file')) {
-        //     $data['file'] = $this->fileService->uploadMenuFile($request->file('file'));
-        // }
-        // $data['currency'] = str_replace(',', '', $request->currency);
-        // $data['currency_idr'] = str_replace('.', '', $request->currency_idr);
         $result = $this->menuRepository->create($data);
         logCreate("Manajemen Menu", $result);
         $successMessage = successMessageCreate("Menu");
@@ -185,17 +159,18 @@ class MenuManagementController extends StislaController
             'uri',
             'menu_group_id',
         ]);
-        // if ($request->hasFile('file')) {
-        //     $data['file'] = $this->fileService->uploadMenuFile($request->file('file'));
-        // }
-        // $data['currency'] = str_replace(',', '', $request->currency);
-        // $data['currency_idr'] = str_replace('.', '', $request->currency_idr);
         $newData = $this->menuRepository->update($data, $menuManagement->id);
         logUpdate("Manajemen Menu", $menuManagement, $newData);
         $successMessage = successMessageUpdate("Menu");
         return back()->with('successMessage', $successMessage);
     }
 
+    /**
+     * showing detail menu page
+     *
+     * @param Menu $menuManagement
+     * @return Response
+     */
     public function show(Menu $menuManagement)
     {
         $data = $this->getDetail($menuManagement, true);
@@ -210,89 +185,9 @@ class MenuManagementController extends StislaController
      */
     public function destroy(Menu $menuManagement)
     {
-        // $this->fileService->deleteMenuFile($menuManagement);
         $this->menuRepository->delete($menuManagement->id);
         logDelete("Manajemen Menu", $menuManagement);
         $successMessage = successMessageDelete("Menu");
         return back()->with('successMessage', $successMessage);
-    }
-
-    /**
-     * download import example
-     *
-     * @return BinaryFileResponse
-     */
-    public function importExcelExample(): BinaryFileResponse
-    {
-        // bisa gunakan file excel langsung sebagai contoh
-        // $filepath = public_path('example.xlsx');
-        // return response()->download($filepath);
-
-        $excel = new MenuExport($this->menuRepository->getLatest());
-        return $this->fileService->downloadExcel($excel, 'crud_examples_import.xlsx');
-    }
-
-    /**
-     * import excel file to db
-     *
-     * @param ImportExcelRequest $request
-     * @return Response
-     */
-    public function importExcel(ImportExcelRequest $request)
-    {
-        $this->fileService->importExcel(new MenuImport, $request->file('import_file'));
-        $successMessage = successMessageImportExcel("Manajemen Menu");
-        return back()->with('successMessage', $successMessage);
-    }
-
-    /**
-     * download export data as json
-     *
-     * @return Response
-     */
-    public function json()
-    {
-        $data = $this->menuRepository->getLatest();
-        return $this->fileService->downloadJson($data, 'crud_examples.json');
-    }
-
-    /**
-     * download export data as xlsx
-     *
-     * @return Response
-     */
-    public function excel()
-    {
-        $data  = $this->menuRepository->getLatest();
-        $excel = new MenuExport($data);
-        return $this->fileService->downloadExcel($excel, 'crud_examples.xlsx', \Maatwebsite\Excel\Excel::XLSX);
-    }
-
-    /**
-     * download export data as csv
-     *
-     * @return Response
-     */
-    public function csv()
-    {
-        $data  = $this->menuRepository->getLatest();
-        $excel = new MenuExport($data);
-        return $this->fileService->downloadExcel($excel, 'crud_examples.csv', \Maatwebsite\Excel\Excel::CSV);
-    }
-
-    /**
-     * download export data as pdf
-     *
-     * @return Response
-     */
-    public function pdf(): Response
-    {
-        $data = [
-            'data'     => $this->menuRepository->getLatest(),
-            'isExport' => true
-        ];
-        // return $this->fileService->downloadPdfLetter('stisla.menu-managements.export-pdf', $data, 'crud_examples.pdf');
-        // return $this->fileService->downloadPdfLegal('stisla.menu-managements.export-pdf', $data, 'crud_examples.pdf');
-        return $this->fileService->downloadPdfA2('stisla.menu-managements.export-pdf', $data, 'crud_examples.pdf');
     }
 }
