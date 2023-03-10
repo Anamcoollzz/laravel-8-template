@@ -239,9 +239,16 @@ class Repository extends RepositoryAbstract
      */
     public function getYajraDataTables()
     {
-        return DataTables::of($this->query())
-            ->addIndexColumn()
-            ->rawColumns([])
-            ->make(true);
+        return DataTables::of($this->query())->addIndexColumn()->rawColumns([])->make(true);
+    }
+
+    /**
+     * get data as select options
+     *
+     * @return array
+     */
+    public function getSelectOptions($key, $value)
+    {
+        return $this->query()->select($key, $value)->get()->pluck($key, $value)->toArray();
     }
 }

@@ -207,6 +207,32 @@
     },
 
     {
+        "name": "Manajemen Menu",
+        "roles": ["superadmin", "admin", "user"],
+        "group": "Manajemen Menu"
+    },
+    {
+        "name": "Manajemen Menu Tambah",
+        "roles": ["superadmin", "admin", "user"],
+        "group": "Manajemen Menu"
+    },
+    {
+        "name": "Manajemen Menu Ubah",
+        "roles": ["superadmin", "admin", "user"],
+        "group": "Manajemen Menu"
+    },
+    {
+        "name": "Manajemen Menu Detail",
+        "roles": ["superadmin", "admin", "user"],
+        "group": "Manajemen Menu"
+    },
+    {
+        "name": "Manajemen Menu Hapus",
+        "roles": ["superadmin", "admin", "user"],
+        "group": "Manajemen Menu"
+    },
+
+    {
         "name": "Contoh CRUD",
         "roles": ["superadmin", "admin", "user"],
         "group": "Contoh CRUD"

@@ -4,6 +4,7 @@ use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\BackupDatabaseController;
 use App\Http\Controllers\CrudExampleController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MenuManagementController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PermissionGroupController;
@@ -108,6 +109,15 @@ Route::get('ubuntu/{pathname}/duplicate', [UbuntuController::class, 'duplicate']
 Route::get('ubuntu/{pathname}/git-pull', [UbuntuController::class, 'gitPull'])->name('ubuntu.git-pull');
 Route::get('ubuntu/{pathname}/set-laravel-permission', [UbuntuController::class, 'setLaravelPermission'])->name('ubuntu.set-laravel-permission');
 Route::resource('ubuntu', UbuntuController::class);
+
+# MANAJEMEN MENU
+// Route::get('menu-managements/pdf', [MenuManagementController::class, 'pdf'])->name('menu-managements.pdf');
+// Route::get('menu-managements/csv', [MenuManagementController::class, 'csv'])->name('menu-managements.csv');
+// Route::get('menu-managements/excel', [MenuManagementController::class, 'excel'])->name('menu-managements.excel');
+// Route::get('menu-managements/json', [MenuManagementController::class, 'json'])->name('menu-managements.json');
+// Route::get('menu-managements/import-excel-example', [MenuManagementController::class, 'importExcelExample'])->name('menu-managements.import-excel-example');
+// Route::post('menu-managements/import-excel', [MenuManagementController::class, 'importExcel'])->name('menu-managements.import-excel');
+Route::resource('menu-managements', MenuManagementController::class);
 
 # CONTOH CRUD
 Route::get('yajra-crud-examples', [CrudExampleController::class, 'index'])->name('yajra-crud-examples.index');
