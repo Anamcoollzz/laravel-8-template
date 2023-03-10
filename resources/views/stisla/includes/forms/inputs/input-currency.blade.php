@@ -1,3 +1,7 @@
+@php
+  $currency_type = $currency_type ?? 'default';
+@endphp
+
 @include('stisla.includes.forms.inputs.input', ['addClass' => 'currency', 'icon' => $icon ?? ($currency_type === 'default' ? 'fa fa-dollar' : 'fa fa-money-bill-wave')])
 
 @if (!defined('CURRENCY'))
