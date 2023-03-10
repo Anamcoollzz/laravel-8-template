@@ -26,9 +26,16 @@ class MenuRepository extends Repository
      */
     public function getMenus()
     {
-        $results = MenuGroup::query()
-            ->with(['menus'])
-            ->get();
-        return $results;
+        return MenuGroup::query()->with(['menus'])->get();
+    }
+
+    /**
+     * getFullData
+     *
+     * @return Collection
+     */
+    public function getFullData()
+    {
+        return $this->model->with(['group', 'parentMenu', 'childs'])->get();
     }
 }

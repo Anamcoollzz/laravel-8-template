@@ -24,6 +24,7 @@ class Menu extends Model
         'is_active_if_url_includes',
         'is_blank',
         'uri',
+        'menu_group_id',
     ];
 
     /**
@@ -51,6 +52,11 @@ class Menu extends Model
      */
     protected $casts = [];
 
+    /**
+     * Get the fix_url attribute.
+     *
+     * @return string
+     */
     public function getFixUrlAttribute()
     {
         if ($this->uri) {
@@ -62,8 +68,33 @@ class Menu extends Model
         return '#';
     }
 
+    /**
+     * Get all of the Menu's childs.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function childs()
     {
         return $this->hasMany(Menu::class, 'parent_menu_id');
+    }
+
+    /**
+     * Get the group that owns the Menu
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function group()
+    {
+        return $this->belongsTo(MenuGroup::class, 'menu_group_id');
+    }
+
+    /**
+     * Get the parent that owns the Menu
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function parentMenu()
+    {
+        return $this->belongsTo(Menu::class, 'parent_menu_id');
     }
 }

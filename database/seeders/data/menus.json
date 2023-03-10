@@ -5,14 +5,14 @@
             {
                 "menu_name": "Beranda",
                 "route_name": "dashboard.index",
-                "icon": "fire",
+                "icon": "fas fa-fire",
                 "permission": null,
                 "is_active_if_url_includes": "dashboard*"
             },
             {
                 "menu_name": "Contoh CRUD",
                 "route_name": "crud-examples.index",
-                "icon": "atom",
+                "icon": "fas fa-atom",
                 "permission": "Contoh CRUD",
                 "is_active_if_url_includes": "crud-examples*",
                 "is_mockup": true
@@ -20,7 +20,7 @@
             {
                 "menu_name": "Contoh CRUD Yajra",
                 "route_name": "yajra-crud-examples.index",
-                "icon": "atom",
+                "icon": "fas fa-atom",
                 "permission": "Contoh CRUD Yajra",
                 "is_active_if_url_includes": "yajra-crud-examples*",
                 "is_mockup": true
@@ -28,7 +28,7 @@
             {
                 "menu_name": "Menu",
                 "route_name": null,
-                "icon": "bars",
+                "icon": "fas fa-bars",
                 "permission": null,
                 "is_active_if_url_includes": null,
                 "is_mockup": true
@@ -36,7 +36,7 @@
             {
                 "menu_name": "Menu Dropdown",
                 "route_name": null,
-                "icon": "caret-square-down",
+                "icon": "fas fa-caret-square-down",
                 "permission": null,
                 "is_active_if_url_includes": null,
                 "is_mockup": true
@@ -44,7 +44,7 @@
             {
                 "menu_name": "Datatable",
                 "route_name": "datatable.index",
-                "icon": "table",
+                "icon": "fas fa-table",
                 "permission": null,
                 "is_active_if_url_includes": "datatable*",
                 "is_mockup": true
@@ -52,7 +52,7 @@
             {
                 "menu_name": "Form",
                 "route_name": "form.index",
-                "icon": "file-alt",
+                "icon": "fas fa-file-alt",
                 "permission": null,
                 "is_active_if_url_includes": "form*",
                 "is_mockup": true
@@ -60,7 +60,7 @@
             {
                 "menu_name": "Chart JS",
                 "route_name": "chart-js.index",
-                "icon": "chart-line",
+                "icon": "fas fa-chart-line",
                 "permission": null,
                 "is_active_if_url_includes": "chart-js*",
                 "is_mockup": true
@@ -74,7 +74,7 @@
             {
                 "menu_name": "Manajemen Pengguna",
                 "route_name": null,
-                "icon": "users",
+                "icon": "fas fa-users",
                 "permission": null,
                 "is_active_if_url_includes": "dashboard*",
                 "childs": [
@@ -111,57 +111,81 @@
             {
                 "menu_name": "Manajemen File",
                 "uri": "file-managers",
-                "icon": "folder",
+                "icon": "fas fa-folder",
                 "permission": "Manajemen File",
                 "is_blank": true,
                 "is_active_if_url_includes": "file-managers*"
             },
             {
+                "menu_name": "Manajemen Menu",
+                "uri": "menu-managements",
+                "icon": "fas fa-bars",
+                "permission": "Manajemen Menu",
+                "is_blank": false,
+                "is_active_if_url_includes": "menu-managements*",
+                "childs": [
+                    {
+                        "menu_name": "Menu",
+                        "route_name": "menu-managements.index",
+                        "icon": null,
+                        "permission": "Manajemen Menu",
+                        "is_active_if_url_includes": "menu-managements*"
+                    },
+                    {
+                        "menu_name": "Grup Menu",
+                        "route_name": "group-menus.index",
+                        "icon": null,
+                        "permission": "Grup Menu",
+                        "is_active_if_url_includes": "group-menus*"
+                    }
+                ]
+            },
+            {
                 "menu_name": "Notifikasi",
                 "route_name": "notifications.index",
-                "icon": "bell",
+                "icon": "fas fa-bell",
                 "permission": "Notifikasi",
                 "is_active_if_url_includes": "notifications*"
             },
             {
                 "menu_name": "Log Aktivitas",
                 "route_name": "activity-logs.index",
-                "icon": "clock-rotate-left",
+                "icon": "fas fa-clock-rotate-left",
                 "permission": "Log Aktivitas",
                 "is_active_if_url_includes": "activity-logs*"
             },
             {
                 "menu_name": "Profil",
                 "route_name": "profile.index",
-                "icon": "user",
+                "icon": "fas fa-user",
                 "permission": "Profil",
                 "is_active_if_url_includes": "profile*"
             },
             {
                 "menu_name": "Pengaturan",
                 "route_name": "settings.all",
-                "icon": "cogs",
+                "icon": "fas fa-cogs",
                 "permission": "Pengaturan",
                 "is_active_if_url_includes": "settings*"
             },
             {
                 "menu_name": "Ubuntu",
                 "route_name": "ubuntu.index",
-                "icon": "ubuntu",
+                "icon": "fab fa-ubuntu",
                 "permission": "Ubuntu",
                 "is_active_if_url_includes": "ubuntu*"
             },
             {
                 "menu_name": "Backup Database",
                 "route_name": "backup-databases.index",
-                "icon": "database",
+                "icon": "fas fa-database",
                 "permission": "Backup Database",
                 "is_active_if_url_includes": "backup-databases*"
             },
             {
                 "menu_name": "Log Viewer",
                 "route_name": "logs.index",
-                "icon": "circle-exclamation",
+                "icon": "fas fa-circle-exclamation",
                 "permission": "Log Viewer",
                 "is_active_if_url_includes": "logs*",
                 "is_blank": true
@@ -169,7 +193,7 @@
             {
                 "menu_name": "Keluar",
                 "route_name": "logout",
-                "icon": "sign-out-alt",
+                "icon": "fas fa-sign-out-alt",
                 "permission": null,
                 "is_active_if_url_includes": null
             }

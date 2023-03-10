@@ -8,14 +8,13 @@ use App\Http\Requests\ImportExcelRequest;
 use App\Imports\CrudExampleImport;
 use App\Models\CrudExample;
 use App\Repositories\CrudExampleRepository;
-use App\Services\EmailService;
-use App\Services\FileService;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-class CrudExampleController extends Controller
+class CrudExampleController extends StislaController
 {
+
     /**
      * crud example repository
      *
@@ -24,44 +23,18 @@ class CrudExampleController extends Controller
     private CrudExampleRepository $crudExampleRepository;
 
     /**
-     * file service
-     *
-     * @var FileService
-     */
-    private FileService $fileService;
-
-    /**
-     * email service
-     *
-     * @var FileService
-     */
-    private EmailService $emailService;
-
-    /**
-     * icon of module
-     *
-     * @var String
-     */
-    private String $icon = 'fa fa-atom';
-
-    /**
      * constructor method
      *
      * @return void
      */
     public function __construct()
     {
-        $this->crudExampleRepository = new CrudExampleRepository;
-        $this->fileService           = new FileService;
-        $this->emailService          = new EmailService;
+        parent::__construct();
 
-        $this->middleware('can:Contoh CRUD');
-        $this->middleware('can:Contoh CRUD Tambah')->only(['create', 'store']);
-        $this->middleware('can:Contoh CRUD Ubah')->only(['edit', 'update']);
-        $this->middleware('can:Contoh CRUD Detail')->only(['show']);
-        $this->middleware('can:Contoh CRUD Hapus')->only(['destroy']);
-        $this->middleware('can:Contoh CRUD Ekspor')->only(['json', 'excel', 'csv', 'pdf']);
-        $this->middleware('can:Contoh CRUD Impor Excel')->only(['importExcel', 'importExcelExample']);
+        $this->icon                  = 'fa fa-atom';
+        $this->crudExampleRepository = new CrudExampleRepository;
+
+        $this->defaultMiddleware('Contoh CRUD');
     }
 
     /**
@@ -71,32 +44,19 @@ class CrudExampleController extends Controller
      */
     public function index()
     {
-        $user = auth()->user();
         $isYajra = Route::is('yajra-crud-examples.index');
         if ($isYajra) {
             $data = collect([]);
         } else {
             $data = $this->crudExampleRepository->getLatest();
         }
-        return view('stisla.crud-example.index', [
-            'data'              => $data,
-            'canCreate'         => $user->can('Contoh CRUD Tambah'),
-            'canUpdate'         => $user->can('Contoh CRUD Ubah'),
-            'canDetail'         => $user->can('Contoh CRUD Detail'),
-            'canDelete'         => $user->can('Contoh CRUD Hapus'),
-            'canImportExcel'    => $user->can('Contoh CRUD Impor Excel'),
-            'canExport'         => $user->can('Contoh CRUD Ekspor'),
-            'title'             => __('Contoh CRUD'),
-            'moduleIcon'        => $this->icon,
-            'route_create'      => route('crud-examples.create'),
-            'routeImportExcel'  => route('crud-examples.import-excel'),
-            'routeExampleExcel' => route('crud-examples.import-excel-example'),
-            'routePdf'          => route('crud-examples.pdf'),
-            'routeExcel'        => route('crud-examples.excel'),
-            'routeCsv'          => route('crud-examples.csv'),
-            'routeJson'         => route('crud-examples.json'),
-            'isYajra'           => $isYajra,
-        ]);
+
+        $defaultData = $this->getDefaultDataIndex(__('Contoh CRUD'), 'Contoh CRUD', 'crud-examples');
+
+        return view('stisla.crud-example.index', array_merge($defaultData, [
+            'data'    => $data,
+            'isYajra' => $isYajra,
+        ]));
     }
 
     /**
@@ -117,32 +77,14 @@ class CrudExampleController extends Controller
     public function create()
     {
         $title      = __('Contoh CRUD');
-        $routeIndex = route('crud-examples.index');
         $fullTitle  = __('Tambah Contoh CRUD');
-        return view('stisla.crud-example.form', [
+        $data       = $this->getDefaultDataCreate($title, 'crud-examples');
+        return view('stisla.crud-example.form', array_merge($data, [
             'selectOptions'   => get_options(10),
             'radioOptions'    => get_options(4),
             'checkboxOptions' => get_options(5),
-            'title'           => $title,
             'fullTitle'       => $fullTitle,
-            'routeIndex'      => $routeIndex,
-            'action'          => route('crud-examples.store'),
-            'moduleIcon'      => $this->icon,
-            'isDetail'        => false,
-            'breadcrumbs'     => [
-                [
-                    'label' => __('Dashboard'),
-                    'link'  => route('dashboard.index')
-                ],
-                [
-                    'label' => $title,
-                    'link'  => $routeIndex
-                ],
-                [
-                    'label' => 'Tambah'
-                ]
-            ]
-        ]);
+        ]));
     }
 
     /**
@@ -191,33 +133,13 @@ class CrudExampleController extends Controller
     private function getDetail(CrudExample $crudExample, bool $isDetail = false)
     {
         $title       = __('Contoh CRUD');
-        $routeIndex  = route('crud-examples.index');
-        $breadcrumbs = [
-            [
-                'label' => __('Dashboard'),
-                'link'  => route('dashboard.index')
-            ],
-            [
-                'label' => $title,
-                'link'  => $routeIndex
-            ],
-            [
-                'label' => $isDetail ? 'Detail' : 'Ubah'
-            ]
-        ];
-        return [
+        $defaultData = $this->getDefaultDataDetail($title, 'crud-examples', $crudExample, $isDetail);
+        return array_merge($defaultData, [
             'selectOptions'   => get_options(10),
             'radioOptions'    => get_options(4),
             'checkboxOptions' => get_options(5),
-            'd'               => $crudExample,
-            'title'           => $title,
             'fullTitle'       => $isDetail ? __('Detail Contoh CRUD') : __('Ubah Contoh CRUD'),
-            'routeIndex'      => $routeIndex,
-            'action'          => route('crud-examples.update', [$crudExample->id]),
-            'moduleIcon'      => $this->icon,
-            'isDetail'        => $isDetail,
-            'breadcrumbs'     => $breadcrumbs,
-        ];
+        ]);
     }
 
     /**
