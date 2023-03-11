@@ -460,7 +460,7 @@ class SettingRepository
     public static function isGoogleCaptchaLogin()
     {
         if (config('captcha.secret') === 'default_secret') return false;
-        return ((int)Setting::firstOrCreate(['key' => 'is_google_captcha_login'], ['value' => '1'])->value) === 1;
+        return ((int)Setting::firstOrCreate(['key' => 'is_google_captcha_login'], ['value' => '1'])->value) === 0;
     }
 
     /**
@@ -471,7 +471,7 @@ class SettingRepository
     public static function isGoogleCaptchaRegister()
     {
         if (config('captcha.secret') === 'default_secret') return false;
-        return ((int)Setting::firstOrCreate(['key' => 'is_google_captcha_register'], ['value' => '1'])->value) === 1;
+        return ((int)Setting::firstOrCreate(['key' => 'is_google_captcha_register'], ['value' => '1'])->value) === 0;
     }
 
     /**
@@ -482,7 +482,7 @@ class SettingRepository
     public static function isGoogleCaptchaForgotPassword()
     {
         if (config('captcha.secret') === 'default_secret') return false;
-        return ((int)Setting::firstOrCreate(['key' => 'is_google_captcha_forgot_password'], ['value' => '1'])->value) === 1;
+        return ((int)Setting::firstOrCreate(['key' => 'is_google_captcha_forgot_password'], ['value' => '1'])->value) === 0;
     }
 
     /**
@@ -493,7 +493,7 @@ class SettingRepository
     public static function isGoogleCaptchaResetPassword()
     {
         if (config('captcha.secret') === 'default_secret') return false;
-        return ((int)Setting::firstOrCreate(['key' => 'is_google_captcha_reset_password'], ['value' => '1'])->value) === 1;
+        return ((int)Setting::firstOrCreate(['key' => 'is_google_captcha_reset_password'], ['value' => '1'])->value) === 0;
     }
 
     /**
@@ -503,7 +503,10 @@ class SettingRepository
      */
     public static function googleCaptchaSiteKey()
     {
-        return decrypt(Setting::where(['key' => 'google_captcha_site_key'])->first()->value);
+        $siteKey = Setting::where(['key' => 'google_captcha_site_key'])->first()->value ?? null;
+        if ($siteKey)
+            return decrypt($siteKey);
+        return null;
     }
 
     /**
@@ -513,7 +516,10 @@ class SettingRepository
      */
     public static function googleCaptchaSecret()
     {
-        return decrypt(Setting::where(['key' => 'google_captcha_secret'])->first()->value);
+        $secret = Setting::where(['key' => 'google_captcha_secret'])->first()->value ?? null;
+        if ($secret)
+            return decrypt($secret);
+        return null;
     }
 
     /**

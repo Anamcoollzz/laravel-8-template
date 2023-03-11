@@ -38,42 +38,33 @@ class ViewShare
     public function handle(Request $request, Closure $next)
     {
         if ($request->isMethod('GET')) {
-            // view()->share('_meta_description', SettingRepository::metaDescription());
-            // view()->share('_meta_keywords', SettingRepository::metaKeywords());
-            // view()->share('_meta_author', SettingRepository::metaAuthor());
-            // view()->share('_company_name', SettingRepository::companyName());
-            // view()->share('_skin', SettingRepository::stislaSkin());
-            // view()->share('_sidebar_mini', SettingRepository::stislaSidebarMini());
-            // $_app_name = SettingRepository::applicationName() ?? config('app.name');
-            // view()->share('_app_name', $_app_name);
-            // view()->share('_developer_name', SettingRepository::developerName());
-            // view()->share('_whatsapp_developer', SettingRepository::developerWhatsapp());
-            // view()->share('_since', SettingRepository::since());
-            // view()->share('_version', SettingRepository::applicationVersion());
-            // view()->share('_app_name_mobile', \App\Helpers\StringHelper::acronym($_app_name, 2));
-            // view()->share('_favicon', SettingRepository::favicon());
-            // view()->share('_logo_url', SettingRepository::logoUrl());
-            // view()->share('_city', SettingRepository::city());
-            // view()->share('_country', SettingRepository::country());
-            // view()->share('_login_bg_url', SettingRepository::loginBgUrl());
-            // Session::flush();
+            // default value
+            view()->share('_logo_url', asset('assets/images/logo.png'));
+            view()->share('_company_name', "Nama Perusahaan");
+            view()->share('_is_forgot_password_send_to_email', false);
+            view()->share('_is_login_must_verified', false);
+            view()->share('_is_active_register_page', false);
+            view()->share('_is_login_with_google', false);
+            view()->share('_is_login_with_facebook', false);
+            view()->share('_is_login_with_twitter', false);
+            view()->share('_is_login_with_github', false);
+            view()->share('_meta_description', 'Meta Description');
+            view()->share('_meta_keywords', "stisla, laravel 8 template, bootstrap 4");
+            view()->share('_meta_author', "Hairul Anam");
+            view()->share('_skin', "style");
+            view()->share('_stisla_bg_login', asset('stisla/assets/img/unsplash/eberhard-grossgasteiger-1207565-unsplash.jpg'));
+            view()->share('_city', "Jember");
+            view()->share('_country', "Indonesia");
+            view()->share('_stisla_bg_home', asset('stisla/assets/img/unsplash/andre-benz-1214056-unsplash.jpg'));
+            view()->share('_app_description', "Ini hanyalah sistem biasa");
+            view()->share('_stisla_sidebar_mini', "0");
+
+
             $settings = SettingRepository::settings();
-            // dd($settings);
+
             session($settings);
             foreach ($settings as $key => $value) {
                 view()->share($key, $value);
-                // if ($setting->key === 'application_name') {
-                //     view()->share('_app_name', $setting->value);
-                // } else if ($setting->key === 'logo') {
-                //     // Session::flush();
-                //     view()->share('_logo_url', $value = SettingRepository::logoUrl());
-                //     session(['_logo_url' => $value]);
-                // } else if ($setting->key === 'stisla_skin') {
-                //     view()->share('_skin', $setting->value);
-                // } else if ($setting->key === 'stisla_bg_login') {
-                //     view()->share('_stisla_bg_login', $value = SettingRepository::loginBgUrl());
-                //     session(['_stisla_bg_login' => $value]);
-                // }
             }
             $menus = $this->menuRepository->getMenus();
             view()->share('_sidebar_menus', $menus);
