@@ -24,10 +24,4 @@
 @endpush
 
 @push('scripts')
-  <script>
-    $(function() {
-      //   $('.dt-buttons').hide();
-      $('.datatable').DataTable();
-    });
-  </script>
 @endpush

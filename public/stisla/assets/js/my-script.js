@@ -1,4 +1,6 @@
 $(document).ready(function () {
+  if ($('.datatable').length > 0) $('.datatable').DataTable();
+
   if (window.innerWidth <= 425) {
     $('.btn-save-form').addClass('btn-block');
     $('.btn-reset-form').addClass('btn-block');
@@ -177,7 +179,7 @@ $(document).ready(function () {
         },
       ];
     }
-    $dtTbl.dataTable(options);
+    $dtTbl.DataTable(options);
   }
 
   // datatable yajra
@@ -274,7 +276,7 @@ $(document).ready(function () {
         },
       ];
     }
-    $dtTblYajra.dataTable(options);
+    window.$dtTblYajra = $dtTblYajra.DataTable(options);
   }
 
   // select2

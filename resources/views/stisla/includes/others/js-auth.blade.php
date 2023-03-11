@@ -30,7 +30,7 @@
 <!-- Template JS File -->
 <script src="{{ asset('stisla/assets/js/scripts.js') }}"></script>
 <script src="{{ asset('stisla/assets/js/custom.js') }}"></script>
-<script src="{{ asset('stisla/assets/js/my-script.min.js?id=1') }}"></script>
+<script src="{{ asset('stisla/assets/js/my-script.min.js?id=2') }}"></script>
 
 <!-- Your custom script -->
 
