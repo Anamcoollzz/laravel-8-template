@@ -101,24 +101,34 @@ class AuthController extends Controller
      */
     public function register(RegisterRequest $request)
     {
-        $data = $request->only(
-            [
-                'name', 'email', 'phone_number', 'birth_date', 'address',
-            ]
-        );
-        $data = array_merge([
-            'password' => bcrypt($request->password)
-        ], $data);
-        $user = $this->userRepository->create($data);
-        if ($this->settingRepository->loginMustVerified()) {
-            $user->update(['email_token' => Str::random(150)]);
-            $this->emailService->verifyAccount($user);
+        try {
+            DB::beginTransaction();
+            $data = $request->only(
+                [
+                    'name', 'email', 'phone_number', 'birth_date', 'address',
+                ]
+            );
+            $data = array_merge([
+                'password' => bcrypt($request->password)
+            ], $data);
+            $user = $this->userRepository->create($data);
+            $this->userRepository->assignRole($user, 'user');
+            if ($this->settingRepository->loginMustVerified()) {
+                $user->update(['email_token' => Str::random(150)]);
+                $this->emailService->verifyAccount($user);
+                logRegister($user);
+                return Helper::redirectSuccess(route('login'), __('Cek inbox email anda untuk memverifikasi akun terlebih dahulu'));
+            }
             logRegister($user);
-            return Helper::redirectSuccess(route('login'), __('Cek inbox email anda untuk memverifikasi akun terlebih dahulu'));
+            $this->userRepository->login($user);
+            DB::commit();
+            return redirect()->route('dashboard.index')->with('successMessage', __('Berhasil mendaftar dan masuk ke dalam sistem'));
+        } catch (Exception $e) {
+            DB::rollBack();
+            if (Str::contains($e->getMessage(), 'SMTP')) {
+                return back()->with('errorMessage', __('Gagal mengirim email verifikasi, silahkan coba lagi nanti'));
+            }
         }
-        logRegister($user);
-        $this->userRepository->login($user);
-        return redirect()->route('dashboard.index')->with('successMessage', __('Berhasil mendaftar dan masuk ke dalam sistem'));
     }
 
     /**

@@ -391,4 +391,16 @@ class UserRepository extends Repository
             ->latest()
             ->paginate($perPage);
     }
+
+    /**
+     * assign role
+     *
+     * @param User $user
+     * @param string $role
+     * @return User
+     */
+    public function assignRole(User $user, string $role)
+    {
+        return $user->assignRole($role);
+    }
 }
