@@ -92,6 +92,7 @@ class StislaController extends Controller
             'routeExcel'        => $canExport ? route($routePrefix . '.excel') : null,
             'routeCsv'          => $canExport ? route($routePrefix . '.csv') : null,
             'routeJson'         => $canExport ? route($routePrefix . '.json') : null,
+            'routeYajra'        => route($routePrefix . '.ajax-yajra'),
         ];
     }
 

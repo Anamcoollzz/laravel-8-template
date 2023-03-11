@@ -19,7 +19,7 @@
             },
             {
                 "menu_name": "Contoh CRUD Yajra",
-                "route_name": "yajra-crud-examples.index",
+                "route_name": "crud-examples.index-yajra",
                 "icon": "fas fa-atom",
                 "permission": "Contoh CRUD Yajra",
                 "is_active_if_url_includes": "yajra-crud-examples*",

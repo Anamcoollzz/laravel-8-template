@@ -44,7 +44,7 @@ class CrudExampleController extends StislaController
      */
     public function index()
     {
-        $isYajra = Route::is('yajra-crud-examples.index');
+        $isYajra = Route::is('crud-examples.index-yajra');
         if ($isYajra) {
             $data = collect([]);
         } else {
@@ -56,6 +56,38 @@ class CrudExampleController extends StislaController
         return view('stisla.crud-example.index', array_merge($defaultData, [
             'data'    => $data,
             'isYajra' => $isYajra,
+            'yajraColumns' => json_encode([
+                [
+                    'data'       => 'DT_RowIndex',
+                    'name'       => 'DT_RowIndex',
+                    'searchable' => false,
+                    'orderable'  => false
+                ],
+                ['data' => 'text', 'name' => 'text'],
+                ['data' => 'number', 'name' => 'number'],
+                ['data' => 'currency', 'name' => 'currency'],
+                ['data' => 'currency_idr', 'name' => 'currency_idr'],
+                ['data' => 'select', 'name' => 'select'],
+                ['data' => 'select2', 'name' => 'select2'],
+                ['data' => 'select2_multiple', 'name' => 'select2_multiple'],
+                ['data' => 'textarea', 'name' => 'textarea'],
+                ['data' => 'radio', 'name' => 'radio'],
+                ['data' => 'checkbox', 'name' => 'checkbox'],
+                ['data' => 'checkbox2', 'name' => 'checkbox2'],
+                ['data' => 'tags', 'name' => 'tags'],
+                ['data' => 'file', 'name' => 'file'],
+                ['data' => 'date', 'name' => 'date'],
+                ['data' => 'time', 'name' => 'time'],
+                ['data' => 'color', 'name' => 'color'],
+                ['data' => 'created_at', 'name' => 'created_at'],
+                ['data' => 'updated_at', 'name' => 'updated_at'],
+                [
+                    'data' => 'action',
+                    'name' => 'action',
+                    'orderable' => false,
+                    'searchable' => false
+                ],
+            ])
         ]));
     }
 

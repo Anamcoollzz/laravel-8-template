@@ -122,8 +122,8 @@ Route::resource('menu-managements', MenuManagementController::class);
 Route::resource('group-menus', GroupMenuController::class);
 
 # CONTOH CRUD
-Route::get('yajra-crud-examples', [CrudExampleController::class, 'index'])->name('yajra-crud-examples.index');
-Route::get('yajra-crud-examples/ajax', [CrudExampleController::class, 'yajraAjax'])->name('yajra-crud-examples.ajax');
+Route::get('yajra-crud-examples', [CrudExampleController::class, 'index'])->name('crud-examples.index-yajra');
+Route::get('yajra-crud-examples/ajax', [CrudExampleController::class, 'yajraAjax'])->name('crud-examples.ajax-yajra');
 Route::get('crud-examples/pdf', [CrudExampleController::class, 'pdf'])->name('crud-examples.pdf');
 Route::get('crud-examples/csv', [CrudExampleController::class, 'csv'])->name('crud-examples.csv');
 Route::get('crud-examples/excel', [CrudExampleController::class, 'excel'])->name('crud-examples.excel');
@@ -131,10 +131,6 @@ Route::get('crud-examples/json', [CrudExampleController::class, 'json'])->name('
 Route::get('crud-examples/import-excel-example', [CrudExampleController::class, 'importExcelExample'])->name('crud-examples.import-excel-example');
 Route::post('crud-examples/import-excel', [CrudExampleController::class, 'importExcel'])->name('crud-examples.import-excel');
 Route::resource('crud-examples', CrudExampleController::class);
-
-Route::get('mahasiswas/import-excel-example', [\App\Http\Controllers\MahasiswaController::class, 'importExcelExample'])->name('mahasiswas.import-excel-example');
-Route::post('mahasiswas/import-excel', [\App\Http\Controllers\MahasiswaController::class, 'importExcel'])->name('mahasiswas.import-excel');
-Route::resource('mahasiswas', \App\Http\Controllers\MahasiswaController::class);
 
 Route::get('testing/datatable', [TestingController::class, 'datatable']);
 Route::get('testing/send-email', [TestingController::class, 'sendEmail']);
