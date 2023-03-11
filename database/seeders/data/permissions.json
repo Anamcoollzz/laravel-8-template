@@ -195,9 +195,9 @@
     },
 
     {
-        "name": "Log Viewer",
+        "name": "Laravel Log Viewer",
         "roles": ["superadmin"],
-        "group": "Log Viewer"
+        "group": "Laravel Log Viewer"
     },
 
     {

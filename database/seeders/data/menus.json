@@ -108,14 +108,7 @@
                     }
                 ]
             },
-            {
-                "menu_name": "Manajemen File",
-                "uri": "file-managers",
-                "icon": "fas fa-folder",
-                "permission": "Manajemen File",
-                "is_blank": true,
-                "is_active_if_url_includes": "file-managers*"
-            },
+
             {
                 "menu_name": "Manajemen Menu",
                 "uri": "menu-managements",
@@ -141,6 +134,14 @@
                 ]
             },
             {
+                "menu_name": "Manajemen File",
+                "uri": "file-managers",
+                "icon": "fas fa-folder",
+                "permission": "Manajemen File",
+                "is_blank": true,
+                "is_active_if_url_includes": "file-managers*"
+            },
+            {
                 "menu_name": "Notifikasi",
                 "route_name": "notifications.index",
                 "icon": "fas fa-bell",
@@ -148,12 +149,30 @@
                 "is_active_if_url_includes": "notifications*"
             },
             {
-                "menu_name": "Log Aktivitas",
+                "menu_name": "Log",
                 "route_name": "activity-logs.index",
                 "icon": "fas fa-clock-rotate-left",
-                "permission": "Log Aktivitas",
-                "is_active_if_url_includes": "activity-logs*"
+                "permission": null,
+                "is_active_if_url_includes": "activity-logs*",
+                "childs": [
+                    {
+                        "menu_name": "Log Aktivitas",
+                        "route_name": "activity-logs.index",
+                        "icon": "fas fa-clock-rotate-left",
+                        "permission": "Log Aktivitas",
+                        "is_active_if_url_includes": "activity-logs*"
+                    },
+                    {
+                        "menu_name": "Laravel Log Viewer",
+                        "route_name": "logs.index",
+                        "icon": "fas fa-circle-exclamation",
+                        "permission": "Laravel Log Viewer",
+                        "is_active_if_url_includes": "logs*",
+                        "is_blank": true
+                    }
+                ]
             },
+
             {
                 "menu_name": "Profil",
                 "route_name": "profile.index",
@@ -181,14 +200,6 @@
                 "icon": "fas fa-database",
                 "permission": "Backup Database",
                 "is_active_if_url_includes": "backup-databases*"
-            },
-            {
-                "menu_name": "Log Viewer",
-                "route_name": "logs.index",
-                "icon": "fas fa-circle-exclamation",
-                "permission": "Log Viewer",
-                "is_active_if_url_includes": "logs*",
-                "is_blank": true
             },
             {
                 "menu_name": "Keluar",
