@@ -1,3 +1,11 @@
+@if (session('successMessage'))
+  <input type="hidden" id="sessionSuccessMessage" value="{{ session('successMessage') }}">
+@endif
+
+@if (session('errorMessage'))
+  <input type="hidden" id="sessionErrorMessage" value="{{ session('errorMessage') }}">
+@endif
+
 <!-- General JS Scripts -->
 @if (config('app.is_cdn', false))
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -22,22 +30,9 @@
 <!-- Template JS File -->
 <script src="{{ asset('stisla/assets/js/scripts.js') }}"></script>
 <script src="{{ asset('stisla/assets/js/custom.js') }}"></script>
-<script src="{{ asset('stisla/assets/js/skripku.js') }}"></script>
+<script src="{{ asset('stisla/assets/js/my-script.min.js?id=1') }}"></script>
 
 <!-- Your custom script -->
-@if (session('successMessage'))
-  <input type="hidden" id="sessionSuccessMessage" value="{{ session('successMessage') }}">
-  <script>
-    swal('Sukses', $('#sessionSuccessMessage').val(), 'success');
-  </script>
-@endif
-
-@if (session('errorMessage'))
-  <input type="hidden" id="sessionErrorMessage" value="{{ session('errorMessage') }}">
-  <script>
-    swal('Gagal', $('#sessionErrorMessage').val(), 'error');
-  </script>
-@endif
 
 @stack('scripts')
 

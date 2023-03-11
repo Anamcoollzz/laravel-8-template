@@ -1,4 +1,9 @@
 $(document).ready(function () {
+  if (window.innerWidth <= 425) {
+    $('.btn-save-form').addClass('btn-block');
+    $('.btn-reset-form').addClass('btn-block');
+  }
+
   // check all hak akses
   function checkAll() {
     if ($('[data-toggle="checkall"]').length) {
@@ -105,7 +110,7 @@ $(document).ready(function () {
         },
       },
     };
-    // alert($dtTbl.data("export"));
+
     if ($dtTbl.data('export') === true) {
       var title = $dtTbl.data('title') && $dtTbl.data('title').replace(' ', '_').toLowerCase();
       title = title ? title + '_export' : document.title;
@@ -159,12 +164,7 @@ $(document).ready(function () {
           extend: 'print',
           text: 'Cetak',
           className: 'btn-primary',
-          // title: title,
         },
-        //   'copyHtml5',
-        //   'excelHtml5',
-        //   'csvHtml5',
-        //   'pdfHtml5',
         {
           attr: { id: 'jsonDtBtn' },
           text: 'JSON',
@@ -178,6 +178,103 @@ $(document).ready(function () {
       ];
     }
     $dtTbl.dataTable(options);
+  }
+
+  // datatable yajra
+  if ($('.yajra-datatable').length > 0) {
+    var $dtTblYajra = $('.yajra-datatable');
+    var options = {
+      processing: true,
+      serverSide: true,
+      ajax: $dtTblYajra.data('ajax-url'),
+      columns: $dtTblYajra.data('ajax-columns'),
+      language: {
+        lengthMenu: 'Menampilkan _MENU_ baris data per halaman',
+        zeroRecords: 'Tidak ada data',
+        info: 'Menampilkan halaman _PAGE_ dari _PAGES_',
+        infoFiltered: '(filtered from _MAX_ total records)',
+        search: 'Pencarian',
+        paginate: {
+          previous: 'Sebelumnya',
+          next: 'Selanjutnya',
+        },
+        buttons: {
+          copySuccess: {
+            1: '1 baris disalin ke papanklip',
+            _: '%d baris disalin ke papanklip',
+          },
+          copyTitle: 'Salin ke papanklip',
+        },
+      },
+    };
+
+    if ($dtTblYajra.data('export') === true) {
+      var title = $dtTblYajra.data('title') && $dtTblYajra.data('title').replace(' ', '_').toLowerCase();
+      title = title ? title + '_export' : document.title;
+      options['dom'] = 'Bfrtip';
+      options['buttons'] = [
+        {
+          attr: { id: 'copyDtBtn' },
+          extend: 'copy',
+          text: 'Salin',
+          className: 'btn-primary',
+          title: title,
+        },
+        {
+          attr: { id: 'csvDtBtn' },
+          extend: 'csv',
+          text: 'CSV',
+          className: 'btn-success',
+          title: title,
+        },
+        {
+          attr: { id: 'excelDtBtn' },
+          extend: 'excel',
+          text: 'Excel',
+          className: 'btn-success',
+          title: title,
+        },
+        {
+          attr: { id: 'pdfDtBtn' },
+          extend: 'pdf',
+          text: 'PDF',
+          orientation: 'landscape',
+          pageSize: 'Legal',
+          className: 'btn-danger',
+          title: title,
+          customize: function (doc) {
+            var colCount = new Array();
+            $dtTblYajra.find('tbody tr:first-child td').each(function () {
+              if ($(this).attr('colspan')) {
+                for (var i = 1; i <= $(this).attr('colspan'); $i++) {
+                  colCount.push('*');
+                }
+              } else {
+                colCount.push('*');
+              }
+            });
+            doc.content[1].table.widths = colCount;
+          },
+        },
+        {
+          attr: { id: 'printDtBtn' },
+          extend: 'print',
+          text: 'Cetak',
+          className: 'btn-primary',
+        },
+        {
+          attr: { id: 'jsonDtBtn' },
+          text: 'JSON',
+          className: 'btn btn-warning',
+          action: function (e, dt, button, config) {
+            var data = dt.buttons.exportData();
+
+            $.fn.dataTable.fileSave(new Blob([JSON.stringify(data)]), title + '.json');
+          },
+        },
+      ];
+    }
+    $dtTblYajra.dataTable(options);
   }
 
   // select2
@@ -322,4 +419,43 @@ function errorMsg(msg) {
 
 function successMsg(msg) {
   return swal('Sukses', msg, 'success');
+}
+
+function showImportModal(e) {
+  e.preventDefault();
+  $('#importModal').modal('show');
+}
+
+if ($('#sessionSuccessMessage').val()) swal('Sukses', $('#sessionSuccessMessage').val(), 'success');
+
+if ($('#sessionErrorMessage').val()) swal('Gagal', $('#sessionErrorMessage').val(), 'error');
+
+function deleteGlobal(e, action_url) {
+  e.preventDefault();
+  swal({
+    title: 'Anda yakin?',
+    text: 'Sekali dihapus, data tidak akan kembali lagi!',
+    icon: 'warning',
+    buttons: true,
+    dangerMode: true,
+    buttons: {
+      cancel: {
+        text: 'Batal',
+        value: null,
+        visible: true,
+        className: '',
+        closeModal: true,
+      },
+      confirm: {
+        text: 'Lanjutkan',
+      },
+    },
+  }).then(function (willDelete) {
+    if (willDelete) {
+      $('#formDeleteGlobal').attr('action', action_url);
+      document.getElementById('formDeleteGlobal').submit();
+    } else {
+      swal('Info', 'Okay, tidak jadi', 'info');
+    }
+  });
 }

@@ -68,19 +68,6 @@
 @endpush
 
 @push('scripts')
-  @if ($isYajra)
-    <script>
-      $(function() {
-        var table = $('.yajra-datatable').DataTable({
-          processing: true,
-          serverSide: true,
-          ajax: "{{ $routeYajra }}",
-          columns: JSON.parse('{!! $yajraColumns !!}'),
-        });
-
-      });
-    </script>
-  @endif
 @endpush
 
 @push('modals')

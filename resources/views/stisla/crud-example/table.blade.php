@@ -3,7 +3,8 @@
   //   dd($isExport);
 @endphp
 
-<table class="table table-striped yajra-datatable" @if ($isYajra === false) id="datatable" @endif
+<table class="table table-striped @if ($isYajra) yajra-datatable @endif"
+  @if ($isYajra === false) id="datatable" @else data-ajax-url="{{ $routeYajra }}" data-ajax-columns='{!! $yajraColumns !!}' @endif
   @if ($isExport === false && $canExport) data-export="true" data-title="{{ __('Contoh CRUD') }}" @endif>
   <thead>
     <tr>
