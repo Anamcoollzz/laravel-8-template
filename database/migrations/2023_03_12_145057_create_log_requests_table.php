@@ -15,8 +15,8 @@ class CreateLogRequestsTable extends Migration
     {
         Schema::create('log_requests', function (Blueprint $table) {
             $table->id();
-            $table->string('uri');
-            $table->string('query_string')->nullable();
+            $table->longText('uri');
+            $table->longText('query_string')->nullable();
             $table->string('method');
             $table->longText('request_data')->nullable();
             $table->string('ip');
