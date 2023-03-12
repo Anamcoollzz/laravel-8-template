@@ -19,7 +19,6 @@ class LogRequestMiddleware
     {
         if ($request->path() !== 'serviceworker.js') {
             $generalService = new \App\Services\GeneralService;
-            $browser = $generalService->getBrowser();
             LogRequest::create([
                 'uri'          => $request->path(),
                 'query_string' => $request->getQueryString(),
@@ -27,9 +26,9 @@ class LogRequestMiddleware
                 'request_data' => $request->all(),
                 'ip'           => $request->ip(),
                 'user_agent'   => $request->userAgent(),
-                'user_id'      => auth()->check() ? auth()->id() : null,
-                'roles'        => auth()->check() ? auth()->user()->roles->pluck('name')->toArray() : [],
-                'browser'      => $browser,
+                'user_id'      => auth()->id() ?? auth('api')->id() ?? null,
+                'roles'        => auth()->user()->roles->pluck('name')->toArray() ?? auth('api')->user()->roles->pluck('name')->toArray() ?? [],
+                'browser'      => $generalService->getBrowser(),
                 'platform'     => $generalService->getPlatform(),
                 'device'       => $generalService->getDevice(),
             ]);
