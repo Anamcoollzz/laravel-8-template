@@ -24,10 +24,20 @@ class ActivityLog extends Model
         'ip',
         'user_agent',
         'user_id',
-        'role_id',
+        // 'role_id',
+        'roles',
         'browser',
         'platform',
         'device',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'roles' => 'array',
     ];
 
     public function user()
@@ -35,8 +45,8 @@ class ActivityLog extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function role()
-    {
-        return $this->belongsTo(Role::class, 'role_id');
-    }
+    // public function role()
+    // {
+    //     return $this->belongsTo(Role::class, 'role_id');
+    // }
 }

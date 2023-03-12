@@ -181,7 +181,13 @@
                         <td>{{ $item->browser }}</td>
                         @if ($isSuperAdmin)
                           <td>{{ $item->user->name ?? '-' }}</td>
-                          <td>{{ $item->role->name ?? '-' }}</td>
+                          {{-- <td>{{ $item->role->name ?? '-' }}</td> --}}
+                          {{-- <td>{{ implode(', ', $item->roles) }}</td> --}}
+                          <td>
+                            @foreach ($item->roles as $role)
+                              <span class="badge badge-primary mb-1">{{ $role }}</span>
+                            @endforeach
+                          </td>
                         @endif
                         <td>{{ $item->created_at }}</td>
                         {{-- <td>

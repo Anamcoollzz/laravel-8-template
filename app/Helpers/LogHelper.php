@@ -28,10 +28,12 @@ function logExecute(string $title, string $activityType, $before = null, $after 
     $generalService = new \App\Services\GeneralService;
     $browser = $generalService->getBrowser();
 
+    $roles = ($user->roles->pluck('name')->toArray());
     return ActivityLog::create([
         'title'         => $title,
         'user_id'       => $user->id,
-        'role_id'       => $user->roles[0]['id'],
+        // 'role_id'       => $user->roles[0]['id'],
+        'roles'         => $roles,
         'request_data'  => json_encode(request()->all()),
         'before'        => $before,
         'activity_type' => $activityType,

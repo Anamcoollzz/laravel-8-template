@@ -89,7 +89,7 @@
                       <td>{{ $item->ip }}</td>
                       <td>{{ $item->user_agent }}</td>
                       <td>{{ $item->user->name }}</td>
-                      <td>{{ $item->role->name ?? '-' }}</td>
+                      <td>{{ implode(', ', $item->roles) }}</td>
                       <td>{{ $item->created_at }}</td>
                     </tr>
                   @endforeach

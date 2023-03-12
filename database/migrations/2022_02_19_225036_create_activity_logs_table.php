@@ -24,8 +24,9 @@ class CreateActivityLogsTable extends Migration
             $table->text('user_agent');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
-            $table->unsignedBigInteger('role_id');
-            $table->foreign('role_id')->references('id')->on('roles')->onUpdate('cascade')->onDelete('cascade');
+            // $table->unsignedBigInteger('role_id');
+            // $table->foreign('role_id')->references('id')->on('roles')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('roles')->comment('history roles');
             $table->string('browser')->nullable();
             $table->string('platform')->nullable();
             $table->string('device')->nullable();

@@ -29,9 +29,9 @@ class ActivityLogRepository extends Repository
             ->when(request('filter_date', date('Y-m-d')), function ($query) {
                 $query->whereDate('created_at', request('filter_date', date('Y-m-d')));
             })
-            ->when(request('filter_role'), function ($query) {
-                $query->whereRoleId(request('filter_role'));
-            })
+            // ->when(request('filter_role'), function ($query) {
+            //     $query->whereRoleId(request('filter_role'));
+            // })
             ->when(request('filter_user'), function ($query) {
                 $query->whereUserId(request('filter_user'));
             })
@@ -44,7 +44,10 @@ class ActivityLogRepository extends Repository
             ->when(!auth()->user()->hasRole('superadmin'), function ($query) {
                 $query->where('user_id', auth()->user()->id);
             })
-            ->with(['user', 'role'])
+            ->with([
+                'user',
+                // 'role'
+            ])
             ->latest()
             ->get();
     }
@@ -108,7 +111,10 @@ class ActivityLogRepository extends Repository
         return $this->model->query()
             ->where('user_id', auth()->id())
             ->limit($limit)
-            ->with(['user', 'role'])
+            ->with([
+                'user',
+                // 'role'
+            ])
             ->latest()
             ->get();
     }

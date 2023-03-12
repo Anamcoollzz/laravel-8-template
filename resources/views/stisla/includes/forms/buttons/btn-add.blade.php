@@ -1,5 +1,7 @@
 @php
   $icon = $icon ?? 'fa fa-plus';
+  $isAjax = $isAjax ?? false;
+  $isAjaxYajra = $isAjaxYajra ?? false;
 @endphp
 
 <a @if ($isAjax || $isAjaxYajra) onclick="showModalForm(event, 'create', '{{ $link }}')" @endif class="btn btn-primary @if ($icon ?? false) btn-icon icon-left @endif"
