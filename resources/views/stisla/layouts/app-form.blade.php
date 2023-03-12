@@ -34,12 +34,6 @@
           </div>
           <div class="card-body">
             <form action="{{ $action }}" method="POST" enctype="multipart/form-data" id="formAction">
-
-              @isset($d)
-                @method('PUT')
-              @endisset
-
-              @csrf
               @yield('rowForm')
 
               <div class="row">

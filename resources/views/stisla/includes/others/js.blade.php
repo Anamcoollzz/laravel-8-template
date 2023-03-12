@@ -38,6 +38,14 @@
   <script src="{{ asetku('stisla/node_modules/datatables.net-select-bs4/js/select.bootstrap4.min.js') }}"></script>
 @endif
 
+@if (($isAjax ?? false) || ($isAjaxYajra ?? false))
+  <script src="{{ asset('plugins/summernote/dist/summernote-bs4.min.js') }}"></script>
+  <script src="{{ asset('stisla/node_modules/select2/dist/js/select2.full.min.js') }}"></script>
+  <script src="{{ asset('stisla/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js') }}"></script>
+  <script src="{{ asset('assets/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js') }}"></script>
+  <script src="{{ asset('js/cleave.min.js') }}"></script>
+@endif
+
 @stack('select2_js')
 @stack('daterangepicker_js')
 <script src="{{ asset('stisla/node_modules/sweetalert/dist/sweetalert.min.js') }}"></script>

@@ -1,10 +1,12 @@
 @php
   $isExport = $isExport ?? false;
-  //   dd($isExport);
+  $isAjax = $isAjax ?? false;
+  $isYajra = $isYajra ?? false;
+  $isAjaxYajra = $isAjaxYajra ?? false;
 @endphp
 
-<table class="table table-striped @if ($isYajra) yajra-datatable @endif"
-  @if ($isYajra === false) id="datatable" @else data-ajax-url="{{ $routeYajra }}" data-ajax-columns='{!! $yajraColumns !!}' @endif
+<table class="table table-striped @if ($isYajra || $isAjaxYajra) yajra-datatable @endif"
+  @if ($isYajra || $isAjaxYajra) data-ajax-url="{{ $routeYajra }}?isAjaxYajra={{ $isAjaxYajra }}" data-ajax-columns='{!! $yajraColumns !!}' @else  id="datatable" @endif
   @if ($isExport === false && $canExport) data-export="true" data-title="{{ __('Contoh CRUD') }}" @endif>
   <thead>
     <tr>
@@ -98,7 +100,7 @@
           <td>{{ $item->updated_at }}</td>
 
           @if ($isExport === false)
-            @include('stisla.crud-example.action')
+            @include('stisla.includes.forms.buttons.btn-action')
           @endif
         </tr>
       @endforeach

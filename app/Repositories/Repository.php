@@ -251,4 +251,27 @@ class Repository extends RepositoryAbstract
     {
         return $this->query()->select($key, $value)->get()->pluck($key, $value)->toArray();
     }
+
+    /**
+     * get yajra columns
+     *
+     * @return string
+     */
+    public function getYajraColumns()
+    {
+        return json_encode([
+            [
+                'data'       => 'DT_RowIndex',
+                'name'       => 'DT_RowIndex',
+                'searchable' => false,
+                'orderable'  => false
+            ],
+            [
+                'data' => 'action',
+                'name' => 'action',
+                'orderable' => false,
+                'searchable' => false
+            ],
+        ]);
+    }
 }

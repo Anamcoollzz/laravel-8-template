@@ -3,7 +3,10 @@
   $name = $name ?? $id;
 @endphp
 <div class="form-group">
-  <div class="control-label">{{ $label ?? Str::random(5) }}
+  <div class="control-label">
+    <label for="">
+      {{ $label ?? Str::random(5) }}
+    </label>
     @if ($required ?? false)
       <span class="text-danger">*</span>
     @endif

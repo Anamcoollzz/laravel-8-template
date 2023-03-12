@@ -22,27 +22,4 @@
   @push('css')
     <link rel="stylesheet" href="{{ asset('plugins/summernote/dist/summernote-bs4.min.css') }}">
   @endpush
-
-  @push('scripts')
-    <script>
-      $(function() {
-        if (jQuery().summernote) {
-          $(".summernote").summernote({
-            dialogsInBody: true,
-            minHeight: 250,
-          });
-          $(".summernote-simple").summernote({
-            dialogsInBody: true,
-            minHeight: 150,
-            toolbar: [
-              ['style', ['bold', 'italic', 'underline', 'clear']],
-              ['font', ['strikethrough']],
-              ['para', ['paragraph']]
-            ]
-          });
-        }
-
-      })
-    </script>
-  @endpush
 @endif

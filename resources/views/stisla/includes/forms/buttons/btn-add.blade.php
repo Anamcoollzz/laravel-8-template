@@ -1,9 +1,11 @@
 @php
-$icon = $icon ?? 'fa fa-plus';
+  $icon = $icon ?? 'fa fa-plus';
 @endphp
-<a class="btn btn-primary @if ($icon ?? false) btn-icon icon-left @endif" href="{{ $link }}" data-toggle="tooltip" title="{{ $label ?? __('Tambah') }}">
+
+<a @if ($isAjax || $isAjaxYajra) onclick="showModalForm(event, 'create', '{{ $link }}')" @endif class="btn btn-primary @if ($icon ?? false) btn-icon icon-left @endif"
+  href="{{ $link }}" @if ($isAjax == false) data-toggle="tooltip" @endif title="{{ $label ?? __('Tambah') }}">
   @if ($icon ?? false)
     <i class="{{ $icon }}"></i>
+    {{ $label ?? false }}
   @endif
-  {{ $label ?? false }}
 </a>

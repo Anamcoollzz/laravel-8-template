@@ -124,6 +124,8 @@ Route::resource('group-menus', GroupMenuController::class);
 # CONTOH CRUD
 Route::get('yajra-crud-examples', [CrudExampleController::class, 'index'])->name('crud-examples.index-yajra');
 Route::get('yajra-crud-examples/ajax', [CrudExampleController::class, 'yajraAjax'])->name('crud-examples.ajax-yajra');
+Route::get('ajax-crud-examples', [CrudExampleController::class, 'index'])->name('crud-examples.index-ajax');
+Route::get('yajra-ajax-crud-examples', [CrudExampleController::class, 'index'])->name('crud-examples.index-ajax-yajra');
 Route::get('crud-examples/pdf', [CrudExampleController::class, 'pdf'])->name('crud-examples.pdf');
 Route::get('crud-examples/csv', [CrudExampleController::class, 'csv'])->name('crud-examples.csv');
 Route::get('crud-examples/excel', [CrudExampleController::class, 'excel'])->name('crud-examples.excel');

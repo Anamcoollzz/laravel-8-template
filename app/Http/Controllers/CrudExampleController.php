@@ -45,50 +45,31 @@ class CrudExampleController extends StislaController
     public function index()
     {
         $isYajra = Route::is('crud-examples.index-yajra');
-        if ($isYajra) {
+        $isAjax  = Route::is('crud-examples.index-ajax');
+        $isAjaxYajra = Route::is('crud-examples.index-ajax-yajra');
+        if ($isYajra || $isAjaxYajra) {
             $data = collect([]);
         } else {
             $data = $this->crudExampleRepository->getLatest();
         }
 
         $defaultData = $this->getDefaultDataIndex(__('Contoh CRUD'), 'Contoh CRUD', 'crud-examples');
+        $data        = array_merge($defaultData, [
+            'data'         => $data,
+            'isYajra'      => $isYajra,
+            'isAjax'       => $isAjax,
+            'isAjaxYajra'  => $isAjaxYajra,
+            'yajraColumns' => $this->crudExampleRepository->getYajraColumns(),
+        ]);
 
-        return view('stisla.crud-example.index', array_merge($defaultData, [
-            'data'    => $data,
-            'isYajra' => $isYajra,
-            'yajraColumns' => json_encode([
-                [
-                    'data'       => 'DT_RowIndex',
-                    'name'       => 'DT_RowIndex',
-                    'searchable' => false,
-                    'orderable'  => false
-                ],
-                ['data' => 'text', 'name' => 'text'],
-                ['data' => 'number', 'name' => 'number'],
-                ['data' => 'currency', 'name' => 'currency'],
-                ['data' => 'currency_idr', 'name' => 'currency_idr'],
-                ['data' => 'select', 'name' => 'select'],
-                ['data' => 'select2', 'name' => 'select2'],
-                ['data' => 'select2_multiple', 'name' => 'select2_multiple'],
-                ['data' => 'textarea', 'name' => 'textarea'],
-                ['data' => 'radio', 'name' => 'radio'],
-                ['data' => 'checkbox', 'name' => 'checkbox'],
-                ['data' => 'checkbox2', 'name' => 'checkbox2'],
-                ['data' => 'tags', 'name' => 'tags'],
-                ['data' => 'file', 'name' => 'file'],
-                ['data' => 'date', 'name' => 'date'],
-                ['data' => 'time', 'name' => 'time'],
-                ['data' => 'color', 'name' => 'color'],
-                ['data' => 'created_at', 'name' => 'created_at'],
-                ['data' => 'updated_at', 'name' => 'updated_at'],
-                [
-                    'data' => 'action',
-                    'name' => 'action',
-                    'orderable' => false,
-                    'searchable' => false
-                ],
-            ])
-        ]));
+        if (request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'data'    => view('stisla.crud-example.table', $data)->render(),
+            ]);
+        }
+
+        return view('stisla.crud-example.index', $data);
     }
 
     /**
@@ -98,7 +79,8 @@ class CrudExampleController extends StislaController
      */
     public function yajraAjax()
     {
-        return $this->crudExampleRepository->getYajraDataTables();
+        $defaultData = $this->getDefaultDataIndex(__('Contoh CRUD'), 'Contoh CRUD', 'crud-examples');
+        return $this->crudExampleRepository->getYajraDataTables($defaultData);
     }
 
     /**
@@ -111,12 +93,16 @@ class CrudExampleController extends StislaController
         $title      = __('Contoh CRUD');
         $fullTitle  = __('Tambah Contoh CRUD');
         $data       = $this->getDefaultDataCreate($title, 'crud-examples');
-        return view('stisla.crud-example.form', array_merge($data, [
+        $data       = array_merge($data, [
             'selectOptions'   => get_options(10),
             'radioOptions'    => get_options(4),
             'checkboxOptions' => get_options(5),
             'fullTitle'       => $fullTitle,
-        ]));
+        ]);
+        if (request()->ajax()) {
+            return view('stisla.crud-example.only-form', $data);
+        }
+        return view('stisla.crud-example.form', $data);
     }
 
     /**
@@ -152,6 +138,14 @@ class CrudExampleController extends StislaController
         $result = $this->crudExampleRepository->create($data);
         logCreate("Contoh CRUD", $result);
         $successMessage = successMessageCreate("Contoh CRUD");
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => $successMessage,
+            ]);
+        }
+
         return back()->with('successMessage', $successMessage);
     }
 
@@ -183,6 +177,11 @@ class CrudExampleController extends StislaController
     public function edit(CrudExample $crudExample)
     {
         $data = $this->getDetail($crudExample);
+
+        if (request()->ajax()) {
+            return view('stisla.crud-example.only-form', $data);
+        }
+
         return view('stisla.crud-example.form', $data);
     }
 
@@ -220,12 +219,25 @@ class CrudExampleController extends StislaController
         $newData = $this->crudExampleRepository->update($data, $crudExample->id);
         logUpdate("Contoh CRUD", $crudExample, $newData);
         $successMessage = successMessageUpdate("Contoh CRUD");
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => $successMessage,
+            ]);
+        }
+
         return back()->with('successMessage', $successMessage);
     }
 
     public function show(CrudExample $crudExample)
     {
         $data = $this->getDetail($crudExample, true);
+
+        if (request()->ajax()) {
+            return view('stisla.crud-example.only-form', $data);
+        }
+
         return view('stisla.crud-example.form', $data);
     }
 
@@ -241,6 +253,14 @@ class CrudExampleController extends StislaController
         $this->crudExampleRepository->delete($crudExample->id);
         logDelete("Contoh CRUD", $crudExample);
         $successMessage = successMessageDelete("Contoh CRUD");
+
+        if (request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => $successMessage,
+            ]);
+        }
+
         return back()->with('successMessage', $successMessage);
     }
 

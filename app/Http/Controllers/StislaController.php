@@ -93,6 +93,8 @@ class StislaController extends Controller
             'routeCsv'          => $canExport ? route($routePrefix . '.csv') : null,
             'routeJson'         => $canExport ? route($routePrefix . '.json') : null,
             'routeYajra'        => route($routePrefix . '.ajax-yajra'),
+            'routeStore'        => route($routePrefix . '.store'),
+            'routePrefix'       => $routePrefix,
         ];
     }
 
@@ -105,6 +107,9 @@ class StislaController extends Controller
      */
     public function getDefaultDataCreate(string $title, string $prefixRoute)
     {
+        if (request()->ajax()) {
+            $isAjax = true;
+        }
         $routeIndex = route($prefixRoute . '.index');
         return [
             'title'           => $title,
@@ -112,6 +117,7 @@ class StislaController extends Controller
             'action'          => route($prefixRoute . '.store'),
             'moduleIcon'      => $this->icon,
             'isDetail'        => false,
+            'isAjax'          => $isAjax ?? false,
             'breadcrumbs'     => [
                 [
                     'label' => __('Dashboard'),

@@ -22,8 +22,15 @@
             </div>
           @endif
 
-          @include('stisla.includes.forms.inputs.input', ['type'=>'file', 'accept'=>'*', 'id'=>'import_file',
-          'label'=>__('Berkas Excel'), 'required'=>true, 'accept'=>'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'hint'=>__('Hanya menerima berkas excel')])
+          @include('stisla.includes.forms.inputs.input', [
+              'type' => 'file',
+              'accept' => '*',
+              'id' => 'import_file',
+              'label' => __('Berkas Excel'),
+              'required' => true,
+              'accept' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+              'hint' => __('Hanya menerima berkas excel'),
+          ])
 
           <div class="text-center">
             <a href="{{ $downloadLink }}" class="text-primary">
@@ -33,7 +40,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-          @include('stisla.includes.forms.buttons.btn-primary', ['type'=>'submit', 'label'=>__('Impor')])
+          @include('stisla.includes.forms.buttons.btn-primary', ['type' => 'submit', 'label' => __('Impor')])
         </div>
       </div>
     </div>

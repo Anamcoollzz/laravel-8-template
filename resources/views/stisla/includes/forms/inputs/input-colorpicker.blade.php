@@ -1,17 +1,17 @@
 @php
-$props = [];
-$id = $id ?? Str::random(5);
-array_push($props, 'id="' . $id . '"');
-array_push($props, 'name="' . ($name ?? $id) . '"');
-array_push($props, 'value="' . (old($name ?? $id) ?? ($value ?? ($d[$name ?? $id] ?? ''))) . '"');
-array_push($props, isset($placeholder) ? 'placeholder="' . $placeholder . '"' : '');
-array_push($props, isset($accept) ? 'accept="' . $accept . '"' : '');
-array_push($props, isset($min) ? 'min="' . $min . '"' : '');
-array_push($props, isset($max) ? 'max="' . $max . '"' : '');
-array_push($props, isset($disabled) ? 'disabled' : '');
-array_push($props, isset($readonly) ? 'readonly' : '');
-array_push($props, $required ?? false ? 'required' : '');
-array_push($props, isset($type) ? 'type="' . $type . '"' : 'type="text"');
+  $props = [];
+  $id = $id ?? Str::random(5);
+  array_push($props, 'id="' . $id . '"');
+  array_push($props, 'name="' . ($name ?? $id) . '"');
+  array_push($props, 'value="' . (old($name ?? $id) ?? ($value ?? ($d[$name ?? $id] ?? ''))) . '"');
+  array_push($props, isset($placeholder) ? 'placeholder="' . $placeholder . '"' : '');
+  array_push($props, isset($accept) ? 'accept="' . $accept . '"' : '');
+  array_push($props, isset($min) ? 'min="' . $min . '"' : '');
+  array_push($props, isset($max) ? 'max="' . $max . '"' : '');
+  array_push($props, isset($disabled) ? 'disabled' : '');
+  array_push($props, isset($readonly) ? 'readonly' : '');
+  array_push($props, $required ?? false ? 'required' : '');
+  array_push($props, isset($type) ? 'type="' . $type . '"' : 'type="text"');
 @endphp
 
 <div class="form-group">
@@ -40,8 +40,7 @@ array_push($props, isset($type) ? 'type="' . $type . '"' : 'type="text"');
     define('COLORPICKER_IMPORT', true);
   @endphp
   @push('css')
-    <link rel="stylesheet"
-      href="{{ asset('stisla/node_modules/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('stisla/node_modules/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css') }}">
   @endpush
 
   @push('js')
@@ -49,12 +48,5 @@ array_push($props, isset($type) ? 'type="' . $type . '"' : 'type="text"');
   @endpush
 
   @push('scripts')
-    <script>
-      $(".colorpickerinput").colorpicker({
-        format: 'hex',
-        component: '.input-group-append',
-      });
-    </script>
   @endpush
-
 @endif

@@ -13,10 +13,5 @@
   @endpush
 
   @push('scripts')
-    <script>
-      $(function() {
-        $(".inputtags").tagsinput('items');
-      })
-    </script>
   @endpush
 @endif
