@@ -42,52 +42,46 @@
                 "is_mockup": true
             },
             {
-                "menu_name": "Menu",
-                "route_name": null,
-                "icon": "fas fa-bars",
-                "permission": null,
-                "is_active_if_url_includes": null,
-                "is_mockup": true
-            },
-            {
-                "menu_name": "Menu Dropdown",
+                "menu_name": "Stisla Example",
                 "route_name": null,
                 "icon": "fas fa-caret-square-down",
                 "permission": null,
                 "is_active_if_url_includes": null,
-                "is_mockup": true
-            },
-            {
-                "menu_name": "Datatable",
-                "route_name": "datatable.index",
-                "icon": "fas fa-table",
-                "permission": null,
-                "is_active_if_url_includes": "datatable*",
-                "is_mockup": true
-            },
-            {
-                "menu_name": "Form",
-                "route_name": "form.index",
-                "icon": "fas fa-file-alt",
-                "permission": null,
-                "is_active_if_url_includes": "form*",
-                "is_mockup": true
-            },
-            {
-                "menu_name": "Chart JS",
-                "route_name": "chart-js.index",
-                "icon": "fas fa-chart-line",
-                "permission": null,
-                "is_active_if_url_includes": "chart-js*",
-                "is_mockup": true
-            },
-            {
-                "menu_name": "Pricing",
-                "route_name": "pricing.index",
-                "icon": "fas fa-dollar",
-                "permission": null,
-                "is_active_if_url_includes": "pricing*",
-                "is_mockup": true
+                "is_mockup": true,
+                "childs": [
+                    {
+                        "menu_name": "Datatable",
+                        "route_name": "datatable.index",
+                        "icon": "fas fa-table",
+                        "permission": null,
+                        "is_active_if_url_includes": "datatable*",
+                        "is_mockup": true
+                    },
+                    {
+                        "menu_name": "Form",
+                        "route_name": "form.index",
+                        "icon": "fas fa-file-alt",
+                        "permission": null,
+                        "is_active_if_url_includes": "form*",
+                        "is_mockup": true
+                    },
+                    {
+                        "menu_name": "Chart JS",
+                        "route_name": "chart-js.index",
+                        "icon": "fas fa-chart-line",
+                        "permission": null,
+                        "is_active_if_url_includes": "chart-js*",
+                        "is_mockup": true
+                    },
+                    {
+                        "menu_name": "Pricing",
+                        "route_name": "pricing.index",
+                        "icon": "fas fa-dollar",
+                        "permission": null,
+                        "is_active_if_url_includes": "pricing*",
+                        "is_mockup": true
+                    }
+                ]
             }
         ]
     },
