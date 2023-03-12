@@ -249,6 +249,20 @@ class FileService
     }
 
     /**
+     * download collection as pdf file (A1 size)
+     *
+     * @param string $view
+     * @param array $data
+     * @param string $filename
+     * @param string $orientation
+     * @return Response
+     */
+    public function downloadPdfA1(string $view, array $data, string $filename, string $orientation = 'landscape')
+    {
+        return PDF::setPaper('A1', $orientation)->loadView($view, $data)->download($filename);
+    }
+
+    /**
      * download collection as pdf file (A2 size)
      *
      * @param string $view
@@ -260,6 +274,34 @@ class FileService
     public function downloadPdfA2(string $view, array $data, string $filename, string $orientation = 'landscape')
     {
         return PDF::setPaper('A2', $orientation)->loadView($view, $data)->download($filename);
+    }
+
+    /**
+     * download collection as pdf file (A3 size)
+     *
+     * @param string $view
+     * @param array $data
+     * @param string $filename
+     * @param string $orientation
+     * @return Response
+     */
+    public function downloadPdfA3(string $view, array $data, string $filename, string $orientation = 'landscape')
+    {
+        return PDF::setPaper('A3', $orientation)->loadView($view, $data)->download($filename);
+    }
+
+    /**
+     * download collection as pdf file (A4 size)
+     *
+     * @param string $view
+     * @param array $data
+     * @param string $filename
+     * @param string $orientation
+     * @return Response
+     */
+    public function downloadPdfA4(string $view, array $data, string $filename, string $orientation = 'landscape')
+    {
+        return PDF::setPaper('A4', $orientation)->loadView($view, $data)->download($filename);
     }
 
     /**

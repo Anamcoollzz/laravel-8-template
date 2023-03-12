@@ -16,6 +16,7 @@ class CrudExample extends Model
      */
     protected $fillable = [
         'text',
+        'email',
         'number',
         'currency',
         'currency_idr',

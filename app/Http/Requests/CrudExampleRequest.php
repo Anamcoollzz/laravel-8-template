@@ -25,6 +25,7 @@ class CrudExampleRequest extends FormRequest
     {
         return [
             'text'              => 'required',
+            'email'             => 'required|email',
             "number"            => "required|numeric",
             "currency"          => "required",
             "currency_idr"      => "required",

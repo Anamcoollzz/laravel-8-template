@@ -106,15 +106,16 @@ class CrudExampleController extends StislaController
     }
 
     /**
-     * save new crud example to db
+     * prepare store data
      *
      * @param CrudExampleRequest $request
-     * @return Response
+     * @return array
      */
-    public function store(CrudExampleRequest $request)
+    private function storeData(CrudExampleRequest $request)
     {
         $data = $request->only([
             'text',
+            'email',
             "number",
             "select",
             "textarea",
@@ -135,6 +136,19 @@ class CrudExampleController extends StislaController
         }
         $data['currency'] = str_replace(',', '', $request->currency);
         $data['currency_idr'] = str_replace('.', '', $request->currency_idr);
+
+        return $data;
+    }
+
+    /**
+     * save new crud example to db
+     *
+     * @param CrudExampleRequest $request
+     * @return Response
+     */
+    public function store(CrudExampleRequest $request)
+    {
+        $data   = $this->storeData($request);
         $result = $this->crudExampleRepository->create($data);
         logCreate("Contoh CRUD", $result);
         $successMessage = successMessageCreate("Contoh CRUD");
@@ -194,28 +208,7 @@ class CrudExampleController extends StislaController
      */
     public function update(CrudExampleRequest $request, CrudExample $crudExample)
     {
-        $data = $request->only([
-            'text',
-            "number",
-            "select",
-            "textarea",
-            "radio",
-            "date",
-            'checkbox',
-            'checkbox2',
-            'tags',
-            "time",
-            "color",
-            'select2',
-            'select2_multiple',
-            'summernote',
-            'summernote_simple',
-        ]);
-        if ($request->hasFile('file')) {
-            $data['file'] = $this->fileService->uploadCrudExampleFile($request->file('file'));
-        }
-        $data['currency'] = str_replace(',', '', $request->currency);
-        $data['currency_idr'] = str_replace('.', '', $request->currency_idr);
+        $data    = $this->storeData($request);
         $newData = $this->crudExampleRepository->update($data, $crudExample->id);
         logUpdate("Contoh CRUD", $crudExample, $newData);
         $successMessage = successMessageUpdate("Contoh CRUD");

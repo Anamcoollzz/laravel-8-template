@@ -1,11 +1,12 @@
 @php
   $value = old($name ?? $id) ?? ($value ?? ($d[$name ?? $id] ?? []));
   $name = $name ?? $id;
+  $required = $required ?? false;
 @endphp
-<div class="form-group">
+<div class="form-group" data-required="{{ $required }}">
   <label class="form-label">
     {{ $label ?? Str::random(5) }}
-    @if ($required ?? false)
+    @if ($required)
       <span class="text-danger">*</span>
     @endif
   </label>
@@ -19,7 +20,7 @@
     @endforeach
   </div>
   @error($name)
-    <div id="{{ $id }}-error-feedback" class="text-danger" for="{{ $id }}">
+    <div id="{{ $id }}-error-feedback" class="invalid-feedback" style="display: block;" for="{{ $id }}">
       {{ $message }}
     </div>
   @enderror

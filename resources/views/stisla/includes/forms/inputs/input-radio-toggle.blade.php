@@ -1,5 +1,6 @@
 @php
   $value = old($name ?? $id) ?? ($value ?? ($d[$name ?? $id] ?? ''));
+  $required = $required ?? false;
   $name = $name ?? $id;
 @endphp
 <div class="form-group">
@@ -7,7 +8,7 @@
     <label for="">
       {{ $label ?? Str::random(5) }}
     </label>
-    @if ($required ?? false)
+    @if ($required)
       <span class="text-danger">*</span>
     @endif
   </div>
@@ -15,7 +16,7 @@
     @foreach ($options as $opValue => $opLabel)
       <label class="custom-switch">
         <input @if ($value == $opValue) checked @endif type="radio" name="{{ $name }}" value="{{ $opValue }}" class="custom-switch-input"
-          id="{{ $id }}{{ $loop->iteration }}">
+          id="{{ $id }}{{ $loop->iteration }}" @if ($required) required @endif>
         <span class="custom-switch-indicator"></span>
         <span class="custom-switch-description">{{ $opLabel }}</span>
       </label>

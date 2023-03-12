@@ -52,6 +52,7 @@
                 <input type="hidden" id="isYajra" value="{{ $isYajra }}">
                 <input type="hidden" id="isAjax" value="{{ $isAjax }}">
                 <input type="hidden" id="isAjaxYajra" value="{{ $isAjaxYajra }}">
+                <textarea name="yajraColumns" id="yajraColumns" cols="30" rows="10" style="display: none;">{!! $yajraColumns !!}</textarea>
                 @yield('table')
               </div>
             </div>

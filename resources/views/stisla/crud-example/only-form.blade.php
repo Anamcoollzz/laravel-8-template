@@ -10,6 +10,9 @@
     @include('stisla.includes.forms.inputs.input', ['required' => true, 'name' => 'text', 'label' => 'Text'])
   </div>
   <div class="col-md-6">
+    @include('stisla.includes.forms.inputs.input-email', ['required' => true])
+  </div>
+  <div class="col-md-6">
     @include('stisla.includes.forms.inputs.input', ['required' => true, 'name' => 'number', 'type' => 'number', 'label' => 'Number'])
   </div>
   <div class="col-md-6">
@@ -81,7 +84,7 @@
   </div>
   <div class="col-md-6">
     @include('stisla.includes.forms.inputs.input-checkbox', [
-        'required' => true,
+        'required' => false,
         'id' => 'checkbox2',
         'label' => 'Checkbox 2',
         'options' => $checkboxOptions,

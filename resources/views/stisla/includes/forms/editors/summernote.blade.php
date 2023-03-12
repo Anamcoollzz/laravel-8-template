@@ -1,13 +1,19 @@
+@php
+  $required = $required ?? false;
+@endphp
+
 <div class="form-group">
   <label for="{{ $id }}">{{ $label ?? 'Summernote Simple' }}
-    @if ($required ?? false)
+    @if ($required)
       <span class="text-danger">*</span>
     @endif
   </label>
-  <textarea class="{{ $simple ?? false ? 'summernote-simple' : 'summernote' }}" name="{{ $name ?? $id }}" id="{{ $id }}">{{ $value ?? ($d[$name ?? $id] ?? old($name ?? $id)) }}</textarea>
-  @if ($errors->has($name ?? $id))
-    <div class="text-danger" style="margin-top: -30px;">{{ $errors->first($name ?? $id) }}</div>
-  @endif
+  <textarea @if ($required) required @endif class="{{ $simple ?? false ? 'summernote-simple' : 'summernote' }}" name="{{ $name ?? $id }}" id="{{ $id }}">{{ $value ?? ($d[$name ?? $id] ?? old($name ?? $id)) }}</textarea>
+  @error($name ?? $id)
+    <div id="{{ $id }}-error-feedback" class="invalid-feedback" style="display: block;" for="{{ $id }}">
+      {{ $message }}
+    </div>
+  @enderror
 </div>
 
 @if (!defined('SUMMERNOTE'))

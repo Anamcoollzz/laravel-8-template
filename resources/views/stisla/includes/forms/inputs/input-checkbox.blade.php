@@ -1,8 +1,9 @@
 @php
   $value = old($name ?? $id) ?? ($value ?? ($d[$name ?? $id] ?? []));
   $name = $name ?? $id;
+  $required = $required ?? false;
 @endphp
-<div class="form-group">
+<div class="form-group" data-required="{{ $required }}">
   <label class="form-label">
     {{ $label ?? Str::random(5) }}
     @if ($required ?? false)
@@ -14,7 +15,7 @@
       <div class="col-auto">
         <label class="colorinput">
           <input id="{{ $id }}{{ $loop->iteration }}" name="{{ $name ?? $id }}[]" type="checkbox" value="{{ $opLabel }}" class="colorinput-input"
-            @if (in_array($opValue, $value)) checked @endif />
+            @if (in_array($opValue, $value)) checked @endif>
           <span class="colorinput-color bg-primary"></span>
         </label>
 
@@ -25,7 +26,7 @@
     </div>
   @endforeach
   @error($name)
-    <div id="{{ $id }}-error-feedback" class="text-danger" for="{{ $id }}">
+    <div id="{{ $id }}-error-feedback" class="invalid-feedback" style="display: block;" for="{{ $id }}">
       {{ $message }}
     </div>
   @enderror

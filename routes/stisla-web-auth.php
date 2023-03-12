@@ -85,7 +85,7 @@ Route::group(['prefix' => 'file-managers', 'middleware' => [FileManagerPermissio
 });
 
 # LOG VIEWER
-Route::get('logs-viewer', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index'])->name('logs.index')->middleware('can:Log Viewer');
+Route::get('logs-viewer', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index'])->name('logs.index')->middleware('can:Laravel Log Viewer');
 
 # YOUTUBE VIEWER (SECRET MENU)
 Route::get('youtube-viewer', [YoutubeController::class, 'viewer'])->name('youtube.viewer');

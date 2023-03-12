@@ -35,6 +35,7 @@ class CrudExampleSeeder extends Seeder
             }
             array_push($data, [
                 'text'              => Str::random(10),
+                'email'             => $faker->email,
                 'number'            => $faker->numberBetween(1, 1000),
                 'currency'          => $faker->numberBetween(1, 10000),
                 'currency_idr'      => $faker->numberBetween(1000, 10000000),

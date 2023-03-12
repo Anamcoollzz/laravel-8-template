@@ -115,7 +115,7 @@ function initDataTables() {
       processing: true,
       serverSide: true,
       ajax: $dtTblYajra.data('ajax-url'),
-      columns: $dtTblYajra.data('ajax-columns'),
+      columns: JSON.parse($('#yajraColumns').val()),
       language: {
         lengthMenu: 'Menampilkan _MENU_ baris data per halaman',
         zeroRecords: 'Tidak ada data',
@@ -452,32 +452,45 @@ $('form')
     // summernote new
     var $summernoteNew = $form.find('.summernote');
     if ($summernoteNew.length) {
-      if ($summernoteNew.summernote('code') == '<p><br></p>' || $summernoteNew.summernote('code') == '') {
-        $summernoteNew.parent().find('label').addClass('text-danger');
-        var label = $summernoteNew.parent().find('label').text().replaceAll('*', '');
-        $form.find('[data-toggle="summernote_message"]').html($summernoteNew.attr('required-message'));
-        $summernoteNew.next().after('<div class="invalid-feedback" style="display: block; margin-top: -20px;">' + label + ' tidak boleh kosong' + '</div>');
-      }
-      $summernoteNew.before().val($summernoteNew.summernote('code'));
+      $summernoteNew.each(function (index, item) {
+        var $item = $(item);
+        if (item.hasAttribute('required') && ($item.summernote('code') == '<p><br></p>' || $item.summernote('code') == '')) {
+          $item.parent().find('label').addClass('text-danger');
+          var label = $item.parent().find('label').text().replaceAll('*', '');
+          $form.find('[data-toggle="summernote_message"]').html($item.attr('required-message'));
+          $item.next().after('<div class="invalid-feedback" style="display: block; margin-top: -20px;">' + label + ' tidak boleh kosong' + '</div>');
+        }
+        $item.before().val($item.summernote('code'));
+      });
     }
 
     // summernote simple
     var $summernoteSimple = $form.find('.summernote-simple');
     if ($summernoteSimple.length) {
-      if ($summernoteSimple.summernote('code') == '<p><br></p>' || $summernoteSimple.summernote('code') == '') {
-        $summernoteSimple.parent().find('label').addClass('text-danger');
-        var label = $summernoteNew.parent().find('label').text().replaceAll('*', '');
-        $form.find('[data-toggle="summernote_message"]').html($summernoteSimple.attr('required-message'));
-        $summernoteSimple.next().after('<div class="invalid-feedback" style="display: block; margin-top: -20px;">' + label + ' tidak boleh kosong' + '</div>');
-      }
-      $summernoteSimple.before().val($summernoteSimple.summernote('code'));
+      $summernoteSimple.each(function (index, item) {
+        var $item = $(item);
+        if (item.hasAttribute('required') && ($item.summernote('code') == '<p><br></p>' || $item.summernote('code') == '')) {
+          $item.parent().find('label').addClass('text-danger');
+          var label = $item.parent().find('label').text().replaceAll('*', '');
+          $form.find('[data-toggle="summernote_message"]').html($item.attr('required-message'));
+          $item.next().after('<div class="invalid-feedback" style="display: block; margin-top: -20px;">' + label + ' tidak boleh kosong' + '</div>');
+        }
+        $item.before().val($item.summernote('code'));
+      });
     }
 
     // radio
     var radioNames = [];
     $('.custom-switch-input').each(function (index, item) {
-      radioNames.push(item.name);
+      radioNames.push({ name: item.name, required: item.required });
     });
+    radioNames = radioNames
+      .filter(function (item) {
+        return item.required;
+      })
+      .map(function (item) {
+        return item.name;
+      });
     radioNames = unique(radioNames);
     radioNames.forEach(function (item) {
       if (!$('input[name="' + item + '"]:checked').val()) {
@@ -505,8 +518,15 @@ $('form')
     // checkbox
     var checkboxNames = [];
     $('.selectgroup-input').each(function (index, item) {
-      checkboxNames.push(item.name);
+      checkboxNames.push({ name: item.name, required: $(item).parent().parent().parent().data('required') == 1 });
     });
+    checkboxNames = checkboxNames
+      .filter(function (item) {
+        return item.required;
+      })
+      .map(function (item) {
+        return item.name;
+      });
     checkboxNames = unique(checkboxNames);
     checkboxNames.forEach(function (item) {
       if (!$('input[name="' + item + '"]:checked').val()) {
@@ -534,8 +554,15 @@ $('form')
     // checkbox2
     var checkboxNames2 = [];
     $('.colorinput-input').each(function (index, item) {
-      checkboxNames2.push(item.name);
+      checkboxNames2.push({ name: item.name, required: $(item).parent().parent().parent().parent().data('required') == 1 });
     });
+    checkboxNames2 = checkboxNames2
+      .filter(function (item) {
+        return item.required;
+      })
+      .map(function (item) {
+        return item.name;
+      });
     checkboxNames2 = unique(checkboxNames2);
     checkboxNames2.forEach(function (item) {
       if (!$('input[name="' + item + '"]:checked').val()) {

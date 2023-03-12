@@ -6,7 +6,7 @@
 @endphp
 
 <table class="table table-striped @if ($isYajra || $isAjaxYajra) yajra-datatable @endif"
-  @if ($isYajra || $isAjaxYajra) data-ajax-url="{{ $routeYajra }}?isAjaxYajra={{ $isAjaxYajra }}" data-ajax-columns='{!! $yajraColumns !!}' @else  id="datatable" @endif
+  @if ($isYajra || $isAjaxYajra) data-ajax-url="{{ $routeYajra }}?isAjaxYajra={{ $isAjaxYajra }}" @else  id="datatable" @endif
   @if ($isExport === false && $canExport) data-export="true" data-title="{{ __('Contoh CRUD') }}" @endif>
   <thead>
     <tr>
@@ -16,6 +16,7 @@
         <th>{{ __('No') }}</th>
       @endif
       <th>{{ __('Text') }}</th>
+      <th>{{ __('Email') }}</th>
       <th>{{ __('Number') }}</th>
       <th>{{ __('Currency') }}</th>
       <th>{{ __('Currency IDR') }}</th>
@@ -48,6 +49,7 @@
         <tr>
           <td>{{ $loop->iteration }}</td>
           <td>{{ $item->text }}</td>
+          <td>{{ $item->email }}</td>
           <td>{{ $item->number }}</td>
           <td>{{ dollar($item->currency) }}</td>
           <td>{{ rp($item->currency_idr) }}</td>
