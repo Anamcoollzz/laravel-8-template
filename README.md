@@ -21,8 +21,11 @@ Beberapa fitur atau komponen yang ada
     -   Export
     -   Import
     -   Server side data table
+    -   Ajax Method
 -   Beberapa contoh menu (tampilan)
--   Log Aktivitas
+-   Log
+    -   Log Aktivitas
+    -   Laravel Log Viewer
 -   User dan role
     -   Manjemen Role dan permission menggunakan [spatie](https://spatie.be/docs/laravel-permission/v5/introduction)
         -   CRUD
@@ -42,7 +45,6 @@ Beberapa fitur atau komponen yang ada
         -   Export
         -   Import
 -   Notifikasi
--   Log Viewer
 -   Ubuntu
 -   Manajemen file menggunakan [Unisharp](https://unisharp.github.io/laravel-filemanager/)
 -   Pengaturan
@@ -55,9 +57,13 @@ Beberapa fitur atau komponen yang ada
         -   Google captcha
         -   Setting page
 -   Backup database
+-   Manajemen Menu
+    -   Menu (CRUD)
+    -   Grup Menu (CRUD)
 -   CRUD Generator (menu nya tersembunyi akses via url saja)
 -   Server side export file
 -   Service dan repository pattern
+-   Log Request
 
 ## How to install and run
 
@@ -77,6 +83,10 @@ Beberapa fitur atau komponen yang ada
 -   https://datatables.net/
 -   https://packagist.org/packages/buzz/laravel-google-captcha
 -   https://github.com/thinhbuzz/laravel-google-captcha
+-   https://github.com/cloudinary-devs/cloudinary-laravel
+-   https://github.com/rap2hpoutre/laravel-log-viewer
+-   https://github.com/yajra/laravel-datatables
+-   https://github.com/tymondesigns/jwt-auth
 
 Terima kasih, bisa distar ataupun difork ya guys. Kalau ada request module atau apapun itu, bisa tulis di issue.
 Rencana nanti bakal kuupdate ke versi laravel terbaru 9 bahkan 10
