@@ -17,7 +17,7 @@
         "key": "meta_author",
         "value": "Hairul Anam"
     },
-    { "key": "meta_description", "value": "[Nama Perusahaannya]" },
+    { "key": "meta_description", "value": "PT Anam Developer" },
     {
         "key": "meta_keywords",
         "value": "Sistem Informasi, Pemrograman, Github, PHP, Laravel, Stisla, Heroku, Gitlab, MySQL"
@@ -56,26 +56,26 @@
     { "key": "mail_mailgun_domain", "value": "test" },
     { "key": "mail_mailgun_api_key", "value": "test" },
 
-    { "key": "is_login_must_verified", "value": "1" },
-    { "key": "is_active_register_page", "value": "1" },
+    { "key": "is_login_must_verified", "value": "0" },
+    { "key": "is_active_register_page", "value": "0" },
 
-    { "key": "is_forgot_password_send_to_email", "value": "1" },
+    { "key": "is_forgot_password_send_to_email", "value": "0" },
     { "key": "google_captcha_site_key", "value": "default_site_key" },
     { "key": "google_captcha_secret", "value": "default_secret" },
-    { "key": "is_google_captcha_login", "value": "1" },
-    { "key": "is_google_captcha_register", "value": "1" },
-    { "key": "is_google_captcha_forgot_password", "value": "1" },
-    { "key": "is_google_captcha_reset_password", "value": "1" },
+    { "key": "is_google_captcha_login", "value": "0" },
+    { "key": "is_google_captcha_register", "value": "0" },
+    { "key": "is_google_captcha_forgot_password", "value": "0" },
+    { "key": "is_google_captcha_reset_password", "value": "0" },
 
-    { "key": "is_login_with_google", "value": "1" },
-    { "key": "is_login_with_facebook", "value": "1" },
-    { "key": "is_login_with_twitter", "value": "1" },
-    { "key": "is_login_with_github", "value": "1" },
+    { "key": "is_login_with_google", "value": "0" },
+    { "key": "is_login_with_facebook", "value": "0" },
+    { "key": "is_login_with_twitter", "value": "0" },
+    { "key": "is_login_with_github", "value": "0" },
 
-    { "key": "is_register_with_google", "value": "1" },
-    { "key": "is_register_with_facebook", "value": "1" },
-    { "key": "is_register_with_twitter", "value": "1" },
-    { "key": "is_register_with_github", "value": "1" },
+    { "key": "is_register_with_google", "value": "0" },
+    { "key": "is_register_with_facebook", "value": "0" },
+    { "key": "is_register_with_twitter", "value": "0" },
+    { "key": "is_register_with_github", "value": "0" },
 
     { "key": "sso_google_client_id", "value": "-" },
     { "key": "sso_google_client_secret", "value": "-" },
