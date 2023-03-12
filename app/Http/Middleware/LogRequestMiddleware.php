@@ -18,6 +18,12 @@ class LogRequestMiddleware
     public function handle(Request $request, Closure $next)
     {
         if ($request->path() !== 'serviceworker.js') {
+            $roles = [];
+            if (auth()->check()) {
+                $roles = auth()->user()->roles->pluck('name')->toArray();
+            } else if (auth('api')->check()) {
+                return auth('api')->user()->roles->pluck('name')->toArray();
+            }
             $generalService = new \App\Services\GeneralService;
             LogRequest::create([
                 'uri'          => $request->path(),
@@ -27,7 +33,7 @@ class LogRequestMiddleware
                 'ip'           => $request->ip(),
                 'user_agent'   => $request->userAgent(),
                 'user_id'      => auth()->id() ?? auth('api')->id() ?? null,
-                'roles'        => auth()->user()->roles->pluck('name')->toArray() ?? auth('api')->user()->roles->pluck('name')->toArray() ?? [],
+                'roles'        => $roles,
                 'browser'      => $generalService->getBrowser(),
                 'platform'     => $generalService->getPlatform(),
                 'device'       => $generalService->getDevice(),
