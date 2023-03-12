@@ -80,6 +80,14 @@
                         "permission": null,
                         "is_active_if_url_includes": "pricing*",
                         "is_mockup": true
+                    },
+                    {
+                        "menu_name": "Invoice",
+                        "route_name": "invoice.index",
+                        "icon": "fas fa-dollar",
+                        "permission": null,
+                        "is_active_if_url_includes": "invoice*",
+                        "is_mockup": true
                     }
                 ]
             }
