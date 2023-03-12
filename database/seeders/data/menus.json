@@ -80,6 +80,14 @@
                 "permission": null,
                 "is_active_if_url_includes": "chart-js*",
                 "is_mockup": true
+            },
+            {
+                "menu_name": "Pricing",
+                "route_name": "pricing.index",
+                "icon": "fas fa-dollar",
+                "permission": null,
+                "is_active_if_url_includes": "pricing*",
+                "is_mockup": true
             }
         ]
     },

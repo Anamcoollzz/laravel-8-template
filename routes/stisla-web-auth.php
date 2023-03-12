@@ -33,14 +33,11 @@ Route::put('profile', [ProfileController::class, 'update']);
 Route::put('profile/password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
 Route::put('profile/email', [ProfileController::class, 'updateEmail'])->name('profile.update-email');
 
-# DATATABLE
+# EXAMPLE STISLA
 Route::view('datatable', 'stisla.examples.datatable.index')->name('datatable.index');
-
-# FORM
 Route::view('form', 'stisla.examples.form.index')->name('form.index');
-
-# CHART JS
 Route::view('chart-js', 'stisla.examples.chart-js.index')->name('chart-js.index');
+Route::view('pricing', 'stisla.examples.pricing.index')->name('pricing.index');
 
 # USER MANAGEMENT
 Route::prefix('user-management')->as('user-management.')->group(function () {
