@@ -1,7 +1,7 @@
 @extends('stisla.layouts.app')
 
 @section('title')
-  {{ $title = 'Form' }}
+  {{ $title = 'Chart JS' }}
 @endsection
 
 @section('content')
