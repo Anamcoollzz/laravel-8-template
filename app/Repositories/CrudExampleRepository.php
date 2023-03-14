@@ -5,7 +5,6 @@ namespace App\Repositories;
 use App\Models\CrudExample;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
-use Yajra\DataTables\Facades\DataTables;
 
 class CrudExampleRepository extends Repository
 {
@@ -31,28 +30,31 @@ class CrudExampleRepository extends Repository
         $query = $this->query()->when(request('order')[0]['column'] == 0, function ($query) {
             $query->latest();
         });
-        return DataTables::of($query)
-            ->addIndexColumn()
-            ->editColumn('currency', '{{dollar($currency)}}')
-            ->editColumn('currency_idr', '{{rp($currency_idr)}}')
-            ->editColumn('select2_multiple', '{{implode(", ", $select2_multiple)}}')
-            ->editColumn('checkbox', '{{implode(", ", $checkbox)}}')
-            ->editColumn('checkbox2', '{{implode(", ", $checkbox2)}}')
-            ->editColumn('tags', 'stisla.crud-examples.tags')
-            ->editColumn('file', 'stisla.crud-examples.file')
-            ->editColumn('color', 'stisla.crud-examples.color')
-            ->editColumn('created_at', '{{\Carbon\Carbon::parse($created_at)->addHour(7)->format("Y-m-d H:i:s")}}')
-            ->editColumn('updated_at', '{{\Carbon\Carbon::parse($updated_at)->addHour(7)->format("Y-m-d H:i:s")}}')
-            ->editColumn('action', function (CrudExample $crudExample) use ($additionalParams) {
+        $editColumns = [
+            'currency'         => fn (CrudExample $item) => dollar($item->currency),
+            'currency_idr'     => fn (CrudExample $item) => rp($item->currency_idr),
+            'select2_multiple' => '{{implode(", ", $select2_multiple)}}',
+            'checkbox'         => '{{implode(", ", $checkbox)}}',
+            'checkbox2'        => '{{implode(", ", $checkbox2)}}',
+            'tags'             => 'stisla.crud-examples.tags',
+            'file'             => 'stisla.crud-examples.file',
+            'color'            => 'stisla.crud-examples.color',
+            'created_at'       => '{{\Carbon\Carbon::parse($created_at)->addHour(7)->format("Y-m-d H:i:s")}}',
+            'updated_at'       => '{{\Carbon\Carbon::parse($updated_at)->addHour(7)->format("Y-m-d H:i:s")}}',
+            'action'           => function (CrudExample $crudExample) use ($additionalParams) {
                 $isAjaxYajra = Route::is('crud-examples.index-ajax-yajra') || request('isAjaxYajra') == 1;
                 $data = array_merge($additionalParams ? $additionalParams : [], [
                     'item'        => $crudExample,
                     'isAjaxYajra' => $isAjaxYajra,
                 ]);
                 return view('stisla.includes.forms.buttons.btn-action', $data);
-            })
-            ->rawColumns(['tags', 'file', 'color', 'action'])
-            ->make(true);
+            }
+        ];
+        $params = [
+            'editColumns' => $editColumns,
+            'rawColumns'  => ['tags', 'file', 'color', 'action'],
+        ];
+        return $this->generateDataTables($query, $params);
     }
 
     /**

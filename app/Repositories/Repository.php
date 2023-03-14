@@ -248,8 +248,23 @@ class Repository extends RepositoryAbstract
      *
      * @return Response
      */
+    protected function generateDataTables($query, array $params)
+    {
+        $dataTables = DataTables::of($query)->addIndexColumn();
+        foreach ($params['editColumns'] as $column => $value) {
+            $dataTables->editColumn($column, $value);
+        }
+        return $dataTables->rawColumns($params['rawColumns'] ?? [])->make(true);
+    }
+
+    /**
+     * get data as datatable
+     *
+     * @return Response
+     */
     public function getYajraDataTables()
     {
+        return $this->generateDataTables($this->query(),);
         return DataTables::of($this->query())->addIndexColumn()->rawColumns([])->make(true);
     }
 
