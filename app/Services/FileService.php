@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exports\GeneralExport;
 use App\Models\CrudExample;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
@@ -193,7 +194,7 @@ class FileService
      *
      * @param Collection $collection
      * @param string $filename
-     * @return Response
+     * @return BinaryFileResponse
      */
     public function downloadJson(Collection $collection, string $filename)
     {
@@ -218,6 +219,34 @@ class FileService
             $extension = \Maatwebsite\Excel\Excel::XLSX;
         }
         return Excel::download($excelInstance, $filename, $extension);
+    }
+
+    /**
+     * download collection as excel file
+     *
+     * @param string $view
+     * @param array $data
+     * @param string $filename
+     * @return BinaryFileResponse
+     */
+    public function downloadExcelGeneral($view, array $data, string $filename)
+    {
+        $excelInstance = new GeneralExport($view, $data);
+        return Excel::download($excelInstance, $filename, \Maatwebsite\Excel\Excel::XLSX);
+    }
+
+    /**
+     * download collection as csv file
+     *
+     * @param string $view
+     * @param array $data
+     * @param string $filename
+     * @return BinaryFileResponse
+     */
+    public function downloadCsvGeneral($view, array $data, string $filename)
+    {
+        $excelInstance = new GeneralExport($view, $data);
+        return Excel::download($excelInstance, $filename, \Maatwebsite\Excel\Excel::CSV);
     }
 
     /**

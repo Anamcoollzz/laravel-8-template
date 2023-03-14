@@ -111,7 +111,7 @@ class MenuManagementController extends StislaController
      * @param bool $isDetail
      * @return array
      */
-    private function getDetail(Menu $menuManagement, bool $isDetail = false)
+    private function getDetailData(Menu $menuManagement, bool $isDetail = false)
     {
         $title         = __('Manajemen Menu');
         $defaultData   = $this->getDefaultDataDetail($title, 'menu-managements', $menuManagement, $isDetail);
@@ -135,7 +135,7 @@ class MenuManagementController extends StislaController
      */
     public function edit(Menu $menuManagement)
     {
-        $data = $this->getDetail($menuManagement);
+        $data = $this->getDetailData($menuManagement);
         return view('stisla.menu-managements.form', $data);
     }
 
@@ -173,7 +173,7 @@ class MenuManagementController extends StislaController
      */
     public function show(Menu $menuManagement)
     {
-        $data = $this->getDetail($menuManagement, true);
+        $data = $this->getDetailData($menuManagement, true);
         return view('stisla.menu-managements.form', $data);
     }
 

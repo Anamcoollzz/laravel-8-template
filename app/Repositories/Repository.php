@@ -48,6 +48,17 @@ class Repository extends RepositoryAbstract
      * store data to db
      *
      * @param array $data
+     * @return bool
+     */
+    public function insert(array $data): bool
+    {
+        return $this->model->insert($data);
+    }
+
+    /**
+     * store data to db
+     *
+     * @param array $data
      * @return Model
      */
     public function create(array $data)

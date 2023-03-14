@@ -3,30 +3,38 @@
 namespace App\Exports;
 
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class CrudExampleExport implements FromView, ShouldAutoSize
+class GeneralExport implements FromView, ShouldAutoSize
 {
     use Exportable;
 
     /**
      * data
      *
-     * @var Collection
+     * @var mixed
      */
-    private Collection $data;
+    private $data;
+
+    /**
+     * view
+     *
+     * @var string
+     */
+    private string $view;
 
     /**
      * constructor method
      *
-     * @param Collection $data
+     * @param string $view
+     * @param mixed $data
      * @return void
      */
-    public function __construct(Collection $data)
+    public function __construct(string $view, $data)
     {
+        $this->view = $view;
         $this->data = $data;
     }
 
@@ -37,9 +45,6 @@ class CrudExampleExport implements FromView, ShouldAutoSize
      */
     public function view(): View
     {
-        return view('stisla.crud-examples.table', [
-            'data'     => $this->data,
-            'isExport' => true
-        ]);
+        return view($this->view, $this->data);
     }
 }

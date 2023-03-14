@@ -65,7 +65,7 @@
 
           @if ($isExport === false)
             <td>
-              @include('stisla.crud-example.tags', ['tags' => $item->tags])
+              @include('stisla.crud-examples.tags', ['tags' => $item->tags])
             </td>
           @else
             <td>{{ implode(', ', explode(',', $item->tags)) }}</td>
@@ -83,14 +83,14 @@
             </td>
           @else
             <td>
-              @include('stisla.crud-example.file', ['file' => $item->file])
+              @include('stisla.crud-examples.file', ['file' => $item->file])
             </td>
           @endif
 
           <td>{{ $item->date }}</td>
           <td>{{ $item->time }}</td>
           <td>
-            @include('stisla.crud-example.color', ['color' => $item->color])
+            @include('stisla.crud-examples.color', ['color' => $item->color])
           </td>
 
           @if ($isExport)

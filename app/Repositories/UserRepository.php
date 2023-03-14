@@ -403,4 +403,16 @@ class UserRepository extends Repository
     {
         return $user->assignRole($role);
     }
+
+    /**
+     * sync roles
+     *
+     * @param User $user
+     * @param array $role
+     * @return User
+     */
+    public function syncRoles(User $user, array $roles)
+    {
+        return $user->syncRoles($roles);
+    }
 }

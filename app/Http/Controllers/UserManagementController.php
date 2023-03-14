@@ -3,11 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Helper;
+use App\Http\Requests\ImportExcelRequest;
 use App\Http\Requests\UserRequest;
+use App\Imports\UserImport;
 use App\Models\User;
 use App\Repositories\UserRepository;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-class UserManagementController extends Controller
+class UserManagementController extends StislaController
 {
     /**
      * user repository
@@ -23,12 +28,27 @@ class UserManagementController extends Controller
      */
     public function __construct()
     {
+        parent::__construct();
+
         $this->userRepository = new UserRepository;
-        $this->middleware('can:Pengguna');
-        $this->middleware('can:Pengguna Tambah')->only(['create', 'store']);
-        $this->middleware('can:Pengguna Ubah')->only(['edit', 'update']);
-        $this->middleware('can:Pengguna Hapus')->only(['destroy']);
-        $this->middleware('can:Pengguna Force Login')->only(['forceLogin']);
+        $this->icon           = 'fa fa-users';
+
+        $this->defaultMiddleware('Pengguna');
+    }
+
+    /**
+     * get index data
+     *
+     * @return array
+     */
+    private function getIndexData()
+    {
+        $roleOptions = $this->userRepository->getRoles()->pluck('name', 'id')->toArray();
+        $defaultData = $this->getDefaultDataIndex(__('Pengguna'), 'Pengguna', 'user-management.users');
+        return array_merge($defaultData, [
+            'data'      => $this->userRepository->getUsers(),
+            'roleCount' => count($roleOptions),
+        ]);
     }
 
     /**
@@ -38,17 +58,8 @@ class UserManagementController extends Controller
      */
     public function index()
     {
-        $user = auth()->user();
-        $roleOptions = $this->userRepository->getRoles()->pluck('name', 'id')->toArray();
-        return view('stisla.user-management.users.index', [
-            'data'           => $this->userRepository->getUsers(),
-            'canImportExcel' => $user->can('Pengguna Impor Excel'),
-            'canCreate'      => $user->can('Pengguna Tambah'),
-            'canUpdate'      => $user->can('Pengguna Ubah'),
-            'canDelete'      => $user->can('Pengguna Hapus'),
-            'canForceLogin'  => $user->can('Pengguna Force Login'),
-            'roleCount'      => count($roleOptions),
-        ]);
+        $data = $this->getIndexData();
+        return view('stisla.user-management.users.index', $data);
     }
 
     /**
@@ -186,5 +197,91 @@ class UserManagementController extends Controller
     {
         $this->userRepository->login($user);
         return Helper::redirectSuccess(route('dashboard.index'), __('Berhasil masuk ke dalam sistem'));
+    }
+
+    /**
+     * download import example
+     *
+     * @return BinaryFileResponse
+     */
+    public function importExcelExample(): BinaryFileResponse
+    {
+        $filepath = public_path('excel_examples/users.xlsx');
+        return response()->download($filepath);
+    }
+
+    /**
+     * import excel file to db
+     *
+     * @param ImportExcelRequest $request
+     * @return RedirectResponse
+     */
+    public function importExcel(ImportExcelRequest $request): RedirectResponse
+    {
+        $this->fileService->importExcel(new UserImport, $request->file('import_file'));
+        $successMessage = successMessageImportExcel("Pengguna");
+        return back()->with('successMessage', $successMessage);
+    }
+
+    /**
+     * get export data
+     *
+     * @return array
+     */
+    public function getExportData(): array
+    {
+        $times = date('Y-m-d_H-i-s');
+        $data = [
+            'isExport'   => true,
+            'pdf_name'   => $times . '_users.pdf',
+            'excel_name' => $times . '_users.xlsx',
+            'csv_name'   => $times . '_users.csv',
+            'json_name'  => $times . '_users.json',
+        ];
+        return array_merge($this->getIndexData(), $data);
+    }
+
+    /**
+     * download export data as json
+     *
+     * @return BinaryFileResponse
+     */
+    public function json(): BinaryFileResponse
+    {
+        $data  = $this->getExportData();
+        return $this->fileService->downloadJson($data['data'], $data['json_name']);
+    }
+
+    /**
+     * download export data as xlsx
+     *
+     * @return Response
+     */
+    public function excel(): BinaryFileResponse
+    {
+        $data  = $this->getExportData();
+        return $this->fileService->downloadExcelGeneral('stisla.user-management.users.table', $data, $data['excel_name']);
+    }
+
+    /**
+     * download export data as csv
+     *
+     * @return Response
+     */
+    public function csv(): BinaryFileResponse
+    {
+        $data  = $this->getExportData();
+        return $this->fileService->downloadCsvGeneral('stisla.user-management.users.table', $data, $data['csv_name']);
+    }
+
+    /**
+     * download export data as pdf
+     *
+     * @return Response
+     */
+    public function pdf(): Response
+    {
+        $data  = $this->getExportData();
+        return $this->fileService->downloadPdfLetter('stisla.includes.others.export-pdf', $data, $data['pdf_name']);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\EmailService;
 use App\Services\FileService;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Route;
 
 class StislaController extends Controller
 {
@@ -55,6 +56,7 @@ class StislaController extends Controller
         $this->middleware('can:' . $moduleName . ' Hapus')->only(['destroy']);
         $this->middleware('can:' . $moduleName . ' Ekspor')->only(['json', 'excel', 'csv', 'pdf']);
         $this->middleware('can:' . $moduleName . ' Impor Excel')->only(['importExcel', 'importExcelExample']);
+        $this->middleware('can:' . $moduleName . ' Force Login')->only(['forceLogin']);
     }
 
     /**
@@ -75,6 +77,9 @@ class StislaController extends Controller
         $canDelete      = $user->can($permissionPrefix . ' Hapus');
         $canImportExcel = $user->can($permissionPrefix . ' Impor Excel');
         $canExport      = $user->can($permissionPrefix . ' Ekspor');
+        $canForceLogin  = $user->can($permissionPrefix . ' Force Login');
+
+        // dd($canImportExcel);
 
         return [
             'canCreate'         => $canCreate,
@@ -83,18 +88,21 @@ class StislaController extends Controller
             'canDelete'         => $canDelete,
             'canImportExcel'    => $canImportExcel,
             'canExport'         => $canExport,
+            'canForceLogin'     => $canForceLogin,
             'title'             => $title,
             'moduleIcon'        => $this->icon,
             'route_create'      => $canCreate ? route($routePrefix . '.create') : null,
-            'routeImportExcel'  => $canImportExcel ? route($routePrefix . '.import-excel') : null,
-            'routeExampleExcel' => $canImportExcel ? route($routePrefix . '.import-excel-example') : null,
-            'routePdf'          => $canExport ? route($routePrefix . '.pdf') : null,
-            'routeExcel'        => $canExport ? route($routePrefix . '.excel') : null,
-            'routeCsv'          => $canExport ? route($routePrefix . '.csv') : null,
-            'routeJson'         => $canExport ? route($routePrefix . '.json') : null,
-            'routeYajra'        => route($routePrefix . '.ajax-yajra'),
-            'routeStore'        => route($routePrefix . '.store'),
+            'routeImportExcel'  => $canImportExcel && Route::has($routePrefix . '.import-excel') ? route($routePrefix . '.import-excel') : null,
+            'routeExampleExcel' => $canImportExcel && Route::has($routePrefix . '.import-excel') ? route($routePrefix . '.import-excel-example') : null,
+            'routePdf'          => $canExport && Route::has($routePrefix . '.pdf') ? route($routePrefix . '.pdf') : null,
+            'routeExcel'        => $canExport && Route::has($routePrefix . '.excel') ? route($routePrefix . '.excel') : null,
+            'routeCsv'          => $canExport && Route::has($routePrefix . '.csv') ? route($routePrefix . '.csv') : null,
+            'routeJson'         => $canExport && Route::has($routePrefix . '.json') ? route($routePrefix . '.json') : null,
+            'routeYajra'        => Route::has($routePrefix . '.ajax-yajra') ? route($routePrefix . '.ajax-yajra') : null,
+            'routeStore'        => Route::has($routePrefix . '.store') ? route($routePrefix . '.store') : null,
             'routePrefix'       => $routePrefix,
+            'isExport'          => false,
+            'folder'            => $routePrefix,
         ];
     }
 

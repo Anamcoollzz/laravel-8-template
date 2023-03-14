@@ -38,9 +38,9 @@ class CrudExampleRepository extends Repository
             ->editColumn('select2_multiple', '{{implode(", ", $select2_multiple)}}')
             ->editColumn('checkbox', '{{implode(", ", $checkbox)}}')
             ->editColumn('checkbox2', '{{implode(", ", $checkbox2)}}')
-            ->editColumn('tags', 'stisla.crud-example.tags')
-            ->editColumn('file', 'stisla.crud-example.file')
-            ->editColumn('color', 'stisla.crud-example.color')
+            ->editColumn('tags', 'stisla.crud-examples.tags')
+            ->editColumn('file', 'stisla.crud-examples.file')
+            ->editColumn('color', 'stisla.crud-examples.color')
             ->editColumn('created_at', '{{\Carbon\Carbon::parse($created_at)->addHour(7)->format("Y-m-d H:i:s")}}')
             ->editColumn('updated_at', '{{\Carbon\Carbon::parse($updated_at)->addHour(7)->format("Y-m-d H:i:s")}}')
             ->editColumn('action', function (CrudExample $crudExample) use ($additionalParams) {

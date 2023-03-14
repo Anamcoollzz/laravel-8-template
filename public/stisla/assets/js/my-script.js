@@ -744,10 +744,11 @@ function initSelect2() {
 }
 
 function initColorPicker() {
-  $('.colorpickerinput').colorpicker({
-    format: 'hex',
-    component: '.input-group-append',
-  });
+  if ($('.colorpickerinput').length > 0)
+    $('.colorpickerinput').colorpicker({
+      format: 'hex',
+      component: '.input-group-append',
+    });
 }
 
 function initCleave() {

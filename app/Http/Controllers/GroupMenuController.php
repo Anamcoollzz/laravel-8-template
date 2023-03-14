@@ -89,7 +89,7 @@ class GroupMenuController extends StislaController
      * @param bool $isDetail
      * @return array
      */
-    private function getDetail(MenuGroup $groupMenu, bool $isDetail = false)
+    private function getDetailData(MenuGroup $groupMenu, bool $isDetail = false)
     {
         $title         = __('Grup Menu');
         $defaultData   = $this->getDefaultDataDetail($title, 'group-menus', $groupMenu, $isDetail);
@@ -108,7 +108,7 @@ class GroupMenuController extends StislaController
      */
     public function edit(MenuGroup $groupMenu)
     {
-        $data = $this->getDetail($groupMenu);
+        $data = $this->getDetailData($groupMenu);
         return view('stisla.group-menus.form', $data);
     }
 
@@ -139,7 +139,7 @@ class GroupMenuController extends StislaController
      */
     public function show(MenuGroup $groupMenu)
     {
-        $data = $this->getDetail($groupMenu, true);
+        $data = $this->getDetailData($groupMenu, true);
         return view('stisla.group-menus.form', $data);
     }
 

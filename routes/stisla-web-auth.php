@@ -43,6 +43,16 @@ Route::view('invoice', 'stisla.examples.invoice.index')->name('invoice.index');
 # USER MANAGEMENT
 Route::prefix('user-management')->as('user-management.')->group(function () {
     Route::get('users/force-login/{user}', [UserManagementController::class, 'forceLogin'])->name('users.force-login');
+    // Route::get('yajra-users', [CrudExampleController::class, 'index'])->name('users.index-yajra');
+    // Route::get('yajra-users/ajax', [CrudExampleController::class, 'yajraAjax'])->name('users.ajax-yajra');
+    // Route::get('ajax-users', [CrudExampleController::class, 'index'])->name('users.index-ajax');
+    // Route::get('yajra-ajax-users', [CrudExampleController::class, 'index'])->name('users.index-ajax-yajra');
+    Route::get('users/pdf', [UserManagementController::class, 'pdf'])->name('users.pdf');
+    Route::get('users/csv', [UserManagementController::class, 'csv'])->name('users.csv');
+    Route::get('users/excel', [UserManagementController::class, 'excel'])->name('users.excel');
+    Route::get('users/json', [UserManagementController::class, 'json'])->name('users.json');
+    Route::get('users/import-excel-example', [UserManagementController::class, 'importExcelExample'])->name('users.import-excel-example');
+    Route::post('users/import-excel', [UserManagementController::class, 'importExcel'])->name('users.import-excel');
     Route::resource('users', UserManagementController::class);
 
     # ROLES
