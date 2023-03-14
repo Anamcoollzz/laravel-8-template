@@ -2,34 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\CrudExampleExport;
 use App\Exports\RoleExampleExport;
 use App\Http\Requests\ImportExcelRequest;
 use App\Http\Requests\RoleRequest;
 use App\Imports\RoleImport;
-use App\Repositories\UserRepository;
-use App\Services\FileService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-class RoleController extends Controller
+class RoleController extends StislaController
 {
-    /**
-     * user repository
-     *
-     * @var UserRepository
-     */
-    private UserRepository $userRepository;
-
-    /**
-     * file service
-     *
-     * @var FileService
-     */
-    private FileService $fileService;
 
     /**
      * constructor method
@@ -38,13 +22,11 @@ class RoleController extends Controller
      */
     public function __construct()
     {
-        $this->userRepository = new UserRepository;
-        $this->fileService    = new FileService;
+        parent::__construct();
 
-        $this->middleware('can:Role');
-        $this->middleware('can:Role Tambah')->only(['create', 'store']);
-        $this->middleware('can:Role Ubah')->only(['edit', 'update']);
-        $this->middleware('can:Role Hapus')->only(['destroy']);
+        $this->defaultMiddleware('Role');
+
+        $this->icon = 'fas fa-user-tag';
     }
 
     /**
@@ -54,14 +36,11 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $user = auth()->user();
-        return view('stisla.user-management.roles.index', [
-            'data'           => $this->userRepository->getRoles(),
-            'canImportExcel' => $user->can('Pengguna Impor Excel'),
-            'canCreate'      => $user->can('Pengguna Tambah'),
-            'canUpdate'      => $user->can('Pengguna Ubah'),
-            'canDelete'      => $user->can('Pengguna Hapus'),
-        ]);
+        $data        = $this->userRepository->getRoles();
+        $defaultData = $this->getDefaultDataIndex(__('Role'), 'Role', 'user-management.roles');
+        $data        = array_merge(['data' => $data], $defaultData);
+
+        return view('stisla.user-management.roles.index', $data);
     }
 
     /**

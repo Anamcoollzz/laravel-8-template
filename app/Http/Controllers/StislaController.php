@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\UserRepository;
 use App\Services\EmailService;
 use App\Services\FileService;
 use Illuminate\Database\Eloquent\Model;
@@ -24,6 +25,13 @@ class StislaController extends Controller
     protected EmailService $emailService;
 
     /**
+     * user repository
+     *
+     * @var UserRepository
+     */
+    protected UserRepository $userRepository;
+
+    /**
      * icon of module
      *
      * @var String
@@ -37,8 +45,9 @@ class StislaController extends Controller
      */
     public function __construct()
     {
-        $this->fileService  = new FileService;
-        $this->emailService = new EmailService;
+        $this->fileService    = new FileService;
+        $this->emailService   = new EmailService;
+        $this->userRepository = new UserRepository;
     }
 
     /**
