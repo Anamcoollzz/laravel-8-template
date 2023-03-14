@@ -73,6 +73,27 @@ class UserManagementController extends StislaController
     }
 
     /**
+     * get detail data
+     *
+     * @param User $user
+     * @param boolean $isDetail
+     * @return array
+     */
+    private function getDetailData(User $user, bool $isDetail)
+    {
+        $roleOptions = $this->userRepository->getRoleOptions();
+        if ($user->roles->count() > 1)
+            $user->role = $user->roles->pluck('id')->toArray();
+        else
+            $user->role = $user->roles->first()->id ?? null;
+        $defaultData = $this->getDefaultDataDetail(__('Pengguna'), 'user-management.users', $user, $isDetail);
+        return array_merge($defaultData, [
+            'roleOptions' => $roleOptions,
+            'fullTitle'   => $isDetail ? __('Detail Pengguna') : __('Ubah Pengguna'),
+        ]);
+    }
+
+    /**
      * get export data
      *
      * @return array
@@ -108,12 +129,12 @@ class UserManagementController extends StislaController
      */
     public function create()
     {
-        $roleOptions = $this->userRepository->getRoles()->pluck('name', 'id')->toArray();
-        return view('stisla.user-management.users.form', [
+        $roleOptions = $this->userRepository->getRoleOptions();
+        $defaultData = $this->getDefaultDataCreate(__('Pengguna'), 'user-management.users');
+        return view('stisla.user-management.users.form', array_merge($defaultData, [
             'roleOptions' => $roleOptions,
-            'isDetail'    => false,
-            'action'      => __("Tambah"),
-        ]);
+            'fullTitle'   => __('Tambah Pengguna'),
+        ]));
     }
 
     /**
@@ -139,17 +160,8 @@ class UserManagementController extends StislaController
      */
     public function edit(User $user)
     {
-        $roleOptions = $this->userRepository->getRoles()->pluck('name', 'id')->toArray();
-        if ($user->roles->count() > 1)
-            $user->role = $user->roles->pluck('id')->toArray();
-        else
-            $user->role = $user->roles->first()->id ?? null;
-        return view('stisla.user-management.users.form', [
-            'roleOptions' => $roleOptions,
-            'd'           => $user,
-            'isDetail'    => false,
-            'action'      => __("Ubah"),
-        ]);
+        $data = $this->getDetailData($user, false);
+        return view('stisla.user-management.users.form', $data);
     }
 
     /**
@@ -178,17 +190,8 @@ class UserManagementController extends StislaController
      */
     public function show(User $user)
     {
-        $roleOptions = $this->userRepository->getRoles()->pluck('name', 'id')->toArray();
-        if ($user->roles->count() > 1)
-            $user->role = $user->roles->pluck('id')->toArray();
-        else
-            $user->role = $user->roles->first()->id ?? null;
-        return view('stisla.user-management.users.form', [
-            'roleOptions' => $roleOptions,
-            'd'           => $user,
-            'isDetail'    => true,
-            'action'      => __("Detail"),
-        ]);
+        $data = $this->getDetailData($user, true);
+        return view('stisla.user-management.users.form', $data);
     }
 
     /**
