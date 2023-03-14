@@ -122,7 +122,7 @@ class CrudExampleController extends StislaController
      *
      * @return array
      */
-    public function getExportData(): array
+    private function getExportData(): array
     {
         $times = date('Y-m-d_H-i-s');
         $data = [

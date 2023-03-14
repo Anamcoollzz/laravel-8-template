@@ -52,6 +52,45 @@ class UserManagementController extends StislaController
     }
 
     /**
+     * get store data
+     *
+     * @param UserRequest $request
+     * @return array
+     */
+    private function getStoreData(UserRequest $request): array
+    {
+        $data = $request->only([
+            'name',
+            'email',
+            'phone_number',
+            'birth_date',
+            'address',
+        ]);
+        if ($request->filled('password')) {
+            $data['password'] = bcrypt($request->password);
+        }
+        return $data;
+    }
+
+    /**
+     * get export data
+     *
+     * @return array
+     */
+    private function getExportData(): array
+    {
+        $times = date('Y-m-d_H-i-s');
+        $data = [
+            'isExport'   => true,
+            'pdf_name'   => $times . '_users.pdf',
+            'excel_name' => $times . '_users.xlsx',
+            'csv_name'   => $times . '_users.csv',
+            'json_name'  => $times . '_users.json',
+        ];
+        return array_merge($this->getIndexData(), $data);
+    }
+
+    /**
      * showing user management page
      *
      * @return Response
@@ -85,21 +124,8 @@ class UserManagementController extends StislaController
      */
     public function store(UserRequest $request)
     {
-        $user = $this->userRepository->create(
-            array_merge(
-                [
-                    'password' => bcrypt($request->password)
-                ],
-                $request->only([
-                    'name',
-                    'email',
-                    'phone_number',
-                    'birth_date',
-                    'address',
-                ])
-            )
-        );
-        $user->assignRole($request->role);
+        $user = $this->userRepository->create($this->getStoreData($request));
+        $this->userRepository->syncRoles($user, $request->role);
         logCreate('Pengguna', $user);
         $successMessage = successMessageCreate('Pengguna');
         return redirect()->back()->with('successMessage', $successMessage);
@@ -135,18 +161,10 @@ class UserManagementController extends StislaController
      */
     public function update(UserRequest $request, User $user)
     {
-        $data = $request->only([
-            'name',
-            'email',
-            'phone_number',
-            'birth_date',
-            'address',
-        ]);
-        if ($request->filled('password')) {
-            $data['password'] = bcrypt($request->password);
-        }
+        $data = $this->getStoreData($request);
+
         $userNew = $this->userRepository->update($data, $user->id);
-        $userNew->syncRoles([$request->role]);
+        $this->userRepository->syncRoles($userNew, $request->role);
         logUpdate('Pengguna', $user, $userNew);
         $successMessage = successMessageUpdate('Pengguna');
         return redirect()->back()->with('successMessage', $successMessage);
@@ -221,24 +239,6 @@ class UserManagementController extends StislaController
         $this->fileService->importExcel(new UserImport, $request->file('import_file'));
         $successMessage = successMessageImportExcel("Pengguna");
         return back()->with('successMessage', $successMessage);
-    }
-
-    /**
-     * get export data
-     *
-     * @return array
-     */
-    public function getExportData(): array
-    {
-        $times = date('Y-m-d_H-i-s');
-        $data = [
-            'isExport'   => true,
-            'pdf_name'   => $times . '_users.pdf',
-            'excel_name' => $times . '_users.xlsx',
-            'csv_name'   => $times . '_users.csv',
-            'json_name'  => $times . '_users.json',
-        ];
-        return array_merge($this->getIndexData(), $data);
     }
 
     /**
