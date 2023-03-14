@@ -6,14 +6,13 @@ use App\Jobs\EditFileJob;
 use App\Jobs\ShellJob;
 use App\Services\CommandService;
 use App\Services\DatabaseService;
-use App\Services\FileService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
-class UbuntuController extends Controller
+class UbuntuController extends StislaController
 {
 
     /**
@@ -31,24 +30,18 @@ class UbuntuController extends Controller
     private DatabaseService $dbService;
 
     /**
-     * FileService
-     *
-     * @var FileService
-     */
-    private FileService $fileService;
-
-    /**
      * constructor method
      *
      * @return void
      */
     public function __construct()
     {
+        parent::__construct();
+
         $this->middleware('can:Ubuntu');
 
         $this->commandService = new CommandService();
         $this->dbService      = new DatabaseService();
-        $this->fileService    = new FileService();
     }
 
     /**
@@ -75,8 +68,8 @@ class UbuntuController extends Controller
         }
 
         // $path       = '/Users/anamkun/Documents/PROJEK/ME';
-        $path = '/Users/anamkun/Documents/PROJEK/ME/laravel-8-template';
-        // $path = '/var/www';
+        // $path = '/Users/anamkun/Documents/PROJEK/ME/laravel-8-template';
+        $path = '/var/www';
         if ($request->query('folder')) {
             $path = decrypt($request->query('folder'));
         }
@@ -404,12 +397,22 @@ class UbuntuController extends Controller
         return redirect()->back()->with('successMessage', 'Berhasil membuat database ' . $schemaName);
     }
 
+    /**
+     * delete row in table
+     *
+     * @return Response
+     */
     public function deleteRow($database, $table, $id)
     {
         $this->dbService->deleteRow($database, $table, $id);
         return redirect()->back()->with('successMessage', 'Berhasil menghapus data');
     }
 
+    /**
+     * command php-fpm
+     *
+     * @return Response
+     */
     public function phpFpm($version, $action)
     {
         $command = $this->commandService->phpFpm($version, $action);
@@ -417,6 +420,11 @@ class UbuntuController extends Controller
         return redirect()->back()->with('successMessage', 'Berhasil menjalankan command  ' . $command);
     }
 
+    /**
+     * command mysql
+     *
+     * @return Response
+     */
     public function mysql($version, $action)
     {
         $command = $this->commandService->mysql($version, $action);
@@ -424,6 +432,11 @@ class UbuntuController extends Controller
         return redirect()->back()->with('successMessage', 'Berhasil menjalankan command  ' . $command);
     }
 
+    /**
+     * command supervisor
+     *
+     * @return Response
+     */
     public function supervisor($action)
     {
         $command = $this->commandService->supervisor($action);
@@ -431,6 +444,11 @@ class UbuntuController extends Controller
         return redirect()->back()->with('successMessage', 'Berhasil menjalankan command  ' . $command);
     }
 
+    /**
+     * command laravel seeder
+     *
+     * @return Response
+     */
     public function laravelSeeder($class)
     {
         $pathnameD = decrypt(request('folder'));
@@ -439,6 +457,11 @@ class UbuntuController extends Controller
         return redirect()->back()->with('successMessage', 'Berhasil menjalankan command  ' . $command);
     }
 
+    /**
+     * command laravel migrate
+     *
+     * @return Response
+     */
     public function laravelMigrate()
     {
         $pathnameD = decrypt(request('folder'));
@@ -447,6 +470,11 @@ class UbuntuController extends Controller
         return redirect()->back()->with('successMessage', 'Berhasil menjalankan artisan command  ' . $command);
     }
 
+    /**
+     * command laravel migrate refresh
+     *
+     * @return Response
+     */
     public function laravelMigrateRefresh()
     {
         $pathnameD = decrypt(request('folder'));
