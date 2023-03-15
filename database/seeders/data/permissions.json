@@ -207,29 +207,29 @@
     },
 
     {
-        "name": "Manajemen Menu",
+        "name": "Menu",
         "roles": ["superadmin"],
-        "group": "Manajemen Menu"
+        "group": "Menu"
     },
     {
-        "name": "Manajemen Menu Tambah",
+        "name": "Menu Tambah",
         "roles": ["superadmin"],
-        "group": "Manajemen Menu"
+        "group": "Menu"
     },
     {
-        "name": "Manajemen Menu Ubah",
+        "name": "Menu Ubah",
         "roles": ["superadmin"],
-        "group": "Manajemen Menu"
+        "group": "Menu"
     },
     {
-        "name": "Manajemen Menu Detail",
+        "name": "Menu Detail",
         "roles": ["superadmin"],
-        "group": "Manajemen Menu"
+        "group": "Menu"
     },
     {
-        "name": "Manajemen Menu Hapus",
+        "name": "Menu Hapus",
         "roles": ["superadmin"],
-        "group": "Manajemen Menu"
+        "group": "Menu"
     },
     {
         "name": "Grup Menu",

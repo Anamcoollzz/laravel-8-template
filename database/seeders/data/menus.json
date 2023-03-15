@@ -139,7 +139,7 @@
                 "menu_name": "Manajemen Menu",
                 "uri": "menu-managements",
                 "icon": "fas fa-bars",
-                "permission": "Manajemen Menu",
+                "permission": null,
                 "is_blank": false,
                 "is_active_if_url_includes": "menu-managements*",
                 "childs": [
@@ -147,7 +147,7 @@
                         "menu_name": "Menu",
                         "route_name": "menu-managements.index",
                         "icon": null,
-                        "permission": "Manajemen Menu",
+                        "permission": "Menu",
                         "is_active_if_url_includes": "menu-managements*"
                     },
                     {

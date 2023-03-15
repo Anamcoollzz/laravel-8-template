@@ -38,7 +38,7 @@ class MenuManagementController extends StislaController
         $this->menuRepository      = new MenuRepository;
         $this->menuGroupRepository = new MenuGroupRepository;
 
-        $this->defaultMiddleware('Manajemen Menu');
+        $this->defaultMiddleware('Menu');
     }
 
     /**
@@ -50,7 +50,7 @@ class MenuManagementController extends StislaController
     {
         $data = $this->menuRepository->getFullData();
 
-        $defaultData = $this->getDefaultDataIndex(__('Manajemen Menu'), 'Manajemen Menu', 'menu-managements');
+        $defaultData = $this->getDefaultDataIndex(__('Manajemen Menu'), 'Menu', 'menu-managements');
 
         return view('stisla.menu-managements.index', array_merge($defaultData, [
             'data' => $data,
