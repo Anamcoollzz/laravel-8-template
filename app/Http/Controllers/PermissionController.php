@@ -6,35 +6,15 @@ use App\Exports\PermissionExport;
 use App\Http\Requests\ImportExcelRequest;
 use App\Http\Requests\PermissionRequest;
 use App\Imports\PermissionImport;
-use App\Repositories\UserRepository;
-use App\Services\FileService;
 use Exception;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-class PermissionController extends Controller
+class PermissionController extends StislaController
 {
-    /**
-     * user repository
-     *
-     * @var UserRepository
-     */
-    private UserRepository $userRepository;
-
-    /**
-     * file service
-     *
-     * @var FileService
-     */
-    private FileService $fileService;
-
-    /**
-     * icon module
-     *
-     * @var string
-     */
-    private string $moduleIcon = 'fa fa-user-lock';
 
     /**
      * constructor method
@@ -43,35 +23,82 @@ class PermissionController extends Controller
      */
     public function __construct()
     {
-        $this->userRepository = new UserRepository;
-        $this->fileService    = new FileService;
+        parent::__construct();
 
-        $this->middleware('can:Permission');
-        $this->middleware('can:Permission Tambah')->only(['create', 'store']);
-        $this->middleware('can:Permission Ubah')->only(['edit', 'update']);
-        $this->middleware('can:Permission Hapus')->only(['destroy']);
+        $this->defaultMiddleware('Permission');
+
+        $this->icon = 'fa fa-user-lock';
     }
 
     /**
-     * showing user management page
+     * get index data
      *
-     * @return Response
+     * @return array
      */
-    public function index()
+    private function getIndexData(): array
     {
-        $user = auth()->user();
-        return view('stisla.user-management.permissions.index', [
-            'data'                    => $this->userRepository->getLatestPermissionJoinGroups(),
-            'canImportExcel'          => $user->can('Permission Impor Excel'),
-            'canCreate'               => $user->can('Permission Tambah'),
-            'canUpdate'               => $user->can('Permission Ubah'),
-            'canDelete'               => $user->can('Permission Hapus'),
-            'moduleIcon'              => $this->moduleIcon,
-            'title'                   => 'Permission',
-            'routeCreate'             => route('user-management.permissions.create'),
-            'routeImportExcel'        => route('user-management.permissions.import-excel'),
-            'routeImportExcelExample' => route('user-management.permissions.import-excel-example'),
-        ]);
+        $data        = $this->userRepository->getLatestPermissionJoinGroups();
+        $defaultData = $this->getDefaultDataIndex(__('Permission'), 'Permission', 'user-management.permissions');
+        $data        = array_merge(['data' => $data], $defaultData);
+        return $data;
+    }
+
+    /**
+     * get store data
+     *
+     * @param PermissionRequest $request
+     * @return array
+     */
+    private function getStoreData(PermissionRequest $request): array
+    {
+        $data = $request->only(['name', 'permission_group_id']);
+        return $data;
+    }
+
+    /**
+     * get detail data
+     *
+     * @param Permission $permission
+     * @param boolean $isDetail
+     * @return array
+     */
+    private function getDetailData(Permission $permission, bool $isDetail): array
+    {
+        $defaultData = $this->getDefaultDataDetail(__('Permission'), 'user-management.permissions', $permission, $isDetail);
+        $data = [
+            'groupOptions'     => $this->userRepository->getPermissionGroupOptions(),
+            'fullTitle'        => $isDetail ? __('Detail Permission') : __('Ubah Permission')
+        ];
+        return array_merge($data, $defaultData);
+    }
+
+    /**
+     * get export data
+     *
+     * @return array
+     */
+    private function getExportData(): array
+    {
+        $times = date('Y-m-d_H-i-s');
+        $data = [
+            'isExport'   => true,
+            'pdf_name'   => $times . '_permissions.pdf',
+            'excel_name' => $times . '_permissions.xlsx',
+            'csv_name'   => $times . '_permissions.csv',
+            'json_name'  => $times . '_permissions.json',
+        ];
+        return array_merge($this->getIndexData(), $data);
+    }
+
+    /**
+     * showing data page
+     *
+     * @return View
+     */
+    public function index(): View
+    {
+        $data = $this->getIndexData();
+        return view('stisla.user-management.permissions.index', $data);
     }
 
     /**
@@ -81,16 +108,13 @@ class PermissionController extends Controller
      */
     public function create()
     {
-        return view('stisla.user-management.permissions.form', [
-            'permissionGroups' => $this->userRepository->getPermissionGroupWithChild(),
-            'action'           => route('user-management.permissions.store'),
-            'actionType'       => CREATE,
-            'title'            => 'Permission',
+        $defaultData = $this->getDefaultDataCreate(__('Permission'), 'user-management.permissions');
+        $data = [
             'fullTitle'        => 'Tambah Permission',
-            'moduleIcon'       => $this->moduleIcon,
             'groupOptions'     => $this->userRepository->getPermissionGroupOptions(),
-            'routeIndex'       => route('user-management.permissions.index'),
-        ]);
+        ];
+        $data = array_merge($data, $defaultData);
+        return view('stisla.user-management.permissions.form', $data);
     }
 
     /**
@@ -101,9 +125,11 @@ class PermissionController extends Controller
      */
     public function store(PermissionRequest $request)
     {
-        $data = $request->only(['name', 'permission_group_id']);
+        $data   = $this->getStoreData($request);
         $result = $this->userRepository->createPermission($data);
+
         logCreate('Permission', $result);
+
         $successMessage = successMessageCreate('Permission');
         return back()->with('successMessage', $successMessage);
     }
@@ -116,17 +142,8 @@ class PermissionController extends Controller
      */
     public function edit(Permission $permission)
     {
-        return view('stisla.user-management.permissions.form', [
-            'd'                => $permission,
-            'permissionGroups' => $this->userRepository->getPermissionGroupWithChild(),
-            'action'           => route('user-management.permissions.update', [$permission->id]),
-            'actionType'       => UPDATE,
-            'moduleIcon'       => $this->moduleIcon,
-            'fullTitle'        => 'Ubah Permission',
-            'title'            => 'Permission',
-            'groupOptions'     => $this->userRepository->getPermissionGroupOptions(),
-            'routeIndex'       => route('user-management.permissions.index'),
-        ]);
+        $data = $this->getDetailData($permission, false);
+        return view('stisla.user-management.permissions.form', $data);
     }
 
     /**
@@ -139,11 +156,25 @@ class PermissionController extends Controller
     public function update(PermissionRequest $request, Permission $permission)
     {
         $before = $this->userRepository->findPermission($permission->id);
-        $data = $request->only(['name', 'permission_group_id',]);
-        $after = $this->userRepository->updatePermission($permission->id, $data);
+        $data   = $this->getStoreData($request);
+        $after  = $this->userRepository->updatePermission($permission->id, $data);
+
         logUpdate('Permission', $before, $after);
+
         $successMessage = successMessageUpdate('Permission');
         return back()->with('successMessage', $successMessage);
+    }
+
+    /**
+     * showing detail permission page
+     *
+     * @param Permission $permission
+     * @return Response
+     */
+    public function show(Permission $permission)
+    {
+        $data = $this->getDetailData($permission, true);
+        return view('stisla.user-management.permissions.form', $data);
     }
 
     /**
@@ -158,8 +189,11 @@ class PermissionController extends Controller
         try {
             $before = $this->userRepository->findPermission($permission->id);
             $this->userRepository->deletePermission($permission->id);
+
             logDelete('Permission', $before);
+
             DB::commit();
+
             $successMessage = successMessageDelete('Permission');
             return back()->with('successMessage', $successMessage);
         } catch (Exception $exception) {
@@ -175,8 +209,8 @@ class PermissionController extends Controller
      */
     public function importExcelExample(): BinaryFileResponse
     {
-        $excel = new PermissionExport($this->userRepository->getLatestPermissionJoinGroups());
-        return $this->fileService->downloadExcel($excel, 'permission_import_examples.xlsx');
+        $filepath = public_path('excel_examples/sample_permissions.xlsx');
+        return response()->download($filepath);
     }
 
     /**
@@ -197,5 +231,49 @@ class PermissionController extends Controller
             DB::rollBack();
             return back()->with('errorMessage', $exception->getMessage());
         }
+    }
+
+    /**
+     * download export data as json
+     *
+     * @return BinaryFileResponse
+     */
+    public function json(): BinaryFileResponse
+    {
+        $data  = $this->getExportData();
+        return $this->fileService->downloadJson($data['data'], $data['json_name']);
+    }
+
+    /**
+     * download export data as xlsx
+     *
+     * @return Response
+     */
+    public function excel(): BinaryFileResponse
+    {
+        $data  = $this->getExportData();
+        return $this->fileService->downloadExcelGeneral('stisla.user-management.permissions.table', $data, $data['excel_name']);
+    }
+
+    /**
+     * download export data as csv
+     *
+     * @return Response
+     */
+    public function csv(): BinaryFileResponse
+    {
+        $data  = $this->getExportData();
+        return $this->fileService->downloadCsvGeneral('stisla.user-management.permissions.table', $data, $data['csv_name']);
+    }
+
+    /**
+     * download export data as pdf
+     *
+     * @return Response
+     */
+    public function pdf(): Response
+    {
+        $data  = $this->getExportData();
+        return $this->fileService->downloadPdfLetter('stisla.includes.others.export-pdf', $data, $data['pdf_name'], 'portrait');
     }
 }

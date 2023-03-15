@@ -219,7 +219,7 @@ class UserManagementController extends StislaController
      */
     public function importExcelExample(): BinaryFileResponse
     {
-        $filepath = public_path('excel_examples/users.xlsx');
+        $filepath = public_path('excel_examples/sample_users.xlsx');
         return response()->download($filepath);
     }
 

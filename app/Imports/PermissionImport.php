@@ -2,7 +2,8 @@
 
 namespace App\Imports;
 
-use App\Models\PermissionGroup;
+use App\Repositories\PermissionGroupRepository;
+use App\Repositories\PermissionRepository;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -12,27 +13,40 @@ class PermissionImport implements ToCollection, WithHeadingRow
 {
 
     /**
+     * Permission repository
+     *
+     * @var PermissionRepository
+     */
+    private PermissionRepository $permissionRepository;
+
+    /**
+     * Permission group repository
+     *
+     * @var PermissionGroupRepository
+     */
+    private PermissionGroupRepository $permissionGroupRepository;
+
+    /**
+     * constructor method
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->permissionRepository      = new PermissionRepository();
+        $this->permissionGroupRepository = new PermissionGroupRepository();
+    }
+
+    /**
      * To collection
      *
      * @return void
      */
     public function collection(Collection $rows)
     {
-        $dateTime = date('Y-m-d H:i:s');
-        $groups = PermissionGroup::all()->pluck('group_name', 'id')->toArray();
-        foreach ($rows->chunk(30) as $chunkData) {
-            $insertData = $chunkData->transform(function ($item) use ($dateTime, $groups) {
-                $item->put('created_at', $dateTime);
-                $item->put('updated_at', $dateTime);
-                $item->put('guard_name', 'web');
-                $item->put('name', $item['permission']);
-                $item->put('permission_group_id', array_search($item['group'], $groups));
-                $item->forget('permission');
-                $item->forget('group');
-                $item->forget('');
-                return $item;
-            })->toArray();
-            Permission::insert($insertData);
+        foreach ($rows as $row) {
+            $groupId = $this->permissionGroupRepository->firstOrCreate(['group_name' => $row['group']])->id;
+            $this->permissionRepository->createPermission($row['permission'], $groupId);
         }
     }
 }

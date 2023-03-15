@@ -8,9 +8,9 @@
       <th class="text-center">#</th>
       <th>{{ __('Group') }}</th>
       <th>{{ __('Permission') }}</th>
-      @if ($isExport == false)
-        <th>{{ __('Created At') }}</th>
-        <th>{{ __('Updated At') }}</th>
+      <th>{{ __('Created At') }}</th>
+      <th>{{ __('Updated At') }}</th>
+      @if ($isExport === false)
         <th>{{ __('Aksi') }}</th>
       @endif
     </tr>
@@ -21,15 +21,18 @@
         <td>{{ $loop->iteration }}</td>
         <td>{{ $item->group_name }}</td>
         <td>{{ $item->name }}</td>
-        @if ($isExport == false)
-          <td>{{ $item->created_at }}</td>
-          <td>{{ $item->updated_at }}</td>
+        <td>{{ $item->created_at }}</td>
+        <td>{{ $item->updated_at }}</td>
+        @if ($isExport === false)
           <td>
             @if ($canUpdate)
-              @include('stisla.includes.forms.buttons.btn-edit', ['link' => route('user-management.permissions.edit', [$item->id])])
+              @include('stisla.includes.forms.buttons.btn-edit', ['link' => route($routePrefix . '.edit', [$item->id])])
             @endif
             @if ($canDelete)
-              @include('stisla.includes.forms.buttons.btn-delete', ['link' => route('user-management.permissions.destroy', [$item->id])])
+              @include('stisla.includes.forms.buttons.btn-delete', ['link' => route($routePrefix . '.destroy', [$item->id])])
+            @endif
+            @if ($canDetail)
+              @include('stisla.includes.forms.buttons.btn-detail', ['link' => route($routePrefix . '.show', [$item->id])])
             @endif
           </td>
         @endif

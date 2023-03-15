@@ -67,6 +67,18 @@ class Repository extends RepositoryAbstract
     }
 
     /**
+     * find or store data to db
+     *
+     * @param array $data
+     * @param array $data2
+     * @return Model
+     */
+    public function firstOrCreate(array $data, array $data2 = [])
+    {
+        return $this->model->firstOrCreate($data, $data2);
+    }
+
+    /**
      * store data to db
      *
      * @param array $data
