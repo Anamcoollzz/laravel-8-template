@@ -59,17 +59,17 @@
         @if (($canUpdate || $canDelete || ($canForceLogin && $item->id != auth()->id())) && $isExport === false)
           <td style="width: 150px;">
             @if ($canUpdate)
-              @include('stisla.includes.forms.buttons.btn-edit', ['link' => route('user-management.users.edit', [$item->id])])
+              @include('stisla.includes.forms.buttons.btn-edit', ['link' => route($routePrefix . '.edit', [$item->id])])
             @endif
             @if ($canDelete)
-              @include('stisla.includes.forms.buttons.btn-delete', ['link' => route('user-management.users.destroy', [$item->id])])
+              @include('stisla.includes.forms.buttons.btn-delete', ['link' => route($routePrefix . '.destroy', [$item->id])])
             @endif
-            @if ($canDelete)
-              @include('stisla.includes.forms.buttons.btn-detail', ['link' => route('user-management.users.show', [$item->id])])
+            @if ($canDetail)
+              @include('stisla.includes.forms.buttons.btn-detail', ['link' => route($routePrefix . '.show', [$item->id])])
             @endif
             @if ($canForceLogin && $item->id != auth()->id())
               @include('stisla.includes.forms.buttons.btn-success', [
-                  'link' => route('user-management.users.force-login', [$item->id]),
+                  'link' => route($routePrefix . '.force-login', [$item->id]),
                   'icon' => 'fa fa-door-open',
                   'title' => 'Force Login',
                   'size' => 'sm',

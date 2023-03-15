@@ -21,10 +21,12 @@ class RoleImport implements ToCollection, WithHeadingRow
         $dateTime = date('Y-m-d H:i:s');
         foreach ($rows->chunk(30) as $chunkData) {
             $insertData = $chunkData->transform(function ($item) use ($dateTime) {
-                $item->put('guard_name', 'web');
-                $item->put('created_at', $dateTime);
-                $item->put('updated_at', $dateTime);
-                return $item;
+                return [
+                    'name'       => $item['role'],
+                    'guard_name' => 'web',
+                    'created_at' => $dateTime,
+                    'updated_at' => $dateTime,
+                ];
             })->toArray();
             Role::insert($insertData);
         }

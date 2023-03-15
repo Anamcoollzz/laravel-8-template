@@ -7,19 +7,12 @@ use App\Http\Requests\ImportExcelRequest;
 use App\Http\Requests\UserRequest;
 use App\Imports\UserImport;
 use App\Models\User;
-use App\Repositories\UserRepository;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class UserManagementController extends StislaController
 {
-    /**
-     * user repository
-     *
-     * @var UserRepository
-     */
-    private UserRepository $userRepository;
 
     /**
      * constructor method
@@ -30,10 +23,9 @@ class UserManagementController extends StislaController
     {
         parent::__construct();
 
-        $this->userRepository = new UserRepository;
-        $this->icon           = 'fa fa-users';
-
         $this->defaultMiddleware('Pengguna');
+
+        $this->icon           = 'fa fa-users';
     }
 
     /**

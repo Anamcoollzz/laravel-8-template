@@ -56,6 +56,10 @@ Route::prefix('user-management')->as('user-management.')->group(function () {
     Route::resource('users', UserManagementController::class);
 
     # ROLES
+    Route::get('roles/pdf', [RoleController::class, 'pdf'])->name('roles.pdf');
+    Route::get('roles/csv', [RoleController::class, 'csv'])->name('roles.csv');
+    Route::get('roles/excel', [RoleController::class, 'excel'])->name('roles.excel');
+    Route::get('roles/json', [RoleController::class, 'json'])->name('roles.json');
     Route::get('roles/import-excel-example', [RoleController::class, 'importExcelExample'])->name('roles.import-excel-example');
     Route::post('roles/import-excel', [RoleController::class, 'importExcel'])->name('roles.import-excel');
     Route::resource('roles', RoleController::class);
