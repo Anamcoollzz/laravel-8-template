@@ -338,6 +338,7 @@ class UserRepository extends Repository
     public function updateRole(int $roleId, array $data)
     {
         $role = Role::find($roleId);
+        $role->update($data);
         if ($role && isset($data['permissions'])) {
             $permissions = Permission::whereIn('name', $data['permissions'])->get();
             $role->syncPermissions($permissions);

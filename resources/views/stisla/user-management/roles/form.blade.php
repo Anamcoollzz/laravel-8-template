@@ -7,7 +7,7 @@
   @csrf
   <div class="row">
     <div class="col-md-12">
-      @include('stisla.includes.forms.inputs.input-name', ['required' => true, 'disabled' => isset($d), 'icon' => false])
+      @include('stisla.includes.forms.inputs.input-name', ['required' => true, 'icon' => false])
     </div>
     <div class="col-md-12">
       <h5>Hak akses</h5>

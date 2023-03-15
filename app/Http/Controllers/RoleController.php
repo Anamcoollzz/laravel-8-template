@@ -54,7 +54,8 @@ class RoleController extends StislaController
     private function getStoreData(RoleRequest $request): array
     {
         $data = $request->only([
-            'permissions'
+            'permissions',
+            'name',
         ]);
         return $data;
     }
@@ -157,11 +158,11 @@ class RoleController extends StislaController
     /**
      * update role data
      *
-     * @param Request $request
+     * @param RoleRequest $request
      * @param Role $role
      * @return RedirectResponse
      */
-    public function update(Request $request, Role $role): RedirectResponse
+    public function update(RoleRequest $request, Role $role): RedirectResponse
     {
         if ($role->is_locked) abort(404);
 
