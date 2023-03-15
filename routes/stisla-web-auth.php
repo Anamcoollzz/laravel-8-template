@@ -70,6 +70,12 @@ Route::prefix('user-management')->as('user-management.')->group(function () {
     Route::resource('permissions', PermissionController::class);
 
     # GROUP PERMISSIONS
+    Route::get('permission-groups/pdf', [PermissionGroupController::class, 'pdf'])->name('permission-groups.pdf');
+    Route::get('permission-groups/csv', [PermissionGroupController::class, 'csv'])->name('permission-groups.csv');
+    Route::get('permission-groups/excel', [PermissionGroupController::class, 'excel'])->name('permission-groups.excel');
+    Route::get('permission-groups/json', [PermissionGroupController::class, 'json'])->name('permission-groups.json');
+    Route::get('permission-groups/import-excel-example', [PermissionGroupController::class, 'importExcelExample'])->name('permission-groups.import-excel-example');
+    Route::post('permission-groups/import-excel', [PermissionGroupController::class, 'importExcel'])->name('permission-groups.import-excel');
     Route::get('permission-groups/import-excel-example', [PermissionGroupController::class, 'importExcelExample'])->name('permission-groups.import-excel-example');
     Route::post('permission-groups/import-excel', [PermissionGroupController::class, 'importExcel'])->name('permission-groups.import-excel');
     Route::resource('permission-groups', PermissionGroupController::class);
