@@ -7,52 +7,54 @@
 
   <div class="section-body">
     <div class="row">
-      <div class="col-12">
-        <div class="card">
-          <div class="card-header">
-            <h4>
-              <i class="fa fa-filter"></i>
-              Filter berdasarkan bulan dan tahun
-            </h4>
-          </div>
-          <div class="card-body">
-            <form action="">
-              @csrf
-              <div class="row">
-                <div class="col-md-6">
-                  @include('stisla.includes.forms.selects.select', [
-                      'id' => 'filter_month',
-                      'name' => 'filter_month',
-                      'options' => $array_bulan,
-                      'label' => 'Bulan',
-                      'required' => true,
-                      'selected' => $month,
-                  ])
-                </div>
-                <div class="col-md-6">
-                  @include('stisla.includes.forms.selects.select', [
-                      'id' => 'filter_year',
-                      'name' => 'filter_year',
-                      'options' => $array_year,
-                      'label' => 'Tahun',
-                      'required' => true,
-                      'selected' => $year,
-                  ])
-                </div>
-              </div>
 
-              <button type="submit" class="btn btn-primary">Lihat</button>
+      @if ($isShowFilter)
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h4>
+                <i class="fa fa-filter"></i>
+                Filter berdasarkan bulan dan tahun
+              </h4>
+            </div>
+            <div class="card-body">
+              <form action="">
+                @csrf
+                <div class="row">
+                  <div class="col-md-6">
+                    @include('stisla.includes.forms.selects.select', [
+                        'id' => 'filter_month',
+                        'name' => 'filter_month',
+                        'options' => $array_bulan,
+                        'label' => 'Bulan',
+                        'required' => true,
+                        'selected' => $month,
+                    ])
+                  </div>
+                  <div class="col-md-6">
+                    @include('stisla.includes.forms.selects.select', [
+                        'id' => 'filter_year',
+                        'name' => 'filter_year',
+                        'options' => $array_year,
+                        'label' => 'Tahun',
+                        'required' => true,
+                        'selected' => $year,
+                    ])
+                  </div>
+                </div>
 
-            </form>
+                <button type="submit" class="btn btn-primary">Lihat</button>
+
+              </form>
+            </div>
           </div>
         </div>
-      </div>
-
-      <div class="col-12">
-        <div class="alert alert-info">
-          Menampilkan data backup database di periode {{ namaBulan($month) }} {{ $year }}
+        <div class="col-12">
+          <div class="alert alert-info">
+            Menampilkan data backup database di periode {{ namaBulan($month) }} {{ $year }}
+          </div>
         </div>
-      </div>
+      @endif
 
       <div class="col-12">
         <div class="card">

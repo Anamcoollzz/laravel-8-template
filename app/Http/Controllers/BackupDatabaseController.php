@@ -3,17 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Gaji;
-use App\KomponenGaji;
-use App\Kehadiran;
 use Barryvdh\DomPDF\Facade as PDF;
-use App\Pegawai;
-use App\Pengaturan;
 use App\Services\DatabaseService;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
-use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Str;
 
 class BackupDatabaseController extends Controller
@@ -41,19 +32,24 @@ class BackupDatabaseController extends Controller
         $filter_month = $request->query('filter_month') ?? (int) date('m');
         $filter_year = $request->query('filter_year') ?? (int) date('Y');
 
+        $isShowFilter = false;
         $data = $this->databaseService->getAllBackupMysql();
-        $data = $data->filter(function ($item) use ($filter_month, $filter_year) {
-            return Str::contains($item['name'], $filter_year . '-' . $filter_month);
-        });
+        if (count($data) > 100) {
+            $data = $data->filter(function ($item) use ($filter_month, $filter_year) {
+                return Str::contains($item['name'], $filter_year . '-' . $filter_month);
+            });
+            $isShowFilter = true;
+        }
 
         return view('stisla.backup-databases.index', [
-            'active'      => 'databases.index',
-            'title'       => 'Backup Database',
-            'data'        => $data,
-            'month'       => $filter_month,
-            'year'        => $filter_year,
-            'array_bulan' => array_bulan(),
-            'array_year'  => array_year(2019, date('Y')),
+            'active'       => 'databases.index',
+            'title'        => 'Backup Database',
+            'data'         => $data,
+            'month'        => $filter_month,
+            'year'         => $filter_year,
+            'array_bulan'  => array_bulan(),
+            'array_year'   => array_year(2019, date('Y')),
+            'isShowFilter' => $isShowFilter,
         ]);
     }
 
