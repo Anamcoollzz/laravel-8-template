@@ -33,7 +33,7 @@ class UserManagementController extends StislaController
      *
      * @return array
      */
-    private function getIndexData()
+    protected function getIndexData()
     {
         $roleOptions = $this->userRepository->getRoles()->pluck('name', 'id')->toArray();
         $defaultData = $this->getDefaultDataIndex(__('Pengguna'), 'Pengguna', 'user-management.users');
@@ -90,7 +90,7 @@ class UserManagementController extends StislaController
      *
      * @return array
      */
-    private function getExportData(): array
+    protected function getExportData(): array
     {
         $times = date('Y-m-d_H-i-s');
         $data = [

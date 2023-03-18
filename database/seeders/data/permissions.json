@@ -232,6 +232,17 @@
         "group": "Menu"
     },
     {
+        "name": "Menu Ekspor",
+        "roles": ["superadmin"],
+        "group": "Menu"
+    },
+    {
+        "name": "Menu Impor Excel",
+        "roles": ["superadmin"],
+        "group": "Menu"
+    },
+
+    {
         "name": "Grup Menu",
         "roles": ["superadmin"],
         "group": "Grup Menu"

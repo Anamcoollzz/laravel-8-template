@@ -38,7 +38,7 @@ class PermissionGroupController extends StislaController
      *
      * @return array
      */
-    private function getIndexData(): array
+    protected function getIndexData(): array
     {
         $data        = $this->userRepository->getLatestPermissionGroups();
         $defaultData = $this->getDefaultDataIndex(__('Group Permission'), 'Group Permission', 'user-management.permission-groups');
@@ -77,7 +77,7 @@ class PermissionGroupController extends StislaController
      *
      * @return array
      */
-    private function getExportData(): array
+    protected function getExportData(): array
     {
         $times = date('Y-m-d_H-i-s');
         $data = [

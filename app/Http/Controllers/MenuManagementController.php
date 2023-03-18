@@ -34,11 +34,30 @@ class MenuManagementController extends StislaController
     {
         parent::__construct();
 
-        $this->icon                = 'fa fa-bars';
-        $this->menuRepository      = new MenuRepository;
-        $this->menuGroupRepository = new MenuGroupRepository;
+        $this->icon                   = 'fa fa-bars';
+        $this->prefixRoute            = 'menu-managements';
+        $this->viewFolder             = 'menu-managements';
+        $this->paperSize              = 'Legal';
+
+        $this->importExcelExamplePath = public_path('excel_examples/sample_menus.xlsx');
+
+        $this->menuRepository         = new MenuRepository;
+        $this->menuGroupRepository    = new MenuGroupRepository;
 
         $this->defaultMiddleware('Menu');
+    }
+
+    /**
+     * get index data
+     *
+     * @return array
+     */
+    protected function getIndexData()
+    {
+        $data = $this->menuRepository->getFullData();
+        $defaultData = $this->getDefaultDataIndex(__('Menu'), 'Menu', 'menu-managements');
+        $data        = array_merge(['data' => $data], $defaultData);
+        return $data;
     }
 
     /**
@@ -48,13 +67,8 @@ class MenuManagementController extends StislaController
      */
     public function index()
     {
-        $data = $this->menuRepository->getFullData();
-
-        $defaultData = $this->getDefaultDataIndex(__('Manajemen Menu'), 'Menu', 'menu-managements');
-
-        return view('stisla.menu-managements.index', array_merge($defaultData, [
-            'data' => $data,
-        ]));
+        $data = $this->getIndexData();
+        return view('stisla.menu-managements.index', $data);
     }
 
     /**
@@ -64,7 +78,7 @@ class MenuManagementController extends StislaController
      */
     public function create()
     {
-        $title         = __('Manajemen Menu');
+        $title         = __('Menu');
         $fullTitle     = __('Tambah Menu');
         $groupOptions  = $this->menuGroupRepository->getSelectOptions('group_name', 'id');
         $parentOptions = $this->menuRepository->getSelectOptions('menu_name', 'id');
@@ -99,7 +113,9 @@ class MenuManagementController extends StislaController
             'menu_group_id',
         ]);
         $result = $this->menuRepository->create($data);
+
         logCreate("Manajemen Menu", $result);
+
         $successMessage = successMessageCreate("Menu");
         return back()->with('successMessage', $successMessage);
     }
@@ -160,7 +176,9 @@ class MenuManagementController extends StislaController
             'menu_group_id',
         ]);
         $newData = $this->menuRepository->update($data, $menuManagement->id);
+
         logUpdate("Manajemen Menu", $menuManagement, $newData);
+
         $successMessage = successMessageUpdate("Menu");
         return back()->with('successMessage', $successMessage);
     }
@@ -186,7 +204,9 @@ class MenuManagementController extends StislaController
     public function destroy(Menu $menuManagement)
     {
         $this->menuRepository->delete($menuManagement->id);
+
         logDelete("Manajemen Menu", $menuManagement);
+
         $successMessage = successMessageDelete("Menu");
         return back()->with('successMessage', $successMessage);
     }

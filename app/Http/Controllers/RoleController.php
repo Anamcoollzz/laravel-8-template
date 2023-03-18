@@ -37,7 +37,7 @@ class RoleController extends StislaController
      *
      * @return array
      */
-    private function getIndexData()
+    protected function getIndexData()
     {
         $data        = $this->userRepository->getRoles();
         $defaultData = $this->getDefaultDataIndex(__('Role'), 'Role', 'user-management.roles');
@@ -85,7 +85,7 @@ class RoleController extends StislaController
      *
      * @return array
      */
-    private function getExportData(): array
+    protected function getExportData(): array
     {
         $times = date('Y-m-d_H-i-s');
         $data = [

@@ -59,6 +59,10 @@ class ViewShare
             view()->share('_app_description', "Ini hanyalah sistem biasa");
             view()->share('_stisla_sidebar_mini', "0");
 
+            view()->share('isYajra', false);
+            view()->share('isAjax', false);
+            view()->share('isAjaxYajra', false);
+
 
             $settings = SettingRepository::settings();
 

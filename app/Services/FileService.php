@@ -255,6 +255,21 @@ class FileService
      * @param string $view
      * @param array $data
      * @param string $filename
+     * @param string $paper
+     * @param string $orientation
+     * @return Response
+     */
+    public function downloadPdf(string $view, array $data, string $filename, string $paper = 'Letter', string $orientation = 'landscape')
+    {
+        return PDF::setPaper($paper, $orientation)->loadView($view, $data)->download($filename);
+    }
+
+    /**
+     * download collection as pdf file
+     *
+     * @param string $view
+     * @param array $data
+     * @param string $filename
      * @param string $orientation
      * @return Response
      */

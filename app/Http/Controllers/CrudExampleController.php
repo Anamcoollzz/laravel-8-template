@@ -42,7 +42,7 @@ class CrudExampleController extends StislaController
      *
      * @return array
      */
-    private function getIndexData()
+    protected function getIndexData()
     {
         $isYajra = Route::is('crud-examples.index-yajra');
         $isAjax  = Route::is('crud-examples.index-ajax');
@@ -122,7 +122,7 @@ class CrudExampleController extends StislaController
      *
      * @return array
      */
-    private function getExportData(): array
+    protected function getExportData(): array
     {
         $times = date('Y-m-d_H-i-s');
         $data = [

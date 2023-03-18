@@ -6,7 +6,9 @@ use App\Repositories\UserRepository;
 use App\Services\EmailService;
 use App\Services\FileService;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class StislaController extends Controller
 {
@@ -37,6 +39,41 @@ class StislaController extends Controller
      * @var String
      */
     protected String $icon;
+
+    /**
+     * prefix route of module
+     *
+     * @var String
+     */
+    protected String $prefixRoute;
+
+    /**
+     * name orientation pdf
+     *
+     * @var String
+     */
+    protected String $orientationPdf = 'landscape';
+
+    /**
+     * name paper size pdf
+     *
+     * @var String
+     */
+    protected String $paperSize = 'Letter';
+
+    /**
+     * name view folder
+     *
+     * @var String
+     */
+    protected String $viewFolder;
+
+    /**
+     * import excel example path
+     *
+     * @var String
+     */
+    protected String $importExcelExamplePath;
 
     /**
      * constructor method
@@ -185,5 +222,78 @@ class StislaController extends Controller
             'isDetail'        => $isDetail,
             'breadcrumbs'     => $breadcrumbs,
         ];
+    }
+
+    /**
+     * download import example
+     *
+     * @return BinaryFileResponse
+     */
+    public function importExcelExample(): BinaryFileResponse
+    {
+        return response()->download($this->importExcelExamplePath);
+    }
+
+    /**
+     * get export data
+     *
+     * @return array
+     */
+    protected function getExportData(): array
+    {
+        $times      = date('Y-m-d_H-i-s');
+        $moduleName = str_replace('-', '_', $this->prefixRoute);
+        $data       = [
+            'isExport'   => true,
+            'pdf_name'   => $times . '_' . $moduleName . '.pdf',
+            'excel_name' => $times . '_' . $moduleName . '.xlsx',
+            'csv_name'   => $times . '_' . $moduleName . '.csv',
+            'json_name'  => $times . '_' . $moduleName . '.json',
+        ];
+        return array_merge($this->getIndexData(), $data);
+    }
+
+    /**
+     * download export data as json
+     *
+     * @return BinaryFileResponse
+     */
+    public function json(): BinaryFileResponse
+    {
+        $data  = $this->getExportData();
+        return $this->fileService->downloadJson($data['data'], $data['json_name']);
+    }
+
+    /**
+     * download export data as xlsx
+     *
+     * @return Response
+     */
+    public function excel(): BinaryFileResponse
+    {
+        $data  = $this->getExportData();
+        return $this->fileService->downloadExcelGeneral('stisla.' . $this->viewFolder . '.table', $data, $data['excel_name']);
+    }
+
+    /**
+     * download export data as csv
+     *
+     * @return Response
+     */
+    public function csv(): BinaryFileResponse
+    {
+        $data  = $this->getExportData();
+        return $this->fileService->downloadCsvGeneral('stisla.' . $this->viewFolder . '.table', $data, $data['csv_name']);
+    }
+
+    /**
+     * download export data as pdf
+     *
+     * @return Response
+     */
+    public function pdf(): Response
+    {
+        $data  = $this->getExportData();
+        return $this->fileService->downloadPdf('stisla.includes.others.export-pdf', $data, $data['pdf_name'], $this->paperSize, $this->orientationPdf);
     }
 }

@@ -130,13 +130,16 @@ Route::get('ubuntu/{pathname}/set-laravel-permission', [UbuntuController::class,
 Route::resource('ubuntu', UbuntuController::class);
 
 # MANAJEMEN MENU
-// Route::get('menu-managements/pdf', [MenuManagementController::class, 'pdf'])->name('menu-managements.pdf');
-// Route::get('menu-managements/csv', [MenuManagementController::class, 'csv'])->name('menu-managements.csv');
-// Route::get('menu-managements/excel', [MenuManagementController::class, 'excel'])->name('menu-managements.excel');
-// Route::get('menu-managements/json', [MenuManagementController::class, 'json'])->name('menu-managements.json');
-// Route::get('menu-managements/import-excel-example', [MenuManagementController::class, 'importExcelExample'])->name('menu-managements.import-excel-example');
-// Route::post('menu-managements/import-excel', [MenuManagementController::class, 'importExcel'])->name('menu-managements.import-excel');
+Route::get('menu-managements/pdf', [MenuManagementController::class, 'pdf'])->name('menu-managements.pdf');
+Route::get('menu-managements/csv', [MenuManagementController::class, 'csv'])->name('menu-managements.csv');
+Route::get('menu-managements/excel', [MenuManagementController::class, 'excel'])->name('menu-managements.excel');
+Route::get('menu-managements/json', [MenuManagementController::class, 'json'])->name('menu-managements.json');
+Route::get('menu-managements/import-excel-example', [MenuManagementController::class, 'importExcelExample'])->name('menu-managements.import-excel-example');
+Route::post('menu-managements/import-excel', [MenuManagementController::class, 'importExcel'])->name('menu-managements.import-excel');
+Route::get('menu-managements/import-excel-example', [MenuManagementController::class, 'importExcelExample'])->name('menu-managements.import-excel-example');
+Route::post('menu-managements/import-excel', [MenuManagementController::class, 'importExcel'])->name('menu-managements.import-excel');
 Route::resource('menu-managements', MenuManagementController::class);
+
 Route::resource('group-menus', GroupMenuController::class);
 
 # CONTOH CRUD
