@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\UserRepository;
+use App\Services\DropBoxService;
 use App\Services\EmailService;
 use App\Services\FileService;
 use Illuminate\Database\Eloquent\Model;
@@ -76,6 +77,13 @@ class StislaController extends Controller
     protected String $importExcelExamplePath;
 
     /**
+     * dropbox service
+     *
+     * @var DropBoxService
+     */
+    protected DropBoxService $dropBoxService;
+
+    /**
      * constructor method
      *
      * @return void
@@ -85,6 +93,7 @@ class StislaController extends Controller
         $this->fileService    = new FileService;
         $this->emailService   = new EmailService;
         $this->userRepository = new UserRepository;
+        $this->dropBoxService = new DropBoxService;
     }
 
     /**

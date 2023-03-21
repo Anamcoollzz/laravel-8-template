@@ -4,6 +4,7 @@ use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\BackupDatabaseController;
 use App\Http\Controllers\CrudExampleController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DropboxController;
 use App\Http\Controllers\GroupMenuController;
 use App\Http\Controllers\MenuManagementController;
 use App\Http\Controllers\NotificationController;
@@ -158,3 +159,8 @@ Route::resource('crud-examples', CrudExampleController::class);
 Route::get('testing/datatable', [TestingController::class, 'datatable']);
 Route::get('testing/send-email', [TestingController::class, 'sendEmail']);
 Route::get('testing/modal', [TestingController::class, 'modal']);
+
+# DROPBOX
+Route::get('dropboxs', [DropboxController::class, 'index'])->name('dropboxs.index');
+Route::post('dropboxs', [DropboxController::class, 'upload'])->name('dropboxs.upload');
+Route::delete('dropboxs', [DropboxController::class, 'destroy'])->name('dropboxs.destroy');
