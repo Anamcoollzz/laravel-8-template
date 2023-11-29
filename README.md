@@ -70,6 +70,7 @@ Beberapa fitur atau komponen yang ada
 -   `composer install`
 -   setup your DB in `.env`
 -   `php artisan migrate --seed`
+-   `php artisan storage:link`
 -   [optional] setup google captcha, google login, facebook login, github login, twitter login in `.env`
 
 ## Libraries
