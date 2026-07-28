@@ -77,3 +77,5 @@ Terima kasih, bisa distar ataupun difork ya guys. Kalau ada request module atau 
 Rencana nanti bakal kuupdate ke versi laravel terbaru 9 bahkan 10
 
 https://github.com/Anamcoollzz/laravel-8-template
+
+
